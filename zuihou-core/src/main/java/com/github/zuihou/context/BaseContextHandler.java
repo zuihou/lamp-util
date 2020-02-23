@@ -1,7 +1,6 @@
 package com.github.zuihou.context;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.util.StrUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -143,37 +142,37 @@ public class BaseContextHandler {
         set(BaseContextConstants.TOKEN_NAME, token);
     }
 
-    @Deprecated
-    public static Long getOrgId() {
-        Object value = get(BaseContextConstants.JWT_KEY_ORG_ID);
-        return Convert.toLong(value, 0L);
-    }
-
-    @Deprecated
-    public static void setOrgId(String val) {
-        set(BaseContextConstants.JWT_KEY_ORG_ID, val);
-    }
-
-    @Deprecated
-    public static void setOrgId(Long val) {
-        set(BaseContextConstants.JWT_KEY_ORG_ID, val);
-    }
-
-    @Deprecated
-    public static Long getStationId() {
-        Object value = get(BaseContextConstants.JWT_KEY_STATION_ID);
-        return Convert.toLong(value, 0L);
-    }
-
-    @Deprecated
-    public static void setStationId(String val) {
-        set(BaseContextConstants.JWT_KEY_STATION_ID, val);
-    }
-
-    @Deprecated
-    public static void setStationId(Long val) {
-        set(BaseContextConstants.JWT_KEY_STATION_ID, val);
-    }
+//    @Deprecated
+//    public static Long getOrgId() {
+//        Object value = get(BaseContextConstants.JWT_KEY_ORG_ID);
+//        return Convert.toLong(value, 0L);
+//    }
+//
+//    @Deprecated
+//    public static void setOrgId(String val) {
+//        set(BaseContextConstants.JWT_KEY_ORG_ID, val);
+//    }
+//
+//    @Deprecated
+//    public static void setOrgId(Long val) {
+//        set(BaseContextConstants.JWT_KEY_ORG_ID, val);
+//    }
+//
+//    @Deprecated
+//    public static Long getStationId() {
+//        Object value = get(BaseContextConstants.JWT_KEY_STATION_ID);
+//        return Convert.toLong(value, 0L);
+//    }
+//
+//    @Deprecated
+//    public static void setStationId(String val) {
+//        set(BaseContextConstants.JWT_KEY_STATION_ID, val);
+//    }
+//
+//    @Deprecated
+//    public static void setStationId(Long val) {
+//        set(BaseContextConstants.JWT_KEY_STATION_ID, val);
+//    }
 
     public static String getTenant() {
         Object value = get(BaseContextConstants.TENANT);
@@ -184,20 +183,20 @@ public class BaseContextHandler {
         set(BaseContextConstants.TENANT, val);
     }
 
-    public static String getDatabase(String tenant) {
-        Object value = get(BaseContextConstants.DATABASE_NAME);
-        String objectValue = Convert.toStr(value);
-        return objectValue + StrUtil.UNDERLINE + tenant;
-    }
-
-    public static String getDatabase() {
-        Object value = get(BaseContextConstants.DATABASE_NAME);
-        return Convert.toStr(value);
-    }
-
-    public static void setDatabase(String val) {
-        set(BaseContextConstants.DATABASE_NAME, val);
-    }
+//    public static String getDatabase(String tenant) {
+//        Object value = get(BaseContextConstants.DATABASE_NAME);
+//        String objectValue = Convert.toStr(value);
+//        return objectValue + StrUtil.UNDERLINE + tenant;
+//    }
+//
+//    public static String getDatabase() {
+//        Object value = get(BaseContextConstants.DATABASE_NAME);
+//        return Convert.toStr(value);
+//    }
+//
+//    public static void setDatabase(String val) {
+//        set(BaseContextConstants.DATABASE_NAME, val);
+//    }
 
     public static String getGrayVersion() {
         Object value = get(BaseContextConstants.GRAY_VERSION);

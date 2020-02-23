@@ -14,7 +14,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
 
 import static com.github.zuihou.utils.StrPool.EMPTY;
-import static com.github.zuihou.utils.StrPool.ZERO;
 
 /**
  * Created by ace on 2017/9/10.
@@ -41,9 +40,7 @@ public class JwtHelper {
                 //设置主题
                 .setSubject(String.valueOf(jwtInfo.getUserId()))
                 .claim(BaseContextConstants.JWT_KEY_ACCOUNT, jwtInfo.getAccount())
-                .claim(BaseContextConstants.JWT_KEY_NAME, jwtInfo.getName())
-                .claim(BaseContextConstants.JWT_KEY_ORG_ID, jwtInfo.getOrgId())
-                .claim(BaseContextConstants.JWT_KEY_STATION_ID, jwtInfo.getStationId());
+                .claim(BaseContextConstants.JWT_KEY_NAME, jwtInfo.getName());
         return generateToken(jwtBuilder, priKeyPath, expire);
     }
 
@@ -62,12 +59,8 @@ public class JwtHelper {
         String account = Convert.toStr(body.get(BaseContextConstants.JWT_KEY_ACCOUNT), EMPTY);
         String name = Convert.toStr(body.get(BaseContextConstants.JWT_KEY_NAME), EMPTY);
 
-        String strOrgId = Convert.toStr(body.get(BaseContextConstants.JWT_KEY_ORG_ID), ZERO);
-        String strStationId = Convert.toStr(body.get(BaseContextConstants.JWT_KEY_STATION_ID), ZERO);
         Long userId = Convert.toLong(strUserId, 0L);
-        Long orgId = Convert.toLong(strOrgId, 0L);
-        Long stationId = Convert.toLong(strStationId, 0L);
-        return new JwtUserInfo(userId, account, name, orgId, stationId);
+        return new JwtUserInfo(userId, account, name);
     }
 
 

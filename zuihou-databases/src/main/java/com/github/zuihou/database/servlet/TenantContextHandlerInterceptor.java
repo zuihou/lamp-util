@@ -23,15 +23,12 @@ import javax.servlet.http.HttpServletResponse;
 @AllArgsConstructor
 public class TenantContextHandlerInterceptor extends HandlerInterceptorAdapter {
 
-    private String databaseName;
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (!(handler instanceof HandlerMethod)) {
             log.info("not exec!!! url={}", request.getRequestURL());
             return super.preHandle(request, response, handler);
         }
-        BaseContextHandler.setDatabase(this.databaseName);
         BaseContextHandler.setTenant(this.getHeader(request, BaseContextConstants.TENANT));
         return super.preHandle(request, response, handler);
     }

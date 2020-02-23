@@ -56,6 +56,9 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
      * 测试环境
      */
     protected static final String[] DEV_PROFILES = new String[]{"dev"};
+    @Value("${spring.profiles.active:dev}")
+    protected String profiles;
+
     private static final List<Class<? extends Annotation>> AOP_POINTCUT_ANNOTATIONS = new ArrayList<>(2);
 
     static {
@@ -75,8 +78,6 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
     private final List<ConfigurationCustomizer> configurationCustomizers;
     private final List<MybatisPlusPropertiesCustomizer> mybatisPlusPropertiesCustomizers;
     private final ApplicationContext applicationContext;
-    @Value("${spring.profiles.active:dev}")
-    protected String profiles;
 
     public BaseDatabaseConfiguration(MybatisPlusProperties properties,
                                      DatabaseProperties databaseProperties,

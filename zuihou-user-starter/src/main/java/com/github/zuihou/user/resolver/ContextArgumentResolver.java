@@ -55,16 +55,12 @@ public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
         Long userId = BaseContextHandler.getUserId();
         String account = BaseContextHandler.getAccount();
         String name = BaseContextHandler.getName();
-        Long orgId = BaseContextHandler.getOrgId();
-        Long stationId = BaseContextHandler.getStationId();
 
         //以下代码为 根据 @LoginUser 注解来注入 SysUser 对象
         SysUser user = SysUser.builder()
                 .id(userId)
                 .account(account)
                 .name(name)
-                .orgId(orgId)
-                .stationId(stationId)
                 .build();
 
         try {

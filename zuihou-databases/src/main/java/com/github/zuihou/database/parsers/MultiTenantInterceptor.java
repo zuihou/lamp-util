@@ -64,7 +64,6 @@ public class MultiTenantInterceptor implements Interceptor {
         if (StrUtil.isEmpty(tenantCode)) {
             return invocation.proceed();
         }
-        this.setSchemaName(BaseContextHandler.getDatabase(tenantCode));
         args[0] = getNewMappedStatement(parameter, mappedStatement);
         return invocation.proceed();
     }

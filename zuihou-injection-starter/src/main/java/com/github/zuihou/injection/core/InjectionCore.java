@@ -72,7 +72,6 @@ public class InjectionCore {
                         public ListenableFuture<Map<Serializable, Object>> reload(final InjectionFieldExtPo key, Map<Serializable, Object> oldValue) throws Exception {
                             return backgroundRefreshPools.submit(() -> {
                                 BaseContextHandler.setTenant(key.getTenant());
-                                BaseContextHandler.setDatabase(key.getDatabase());
                                 return load(key);
                             });
                         }

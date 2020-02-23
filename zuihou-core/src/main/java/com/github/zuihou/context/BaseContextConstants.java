@@ -25,31 +25,9 @@ public class BaseContextConstants {
     public static final String JWT_KEY_ACCOUNT = "account";
 
     /**
-     * 组织id
-     */
-    @Deprecated
-    public static final String JWT_KEY_ORG_ID = "orgid";
-    /**
-     * 岗位id
-     */
-    @Deprecated
-    public static final String JWT_KEY_STATION_ID = "stationid";
-
-    /**
      * 租户 编码
      */
     public static final String TENANT = "tenant";
-    /**
-     * 动态数据库名前缀。  每个项目配置死的
-     */
-    public static final String DATABASE_NAME = "database_name";
-
-//    /**
-//     * 是否boot项目
-//     */
-//    @Deprecated
-//    public static final String IS_BOOT = "boot";
-
     /**
      * 灰度发布版本号
      */

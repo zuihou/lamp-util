@@ -17,7 +17,7 @@ public class JwtHelperTest {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        JwtUserInfo jwtInfo = new JwtUserInfo(1L, "zuihou", "最后", 1L, 1L);
+        JwtUserInfo jwtInfo = new JwtUserInfo(1L, "zuihou", "最后");
         int expire = 7200;
 
         //生成Token  注意： 确保该模块 zuihou-jwt-starter/src/main/resources 目录下已经有了私钥

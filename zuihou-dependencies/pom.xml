@@ -52,7 +52,6 @@
         <commons-lang.version>2.6</commons-lang.version>
         <commons-io.version>2.6</commons-io.version>
 
-        <maven.test.skip>true</maven.test.skip>
         <shiro.version>1.5.1</shiro.version>
 
         <asm.version>5.0.4</asm.version>

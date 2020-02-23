@@ -33,7 +33,7 @@ public class GrayRule extends AvailabilityFilteringRule {
             return null;
         }
 
-        String serviceVersion = BaseContextHandler.get(GRAY_VERSION);
+        String serviceVersion = BaseContextHandler.getGrayVersion();
         log.debug("======>GrayMetadataRule:  serviceVersionTL{}", serviceVersion);
 
         List<Server> noMetaServerList = new ArrayList<>();

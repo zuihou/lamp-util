@@ -39,13 +39,10 @@ public class TenantWebMvcConfigurer implements WebMvcConfigurer {
             "/doc.html**"
     };
 
-    private final String databaseName;
-
     private String[] exclude;
     private Integer order;
 
-    public TenantWebMvcConfigurer(String databaseName, String[] exclude, Integer order) {
-        this.databaseName = databaseName;
+    public TenantWebMvcConfigurer(String[] exclude, Integer order) {
         this.exclude = exclude;
         this.order = order;
         if (ArrayUtil.isEmpty(this.exclude)) {
@@ -74,7 +71,7 @@ public class TenantWebMvcConfigurer implements WebMvcConfigurer {
     }
 
     protected HandlerInterceptor getHandlerInterceptor() {
-        return new TenantContextHandlerInterceptor(databaseName);
+        return new TenantContextHandlerInterceptor();
     }
 
 }

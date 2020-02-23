@@ -35,7 +35,6 @@ public class SysLogListener {
             log.warn("租户编码不存在，忽略操作日志=={}", sysLog.getRequestUri());
             return;
         }
-        BaseContextHandler.setDatabase(database);
         BaseContextHandler.setTenant(sysLog.getTenantCode());
 
         consumer.accept(sysLog);

@@ -13,6 +13,7 @@ import com.github.zuihou.database.mybatis.typehandler.RightLikeTypeHandler;
 import com.github.zuihou.database.parsers.DynamicTableNameParser;
 import com.github.zuihou.database.properties.DatabaseProperties;
 import com.github.zuihou.database.servlet.TenantWebMvcConfigurer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
@@ -43,6 +44,7 @@ public abstract class BaseMybatisConfiguration {
      */
     @Bean
     @Order(15)
+    @ConditionalOnMissingBean
     @ConditionalOnProperty(name = "zuihou.database.isNotWrite", havingValue = "true")
     public WriteInterceptor getWriteInterceptor() {
         return new WriteInterceptor();
@@ -55,6 +57,7 @@ public abstract class BaseMybatisConfiguration {
      */
     @Order(5)
     @Bean
+    @ConditionalOnMissingBean
     public PaginationInterceptor paginationInterceptor() {
         PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
         List<ISqlParser> sqlParserList = new ArrayList<>();
@@ -66,7 +69,7 @@ public abstract class BaseMybatisConfiguration {
 
         //动态"表名" 插件 来实现 租户schema切换 加入解析链
         if (this.databaseProperties.getIsMultiTenant()) {
-            DynamicTableNameParser dynamicTableNameParser = new DynamicTableNameParser();
+            DynamicTableNameParser dynamicTableNameParser = new DynamicTableNameParser(databaseProperties.getBizDatabase());
             sqlParserList.add(dynamicTableNameParser);
         }
 
@@ -81,6 +84,7 @@ public abstract class BaseMybatisConfiguration {
      * @return
      */
     @Bean("myMetaObjectHandler")
+    @ConditionalOnMissingBean
     public MetaObjectHandler getMyMetaObjectHandler() {
         DatabaseProperties.Id id = databaseProperties.getId();
         return new MyMetaObjectHandler(id.getWorkerId(), id.getDataCenterId());
@@ -92,9 +96,10 @@ public abstract class BaseMybatisConfiguration {
      * @return
      */
     @Bean
+    @ConditionalOnMissingBean
     @ConditionalOnProperty(name = "zuihou.database.isMultiTenant", havingValue = "true", matchIfMissing = true)
     public TenantWebMvcConfigurer getTenantWebMvcConfigurer() {
-        return new TenantWebMvcConfigurer(databaseProperties.getBizDatabase(), null, null);
+        return new TenantWebMvcConfigurer(null, null);
     }
 
     /**
@@ -141,6 +146,7 @@ public abstract class BaseMybatisConfiguration {
 
 
     @Bean
+    @ConditionalOnMissingBean
     public ZuihouSqlInjector getZuihouSqlInjector() {
         return new ZuihouSqlInjector();
     }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.parser.ISqlParser;
 import com.baomidou.mybatisplus.core.parser.SqlInfo;
 import com.github.zuihou.context.BaseContextHandler;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.ibatis.reflection.MetaObject;
 
@@ -19,17 +20,23 @@ import java.util.Map;
  */
 @Data
 @Accessors(chain = true)
+@NoArgsConstructor
 public class DynamicTableNameParser implements ISqlParser {
 
-    private Map<String, ITableNameHandler> tableNameHandlerMap;
-
+    private String database = "zuihou_base";
     private ITableNameHandler defaultTableNameHandler = (metaObject, sql, tableName) -> {
         String tenantCode = BaseContextHandler.getTenant();
         if (StrUtil.isEmpty(tenantCode)) {
             return tableName;
         }
-        return BaseContextHandler.getDatabase(tenantCode) + StrUtil.DOT + tableName;
+        return database + StrUtil.DOT + tableName;
     };
+
+    private Map<String, ITableNameHandler> tableNameHandlerMap;
+
+    public DynamicTableNameParser(String database) {
+        this.database = database;
+    }
 
     @Override
     public SqlInfo parser(MetaObject metaObject, String sql) {
@@ -62,8 +69,9 @@ public class DynamicTableNameParser implements ISqlParser {
             }
 
             MultiTenantInterceptor multiTenantInterceptor = new MultiTenantInterceptor();
+            String schemaName = StrUtil.format("{}_{}", database, tenantCode);
             // 想要 执行sql时， 切换到 切换到自己指定的库， 直接修改 setSchemaName
-            multiTenantInterceptor.setSchemaName(BaseContextHandler.getDatabase(tenantCode));
+            multiTenantInterceptor.setSchemaName(schemaName);
             String parsedSql = multiTenantInterceptor.processSqlByInterceptor(sql);
             return SqlInfo.newInstance().setSql(parsedSql);
         }

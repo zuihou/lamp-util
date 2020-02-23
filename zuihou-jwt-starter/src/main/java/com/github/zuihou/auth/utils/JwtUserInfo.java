@@ -29,13 +29,4 @@ public class JwtUserInfo implements Serializable {
      */
     private String name;
 
-    /**
-     * 当前登录人单位id
-     */
-    private Long orgId;
-
-    /**
-     * 当前登录人岗位ID
-     */
-    private Long stationId;
 }
