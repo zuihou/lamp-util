@@ -38,8 +38,8 @@ public class ContextHandlerInterceptor extends HandlerInterceptorAdapter {
                 BaseContextHandler.setAccount(getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
                 BaseContextHandler.setName(getHeader(request, BaseContextConstants.JWT_KEY_NAME));
             }
-            BaseContextHandler.setGrayVersion(getHeader(request, BaseContextConstants.TENANT));
-            BaseContextHandler.setTenant(getHeader(request, BaseContextConstants.GRAY_VERSION));
+            BaseContextHandler.setGrayVersion(getHeader(request, BaseContextConstants.GRAY_VERSION));
+            BaseContextHandler.setTenant(getHeader(request, BaseContextConstants.TENANT));
         } catch (Exception e) {
             log.warn("解析token信息时，发生异常. url=" + request.getRequestURI(), e);
         }

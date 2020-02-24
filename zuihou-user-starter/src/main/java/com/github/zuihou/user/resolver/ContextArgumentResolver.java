@@ -5,7 +5,7 @@ import com.github.zuihou.base.R;
 import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.user.annotation.LoginUser;
 import com.github.zuihou.user.feign.UserQuery;
-import com.github.zuihou.user.feign.UserResolveApi;
+import com.github.zuihou.user.feign.UserResolverService;
 import com.github.zuihou.user.model.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -23,10 +23,10 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Slf4j
 public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private UserResolveApi userResolveApi;
+    private final UserResolverService userResolverService;
 
-    public ContextArgumentResolver(UserResolveApi userResolveApi) {
-        this.userResolveApi = userResolveApi;
+    public ContextArgumentResolver(UserResolverService userResolverService) {
+        this.userResolverService = userResolverService;
     }
 
     /**
@@ -68,7 +68,7 @@ public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
             boolean isFull = loginUser.isFull();
 
             if (isFull || loginUser.isStation() || loginUser.isOrg() || loginUser.isRoles()) {
-                R<SysUser> result = userResolveApi.getById(Convert.toLong(userId),
+                R<SysUser> result = userResolverService.getById(Convert.toLong(userId),
                         UserQuery.builder()
                                 .full(isFull)
                                 .org(loginUser.isOrg())
