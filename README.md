@@ -42,3 +42,31 @@ http://doc.tangyh.top/zuihou-admin-cloud
 |---|---|---|---|
 | 租户后台 | http://tangyh.top:10000/zuihou-ui/ | zuihou/zuihou | test/zuiou |
 | 开发&运营后台 | http://tangyh.top:180/zuihou-admin-ui/ | demoAdmin/zuihou | 无 |
+
+
+## 如何编译 zuihou-commons ?
+```
+# 编译 同时生成源代码和javadoc
+mvn clean install
+
+# 跳过生成 javadoc
+mvn clean install -Dmaven.javadoc.skip=true -Dgpg.skip=true
+# 跳过生成 源代码
+mvn clean install -Dmaven.source.skip=true
+
+```
+
+## 如何解决 IDEA 2019 控制台生成javadoc时乱码
+```
+# mac
+IntelliJ IDEA -> Preferences  -> Build, Execution, Deployment -> Build Tools ->  Maven -> Runner 
+在 Environment variables: 加入  JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8
+
+# window
+File -> Settings -> Build, Execution, Deployment-> Build Tools ->  Maven -> Runner 
+在VM Options： 加入  -Dfile.encoding=GBK
+
+# 还不行就在命令行执行 mvn -version  看看 mvn 的编码是什么，改成一样的即可。
+# 改了还不行，就度娘吧
+```
+
