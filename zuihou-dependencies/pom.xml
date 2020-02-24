@@ -299,27 +299,6 @@
                 <version>${bce-java-sdk.version}</version>
             </dependency>
 
-            <!--            &lt;!&ndash; jackson 序列化 &ndash;&gt;-->
-            <!--            <dependency>-->
-            <!--                <groupId>com.fasterxml.jackson.datatype</groupId>-->
-            <!--                <artifactId>jackson-datatype-jsr310</artifactId>-->
-            <!--                <version>${jackson.version}</version>-->
-            <!--                <scope>compile</scope>-->
-            <!--            </dependency>-->
-            <!--            <dependency>-->
-            <!--                <groupId>com.fasterxml.jackson.module</groupId>-->
-            <!--                <artifactId>jackson-module-parameter-names</artifactId>-->
-            <!--                <version>${jackson.version}</version>-->
-            <!--                <scope>compile</scope>-->
-            <!--            </dependency>-->
-
-            <!--            <dependency>-->
-            <!--                <groupId>com.fasterxml.jackson.core</groupId>-->
-            <!--                <artifactId>jackson-databind</artifactId>-->
-            <!--                <version>${jackson.version}</version>-->
-            <!--                <scope>compile</scope>-->
-            <!--            </dependency>-->
-
             <dependency>
                 <groupId>org.apache.shiro</groupId>
                 <artifactId>shiro-core</artifactId>
@@ -480,16 +459,6 @@
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
-            <!--            <dependency>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-compiler-plugin</artifactId>-->
-            <!--                <version>${maven-compiler-plugin.version}</version>-->
-            <!--            </dependency>-->
-            <!--            <dependency>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-resources-plugin</artifactId>-->
-            <!--                <version>${maven-resources-plugin.version}</version>-->
-            <!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
 
@@ -531,54 +500,4 @@
         </pluginRepository>
     </pluginRepositories>
 
-
-    <!--    <build>-->
-    <!--        <finalName>${project.artifactId}</finalName>-->
-    <!--        &lt;!&ndash;        <resources>&ndash;&gt;-->
-    <!--        &lt;!&ndash;            <resource>&ndash;&gt;-->
-    <!--        &lt;!&ndash;                <directory>src/main/resources</directory>&ndash;&gt;-->
-    <!--        &lt;!&ndash;                <includes>&ndash;&gt;-->
-    <!--        &lt;!&ndash;                    <include>**/*</include>&ndash;&gt;-->
-    <!--        &lt;!&ndash;                </includes>&ndash;&gt;-->
-    <!--        &lt;!&ndash;                <filtering>true</filtering>&ndash;&gt;-->
-    <!--        &lt;!&ndash;            </resource>&ndash;&gt;-->
-    <!--        &lt;!&ndash;        </resources>&ndash;&gt;-->
-
-    <!--        <pluginManagement>-->
-    <!--            <plugins>-->
-    <!--                <plugin>-->
-    <!--                    <groupId>org.apache.maven.plugins</groupId>-->
-    <!--                    <artifactId>maven-compiler-plugin</artifactId>-->
-    <!--                    <version>${maven-compiler-plugin.version}</version>-->
-    <!--                    <configuration>-->
-    <!--                        <source>${java.version}</source>-->
-    <!--                        <target>${java.version}</target>-->
-    <!--                        <encoding>${project.build.sourceEncoding}</encoding>-->
-    <!--                    </configuration>-->
-    <!--                </plugin>-->
-    <!--                &lt;!&ndash; resources资源插件 &ndash;&gt;-->
-    <!--                <plugin>-->
-    <!--                    <groupId>org.apache.maven.plugins</groupId>-->
-    <!--                    <artifactId>maven-resources-plugin</artifactId>-->
-    <!--                    <version>${maven-resources-plugin.version}</version>-->
-    <!--                    <configuration>-->
-    <!--                        <encoding>UTF-8</encoding>-->
-    <!--                        &lt;!&ndash; 后缀为pem、pfx的证书文件 &ndash;&gt;-->
-    <!--                        <nonFilteredFileExtensions>-->
-    <!--                            <nonFilteredFileExtension>pem</nonFilteredFileExtension>-->
-    <!--                            <nonFilteredFileExtension>pfx</nonFilteredFileExtension>-->
-    <!--                            <nonFilteredFileExtension>p12</nonFilteredFileExtension>-->
-    <!--                            <nonFilteredFileExtension>key</nonFilteredFileExtension>-->
-    <!--                        </nonFilteredFileExtensions>-->
-    <!--                    </configuration>-->
-    <!--                </plugin>-->
-    <!--                &lt;!&ndash; java文档插件 &ndash;&gt;-->
-    <!--                <plugin>-->
-    <!--                    <groupId>org.apache.maven.plugins</groupId>-->
-    <!--                    <artifactId>maven-javadoc-plugin</artifactId>-->
-    <!--                    <version>${maven-javadoc-plugin.version}</version>-->
-    <!--                </plugin>-->
-    <!--            </plugins>-->
-    <!--        </pluginManagement>-->
-    <!--    </build>-->
 </project>

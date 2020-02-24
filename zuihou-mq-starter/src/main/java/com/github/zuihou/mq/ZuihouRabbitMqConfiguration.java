@@ -14,11 +14,6 @@ import org.springframework.context.annotation.Import;
  * 若自建服务的 包名 跟当前类的包名不同，请在服务的启动类上配置下列注解，否则启动报错
  *
  * @author zuihou
- * @ComponentScan({ "com.github.zuihou.mq",
- * "cn.github.hehe",
- * })
- * <p>
- * 报错信息： org.springframework.beans.factory.parsing.BeanDefinitionParsingException: Configuration problem: A circular @Import has been detected: Illegal attempt by @Configuration class 'ZuihouRabbitMqConfiguration.RabbitMqConfiguration' to import class 'ZuihouRabbitMqConfiguration' as 'ZuihouRabbitMqConfiguration' is already present in the current import stack [ZuihouRabbitMqConfiguration.RabbitMqConfiguration->ZuihouRabbitMqConfiguration.RabbitMqConfiguration->ZuihouRabbitMqConfiguration->HahaServerApplication]
  * @date 2019/09/20
  */
 @Configuration
