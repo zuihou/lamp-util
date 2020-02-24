@@ -42,7 +42,7 @@ public class ScanConfiguration {
     }
 
     @Configuration
-    @ConditionalOnProperty(prefix = "zuihou.rabbitmq", name = "enabled", havingValue = "false", matchIfMissing = true)
+    @ConditionalOnProperty(name = "zuihou.scan.type", havingValue = "FEIGN")
     @EnableFeignClients(basePackageClasses = SystemApiApi.class)
     public static class ScanFeignConfiguration {
 
@@ -75,7 +75,7 @@ public class ScanConfiguration {
     /**
      * 使用队列时，消费者需要自行实现
      */
-    @ConditionalOnProperty(prefix = "zuihou.rabbitmq", name = "enabled", havingValue = "true")
+    @ConditionalOnProperty(name = "zuihou.scan.type", havingValue = "RABBIT")
     public static class ScanRabbitConfiguration {
 
         @Bean("systemApiScanService")
@@ -100,7 +100,6 @@ public class ScanConfiguration {
                 }
             }
         }
-
     }
 
 }
