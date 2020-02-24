@@ -12,7 +12,6 @@ import com.github.zuihou.database.mybatis.typehandler.LeftLikeTypeHandler;
 import com.github.zuihou.database.mybatis.typehandler.RightLikeTypeHandler;
 import com.github.zuihou.database.parsers.DynamicTableNameParser;
 import com.github.zuihou.database.properties.DatabaseProperties;
-import com.github.zuihou.database.servlet.TenantWebMvcConfigurer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -90,17 +89,17 @@ public abstract class BaseMybatisConfiguration {
         return new MyMetaObjectHandler(id.getWorkerId(), id.getDataCenterId());
     }
 
-    /**
-     * 租户信息拦截器
-     *
-     * @return
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnProperty(name = "zuihou.database.isMultiTenant", havingValue = "true", matchIfMissing = true)
-    public TenantWebMvcConfigurer getTenantWebMvcConfigurer() {
-        return new TenantWebMvcConfigurer(null, null);
-    }
+//    /**
+//     * 租户信息拦截器
+//     *
+//     * @return
+//     */
+//    @Bean
+//    @ConditionalOnMissingBean
+//    @ConditionalOnProperty(name = "zuihou.database.isMultiTenant", havingValue = "true", matchIfMissing = true)
+//    public TenantWebMvcConfigurer getTenantWebMvcConfigurer() {
+//        return new TenantWebMvcConfigurer(null, null);
+//    }
 
     /**
      * Mybatis 自定义的类型处理器： 处理XML中  #{name,typeHandler=leftLike} 类型的参数

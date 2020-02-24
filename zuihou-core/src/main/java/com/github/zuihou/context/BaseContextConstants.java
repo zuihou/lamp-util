@@ -24,6 +24,12 @@ public class BaseContextConstants {
      */
     public static final String JWT_KEY_ACCOUNT = "account";
 
+
+    /**
+     * 是否boot项目
+     */
+    public static final String IS_BOOT = "boot";
+
     /**
      * 租户 编码
      */

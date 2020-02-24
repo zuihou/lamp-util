@@ -23,7 +23,6 @@ import java.util.function.Consumer;
 @AllArgsConstructor
 public class SysLogListener {
 
-    private String database;
     private Consumer<OptLogDTO> consumer;
 
     @Async

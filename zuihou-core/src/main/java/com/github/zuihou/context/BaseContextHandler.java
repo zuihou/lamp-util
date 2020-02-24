@@ -1,6 +1,7 @@
 package com.github.zuihou.context;
 
 import cn.hutool.core.convert.Convert;
+import com.github.zuihou.utils.StrPool;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,21 +17,25 @@ import java.util.Map;
 public class BaseContextHandler {
     private static final ThreadLocal<Map<String, String>> THREAD_LOCAL = new ThreadLocal<>();
 
-    public static void set(String key, Long value) {
+    public static void set(String key, Object value) {
         Map<String, String> map = getLocalMap();
-        map.put(key, value == null ? "0" : String.valueOf(value));
+        map.put(key, value == null ? StrPool.EMPTY : value.toString());
     }
 
-    public static void set(String key, String value) {
+    public static <T> T get(String key, Class<T> type) {
         Map<String, String> map = getLocalMap();
-        map.put(key, value == null ? "" : value);
+        return Convert.convert(type, map.get(key));
     }
 
-    public static void set(String key, Boolean value) {
+    public static <T> T get(String key, Class<T> type, Object def) {
         Map<String, String> map = getLocalMap();
-        map.put(key, value == null ? "false" : value.toString());
+        return Convert.convert(type, map.getOrDefault(key, String.valueOf(def == null ? "" : def)));
     }
 
+    public static String get(String key) {
+        Map<String, String> map = getLocalMap();
+        return map.getOrDefault(key, "");
+    }
 
     public static Map<String, String> getLocalMap() {
         Map<String, String> map = THREAD_LOCAL.get();
@@ -46,25 +51,18 @@ public class BaseContextHandler {
     }
 
 
-    public static String get(String key) {
-        Map<String, String> map = getLocalMap();
-        return map.getOrDefault(key, "");
+    public static Boolean getBoot() {
+        return get(BaseContextConstants.IS_BOOT, Boolean.class, false);
     }
-
-
-//    public static Boolean isBoot() {
-//        Object value = get(BaseContextConstants.IS_BOOT);
-//        return Convert.toBool(value);
-//    }
 
     /**
      * 账号id
      *
      * @param val
      */
-//    public static void setBoot(Boolean val) {
-//        set(BaseContextConstants.IS_BOOT, val);
-//    }
+    public static void setBoot(Boolean val) {
+        set(BaseContextConstants.IS_BOOT, val);
+    }
 
     /**
      * 账号id
@@ -72,8 +70,7 @@ public class BaseContextHandler {
      * @return
      */
     public static Long getUserId() {
-        Object value = get(BaseContextConstants.JWT_KEY_USER_ID);
-        return Convert.toLong(value, 0L);
+        return get(BaseContextConstants.JWT_KEY_USER_ID, Long.class, 0L);
     }
 
     /**
@@ -86,7 +83,7 @@ public class BaseContextHandler {
     }
 
     public static void setUserId(String userId) {
-        setUserId(Convert.toLong(userId, 0L));
+        set(BaseContextConstants.JWT_KEY_USER_ID, userId);
     }
 
     /**
@@ -95,8 +92,7 @@ public class BaseContextHandler {
      * @return
      */
     public static String getAccount() {
-        Object value = get(BaseContextConstants.JWT_KEY_ACCOUNT);
-        return returnObjectValue(value);
+        return get(BaseContextConstants.JWT_KEY_ACCOUNT, String.class);
     }
 
     /**
@@ -115,8 +111,7 @@ public class BaseContextHandler {
      * @return
      */
     public static String getName() {
-        Object value = get(BaseContextConstants.JWT_KEY_NAME);
-        return returnObjectValue(value);
+        return get(BaseContextConstants.JWT_KEY_NAME, String.class);
     }
 
     /**
@@ -134,82 +129,28 @@ public class BaseContextHandler {
      * @return
      */
     public static String getToken() {
-        Object value = get(BaseContextConstants.TOKEN_NAME);
-        return Convert.toStr(value);
+        return get(BaseContextConstants.TOKEN_NAME, String.class);
     }
 
     public static void setToken(String token) {
         set(BaseContextConstants.TOKEN_NAME, token);
     }
 
-//    @Deprecated
-//    public static Long getOrgId() {
-//        Object value = get(BaseContextConstants.JWT_KEY_ORG_ID);
-//        return Convert.toLong(value, 0L);
-//    }
-//
-//    @Deprecated
-//    public static void setOrgId(String val) {
-//        set(BaseContextConstants.JWT_KEY_ORG_ID, val);
-//    }
-//
-//    @Deprecated
-//    public static void setOrgId(Long val) {
-//        set(BaseContextConstants.JWT_KEY_ORG_ID, val);
-//    }
-//
-//    @Deprecated
-//    public static Long getStationId() {
-//        Object value = get(BaseContextConstants.JWT_KEY_STATION_ID);
-//        return Convert.toLong(value, 0L);
-//    }
-//
-//    @Deprecated
-//    public static void setStationId(String val) {
-//        set(BaseContextConstants.JWT_KEY_STATION_ID, val);
-//    }
-//
-//    @Deprecated
-//    public static void setStationId(Long val) {
-//        set(BaseContextConstants.JWT_KEY_STATION_ID, val);
-//    }
 
     public static String getTenant() {
-        Object value = get(BaseContextConstants.TENANT);
-        return Convert.toStr(value);
+        return get(BaseContextConstants.TENANT, String.class);
     }
 
     public static void setTenant(String val) {
         set(BaseContextConstants.TENANT, val);
     }
 
-//    public static String getDatabase(String tenant) {
-//        Object value = get(BaseContextConstants.DATABASE_NAME);
-//        String objectValue = Convert.toStr(value);
-//        return objectValue + StrUtil.UNDERLINE + tenant;
-//    }
-//
-//    public static String getDatabase() {
-//        Object value = get(BaseContextConstants.DATABASE_NAME);
-//        return Convert.toStr(value);
-//    }
-//
-//    public static void setDatabase(String val) {
-//        set(BaseContextConstants.DATABASE_NAME, val);
-//    }
-
     public static String getGrayVersion() {
-        Object value = get(BaseContextConstants.GRAY_VERSION);
-        return Convert.toStr(value);
+        return get(BaseContextConstants.GRAY_VERSION, String.class);
     }
 
     public static void setGrayVersion(String val) {
         set(BaseContextConstants.GRAY_VERSION, val);
-    }
-
-
-    private static String returnObjectValue(Object value) {
-        return value == null ? "" : value.toString();
     }
 
     public static void remove() {

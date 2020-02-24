@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
  * 解析请求头数据， 将用户信息、应用信息封装到BaseContextHandler
  * 考虑请求来源是否网关（ip等）
  * <p>
- * Created by zuihou on 2017/9/10.
  *
  * @author zuihou
  * @date 2019-06-20 22:22
@@ -34,14 +33,13 @@ public class ContextHandlerInterceptor extends HandlerInterceptorAdapter {
                 log.info("not exec!!! url={}", request.getRequestURL());
                 return super.preHandle(request, response, handler);
             }
-            String userId = this.getHeader(request, BaseContextConstants.JWT_KEY_USER_ID);
-            String account = this.getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT);
-            String name = this.getHeader(request, BaseContextConstants.JWT_KEY_NAME);
-            String grayVersion = this.getHeader(request, BaseContextConstants.GRAY_VERSION);
-            BaseContextHandler.setUserId(userId);
-            BaseContextHandler.setAccount(account);
-            BaseContextHandler.setName(name);
-            BaseContextHandler.setGrayVersion(grayVersion);
+            if (!BaseContextHandler.getBoot()) {
+                BaseContextHandler.setUserId(getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
+                BaseContextHandler.setAccount(getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
+                BaseContextHandler.setName(getHeader(request, BaseContextConstants.JWT_KEY_NAME));
+            }
+            BaseContextHandler.setGrayVersion(getHeader(request, BaseContextConstants.TENANT));
+            BaseContextHandler.setTenant(getHeader(request, BaseContextConstants.GRAY_VERSION));
         } catch (Exception e) {
             log.warn("解析token信息时，发生异常. url=" + request.getRequestURI(), e);
         }
