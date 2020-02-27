@@ -31,6 +31,7 @@ public class DateUtils {
     public final static String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
     public final static String DEFAULT_DATE_FORMAT_EN = "yyyy年MM月dd日";
     public final static String DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public final static String DEFAULT_DATE_TIME_FORMAT_EN = "yyyy年MM月dd日HH时mm分ss秒";
     public final static String DEFAULT_TIME_FORMAT = "HH:mm:ss";
     public final static String DAY = "DAY";
     public final static String MONTH = "MONTH";

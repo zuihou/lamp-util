@@ -33,6 +33,8 @@ import static com.github.zuihou.exception.code.ExceptionCode.SERVICE_MAPPER_ERRO
  *
  * @param <M>
  * @param <T>
+ * @author zuihou
+ * @date 2020年02月27日18:15:17
  */
 @CacheConfig(cacheNames = SuperServiceCacheImpl.CACHE_NAMES)
 public class SuperServiceCacheImpl<M extends SuperMapper<T>, T> extends ServiceImpl<M, T> implements SuperService<T> {
@@ -81,7 +83,7 @@ public class SuperServiceCacheImpl<M extends SuperMapper<T>, T> extends ServiceI
      *
      * @return
      */
-    protected String getClassTypeName() {
+    protected String getClassSimpleName() {
         return SuperServiceCacheImpl.class.getSimpleName();
     }
 
@@ -92,7 +94,7 @@ public class SuperServiceCacheImpl<M extends SuperMapper<T>, T> extends ServiceI
      * @return
      */
     protected String key(Object... args) {
-        return buildKey(getClassTypeName(), args);
+        return buildKey(getClassSimpleName(), args);
     }
 
     @Override

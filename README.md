@@ -44,6 +44,13 @@ http://doc.tangyh.top/zuihou-admin-cloud
 | 开发&运营后台 | http://tangyh.top:180/zuihou-admin-ui/ | demoAdmin/zuihou | 无 |
 
 
+## 如何导入本项目
+1. 将zuihou-commons/zuihou-dependencies/pom.xml导入IDEA 
+2. 编译 mvn install
+3. 将zuihou-commons/pom.xml导入IDEA
+4. 编译 mvn install
+
+
 ## 如何编译 zuihou-commons ?
 ```
 # 编译 同时生成源代码和javadoc
