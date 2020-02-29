@@ -1,13 +1,7 @@
 package com.github.zuihou.user.config;
 
-import com.github.zuihou.user.feign.UserResolveApi;
-import com.github.zuihou.user.feign.UserResolverService;
-import com.github.zuihou.user.feign.impl.UserResolverServiceFeignImpl;
 import com.github.zuihou.user.interceptor.ContextHandlerInterceptor;
 import com.github.zuihou.user.resolver.ContextArgumentResolver;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -23,9 +17,6 @@ import java.util.List;
  */
 public class LoginArgResolverConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private UserResolverService userResolverService;
-
     /**
      * Token参数解析
      *
@@ -33,13 +24,7 @@ public class LoginArgResolverConfig implements WebMvcConfigurer {
      */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(new ContextArgumentResolver(userResolverService));
-    }
-
-    @Bean
-    @ConditionalOnProperty(name = "zuihou.user.type", havingValue = "FEIGN", matchIfMissing = true)
-    public UserResolverService getUserResolverService(UserResolveApi userResolveApi) {
-        return new UserResolverServiceFeignImpl(userResolveApi);
+        argumentResolvers.add(new ContextArgumentResolver());
     }
 
     /**

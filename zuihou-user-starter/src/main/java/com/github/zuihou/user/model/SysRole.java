@@ -1,6 +1,12 @@
 package com.github.zuihou.user.model;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.*;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 角色
@@ -41,4 +47,30 @@ public class SysRole {
      * 是否只读角色
      */
     private Boolean isReadonly;
+
+    /**
+     * 角色列表转换成角色编码列表
+     *
+     * @param list
+     * @return
+     */
+    public static List<String> getRoleCode(List<SysRole> list) {
+        if (ArrayUtil.isEmpty(list)) {
+            return Collections.emptyList();
+        }
+        return list.stream().map(SysRole::getCode).collect(Collectors.toList());
+    }
+
+    /**
+     * 指定角色编码是否在角色列表中
+     *
+     * @param list
+     * @return
+     */
+    public static boolean contains(List<SysRole> list, String code) {
+        if (ArrayUtil.isEmpty(list) || StrUtil.isEmpty(code)) {
+            return false;
+        }
+        return list.stream().anyMatch((item) -> code.equals(item.getCode()));
+    }
 }

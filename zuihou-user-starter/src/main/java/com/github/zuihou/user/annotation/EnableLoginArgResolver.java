@@ -1,6 +1,7 @@
 package com.github.zuihou.user.annotation;
 
 import com.github.zuihou.user.config.LoginArgResolverConfig;
+import com.github.zuihou.user.config.UserResolveFeignConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;
@@ -16,6 +17,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import(LoginArgResolverConfig.class)
+@Import({UserResolveFeignConfiguration.class, LoginArgResolverConfig.class})
 public @interface EnableLoginArgResolver {
 }

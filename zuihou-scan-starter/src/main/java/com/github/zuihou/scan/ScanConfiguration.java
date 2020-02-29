@@ -3,8 +3,6 @@ package com.github.zuihou.scan;
 import com.alibaba.fastjson.JSONObject;
 import com.github.zuihou.base.R;
 import com.github.zuihou.mq.constant.QueueConstants;
-import com.github.zuihou.scan.feign.SystemApiApi;
-import com.github.zuihou.scan.feign.SystemApiApiFallback;
 import com.github.zuihou.scan.model.SystemApiScanSaveDTO;
 import com.github.zuihou.scan.service.SystemApiScanService;
 import com.github.zuihou.utils.SpringUtils;
@@ -14,11 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * 系统api扫描配置类
@@ -43,30 +45,61 @@ public class ScanConfiguration {
 
     @Configuration
     @ConditionalOnProperty(name = "zuihou.scan.type", havingValue = "FEIGN")
-    @EnableFeignClients(basePackageClasses = SystemApiApi.class)
+    @EnableFeignClients(basePackageClasses = ScanFeignConfiguration.SystemApiApi.class)
     public static class ScanFeignConfiguration {
-
 
         @Bean("systemApiScanService")
         @ConditionalOnMissingBean(SystemApiScanService.class)
-        public SystemApiScanService getSystemApiService() {
-            return new SystemApiFeignServiceImpl();
+        public SystemApiScanService getSystemApiService(SystemApiApi systemApiApi) {
+            return new SystemApiFeignServiceImpl(systemApiApi);
         }
 
-        @Bean
-        public SystemApiApiFallback getSystemApiApiFallback() {
-            return new SystemApiApiFallback();
+        /**
+         * 系统接口
+         *
+         * @author zuihou
+         * @date 2019/12/16
+         */
+        @FeignClient(name = "${zuihou.feign.authority-server:zuihou-authority-server}", path = "/systemApi", fallback = SystemApiApiFallback.class)
+        public interface SystemApiApi {
+            /**
+             * 批量保存
+             *
+             * @param data
+             * @return
+             */
+            @PostMapping("/batch")
+            R<Boolean> batchSave(@RequestBody SystemApiScanSaveDTO data);
+
         }
 
         public class SystemApiFeignServiceImpl implements SystemApiScanService {
 
-            @Autowired
             private SystemApiApi systemApiApi;
+
+            public SystemApiFeignServiceImpl(SystemApiApi systemApiApi) {
+                this.systemApiApi = systemApiApi;
+            }
 
             @Override
             public Boolean batchSave(SystemApiScanSaveDTO data) {
                 R<Boolean> result = systemApiApi.batchSave(data);
                 return result.getIsSuccess() ? result.getData() : false;
+            }
+        }
+
+        /**
+         * 熔断
+         *
+         * @author zuihou
+         * @date 2019/12/16
+         */
+        @Component
+        public class SystemApiApiFallback implements SystemApiApi {
+
+            @Override
+            public R<Boolean> batchSave(SystemApiScanSaveDTO data) {
+                return R.timeout();
             }
         }
 

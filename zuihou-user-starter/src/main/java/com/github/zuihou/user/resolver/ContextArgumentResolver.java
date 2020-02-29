@@ -7,6 +7,7 @@ import com.github.zuihou.user.annotation.LoginUser;
 import com.github.zuihou.user.feign.UserQuery;
 import com.github.zuihou.user.feign.UserResolverService;
 import com.github.zuihou.user.model.SysUser;
+import com.github.zuihou.utils.SpringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -23,11 +24,11 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Slf4j
 public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final UserResolverService userResolverService;
-
-    public ContextArgumentResolver(UserResolverService userResolverService) {
-        this.userResolverService = userResolverService;
-    }
+//    private final UserResolverService userResolverService;
+//
+//    public ContextArgumentResolver(UserResolverService userResolverService) {
+//        this.userResolverService = userResolverService;
+//    }
 
     /**
      * 入参筛选
@@ -68,6 +69,7 @@ public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
             boolean isFull = loginUser.isFull();
 
             if (isFull || loginUser.isStation() || loginUser.isOrg() || loginUser.isRoles()) {
+                UserResolverService userResolverService = SpringUtils.getBean(UserResolverService.class);
                 R<SysUser> result = userResolverService.getById(Convert.toLong(userId),
                         UserQuery.builder()
                                 .full(isFull)

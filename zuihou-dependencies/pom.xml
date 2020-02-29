@@ -55,8 +55,6 @@
         <shiro.version>1.5.1</shiro.version>
 
         <asm.version>5.0.4</asm.version>
-        <groovy-all.version>2.5.5</groovy-all.version>
-        <quartz.version>2.3.0</quartz.version>
 
         <jjwt.version>0.7.0</jjwt.version>
 
@@ -458,6 +456,28 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+
+
+            <!-- commons-exec -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-exec</artifactId>
+                <version>${commons-exec.version}</version>
+            </dependency>
+
+            <!-- commons-email -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-email</artifactId>
+                <version>${commons-email.version}</version>
+            </dependency>
+
+            <!-- commons-collections4 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons.collections4.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
