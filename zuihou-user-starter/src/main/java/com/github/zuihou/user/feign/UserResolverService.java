@@ -1,9 +1,8 @@
 package com.github.zuihou.user.feign;
 
 import com.github.zuihou.base.R;
+import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.user.model.SysUser;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author zuihou
@@ -17,5 +16,15 @@ public interface UserResolverService {
      * @param userQuery
      * @return
      */
-    R<SysUser> getById(@PathVariable("id") Long id, @RequestBody UserQuery userQuery);
+    R<SysUser> getById(Long id, UserQuery userQuery);
+
+    /**
+     * 查询当前用户的信息
+     *
+     * @param userQuery
+     * @return
+     */
+    default R<SysUser> getById(UserQuery userQuery) {
+        return this.getById(BaseContextHandler.getUserId(), userQuery);
+    }
 }

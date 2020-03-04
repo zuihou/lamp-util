@@ -1,6 +1,5 @@
 package com.github.zuihou.user.resolver;
 
-import cn.hutool.core.convert.Convert;
 import com.github.zuihou.base.R;
 import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.user.annotation.LoginUser;
@@ -23,12 +22,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  */
 @Slf4j
 public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
-
-//    private final UserResolverService userResolverService;
-//
-//    public ContextArgumentResolver(UserResolverService userResolverService) {
-//        this.userResolverService = userResolverService;
-//    }
 
     /**
      * 入参筛选
@@ -63,16 +56,17 @@ public class ContextArgumentResolver implements HandlerMethodArgumentResolver {
                 .account(account)
                 .name(name)
                 .build();
-
+        if (userId == null) {
+            return user;
+        }
         try {
             LoginUser loginUser = methodParameter.getParameterAnnotation(LoginUser.class);
-            boolean isFull = loginUser.isFull();
-
-            if (isFull || loginUser.isStation() || loginUser.isOrg() || loginUser.isRoles()) {
+            boolean isQuery = loginUser.isFull() || loginUser.isStation() || loginUser.isOrg() || loginUser.isRoles();
+            if (isQuery) {
                 UserResolverService userResolverService = SpringUtils.getBean(UserResolverService.class);
-                R<SysUser> result = userResolverService.getById(Convert.toLong(userId),
+                R<SysUser> result = userResolverService.getById(userId,
                         UserQuery.builder()
-                                .full(isFull)
+                                .full(loginUser.isFull())
                                 .org(loginUser.isOrg())
                                 .station(loginUser.isStation())
                                 .roles(loginUser.isRoles())

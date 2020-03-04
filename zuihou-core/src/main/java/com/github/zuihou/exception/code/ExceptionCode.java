@@ -69,6 +69,7 @@ public enum ExceptionCode implements BaseExceptionCode {
 
     DATA_SAVE_ERROR(2000, "新增数据失败"),
     DATA_UPDATE_ERROR(2001, "修改数据失败"),
+    TOO_MUCH_DATA_ERROR(2002, "批量新增数据过多"),
     //jwt token 相关 start
 
     JWT_TOKEN_EXPIRED(40001, "会话超时，请重新登录"),

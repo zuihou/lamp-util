@@ -22,7 +22,7 @@ import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT;
 /**
  * SuperController
  *
- * @author Caratacus
+ * @author zuihou
  */
 @Deprecated
 public abstract class BaseController {

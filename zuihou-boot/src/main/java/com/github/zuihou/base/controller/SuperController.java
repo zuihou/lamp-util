@@ -1,4 +1,4 @@
-package com.github.zuihou.base;
+package com.github.zuihou.base.controller;
 
 import cn.afterturn.easypoi.entity.vo.NormalExcelConstants;
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
@@ -16,6 +16,7 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.zuihou.base.R;
 import com.github.zuihou.base.entity.SuperEntity;
 import com.github.zuihou.base.request.PageParams;
 import com.github.zuihou.base.service.SuperService;
@@ -60,26 +61,21 @@ import java.util.Map;
  * <p>
  * 若重写扩展方法无法满足，则可以重写page、save等方法，但切记不要修改 @RequestMapping 参数
  *
- * @author Caratacus
+ * @author zuihou
  */
 public abstract class SuperController<S extends SuperService<Entity>, Id extends Serializable, Entity, PageDTO, SaveDTO, UpdateDTO> {
 
-    protected Class<Entity> entityClass = null;
     @Autowired
     protected S baseService;
 
+    protected Class<Entity> entityClass = null;
     protected SuperController() {
         entityClass = (Class<Entity>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[2];
-    }
-
-    protected static IPage getPage(PageParams params) {
-        return params.getPage();
     }
 
     protected Class<Entity> getEntityClass() {
         return entityClass;
     }
-
 
     /**
      * 成功返回
@@ -241,7 +237,7 @@ public abstract class SuperController<S extends SuperService<Entity>, Id extends
     @GetMapping("/{id}")
     @SysLog("'查询:' + #id")
     public R<Entity> get(@PathVariable Id id) {
-        return success(baseService.getByIdCache(id));
+        return success(baseService.getById(id));
     }
 
     /**

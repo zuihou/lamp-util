@@ -22,7 +22,10 @@ zuihou:
       maximumSize: 1000
       refreshWriteTime: 10
       refreshThreadPoolSize: 1000
-
+  user:
+    type: FEIGN
+  scan:
+    type: FEIGN
 
 server:
   undertow: # jetty  undertow

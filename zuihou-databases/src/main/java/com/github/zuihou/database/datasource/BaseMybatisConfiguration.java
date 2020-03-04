@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.parser.ISqlParser;
 import com.baomidou.mybatisplus.extension.parsers.BlockAttackSqlParser;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import com.github.zuihou.database.injector.ZuihouSqlInjector;
+import com.github.zuihou.database.injector.MySqlInjector;
 import com.github.zuihou.database.mybatis.WriteInterceptor;
 import com.github.zuihou.database.mybatis.typehandler.FullLikeTypeHandler;
 import com.github.zuihou.database.mybatis.typehandler.LeftLikeTypeHandler;
@@ -146,7 +146,7 @@ public abstract class BaseMybatisConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ZuihouSqlInjector getZuihouSqlInjector() {
-        return new ZuihouSqlInjector();
+    public MySqlInjector getZuihouSqlInjector() {
+        return new MySqlInjector();
     }
 }

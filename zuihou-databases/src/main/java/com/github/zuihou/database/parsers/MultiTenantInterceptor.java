@@ -50,7 +50,7 @@ public class MultiTenantInterceptor implements Interceptor {
     public void setProperties(Properties properties) {
     }
 
-    void setSchemaName(String schemaName) {
+    public void setSchemaName(String schemaName) {
         this.schemaName = schemaName;
     }
 
@@ -125,11 +125,19 @@ public class MultiTenantInterceptor implements Interceptor {
             for (SQLSelectItem sqlSelectItem : sqlSelectItemList) {
                 SQLExpr sqlExpr = sqlSelectItem.getExpr();
                 setSQLSchema(sqlExpr);
+
+                //存储过程
+                if (sqlExpr instanceof SQLMethodInvokeExpr) {
+                    if (sqlSelectQuery instanceof SQLSelectQueryBlock && ((SQLSelectQueryBlock) sqlSelectQuery).getFrom() == null) {
+                        logger.info("执行到存储过程 or 函数这里了");
+                        ((SQLMethodInvokeExpr) sqlExpr).setOwner(new SQLIdentifierExpr(schemaName));
+                    }
+                }
             }
         }
     }
 
-    String processSqlByInterceptor(String sql) {
+    public String processSqlByInterceptor(String sql) {
         MySqlStatementParser parser = new MySqlStatementParser(sql);
         SQLStatement sqlStatement = parser.parseStatement();
         if (sqlStatement instanceof SQLSelectStatement) {

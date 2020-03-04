@@ -31,7 +31,7 @@
         <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
         <mybatisplus.version>3.3.1</mybatisplus.version>
         <p6spy.version>3.8.7</p6spy.version>
-        <fastjson.version>1.2.62</fastjson.version>
+        <fastjson.version>1.2.66</fastjson.version>
         <druid.version>1.1.21</druid.version>
         <mysql.version>6.0.6</mysql.version>
         <knife4j.version>2.0.1</knife4j.version>

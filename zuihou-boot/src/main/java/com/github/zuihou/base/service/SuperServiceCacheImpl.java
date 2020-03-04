@@ -1,12 +1,7 @@
 package com.github.zuihou.base.service;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.github.zuihou.base.mapper.SuperMapper;
-import com.github.zuihou.exception.BizException;
-import com.github.zuihou.exception.code.ExceptionCode;
 import com.github.zuihou.utils.StrPool;
 import net.oschina.j2cache.CacheChannel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +11,6 @@ import org.springframework.cache.annotation.Cacheable;
 
 import java.io.Serializable;
 import java.util.Collection;
-
-import static com.github.zuihou.exception.code.ExceptionCode.SERVICE_MAPPER_ERROR;
 
 /**
  * 基于SpringCache + J2Cache 实现的 缓存实现
@@ -37,12 +30,22 @@ import static com.github.zuihou.exception.code.ExceptionCode.SERVICE_MAPPER_ERRO
  * @date 2020年02月27日18:15:17
  */
 @CacheConfig(cacheNames = SuperServiceCacheImpl.CACHE_NAMES)
-public class SuperServiceCacheImpl<M extends SuperMapper<T>, T> extends ServiceImpl<M, T> implements SuperService<T> {
+public abstract class SuperServiceCacheImpl<M extends SuperMapper<T>, T> extends SuperServiceImpl<M, T> implements SuperCacheService<T> {
 
     protected final static String CACHE_NAMES = "default";
 
     @Autowired
     protected CacheChannel cacheChannel;
+
+    /**
+     * 构建key
+     *
+     * @param args
+     * @return
+     */
+    protected String key(Object... args) {
+        return buildKey(getClassSimpleName(), args);
+    }
 
     /**
      * 构建没有租户信息的key
@@ -60,22 +63,13 @@ public class SuperServiceCacheImpl<M extends SuperMapper<T>, T> extends ServiceI
         }
     }
 
-    public SuperMapper getSuperMapper() {
-        if (baseMapper instanceof SuperMapper) {
-            return baseMapper;
-        }
-        throw BizException.wrap(SERVICE_MAPPER_ERROR);
-    }
-
     /**
      * 缓存的 region
      * 记得重写该类！
      *
      * @return
      */
-    protected String getRegion() {
-        return CACHE_NAMES;
-    }
+    protected abstract String getRegion();
 
     /**
      * 获取当前执行类的简单名称
@@ -83,40 +77,7 @@ public class SuperServiceCacheImpl<M extends SuperMapper<T>, T> extends ServiceI
      *
      * @return
      */
-    protected String getClassSimpleName() {
-        return SuperServiceCacheImpl.class.getSimpleName();
-    }
-
-    /**
-     * 构建key
-     *
-     * @param args
-     * @return
-     */
-    protected String key(Object... args) {
-        return buildKey(getClassSimpleName(), args);
-    }
-
-    @Override
-    public boolean save(T model) {
-        boolean bool = super.save(model);
-        if (bool) {
-            if (!handlerSave(model)) {
-                throw BizException.wrap(ExceptionCode.DATA_SAVE_ERROR);
-            }
-        }
-        return bool;
-    }
-
-    /**
-     * 处理新增相关处理
-     *
-     * @param model
-     * @return
-     */
-    protected boolean handlerSave(T model) {
-        return true;
-    }
+    protected abstract String getClassSimpleName();
 
 
     @Override
@@ -133,9 +94,6 @@ public class SuperServiceCacheImpl<M extends SuperMapper<T>, T> extends ServiceI
 
     @Override
     public boolean removeByIds(Collection<? extends Serializable> idList) {
-        if (CollUtil.isEmpty(idList)) {
-            return true;
-        }
         boolean flag = super.removeByIds(idList);
 
         String[] keys = idList.stream().map(id -> key(id)).toArray(String[]::new);
@@ -147,46 +105,13 @@ public class SuperServiceCacheImpl<M extends SuperMapper<T>, T> extends ServiceI
     @Override
     @CacheEvict(key = "#root.targetClass.simpleName + ':'+#p0.id")
     public boolean updateAllById(T model) {
-        boolean bool = SqlHelper.retBool(getSuperMapper().updateAllById(model));
-
-        if (bool) {
-            if (!handlerUpdateAllById(model)) {
-                throw BizException.wrap(ExceptionCode.DATA_UPDATE_ERROR);
-            }
-        }
-        return bool;
+        return super.updateAllById(model);
     }
 
     @Override
     @CacheEvict(key = "#root.targetClass.simpleName + ':'+#p0.id")
     public boolean updateById(T model) {
-        boolean bool = super.updateById(model);
-        if (bool) {
-            if (!handlerUpdateById(model)) {
-                throw BizException.wrap(ExceptionCode.DATA_UPDATE_ERROR);
-            }
-        }
-        return bool;
-    }
-
-    /**
-     * 处理修改相关处理
-     *
-     * @param model
-     * @return
-     */
-    protected boolean handlerUpdateAllById(T model) {
-        return true;
-    }
-
-    /**
-     * 处理修改相关处理
-     *
-     * @param model
-     * @return
-     */
-    protected boolean handlerUpdateById(T model) {
-        return true;
+        return super.updateById(model);
     }
 
 }

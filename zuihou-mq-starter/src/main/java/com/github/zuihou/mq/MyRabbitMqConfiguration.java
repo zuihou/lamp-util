@@ -17,8 +17,8 @@ import org.springframework.context.annotation.Import;
  * @date 2019/09/20
  */
 @Configuration
-@Import(ZuihouRabbitMqConfiguration.RabbitMqConfiguration.class)
-public class ZuihouRabbitMqConfiguration {
+@Import(MyRabbitMqConfiguration.RabbitMqConfiguration.class)
+public class MyRabbitMqConfiguration {
     @Slf4j
     @Configuration
     @ConditionalOnProperty(name = {

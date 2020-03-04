@@ -10,6 +10,7 @@ zuihou:
     password: root
   database:
     bizDatabase: zuihou_base
+    isNotWrite: false
     isMultiTenant: true   # 是否启用多租户
     isBlockAttack: false  # 是否启用 攻击 SQL 阻断解析器
     worker-id: 0

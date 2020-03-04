@@ -48,7 +48,7 @@ http://doc.tangyh.top/zuihou-admin-cloud
 1. 将zuihou-commons/zuihou-dependencies/pom.xml导入IDEA 
 2. 编译 mvn install
 3. 将zuihou-commons/pom.xml导入IDEA
-4. 编译 mvn install
+4. 编译 mvn clean install -Dmaven.javadoc.skip=true -Dgpg.skip=true -Dmaven.source.skip=true
 
 
 ## 如何编译 zuihou-commons ?

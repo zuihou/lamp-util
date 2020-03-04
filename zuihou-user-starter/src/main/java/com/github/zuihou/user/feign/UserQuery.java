@@ -1,6 +1,7 @@
 package com.github.zuihou.user.feign;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 
 /**
  * 用户查询对象
@@ -11,6 +12,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Accessors(chain = true)
 @ToString
 @Builder
 public class UserQuery {
@@ -33,4 +35,20 @@ public class UserQuery {
      * 是否只查询岗位信息，true则通过rpc接口查询
      */
     private Boolean station;
+
+    public static UserQuery buildFull() {
+        return new UserQuery().setFull(true);
+    }
+
+    public static UserQuery buildRoles() {
+        return new UserQuery().setRoles(true);
+    }
+
+    public static UserQuery buildOrg() {
+        return new UserQuery().setOrg(true);
+    }
+
+    public static UserQuery buildStation() {
+        return new UserQuery().setStation(true);
+    }
 }
