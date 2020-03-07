@@ -75,11 +75,12 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     public boolean save(T model) {
         R<Boolean> result = handlerSave(model);
         if (result.getDefExec()) {
+            boolean save = super.save(model);
             if (model instanceof SuperEntity) {
                 String key = key(((SuperEntity) model).getId());
                 cacheChannel.set(getRegion(), key, model);
             }
-            return super.save(model);
+            return save;
         }
         return result.getData();
     }
