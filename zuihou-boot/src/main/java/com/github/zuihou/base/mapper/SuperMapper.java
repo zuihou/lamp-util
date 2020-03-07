@@ -10,6 +10,8 @@ import java.util.List;
  * 基于MP的 BaseMapper 新增了2个方法： insertBatchSomeColumn、updateAllById
  *
  * @param <T> 实体
+ * @author zuihou
+ * @date 2020年03月06日11:06:46
  */
 public interface SuperMapper<T> extends BaseMapper<T> {
 

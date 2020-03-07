@@ -62,6 +62,7 @@ import java.util.Map;
  * 若重写扩展方法无法满足，则可以重写page、save等方法，但切记不要修改 @RequestMapping 参数
  *
  * @author zuihou
+ * @date 2020年03月06日11:06:46
  */
 public abstract class SuperController<S extends SuperService<Entity>, Id extends Serializable, Entity, PageDTO, SaveDTO, UpdateDTO> {
 
@@ -69,6 +70,7 @@ public abstract class SuperController<S extends SuperService<Entity>, Id extends
     protected S baseService;
 
     protected Class<Entity> entityClass = null;
+
     protected SuperController() {
         entityClass = (Class<Entity>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[2];
     }
@@ -176,10 +178,10 @@ public abstract class SuperController<S extends SuperService<Entity>, Id extends
     /**
      * 自定义新增
      *
-     * @param saveDTO
+     * @param model
      * @return 返回SUCCESS_RESPONSE, 调用默认更新, 返回其他不调用默认更新
      */
-    protected R<Entity> handlerSave(SaveDTO saveDTO) {
+    protected R<Entity> handlerSave(SaveDTO model) {
         return R.successDef();
     }
 
@@ -321,7 +323,7 @@ public abstract class SuperController<S extends SuperService<Entity>, Id extends
      * @param wrapper
      * @param params
      */
-    protected void handlerWrapper(QueryWrap wrapper, PageParams<PageDTO> params) {
+    protected void handlerWrapper(QueryWrap<Entity> wrapper, PageParams<PageDTO> params) {
         if (CollUtil.isNotEmpty(params.getMap())) {
             Map<String, String> map = params.getMap();
             //拼装区间
@@ -369,7 +371,7 @@ public abstract class SuperController<S extends SuperService<Entity>, Id extends
             page.setSize(defSize);
         }
         Entity model = BeanUtil.toBean(params.getModel(), getEntityClass());
-        QueryWrap wrapper = Wraps.q(model);
+        QueryWrap<Entity> wrapper = Wraps.q(model);
 
         handlerWrapper(wrapper, params);
         baseService.page(page, wrapper);
