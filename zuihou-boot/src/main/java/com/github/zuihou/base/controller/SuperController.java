@@ -33,7 +33,7 @@ import java.lang.reflect.ParameterizedType;
  * @date 2020年03月06日11:06:46
  */
 public abstract class SuperController<S extends SuperService<Entity>, Id extends Serializable, Entity, PageDTO, SaveDTO, UpdateDTO> extends SuperSimpleController<S, Entity>
-        implements SaveController<Entity, SaveDTO>, UpdateController<Entity, UpdateDTO>, DeleteController<Entity, Id>, PoiController<Entity, Id, PageDTO> {
+        implements SaveController<Entity, SaveDTO>, UpdateController<Entity, UpdateDTO>, DeleteController<Entity, Id>, PoiController<Entity, PageDTO>, QueryController<Entity, Id, PageDTO> {
 
 
     @Override

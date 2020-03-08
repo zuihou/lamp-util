@@ -406,6 +406,11 @@
                 <artifactId>easypoi-annotation</artifactId>
                 <version>${easypoi.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi-base</artifactId>
+                <version>${easypoi.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.google.code.gson</groupId>

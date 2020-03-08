@@ -115,6 +115,10 @@ public class R<T> {
         return new R<>(SUCCESS_CODE, null, "ok", true);
     }
 
+    public static <E> R<E> successDef(E data, String msg) {
+        return new R<>(SUCCESS_CODE, data, msg, true);
+    }
+
     /**
      * 请求成功方法 ，data返回值，msg提示信息
      *

@@ -1,8 +1,12 @@
 package com.github.zuihou.utils;
 
+import cn.hutool.core.collection.CollUtil;
+import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableMap;
 
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.function.Function;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -55,5 +59,21 @@ public class MapHelper {
         }
     }
 
+    /**
+     * 转换 Map 的 K 和 V
+     *
+     * @param map
+     * @param <K>
+     * @param <V>
+     * @return
+     */
+    public static <K, V> Map<V, K> inverse(Map<K, V> map) {
+        if (CollUtil.isEmpty(map)) {
+            return Collections.emptyMap();
+        }
+        HashBiMap<K, V> biMap = HashBiMap.create();
+        map.forEach(biMap::forcePut);
+        return biMap.inverse();
+    }
 
 }

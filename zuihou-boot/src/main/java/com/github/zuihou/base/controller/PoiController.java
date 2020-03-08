@@ -10,6 +10,7 @@ import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
 import cn.afterturn.easypoi.view.PoiBaseView;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.zuihou.base.R;
 import com.github.zuihou.base.request.PageParams;
@@ -23,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,12 +32,11 @@ import java.util.Map;
  * 导入导出
  *
  * @param <Entity>  实体
- * @param <Id>      主键
  * @param <PageDTO> 分页查询参数
  * @author zuihou
  * @date 2020年03月07日22:02:06
  */
-public interface PoiController<Entity, Id extends Serializable, PageDTO> extends QueryController<Entity, Id, PageDTO> {
+public interface PoiController<Entity, PageDTO> extends BaseController<Entity> {
 
     /**
      * 导出Excel
@@ -84,25 +83,45 @@ public interface PoiController<Entity, Id extends Serializable, PageDTO> extends
      * 使用自动生成的实体+注解方式导入 对RemoteData 类型的字段不支持，
      * 建议自建实体使用
      *
-     * @param simpleFile
+     * @param simpleFile 上传文件
+     * @param request    请求
+     * @param response   响应
      * @return
      * @throws Exception
      */
     @ApiOperation(value = "导入Excel")
     @PostMapping(value = "/import")
     @SysLog(value = "'导入Excel:' + #simpleFile?.originalFilename", request = false)
-    default R<Boolean> importExcel(@RequestParam(value = "file") MultipartFile simpleFile) throws Exception {
+    default R<Boolean> importExcel(@RequestParam(value = "file") MultipartFile simpleFile, HttpServletRequest request,
+                                   HttpServletResponse response) throws Exception {
         ImportParams params = new ImportParams();
-        params.setTitleRows(0);
-        params.setHeadRows(1);
+
+        params.setTitleRows(StrUtil.isEmpty(request.getParameter("titleRows")) ? 0 : Convert.toInt(request.getParameter("titleRows")));
+        params.setHeadRows(StrUtil.isEmpty(request.getParameter("headRows")) ? 1 : Convert.toInt(request.getParameter("headRows")));
         List<Map<String, String>> list = ExcelImportUtil.importExcel(simpleFile.getInputStream(), Map.class, params);
 
         if (list != null && !list.isEmpty()) {
-            handlerImport(list);
+            return handlerImport(list);
         }
-        return success();
+        return validFail("导入Excel无有效数据！");
     }
 
+    /**
+     * 转换后保存
+     *
+     * @param list
+     */
+    default R<Boolean> handlerImport(List<Map<String, String>> list) {
+        return R.successDef(null, "请在子类Controller重写导入方法，实现导入逻辑");
+    }
+
+    /**
+     * 构建导出参数
+     *
+     * @param params 分页参数
+     * @param page
+     * @return
+     */
     default ExportParams getExportParams(PageParams<PageDTO> params, IPage<Entity> page) {
         query(params, page, params.getSize() == -1 ? Convert.toLong(Integer.MAX_VALUE) : params.getSize());
 
