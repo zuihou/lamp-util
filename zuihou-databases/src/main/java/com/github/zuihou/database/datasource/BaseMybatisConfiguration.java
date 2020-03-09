@@ -5,6 +5,9 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.parser.ISqlParser;
 import com.baomidou.mybatisplus.extension.parsers.BlockAttackSqlParser;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.tenant.TenantHandler;
+import com.baomidou.mybatisplus.extension.plugins.tenant.TenantSqlParser;
+import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.database.injector.MySqlInjector;
 import com.github.zuihou.database.mybatis.WriteInterceptor;
 import com.github.zuihou.database.mybatis.typehandler.FullLikeTypeHandler;
@@ -12,6 +15,10 @@ import com.github.zuihou.database.mybatis.typehandler.LeftLikeTypeHandler;
 import com.github.zuihou.database.mybatis.typehandler.RightLikeTypeHandler;
 import com.github.zuihou.database.parsers.DynamicTableNameParser;
 import com.github.zuihou.database.properties.DatabaseProperties;
+import com.github.zuihou.database.properties.MultiTenantType;
+import lombok.extern.slf4j.Slf4j;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.StringValue;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +36,7 @@ import java.util.List;
  * @author zuihou
  * @date 2018/10/24
  */
+@Slf4j
 public abstract class BaseMybatisConfiguration {
     protected final DatabaseProperties databaseProperties;
 
@@ -66,10 +74,33 @@ public abstract class BaseMybatisConfiguration {
             sqlParserList.add(new BlockAttackSqlParser());
         }
 
+        log.info("已为您开启{}租户模式", databaseProperties.getMultiTenantType().getDescribe());
         //动态"表名" 插件 来实现 租户schema切换 加入解析链
-        if (this.databaseProperties.getIsMultiTenant()) {
+        if (MultiTenantType.SCHEMA.eq(this.databaseProperties.getMultiTenantType())) {
             DynamicTableNameParser dynamicTableNameParser = new DynamicTableNameParser(databaseProperties.getBizDatabase());
             sqlParserList.add(dynamicTableNameParser);
+        } else if (MultiTenantType.COLUMN.eq(this.databaseProperties.getMultiTenantType())) {
+            TenantSqlParser tenantSqlParser = new TenantSqlParser();
+            tenantSqlParser.setTenantHandler(new TenantHandler() {
+                @Override
+                public Expression getTenantId(boolean where) {
+                    // 该 where 条件 3.2.0 版本开始添加的，用于分区是否为在 where 条件中使用
+                    // 如果是in/between之类的多个tenantId的情况，参考下方示例
+                    return new StringValue(BaseContextHandler.getTenant());
+                }
+
+                @Override
+                public String getTenantIdColumn() {
+                    return databaseProperties.getTenantIdColumn();
+                }
+
+                @Override
+                public boolean doTableFilter(String tableName) {
+                    // 这里可以判断是否过滤表
+                    return false;
+                }
+            });
+            sqlParserList.add(tenantSqlParser);
         }
 
         paginationInterceptor.setSqlParserList(sqlParserList);

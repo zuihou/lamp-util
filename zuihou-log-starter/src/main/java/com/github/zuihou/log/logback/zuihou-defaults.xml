@@ -25,18 +25,33 @@
     <springProperty scope="context" name="log.path" source="logging.file.path" defaultValue="/data/projects/logs"/>
     <springProperty scope="context" name="spring.application.name" source="spring.application.name"/>
     <springProperty scope="context" name="spring.profiles.active" source="spring.profiles.active"/>
-    <springProperty scope="context" name="common-pattern" source="logging.common-pattern"
-                    defaultValue="%d{yyyy-MM-dd HH:mm:ss.SSS}:[%5p] [%t:%r] [%logger{50}.%M:%L] --> %msg%n"/>
+    <!--    <springProperty scope="context" name="common-pattern" source="logging.common-pattern"-->
+    <!--                    defaultValue="%d{yyyy-MM-dd HH:mm:ss.SSS}:[%5p] [%t:%r] [%logger{50}.%M:%L] &ndash;&gt; %msg%n"/>-->
     <springProperty scope="context" name="log.level.console" source="logging.level.console" defaultValue="INFO"/>
     <springProperty scope="context" name="log.level.controller" source="logging.level.controller" defaultValue="INFO"/>
     <springProperty scope="context" name="log.level.service" source="logging.level.service" defaultValue="INFO"/>
     <springProperty scope="context" name="log.level.dao" source="logging.level.sql" defaultValue="DEBUG"/>
     <springProperty scope="context" name="log.level.nacos" source="logging.level.nacos" defaultValue="WARN"/>
+    <springProperty scope="context" name="server.port" source="server.port" defaultValue="0000"/>
+    <!-- 彩色日志 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
+    <!-- 彩色日志格式 -->
+    <springProperty scope="context" name="common-pattern-color" source="logging.common-pattern-color"
+                    defaultValue="[${spring.application.name}:${server.port}:%X{tenant}:%X{userid}] %clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint}:%clr([%5p]){blue} %clr([${PID}]){magenta} %clr([%X{trace}]){yellow} %clr([%t:%r]){orange} %clr([%logger{50}.%M:%L]){cyan} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <springProperty scope="context" name="common-pattern" source="logging.common-pattern"
+                    defaultValue="[${spring.application.name}:${server.port}:%X{tenant}:%X{userid}] %d{yyyy-MM-dd HH:mm:ss.SSS}[%5p] ${PID} [%X{trace}] [%t:%r] [%logger{50}.%M:%L] %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
     <contextName>${spring.application.name}-logback</contextName>
 
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <jmxConfigurator/>
+
 
     <!-- 控制台实时输出，采用高亮语法，用于开发环境 -->
     <appender name="CONSOLE_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
@@ -44,8 +59,7 @@
 <!--            <level>${log.level.console}</level>-->
         </filter>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}:[%5p] [%t:%r] [%cyan(%logger{50}).%M:%L] --> %highlight(%msg) %n
-            </pattern>
+            <pattern>${common-pattern-color}</pattern>
         </encoder>
     </appender>
     <!-- 控制台异步实时输出 -->
@@ -144,6 +158,26 @@
         <appender-ref ref="SERVICE_APPENDER"/>
     </appender>
 
+    <!-- 埋点包的日志 -->
+    <appender name="POINT_LOG_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/${spring.application.name}/point.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/${spring.application.name}/%d{yyyy-MM}/point-%d{yyyy-MM-dd}-%i.log.gz
+            </fileNamePattern>
+            <maxFileSize>128MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${common-pattern}</pattern>
+        </encoder>
+    </appender>
+    <appender name="ASYNC_POINT_LOG_APPENDER" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>256</queueSize>
+        <appender-ref ref="POINT_LOG_APPENDER"/>
+    </appender>
+
     <!-- controller 包的日志 -->
     <appender name="CONTROLLER_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/${spring.application.name}/controller.log</file>
@@ -229,6 +263,9 @@
         <logger name="com.alibaba.nacos.client.naming" level="${log.level.nacos}" additivity="false">
             <appender-ref ref="ASYNC_THIRD_PARTY_APPENDER"/>
         </logger>
+        <logger name="com.github.zuihou.log.monitor" level="debug" addtivity="false">
+            <appender-ref ref="ASYNC_POINT_LOG_APPENDER"/>
+        </logger>
     </springProfile>
 
     <springProfile name="dev">
@@ -253,6 +290,14 @@
 
         <logger name="com.alibaba.nacos.client.naming" level="${log.level.nacos}" additivity="false">
             <appender-ref ref="THIRD_PARTY_APPENDER"/>
+        </logger>
+
+        <logger name="com.alibaba.nacos.client.naming" level="${log.level.nacos}" additivity="false">
+            <appender-ref ref="THIRD_PARTY_APPENDER"/>
+        </logger>
+
+        <logger name="com.github.zuihou.log.monitor" level="debug" addtivity="false">
+            <appender-ref ref="POINT_LOG_APPENDER"/>
         </logger>
     </springProfile>
 

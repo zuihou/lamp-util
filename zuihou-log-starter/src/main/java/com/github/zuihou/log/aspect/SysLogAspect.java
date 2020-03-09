@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.DefaultParameterNameDiscoverer;
@@ -233,12 +234,17 @@ public class SysLogAspect {
             String strArgs = getArgs(sysLogAnno, args, request);
             sysLog.setParams(getText(strArgs));
 
+            sysLog.setTrace(MDC.get(BaseContextConstants.LOG_TRACE_ID));
+
             if (request != null) {
                 sysLog.setRequestIp(ServletUtil.getClientIP(request));
                 sysLog.setRequestUri(URLUtil.getPath(request.getRequestURI()));
                 sysLog.setHttpMethod(request.getMethod());
                 sysLog.setUa(StrUtil.sub(request.getHeader("user-agent"), 0, 500));
                 sysLog.setTenantCode(request.getHeader(BaseContextConstants.TENANT));
+                if (StrUtil.isEmpty(sysLog.getTrace())) {
+                    sysLog.setTrace(request.getHeader(BaseContextConstants.TRACE_ID_HEADER));
+                }
             }
             sysLog.setStartTime(LocalDateTime.now());
 

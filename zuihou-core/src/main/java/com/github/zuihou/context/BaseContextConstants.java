@@ -31,6 +31,15 @@ public class BaseContextConstants {
     public static final String IS_BOOT = "boot";
 
     /**
+     * 日志链路追踪id信息头
+     */
+    public static final String TRACE_ID_HEADER = "x-trace-header";
+    /**
+     * 日志链路追踪id日志标志
+     */
+    public static final String LOG_TRACE_ID = "trace";
+
+    /**
      * 租户 编码
      */
     public static final String TENANT = "tenant";

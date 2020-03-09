@@ -28,7 +28,13 @@ public class OptLogDTO {
      * 操作IP
      */
     private String requestIp;
+
     private String tenantCode;
+
+    /**
+     * 日志链路追踪id日志标志
+     */
+    private String trace;
 
     /**
      * 日志类型

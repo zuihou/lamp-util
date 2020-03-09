@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.github.zuihou.database.properties.DatabaseProperties.PREFIX;
+import static com.github.zuihou.database.properties.MultiTenantType.SCHEMA;
 
 
 /**
@@ -33,10 +34,6 @@ public class DatabaseProperties {
      */
     public Boolean isSeata = false;
     /**
-     * 是否 启用多租户
-     */
-    private Boolean isMultiTenant = true;
-    /**
      * 是否禁止写入
      */
     private Boolean isNotWrite = false;
@@ -49,7 +46,19 @@ public class DatabaseProperties {
      */
     private int txTimeout = 60 * 60;
 
+    /**
+     * 业务库前缀
+     */
     private String bizDatabase = "zuihou_base";
+
+    /**
+     * 多租户模式
+     */
+    private MultiTenantType multiTenantType = SCHEMA;
+    /**
+     * 租户id 列名
+     */
+    private String tenantIdColumn = "tenant_code";
 
     /**
      * Id 生成策略
@@ -80,4 +89,5 @@ public class DatabaseProperties {
          */
         private Long dataCenterId = 0L;
     }
+
 }

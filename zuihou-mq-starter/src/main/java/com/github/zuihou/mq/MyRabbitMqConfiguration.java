@@ -27,8 +27,8 @@ public class MyRabbitMqConfiguration {
     @EnableAutoConfiguration(exclude = {RabbitAutoConfiguration.class})
     public static class RabbitMqConfiguration {
 
-        @Bean("zxcvbnm")
-        public TestB getB() {
+        @Bean("checkMq")
+        public TestB checkMq() {
             log.warn("检测到zuihou.rabbitmq.enabled=false，排除了 RabbitMQ");
             return new TestB();
         }

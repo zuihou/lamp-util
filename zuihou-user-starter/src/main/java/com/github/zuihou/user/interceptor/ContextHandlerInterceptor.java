@@ -1,9 +1,11 @@
 package com.github.zuihou.user.interceptor;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import com.github.zuihou.context.BaseContextConstants;
 import com.github.zuihou.context.BaseContextHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -33,6 +35,7 @@ public class ContextHandlerInterceptor extends HandlerInterceptorAdapter {
                 log.info("not exec!!! url={}", request.getRequestURL());
                 return super.preHandle(request, response, handler);
             }
+
             if (!BaseContextHandler.getBoot()) {
                 BaseContextHandler.setUserId(getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
                 BaseContextHandler.setAccount(getHeader(request, BaseContextConstants.JWT_KEY_ACCOUNT));
@@ -40,6 +43,11 @@ public class ContextHandlerInterceptor extends HandlerInterceptorAdapter {
             }
             BaseContextHandler.setGrayVersion(getHeader(request, BaseContextConstants.GRAY_VERSION));
             BaseContextHandler.setTenant(getHeader(request, BaseContextConstants.TENANT));
+
+            String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
+            MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? StrUtil.EMPTY : traceId);
+            MDC.put(BaseContextConstants.TENANT, BaseContextHandler.getTenant());
+            MDC.put(BaseContextConstants.JWT_KEY_USER_ID, String.valueOf(BaseContextHandler.getUserId()));
         } catch (Exception e) {
             log.warn("解析token信息时，发生异常. url=" + request.getRequestURI(), e);
         }
@@ -49,7 +57,7 @@ public class ContextHandlerInterceptor extends HandlerInterceptorAdapter {
     private String getHeader(HttpServletRequest request, String name) {
         String value = request.getHeader(name);
         if (StringUtils.isEmpty(value)) {
-            return null;
+            return "";
         }
         return URLUtil.decode(value);
     }
