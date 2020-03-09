@@ -30,7 +30,7 @@ import java.util.List;
  * @date 2018/10/24
  */
 public abstract class BaseMybatisConfiguration {
-    private final DatabaseProperties databaseProperties;
+    protected final DatabaseProperties databaseProperties;
 
     public BaseMybatisConfiguration(DatabaseProperties databaseProperties) {
         this.databaseProperties = databaseProperties;

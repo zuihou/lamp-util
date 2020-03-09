@@ -27,7 +27,7 @@ import java.util.List;
  * @author zuihou
  * @date 2020年03月07日22:06:35
  */
-public interface QueryController<Entity, Id extends Serializable, PageDTO> extends BaseController<Entity> {
+public interface QueryController<Entity, Id extends Serializable, PageDTO> extends PageController<Entity, PageDTO> {
 
     /**
      * 查询

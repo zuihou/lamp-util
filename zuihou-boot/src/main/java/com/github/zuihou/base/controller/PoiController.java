@@ -36,7 +36,7 @@ import java.util.Map;
  * @author zuihou
  * @date 2020年03月07日22:02:06
  */
-public interface PoiController<Entity, PageDTO> extends BaseController<Entity> {
+public interface PoiController<Entity, PageDTO> extends PageController<Entity, PageDTO> {
 
     /**
      * 导出Excel
