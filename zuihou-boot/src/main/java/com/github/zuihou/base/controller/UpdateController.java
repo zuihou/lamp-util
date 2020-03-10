@@ -32,7 +32,7 @@ public interface UpdateController<Entity, UpdateDTO> extends BaseController<Enti
         R<Entity> result = handlerUpdate(updateDTO);
         if (result.getDefExec()) {
             Entity model = BeanUtil.toBean(updateDTO, getEntityClass());
-            getBaseService().updateAllById(model);
+            getBaseService().updateById(model);
             result.setData(model);
         }
         return result;
