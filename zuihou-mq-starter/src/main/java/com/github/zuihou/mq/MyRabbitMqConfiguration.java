@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -26,11 +25,8 @@ public class MyRabbitMqConfiguration {
     }, havingValue = "false", matchIfMissing = true)
     @EnableAutoConfiguration(exclude = {RabbitAutoConfiguration.class})
     public static class RabbitMqConfiguration {
-
-        @Bean("checkMq")
-        public TestB checkMq() {
+        public RabbitMqConfiguration() {
             log.warn("检测到zuihou.rabbitmq.enabled=false，排除了 RabbitMQ");
-            return new TestB();
         }
     }
 
