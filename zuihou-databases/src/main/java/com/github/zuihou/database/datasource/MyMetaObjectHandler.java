@@ -35,6 +35,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     private long workerId;
     private long dataCenterId;
 
+    /**
+     * @param workerId     终端ID
+     * @param dataCenterId 数据中心ID
+     */
     public MyMetaObjectHandler(long workerId, long dataCenterId) {
         super();
         this.workerId = workerId;

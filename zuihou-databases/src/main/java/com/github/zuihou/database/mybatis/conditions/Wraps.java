@@ -1,11 +1,13 @@
 package com.github.zuihou.database.mybatis.conditions;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.github.zuihou.database.mybatis.conditions.query.LbqWrapper;
 import com.github.zuihou.database.mybatis.conditions.query.QueryWrap;
 import com.github.zuihou.database.mybatis.conditions.update.LbuWrapper;
 import com.github.zuihou.model.RemoteData;
+import lombok.Data;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -113,7 +115,8 @@ public class Wraps {
             if (classValue instanceof RemoteData) {
                 RemoteData rd = (RemoteData) classValue;
                 Object key = rd.getKey();
-                if (key == null) {
+                if (ObjectUtil.isEmpty(key)) {
+                    ReflectUtil.setFieldValue(target, field, null);
                     continue;
                 }
                 if (!(key instanceof String)) {
@@ -142,6 +145,13 @@ public class Wraps {
             }
         }
         return (T) target;
+    }
+
+    @Data
+    public static class Txx {
+        RemoteData<String, String> d1;
+        RemoteData<Long, String> d2;
+        private String aa;
     }
 
 }
