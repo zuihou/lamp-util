@@ -31,6 +31,7 @@ import static com.github.zuihou.database.mybatis.conditions.Wraps.replace;
  * <p>
  * 相比 QueryWrapper 的增强如下：
  * 1，new QueryWrapper(T entity)时， 对entity 中的string字段 %和_ 符号进行转义，便于模糊查询
+ * 2，new QueryWrapper(T entity)时， 对entity 中 RemoteData 类型的字段 值为null或者 key为null或者""时，忽略拼接成查询条件
  * 2，对nested、eq、ne、gt、ge、lt、le、in、*like*、 等方法 进行条件判断，null 或 "" 字段不加入查询
  * 3，对*like*相关方法的参数 %和_ 符号进行转义，便于模糊查询
  * 4，增加 leFooter 方法， 将日期参数值，强制转换成当天 23：59：59

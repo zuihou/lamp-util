@@ -20,7 +20,7 @@
 
     <properties>
 
-        <spring.boot.version>2.2.4.RELEASE</spring.boot.version>
+        <spring.boot.version>2.2.5.RELEASE</spring.boot.version>
         <spring.cloud.version>Hoxton.SR1</spring.cloud.version>
         <spring-cloud-alibaba-dependencies.version>2.2.0.RELEASE</spring-cloud-alibaba-dependencies.version>
         <seata.version>1.0.0</seata.version>
@@ -63,7 +63,7 @@
         <lombok.version>1.18.12</lombok.version>
         <slf4j.version>1.7.30</slf4j.version>
         <feign-okhttp.version>10.4.0</feign-okhttp.version>
-        <hutool.version>5.1.5</hutool.version>
+        <hutool.version>5.2.1</hutool.version>
         <antisamy.version>1.5.7</antisamy.version>
         <caffeine.version>2.8.0</caffeine.version>
         <ip2region.version>1.7.2</ip2region.version>
