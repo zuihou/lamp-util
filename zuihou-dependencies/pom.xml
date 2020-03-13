@@ -7,7 +7,7 @@
     <version>2.0</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
-    <description>Spring Boot 2.0项目依赖管理</description>
+    <description>Spring Boot 2.x项目依赖管理</description>
     <url>https://gitee.com/zuihou111/zuihou-admin-cloud</url>
 
     <properties>

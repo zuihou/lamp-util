@@ -54,13 +54,20 @@ http://doc.tangyh.top/zuihou-admin-cloud
 
 ## 如何编译 zuihou-commons ?
 ```
-# 编译 同时生成源代码和javadoc
+
+# 跳过 生成javadoc
+mvn clean install -Dmaven.javadoc.skip=true -Dgpg.skip=true
+# 跳过 生成源代码
+mvn clean install -Dmaven.source.skip=true
+# 跳过 发布jar到中央仓库
+clean install -Dgpg.skip -f pom.xml
+
+# 同时跳过 生成javadoc、生成源代码、发布jar到中央仓库， 只编译源码到本地仓库
+mvn clean install  -Dmaven.javadoc.skip=true -Dgpg.skip=true -Dmaven.source.skip=true -Dgpg.skip -f pom.xml
+
+# 编译 同时生成源代码和javadoc和发布  （默认情况大家都会报错）
 mvn clean install
 
-# 跳过生成 javadoc
-mvn clean install -Dmaven.javadoc.skip=true -Dgpg.skip=true
-# 跳过生成 源代码
-mvn clean install -Dmaven.source.skip=true
 
 ```
 
