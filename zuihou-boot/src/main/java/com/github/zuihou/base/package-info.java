@@ -7,10 +7,10 @@
  * 3，Service和Mapper都是后端人员使用，丰富一些无所谓,就算会多个后端协同开发，因为都懂JAVA，沟通阅读起来没那么难
  * 4，Service和Mapper都继承了MP的IService和BaseMapper，没得选择！
  *
- * @version 2.0
+ * @version 2.1
  * @author zuihou
  * @date 2020年03月07日22:35:57
- * @since 2.0
+ * @since 2.1
  */
 package com.github.zuihou.base;
 

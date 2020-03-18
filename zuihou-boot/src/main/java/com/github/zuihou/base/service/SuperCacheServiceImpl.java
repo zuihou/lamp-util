@@ -1,14 +1,12 @@
 package com.github.zuihou.base.service;
 
 import cn.hutool.core.collection.CollUtil;
-import com.github.zuihou.base.R;
 import com.github.zuihou.base.entity.SuperEntity;
 import com.github.zuihou.base.mapper.SuperMapper;
 import net.oschina.j2cache.CacheChannel;
+import net.oschina.j2cache.CacheObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -30,10 +28,7 @@ import java.util.Collection;
  * @author zuihou
  * @date 2020年02月27日18:15:17
  */
-@CacheConfig(cacheNames = SuperCacheServiceImpl.CACHE_NAMES)
 public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends SuperServiceImpl<M, T> implements SuperCacheService<T> {
-
-    protected final static String CACHE_NAMES = "default";
 
     @Autowired
     protected CacheChannel cacheChannel;
@@ -48,18 +43,23 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     protected abstract String getRegion();
 
     @Override
-    @Cacheable(key = "#id")
     public T getByIdCache(Serializable id) {
-        return super.getById(id);
+        String key = key(id);
+        CacheObject cacheObject = cacheChannel.get(getRegion(), key, (x) -> super.getById(id));
+        return (T) cacheObject.getValue();
     }
 
     @Override
-    @CacheEvict(key = "#id")
+    @Transactional(rollbackFor = Exception.class)
     public boolean removeById(Serializable id) {
-        return super.removeById(id);
+        boolean bool = super.removeById(id);
+        String key = key(id);
+        cacheChannel.evict(getRegion(), key);
+        return bool;
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean removeByIds(Collection<? extends Serializable> idList) {
         if (CollUtil.isEmpty(idList)) {
             return true;
@@ -72,30 +72,37 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean save(T model) {
-        R<Boolean> result = handlerSave(model);
-        if (result.getDefExec()) {
-            boolean save = super.save(model);
-            if (model instanceof SuperEntity) {
-                String key = key(((SuperEntity) model).getId());
-                cacheChannel.set(getRegion(), key, model);
-            }
-            return save;
+        boolean save = super.save(model);
+        if (model instanceof SuperEntity) {
+            String key = key(((SuperEntity) model).getId());
+            cacheChannel.set(getRegion(), key, model);
         }
-        return result.getData();
+        return save;
     }
 
 
     @Override
-    @CacheEvict(key = "#p0.id")
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateAllById(T model) {
-        return super.updateAllById(model);
+        boolean updateBool = super.updateAllById(model);
+        if (model instanceof SuperEntity) {
+            String key = key(((SuperEntity) model).getId());
+            cacheChannel.evict(getRegion(), key);
+        }
+        return updateBool;
     }
 
     @Override
-    @CacheEvict(key = "#p0.id")
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateById(T model) {
-        return super.updateById(model);
+        boolean updateBool = super.updateById(model);
+        if (model instanceof SuperEntity) {
+            String key = key(((SuperEntity) model).getId());
+            cacheChannel.evict(getRegion(), key);
+        }
+        return updateBool;
     }
 
 }

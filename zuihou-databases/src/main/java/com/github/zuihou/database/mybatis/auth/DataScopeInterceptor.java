@@ -1,5 +1,6 @@
 package com.github.zuihou.database.mybatis.auth;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
@@ -26,6 +27,12 @@ import java.util.function.Function;
 /**
  * mybatis 数据权限拦截器
  * <p>
+ * <p>
+ * 1，全部：没有createUser权限
+ * 2，本级：当前用户的orgId
+ * 3，本级以及子级
+ * 4，自定义：
+ * 5，个人：createUser = 1
  *
  * @author zuihou
  * @date 2019/2/1
@@ -83,14 +90,12 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
         if (DataScopeType.ALL.eq(dsType)) {
             return invocation.proceed();
         }
-
         //查个人
         if (DataScopeType.SELF.eq(dsType)) {
             originalSql = "select * from (" + originalSql + ") temp_data_scope where temp_data_scope." + selfScopeName + " = " + userId;
         }
         //查其他
-        else if (StrUtil.isNotBlank(scopeName) && CollectionUtil.isNotEmpty(orgIds)) {
-
+        else if (StrUtil.isNotBlank(scopeName) && CollUtil.isNotEmpty(orgIds)) {
             String join = CollectionUtil.join(orgIds, ",");
             originalSql = "select * from (" + originalSql + ") temp_data_scope where temp_data_scope." + scopeName + " in (" + join + ")";
         }

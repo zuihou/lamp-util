@@ -2,6 +2,7 @@ package com.github.zuihou.database.parsers;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.druid.sql.ast.SQLExpr;
+import com.alibaba.druid.sql.ast.SQLName;
 import com.alibaba.druid.sql.ast.SQLObject;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.expr.*;
@@ -126,10 +127,10 @@ public class MultiTenantInterceptor implements Interceptor {
                 SQLExpr sqlExpr = sqlSelectItem.getExpr();
                 setSQLSchema(sqlExpr);
 
-                //存储过程
+                //函数
                 if (sqlExpr instanceof SQLMethodInvokeExpr) {
                     if (sqlSelectQuery instanceof SQLSelectQueryBlock && ((SQLSelectQueryBlock) sqlSelectQuery).getFrom() == null) {
-                        logger.info("执行到存储过程 or 函数这里了");
+                        logger.info("执行到 函数 这里了");
                         ((SQLMethodInvokeExpr) sqlExpr).setOwner(new SQLIdentifierExpr(schemaName));
                     }
                 }
@@ -168,6 +169,18 @@ public class MultiTenantInterceptor implements Interceptor {
             SQLCreateTableStatement sqlCreateStatement = (SQLCreateTableStatement) sqlStatement;
             SQLExprTableSource tableSource = sqlCreateStatement.getTableSource();
             setSQLSchema(tableSource);
+        }
+        if (sqlStatement instanceof SQLCallStatement) {
+            logger.info("执行到 存储过程 这里了");
+            SQLCallStatement sqlCallStatement = (SQLCallStatement) sqlStatement;
+            SQLName expr = sqlCallStatement.getProcedureName();
+            if (expr instanceof SQLIdentifierExpr) {
+                SQLIdentifierExpr procedureName = (SQLIdentifierExpr) expr;
+                sqlCallStatement.setProcedureName(new SQLPropertyExpr(schemaName, procedureName.getName()));
+            } else if (expr instanceof SQLPropertyExpr) {
+                SQLPropertyExpr procedureName = (SQLPropertyExpr) expr;
+                sqlCallStatement.setProcedureName(new SQLPropertyExpr(schemaName, procedureName.getName()));
+            }
         }
         return sqlStatement.toString();
     }
@@ -257,5 +270,4 @@ public class MultiTenantInterceptor implements Interceptor {
             }
         }
     }
-
 }

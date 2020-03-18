@@ -61,5 +61,10 @@ public class SpringUtils {
         }
     }
 
+    public static ApplicationContext publishEvent(Object event) {
+        applicationContext.publishEvent(event);
+        return applicationContext;
+    }
+
 
 }

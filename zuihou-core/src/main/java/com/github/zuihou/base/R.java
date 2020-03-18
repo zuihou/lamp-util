@@ -4,12 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.zuihou.exception.BizException;
 import com.github.zuihou.exception.code.BaseExceptionCode;
-import com.google.common.collect.Maps;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -19,7 +19,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-@SuppressWarnings({"AlibabaClassNamingShouldBeCamel"})
+@SuppressWarnings("ALL")
 @Accessors(chain = true)
 public class R<T> {
     public static final String DEF_ERROR_MESSAGE = "系统繁忙，请稍候再试";
@@ -39,7 +39,7 @@ public class R<T> {
     private int code;
 
     /**
-     * 时候执行默认操作
+     * 是否执行默认操作
      */
     @JsonIgnore
     private Boolean defExec = true;
@@ -191,7 +191,7 @@ public class R<T> {
 
     public R<T> put(String key, Object value) {
         if (this.extra == null) {
-            this.extra = Maps.newHashMap();
+            this.extra = new HashMap<>(10);
         }
         this.extra.put(key, value);
         return this;

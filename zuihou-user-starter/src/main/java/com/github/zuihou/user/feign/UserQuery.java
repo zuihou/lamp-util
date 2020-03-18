@@ -37,18 +37,18 @@ public class UserQuery {
     private Boolean station;
 
     public static UserQuery buildFull() {
-        return new UserQuery().setFull(true);
+        return new UserQuery().setFull(true).setRoles(true).setOrg(true).setStation(true);
     }
 
     public static UserQuery buildRoles() {
-        return new UserQuery().setRoles(true);
+        return new UserQuery().setFull(false).setRoles(true).setOrg(false).setStation(false);
     }
 
     public static UserQuery buildOrg() {
-        return new UserQuery().setOrg(true);
+        return new UserQuery().setFull(false).setRoles(false).setOrg(true).setStation(false);
     }
 
     public static UserQuery buildStation() {
-        return new UserQuery().setStation(true);
+        return new UserQuery().setFull(false).setRoles(false).setOrg(false).setStation(true);
     }
 }
