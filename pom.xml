@@ -31,6 +31,7 @@
         <module>zuihou-config</module>
         <module>zuihou-scan-starter</module>
         <module>zuihou-injection-starter</module>
+        <module>zuihou-security-starter</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

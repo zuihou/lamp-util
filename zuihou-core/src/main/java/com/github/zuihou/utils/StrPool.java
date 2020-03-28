@@ -72,6 +72,14 @@ public interface StrPool {
     String HTML_QUOTE = "&quot;";
     String HTML_LT = "&lt;";
     String HTML_GT = "&gt;";
+    /**
+     * 编码
+     */
+    String UTF8 = "UTF-8";
+    /**
+     * JSON 资源
+     */
+    String CONTENT_TYPE = "application/json; charset=utf-8";
 
 
     String TEST = "test";

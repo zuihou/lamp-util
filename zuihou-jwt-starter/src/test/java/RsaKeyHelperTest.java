@@ -28,7 +28,7 @@ public class RsaKeyHelperTest {
         byte[] publicKeyBytes = keyPair.getPublic().getEncoded();
         byte[] privateKeyBytes = keyPair.getPrivate().getEncoded();
 
-        FileUtil.writeBytes(publicKeyBytes, "/Users/zuihou/githubspace/zuihou-admin-cloud/zuihou-commons/zuihou-jwt-starter/src/main/resources/pub.key");
-        FileUtil.writeBytes(privateKeyBytes, "/Users/zuihou/githubspace/zuihou-admin-cloud/zuihou-commons/zuihou-jwt-starter/src/main/resources/pri.key");
+        FileUtil.writeBytes(publicKeyBytes, "/Users/tangyh/githubspace/zuihou-commons/zuihou-jwt-starter/src/main/resources/pub.key");
+        FileUtil.writeBytes(privateKeyBytes, "/Users/tangyh/githubspace/zuihou-commons/zuihou-jwt-starter/src/main/resources/pri.key");
     }
 }
