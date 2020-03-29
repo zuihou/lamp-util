@@ -1,5 +1,6 @@
 package com.github.zuihou.security.component;
 
+import cn.hutool.core.convert.Convert;
 import com.github.zuihou.security.service.SysUser;
 import com.github.zuihou.security.util.SecurityConstants;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -51,9 +52,10 @@ public class MyUserAuthenticationConverter implements UserAuthenticationConverte
             Collection<? extends GrantedAuthority> authorities = getAuthorities(map);
 
             String username = (String) map.get(SecurityConstants.DETAILS_USERNAME);
-            Long id = (Long) map.get(SecurityConstants.DETAILS_USER_ID);
-            Long deptId = (Long) map.get(SecurityConstants.DETAILS_DEPT_ID);
-            SysUser user = new SysUser(id, deptId, 3L, username, N_A, true
+            Long id = Convert.toLong(map.get(SecurityConstants.DETAILS_USER_ID), 0L);
+            Long stationId = Convert.toLong(map.get(SecurityConstants.DETAILS_STATION_ID), 0L);
+            Long orgId = Convert.toLong(map.get(SecurityConstants.DETAILS_ORG_ID), 0L);
+            SysUser user = new SysUser(id, orgId, stationId, username, N_A, true
                     , true, true, true, authorities);
             return new UsernamePasswordAuthenticationToken(user, N_A, authorities);
         }

@@ -87,7 +87,11 @@ public interface SecurityConstants {
     /**
      * 用户部门字段
      */
-    String DETAILS_DEPT_ID = "dept_id";
+    String DETAILS_ORG_ID = "org_id";
+    /**
+     * 岗位
+     */
+    String DETAILS_STATION_ID = "station_id";
 
     /**
      * 协议字段

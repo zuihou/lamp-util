@@ -16,6 +16,8 @@ import org.springframework.security.oauth2.provider.token.UserAuthenticationConv
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
+
 /**
  * 1. 支持 remoteTokenServices 负载均衡
  * 2. 支持 获取用户全部信息
@@ -34,7 +36,7 @@ public class MyResourceServerConfigurerAdapter extends ResourceServerConfigurerA
     private AccessDeniedHandler accessDeniedHandler;
     @Autowired
     private PermitAllUrlProperties permitAllUrl;
-    @Autowired
+    @Resource(name = "securityRestTemplate")
     private RestTemplate lbRestTemplate;
 
     /**

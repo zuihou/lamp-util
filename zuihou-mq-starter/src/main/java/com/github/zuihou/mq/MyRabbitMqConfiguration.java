@@ -11,6 +11,10 @@ import org.springframework.context.annotation.Import;
  * zipkin 客服端自定义配置
  * <p>
  * 若自建服务的 包名 跟当前类的包名不同，请在服务的启动类上配置下列注解，否则启动报错
+ * \@ComponentScan({
+ * "xxx",
+ * "com.github.zuihou.mq"
+ * })
  *
  * @author zuihou
  * @date 2019/09/20

@@ -68,9 +68,7 @@ public class MyWebResponseExceptionTranslator implements WebResponseExceptionTra
         }
 
         return handleOAuth2Exception(new ServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e));
-
     }
-
 
     private ResponseEntity<OAuth2Exception> handleOAuth2Exception(OAuth2Exception e) {
 
@@ -84,10 +82,8 @@ public class MyWebResponseExceptionTranslator implements WebResponseExceptionTra
 
         // 客户端异常直接返回客户端,不然无法解析
         if (e instanceof ClientAuthenticationException) {
-            return new ResponseEntity<>(e, headers,
-                    HttpStatus.valueOf(status));
+            return new ResponseEntity<>(e, headers, HttpStatus.valueOf(200));
         }
-        return new ResponseEntity<>(new Auth2Exception(e.getMessage(), e.getOAuth2ErrorCode()), headers,
-                HttpStatus.valueOf(status));
+        return new ResponseEntity<>(new Auth2Exception(e.getMessage(), e.getOAuth2ErrorCode()), headers, HttpStatus.valueOf(200));
     }
 }

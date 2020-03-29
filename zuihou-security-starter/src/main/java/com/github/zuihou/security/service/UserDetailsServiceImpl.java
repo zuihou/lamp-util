@@ -69,7 +69,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 //		// 构造security用户
 //		return new PigUser(user.getUserId(), user.getDeptId(), user.getUsername(), SecurityConstants.BCRYPT + user.getPassword(),
 //			StrUtil.equals(user.getLockFlag(), CommonConstants.STATUS_NORMAL), true, true, true, authorities);
-        return new SysUser(3L, 1L, 1L, "zuihou", SecurityConstants.BCRYPT + "d9d17d88918aa72834289edaf38f42e2", true,
+        return new SysUser(3L, 6670316018503516811L, 1L, "zuihou", SecurityConstants.BCRYPT + "d9d17d88918aa72834289edaf38f42e2", true,
                 true, true, true, authorities);
     }
 }
