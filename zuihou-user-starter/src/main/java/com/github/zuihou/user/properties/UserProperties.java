@@ -13,5 +13,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "zuihou.user")
 public class UserProperties {
     private UserType type = UserType.FEIGN;
-
+    private Boolean enabled = true;
 }

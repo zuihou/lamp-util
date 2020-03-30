@@ -73,6 +73,11 @@ public class SysUser {
      */
     private List<SysRole> roles;
     /**
+     * 当前登录用户的资源编码
+     * 启用条件： LoginUser.isFull = true || LoginUser.isResource = true
+     */
+    private List<String> resources;
+    /**
      * 当前登录用户的组织架构
      * 启用条件： LoginUser.isFull = true || LoginUser.isOrg = true
      */

@@ -3,6 +3,7 @@ package com.github.zuihou.base.controller;
 import com.github.zuihou.base.R;
 import com.github.zuihou.base.service.SuperCacheService;
 import com.github.zuihou.log.annotation.SysLog;
+import com.github.zuihou.user.annotation.PreAuth;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.Serializable;
@@ -27,6 +28,7 @@ public abstract class SuperCacheController<S extends SuperCacheService<Entity>, 
      */
     @Override
     @SysLog("'查询:' + #id")
+    @PreAuth("hasPermit('{}view')")
     public R<Entity> get(@PathVariable Id id) {
         return success(baseService.getByIdCache(id));
     }

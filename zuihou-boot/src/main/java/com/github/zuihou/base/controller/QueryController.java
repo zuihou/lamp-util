@@ -6,6 +6,7 @@ import com.github.zuihou.base.request.PageParams;
 import com.github.zuihou.database.mybatis.conditions.Wraps;
 import com.github.zuihou.database.mybatis.conditions.query.QueryWrap;
 import com.github.zuihou.log.annotation.SysLog;
+import com.github.zuihou.user.annotation.PreAuth;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -41,6 +42,7 @@ public interface QueryController<Entity, Id extends Serializable, PageDTO> exten
     @ApiOperation(value = "查询", notes = "查询")
     @GetMapping("/{id}")
     @SysLog("'查询:' + #id")
+    @PreAuth("hasPermit('{}view')")
     default R<Entity> get(@PathVariable Id id) {
         return success(getBaseService().getById(id));
     }
