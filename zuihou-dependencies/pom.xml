@@ -22,6 +22,8 @@
         <mybatis-spring.version>2.0.3</mybatis-spring.version>
         <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
         <mybatisplus.version>3.3.1</mybatisplus.version>
+        <dynamic.datasource.version>3.0.1</dynamic.datasource.version>
+        <jasypt.version>2.1.0</jasypt.version>
         <p6spy.version>3.8.7</p6spy.version>
         <fastjson.version>1.2.66</fastjson.version>
         <transmittable-thread-local.version>2.11.4</transmittable-thread-local.version>
@@ -176,6 +178,18 @@
             </dependency>
 
             <!-- 持久层相关 -->
+            <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>${jasypt.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                <version>${dynamic.datasource.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
