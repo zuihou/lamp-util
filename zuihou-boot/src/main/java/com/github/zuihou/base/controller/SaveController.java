@@ -3,6 +3,7 @@ package com.github.zuihou.base.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.github.zuihou.base.R;
 import com.github.zuihou.log.annotation.SysLog;
+import com.github.zuihou.security.annotation.PreAuth;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ public interface SaveController<Entity, SaveDTO> extends BaseController<Entity> 
     @ApiOperation(value = "新增")
     @PostMapping
     @SysLog(value = "新增", request = false)
+    @PreAuth("hasPermit('{}add')")
     default R<Entity> save(@RequestBody @Validated SaveDTO saveDTO) {
         R<Entity> result = handlerSave(saveDTO);
         if (result.getDefExec()) {

@@ -23,7 +23,7 @@ import java.util.List;
 public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
     private static final List<String> HEADER_NAME_LIST = Arrays.asList(
-            BaseContextConstants.TENANT, BaseContextConstants.JWT_KEY_USER_ID,
+            BaseContextConstants.JWT_KEY_TENANT, BaseContextConstants.JWT_KEY_USER_ID,
             BaseContextConstants.JWT_KEY_ACCOUNT, BaseContextConstants.JWT_KEY_NAME, BaseContextConstants.GRAY_VERSION,
             BaseContextConstants.TRACE_ID_HEADER, "X-Real-IP", "x-forwarded-for"
     );

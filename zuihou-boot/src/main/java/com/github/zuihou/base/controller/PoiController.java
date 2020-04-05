@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.zuihou.base.R;
 import com.github.zuihou.base.request.PageParams;
 import com.github.zuihou.log.annotation.SysLog;
+import com.github.zuihou.security.annotation.PreAuth;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.validation.annotation.Validated;
@@ -49,6 +50,7 @@ public interface PoiController<Entity, PageDTO> extends PageController<Entity, P
     @ApiOperation(value = "导出Excel")
     @RequestMapping(value = "/export", method = RequestMethod.POST, produces = "application/octet-stream")
     @SysLog("'导出Excel:'.concat(#params.map[" + NormalExcelConstants.FILE_NAME + "]?:'')")
+    @PreAuth("hasPermit('{}export')")
     default void exportExcel(@RequestBody @Validated PageParams<PageDTO> params, HttpServletRequest request, HttpServletResponse response) {
         IPage<Entity> page = params.getPage();
         ExportParams exportParams = getExportParams(params, page);
@@ -71,6 +73,7 @@ public interface PoiController<Entity, PageDTO> extends PageController<Entity, P
     @ApiOperation(value = "预览Excel")
     @SysLog("'预览Excel:' + (#params.map[" + NormalExcelConstants.FILE_NAME + "]?:'')")
     @RequestMapping(value = "/preview", method = RequestMethod.POST)
+    @PreAuth("hasPermit('{}export')")
     default R<String> preview(@RequestBody @Validated PageParams<PageDTO> params) {
         IPage<Entity> page = params.getPage();
         ExportParams exportParams = getExportParams(params, page);
@@ -92,6 +95,7 @@ public interface PoiController<Entity, PageDTO> extends PageController<Entity, P
     @ApiOperation(value = "导入Excel")
     @PostMapping(value = "/import")
     @SysLog(value = "'导入Excel:' + #simpleFile?.originalFilename", request = false)
+    @PreAuth("hasPermit('{}import')")
     default R<Boolean> importExcel(@RequestParam(value = "file") MultipartFile simpleFile, HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
         ImportParams params = new ImportParams();

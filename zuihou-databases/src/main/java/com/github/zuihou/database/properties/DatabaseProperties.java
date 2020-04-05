@@ -47,9 +47,9 @@ public class DatabaseProperties {
     private int txTimeout = 60 * 60;
 
     /**
-     * 业务库前缀
+     * 租户库 前缀
      */
-    private String bizDatabase = "zuihou_base";
+    private String tenantDatabasePrefix = "zuihou_base";
 
     /**
      * 多租户模式

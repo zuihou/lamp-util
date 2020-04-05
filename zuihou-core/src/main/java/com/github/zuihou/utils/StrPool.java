@@ -58,6 +58,7 @@ public interface StrPool {
     String TRUE = "true";
     String UNDERSCORE = "_";
     String UTF_8 = "UTF-8";
+    String GBK = "GBK";
     String US_ASCII = "US-ASCII";
     String ISO_8859_1 = "ISO-8859-1";
     String Y = "y";

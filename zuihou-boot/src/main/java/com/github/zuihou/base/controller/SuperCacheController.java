@@ -3,7 +3,7 @@ package com.github.zuihou.base.controller;
 import com.github.zuihou.base.R;
 import com.github.zuihou.base.service.SuperCacheService;
 import com.github.zuihou.log.annotation.SysLog;
-import com.github.zuihou.user.annotation.PreAuth;
+import com.github.zuihou.security.annotation.PreAuth;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.Serializable;

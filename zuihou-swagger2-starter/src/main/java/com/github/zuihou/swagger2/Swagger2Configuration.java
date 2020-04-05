@@ -25,7 +25,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @date 2018/11/18 9:20
  */
 @Configuration
-@ConditionalOnProperty(name = "zuihou.swagger.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = SwaggerProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableSwagger2
 @ComponentScan(
         basePackages = {

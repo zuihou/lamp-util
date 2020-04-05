@@ -26,60 +26,12 @@ public class AddressUtil {
 
     static DbConfig config = null;
     static DbSearcher searcher = null;
-    /**
-     * 根据ip查询地址
-     *
-     * @param ip
-     * @return
-     */
-//    public static String getCityInfo(String ip) {
-//        DbSearcher searcher = null;
-//        try {
-//            String dbPath = AddressUtil.class.getResource("/ip2region/ip2region.db").getPath();
-//            File file = new File(dbPath);
-//            if (!file.exists()) {
-//                String tmpDir = System.getProperties().getProperty(JAVA_TEMP_DIR);
-//                dbPath = tmpDir + "ip2region.db";
-//                file = new File(dbPath);
-//                String classPath = "classpath:ip2region/ip2region.db";
-//                InputStream resourceAsStream = ResourceUtil.getStreamSafe(classPath);
-//                if (resourceAsStream != null) {
-//                    FileUtils.copyInputStreamToFile(resourceAsStream, file);
-//                }
-//            }
-//            DbConfig config = new DbConfig();
-//            searcher = new DbSearcher(config, file.getPath());
-//            Method method = searcher.getClass().getMethod("btreeSearch", String.class);
-//            if (!Util.isIpAddress(ip)) {
-//                log.error("Error: Invalid ip address");
-//            }
-//            DataBlock dataBlock = (DataBlock) method.invoke(searcher, ip);
-//            return dataBlock.getRegion();
-//        } catch (Exception e) {
-//            log.error("获取地址信息异常，{}", e);
-//            return StrUtil.EMPTY;
-//        } finally {
-//            if (searcher != null) {
-//                try {
-//                    searcher.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
 
     /**
      * 初始化IP库
      */
     static {
         try {
-            // 因为jar无法读取文件,复制创建临时文件
-//            String tmpDir = System.getProperty("user.dir") + File.separator + "temp";
-//            String dbPath = tmpDir + File.separator + "ip2region.db";
-//            log.info("init ip region db path [{}]", dbPath);
-//            File file = new File(dbPath);
-//            FileUtils.copyInputStreamToFile(AddressUtil.class.getClassLoader().getResourceAsStream("ip2region/ip2region.db"), file);
             String dbPath = AddressUtil.class.getResource("/ip2region/ip2region.db").getPath();
             File file = new File(dbPath);
             if (!file.exists()) {

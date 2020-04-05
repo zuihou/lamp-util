@@ -73,6 +73,10 @@ public class BaseContextHandler {
         return get(BaseContextConstants.JWT_KEY_USER_ID, Long.class, 0L);
     }
 
+    public static String getUserIdStr() {
+        return String.valueOf(getUserId());
+    }
+
     /**
      * 账号id
      *
@@ -129,20 +133,20 @@ public class BaseContextHandler {
      * @return
      */
     public static String getToken() {
-        return get(BaseContextConstants.TOKEN_NAME, String.class);
+        return get(BaseContextConstants.BEARER_HEADER_KEY, String.class);
     }
 
     public static void setToken(String token) {
-        set(BaseContextConstants.TOKEN_NAME, token);
+        set(BaseContextConstants.BEARER_HEADER_KEY, token);
     }
 
 
     public static String getTenant() {
-        return get(BaseContextConstants.TENANT, String.class);
+        return get(BaseContextConstants.JWT_KEY_TENANT, String.class);
     }
 
     public static void setTenant(String val) {
-        set(BaseContextConstants.TENANT, val);
+        set(BaseContextConstants.JWT_KEY_TENANT, val);
     }
 
     public static String getGrayVersion() {

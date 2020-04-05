@@ -14,6 +14,7 @@ import com.github.zuihou.log.annotation.SysLog;
 import com.github.zuihou.log.entity.OptLogDTO;
 import com.github.zuihou.log.event.SysLogEvent;
 import com.github.zuihou.log.util.LogUtil;
+import com.github.zuihou.utils.SpringUtils;
 import com.github.zuihou.utils.StrPool;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +22,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
@@ -51,11 +50,6 @@ public class SysLogAspect {
     public static final int MAX_LENGTH = 65535;
     private static final ThreadLocal<OptLogDTO> THREAD_LOCAL = new ThreadLocal<>();
     /**
-     * 事件发布是由ApplicationContext对象管控的，我们发布事件前需要注入ApplicationContext对象调用publishEvent方法完成事件发布
-     **/
-    @Autowired
-    private ApplicationContext applicationContext;
-    /**
      * 用于SpEL表达式解析.
      */
     private SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
@@ -82,23 +76,6 @@ public class SysLogAspect {
 
     }
 
-    private OptLogDTO get() {
-        OptLogDTO sysLog = THREAD_LOCAL.get();
-        if (sysLog == null) {
-            return new OptLogDTO();
-        }
-        return sysLog;
-    }
-
-    private void tryCatch(Consumer<String> consumer) {
-        try {
-            consumer.accept("");
-        } catch (Exception e) {
-            log.warn("记录操作日志异常", e);
-            THREAD_LOCAL.remove();
-        }
-    }
-
     /**
      * 返回通知
      *
@@ -109,7 +86,7 @@ public class SysLogAspect {
     public void doAfterReturning(JoinPoint joinPoint, Object ret) {
         tryCatch((aaa) -> {
             SysLog sysLogAnno = LogUtil.getTargetAnno(joinPoint);
-            if (sysLogAnno == null) {
+            if (check(joinPoint, sysLogAnno)) {
                 return;
             }
 
@@ -137,12 +114,6 @@ public class SysLogAspect {
 
     }
 
-    private void publishEvent(OptLogDTO sysLog) {
-        sysLog.setFinishTime(LocalDateTime.now());
-        sysLog.setConsumingTime(sysLog.getStartTime().until(sysLog.getFinishTime(), ChronoUnit.MILLIS));
-        applicationContext.publishEvent(new SysLogEvent(sysLog));
-        THREAD_LOCAL.remove();
-    }
 
     /**
      * 异常通知
@@ -153,9 +124,10 @@ public class SysLogAspect {
     public void doAfterThrowable(JoinPoint joinPoint, Throwable e) {
         tryCatch((aaa) -> {
             SysLog sysLogAnno = LogUtil.getTargetAnno(joinPoint);
-            if (sysLogAnno == null) {
+            if (check(joinPoint, sysLogAnno)) {
                 return;
             }
+
             OptLogDTO sysLog = get();
             sysLog.setType("EX");
 
@@ -176,23 +148,14 @@ public class SysLogAspect {
         });
     }
 
-    /**
-     * 截取指定长度的字符串
-     *
-     * @param val
-     * @return
-     */
-    private String getText(String val) {
-        return StrUtil.sub(val, 0, 65535);
-    }
-
     @Before(value = "sysLogAspect()")
     public void recordLog(JoinPoint joinPoint) throws Throwable {
         tryCatch((val) -> {
             SysLog sysLogAnno = LogUtil.getTargetAnno(joinPoint);
-            if (sysLogAnno == null) {
+            if (check(joinPoint, sysLogAnno)) {
                 return;
             }
+
             // 开始时间
             OptLogDTO sysLog = get();
             sysLog.setCreateUser(BaseContextHandler.getUserId());
@@ -241,7 +204,7 @@ public class SysLogAspect {
                 sysLog.setRequestUri(URLUtil.getPath(request.getRequestURI()));
                 sysLog.setHttpMethod(request.getMethod());
                 sysLog.setUa(StrUtil.sub(request.getHeader("user-agent"), 0, 500));
-                sysLog.setTenantCode(request.getHeader(BaseContextConstants.TENANT));
+                sysLog.setTenantCode(request.getHeader(BaseContextConstants.JWT_KEY_TENANT));
                 if (StrUtil.isEmpty(sysLog.getTrace())) {
                     sysLog.setTrace(request.getHeader(BaseContextConstants.TRACE_ID_HEADER));
                 }
@@ -250,6 +213,62 @@ public class SysLogAspect {
 
             THREAD_LOCAL.set(sysLog);
         });
+    }
+
+    /**
+     * 监测是否需要记录日志
+     *
+     * @param joinPoint
+     * @param sysLogAnno
+     * @return
+     */
+    private boolean check(JoinPoint joinPoint, SysLog sysLogAnno) {
+        if (sysLogAnno == null || !sysLogAnno.enabled()) {
+            return true;
+        }
+        // 读取目标类上的注解
+        SysLog targetClass = joinPoint.getTarget().getClass().getAnnotation(SysLog.class);
+        // 加上 sysLogAnno == null 会导致父类上的方法永远需要记录日志
+//        if (sysLogAnno == null && targetClass != null && !targetClass.enabled()) {
+        if (targetClass != null && !targetClass.enabled()) {
+            return true;
+        }
+        return false;
+    }
+
+
+    private OptLogDTO get() {
+        OptLogDTO sysLog = THREAD_LOCAL.get();
+        if (sysLog == null) {
+            return new OptLogDTO();
+        }
+        return sysLog;
+    }
+
+    private void tryCatch(Consumer<String> consumer) {
+        try {
+            consumer.accept("");
+        } catch (Exception e) {
+            log.warn("记录操作日志异常", e);
+            THREAD_LOCAL.remove();
+        }
+    }
+
+    private void publishEvent(OptLogDTO sysLog) {
+        sysLog.setFinishTime(LocalDateTime.now());
+        sysLog.setConsumingTime(sysLog.getStartTime().until(sysLog.getFinishTime(), ChronoUnit.MILLIS));
+        SpringUtils.publishEvent(new SysLogEvent(sysLog));
+        THREAD_LOCAL.remove();
+    }
+
+    /**
+     * 截取指定长度的字符串
+     *
+     * @param val
+     * @return
+     */
+    private String getText(String val) {
+        return StrUtil.sub(val, 0, 65535);
     }
 
     private String getArgs(SysLog sysLogAnno, Object[] args, HttpServletRequest request) {

@@ -7,23 +7,71 @@ package com.github.zuihou.context;
  * @date 2018/12/21
  */
 public class BaseContextConstants {
+
     /**
-     * token
-     */
-    public static final String TOKEN_NAME = "token";
-    /**
-     * 用户id
+     * JWT中封装的 用户id
      */
     public static final String JWT_KEY_USER_ID = "userid";
     /**
-     * 用户名称
+     * JWT中封装的 用户名称
      */
     public static final String JWT_KEY_NAME = "name";
     /**
-     * 用户账号
+     * JWT中封装的 token 类型
+     */
+    public static final String JWT_KEY_TOKEN_TYPE = "token_type";
+    /**
+     * JWT中封装的 用户账号
      */
     public static final String JWT_KEY_ACCOUNT = "account";
 
+    /**
+     * JWT中封装的 客户端id
+     */
+    public static final String JWT_KEY_CLIENT_ID = "client_id";
+
+
+    /**
+     * JWT token 签名
+     */
+    public static final String JWT_SIGN_KEY = "zuihou";
+
+    /**
+     * JWT中封装的 租户编码
+     */
+    public static final String JWT_KEY_TENANT = "tenant";
+    /**
+     * 刷新 Token
+     */
+    public static final String REFRESH_TOKEN_KEY = "refresh_token";
+
+    /**
+     * User信息 认证请求头
+     */
+    public static final String BEARER_HEADER_KEY = "token";
+    /**
+     * User信息 认证请求头前缀
+     */
+    public static final String BEARER_HEADER_PREFIX = "Bearer ";
+    /**
+     * User信息 认证请求头前缀
+     */
+    public static final String BEARER_HEADER_PREFIX_EXT = "Bearer%20";
+
+    /**
+     * Client信息认证请求头
+     */
+    public static final String BASIC_HEADER_KEY = "Authorization";
+
+    /**
+     * Client信息认证请求头前缀
+     */
+    public static final String BASIC_HEADER_PREFIX = "Basic ";
+
+    /**
+     * Client信息认证请求头前缀
+     */
+    public static final String BASIC_HEADER_PREFIX_EXT = "Basic%20";
 
     /**
      * 是否boot项目
@@ -42,7 +90,15 @@ public class BaseContextConstants {
     /**
      * 租户 编码
      */
-    public static final String TENANT = "tenant";
+//    @Deprecated
+//    public static final String TENANT = JWT_KEY_TENANT;
+
+    /**
+     * token
+     */
+    @Deprecated
+    public static final String TOKEN_NAME = BEARER_HEADER_KEY;
+
     /**
      * 灰度发布版本号
      */

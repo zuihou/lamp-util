@@ -16,6 +16,7 @@ import com.github.zuihou.database.mybatis.typehandler.RightLikeTypeHandler;
 import com.github.zuihou.database.parsers.DynamicTableNameParser;
 import com.github.zuihou.database.properties.DatabaseProperties;
 import com.github.zuihou.database.properties.MultiTenantType;
+import com.github.zuihou.database.servlet.TenantWebMvcConfigurer;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.StringValue;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Mybatis 常用重用拦截器
+ * Mybatis 常用重用拦截器，zuihou.database.multiTenantType=任意模式 都需要实例出来
  * <p>
  * 拦截器执行一定是：
  * WriteInterceptor > DataScopeInterceptor > PaginationInterceptor
@@ -37,7 +38,7 @@ import java.util.List;
  * @date 2018/10/24
  */
 @Slf4j
-public abstract class BaseMybatisConfiguration {
+public class BaseMybatisConfiguration {
     protected final DatabaseProperties databaseProperties;
 
     public BaseMybatisConfiguration(DatabaseProperties databaseProperties) {
@@ -77,7 +78,7 @@ public abstract class BaseMybatisConfiguration {
         log.info("已为您开启{}租户模式", databaseProperties.getMultiTenantType().getDescribe());
         //动态"表名" 插件 来实现 租户schema切换 加入解析链
         if (MultiTenantType.SCHEMA.eq(this.databaseProperties.getMultiTenantType())) {
-            DynamicTableNameParser dynamicTableNameParser = new DynamicTableNameParser(databaseProperties.getBizDatabase());
+            DynamicTableNameParser dynamicTableNameParser = new DynamicTableNameParser(databaseProperties.getTenantDatabasePrefix());
             sqlParserList.add(dynamicTableNameParser);
         } else if (MultiTenantType.COLUMN.eq(this.databaseProperties.getMultiTenantType())) {
             TenantSqlParser tenantSqlParser = new TenantSqlParser();
@@ -107,7 +108,6 @@ public abstract class BaseMybatisConfiguration {
         return paginationInterceptor;
     }
 
-
     /**
      * Mybatis Plus 注入器
      *
@@ -119,18 +119,6 @@ public abstract class BaseMybatisConfiguration {
         DatabaseProperties.Id id = databaseProperties.getId();
         return new MyMetaObjectHandler(id.getWorkerId(), id.getDataCenterId());
     }
-
-//    /**
-//     * 租户信息拦截器
-//     *
-//     * @return
-//     */
-//    @Bean
-//    @ConditionalOnMissingBean
-//    @ConditionalOnProperty(name = "zuihou.database.isMultiTenant", havingValue = "true", matchIfMissing = true)
-//    public TenantWebMvcConfigurer getTenantWebMvcConfigurer() {
-//        return new TenantWebMvcConfigurer(null, null);
-//    }
 
     /**
      * Mybatis 自定义的类型处理器： 处理XML中  #{name,typeHandler=leftLike} 类型的参数
@@ -177,7 +165,12 @@ public abstract class BaseMybatisConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public MySqlInjector getZuihouSqlInjector() {
+    public MySqlInjector getMySqlInjector() {
         return new MySqlInjector();
+    }
+
+    @Bean
+    public TenantWebMvcConfigurer getTenantWebMvcConfigurer() {
+        return new TenantWebMvcConfigurer();
     }
 }

@@ -389,6 +389,29 @@ public class DateUtils {
         return instant.atZone(zoneId).toLocalTime();
     }
 
+
+    /**
+     * 毫秒转日期
+     *
+     * @param epochMilli 毫秒
+     * @return
+     */
+    public static LocalDateTime getDateTimeOfTimestamp(long epochMilli) {
+        Instant instant = Instant.ofEpochMilli(epochMilli);
+        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+    }
+
+    /**
+     * 秒转日期
+     *
+     * @param epochSecond 秒
+     * @return
+     */
+    public static LocalDateTime getDateTimeOfSecond(long epochSecond) {
+        Instant instant = Instant.ofEpochSecond(epochSecond);
+        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+    }
+
     //-计算日期 start------------------------------------------
 
 

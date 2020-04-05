@@ -8,17 +8,23 @@ import java.lang.annotation.*;
  * @author zuihou
  * @date 2019/2/1
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface SysLog {
+    /**
+     * 是否启用 操作日志
+     *
+     * @return
+     */
+    boolean enabled() default true;
 
     /**
      * 描述
      *
      * @return {String}
      */
-    String value();
+    String value() default "";
 
     /**
      * 记录执行参数

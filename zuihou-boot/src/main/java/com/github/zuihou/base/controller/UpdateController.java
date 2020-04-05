@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.github.zuihou.base.R;
 import com.github.zuihou.base.entity.SuperEntity;
 import com.github.zuihou.log.annotation.SysLog;
+import com.github.zuihou.security.annotation.PreAuth;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,6 +29,7 @@ public interface UpdateController<Entity, UpdateDTO> extends BaseController<Enti
     @ApiOperation(value = "修改")
     @PutMapping
     @SysLog(value = "'修改:' + #updateDTO?.id", request = false)
+    @PreAuth("hasPermit('{}update')")
     default R<Entity> update(@RequestBody @Validated(SuperEntity.Update.class) UpdateDTO updateDTO) {
         R<Entity> result = handlerUpdate(updateDTO);
         if (result.getDefExec()) {

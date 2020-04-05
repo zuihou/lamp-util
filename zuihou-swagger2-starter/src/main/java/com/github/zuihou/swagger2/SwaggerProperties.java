@@ -8,6 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.zuihou.swagger2.SwaggerProperties.PREFIX;
+
 /**
  * swagger2 属性配置
  * 必须配置 prefix ，才能有提示
@@ -16,9 +18,9 @@ import java.util.Map;
  * @date 2018/11/18 9:17
  */
 @Data
-//@RefreshScope
-@ConfigurationProperties(prefix = "zuihou.swagger")
+@ConfigurationProperties(prefix = PREFIX)
 public class SwaggerProperties {
+    public static final String PREFIX = "zuihou.swagger";
     /**
      * 是否开启swagger
      **/
@@ -71,6 +73,14 @@ public class SwaggerProperties {
      * swagger会解析的包路径
      **/
     private String basePackage = "com.github.zuihou";
+    /**
+     * SpringSecurity 全局统一鉴权配置
+     **/
+    private Authorization authorization;
+    /**
+     *
+     */
+    private List<ApiKey> apiKeys = new ArrayList<>();
 
     /**
      * swagger会解析的url规则
@@ -135,6 +145,11 @@ public class SwaggerProperties {
          * 参数是否必须传
          **/
         private Boolean required = false;
+        private Boolean allowMultiple = false;
+        private AllowableValues allowableValues;
+        private Boolean hidden = false;
+        private String pattern = "";
+        private String collectionFormat = "";
         /**
          * 默认值
          */
@@ -166,7 +181,7 @@ public class SwaggerProperties {
         /**
          * 版本
          **/
-        private String version = "1.0";
+        private String version = "";
         /**
          * 许可证
          **/
@@ -199,6 +214,14 @@ public class SwaggerProperties {
         private List<GlobalOperationParameter> globalOperationParameters;
 
         /**
+         * 全局统一鉴权配置
+         **/
+        private Authorization authorization;
+        /**
+         *
+         */
+        private List<ApiKey> apiKeys = new ArrayList<>();
+        /**
          * 排序
          */
         private Integer order = 1;
@@ -212,6 +235,46 @@ public class SwaggerProperties {
     }
 
     @Data
+    @NoArgsConstructor
+    public static class Authorization {
+
+        /**
+         * 鉴权策略ID，需要和SecurityReferences ID保持一致
+         */
+        private String name = "";
+
+        /**
+         * 需要开启鉴权URL的正则
+         */
+        private String authRegex = "^.*$";
+
+        /**
+         * 鉴权作用域列表
+         */
+        private List<AuthorizationScope> authorizationScopeList = new ArrayList<>();
+
+        private List<String> tokenUrlList = new ArrayList<>();
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class AuthorizationScope {
+
+        /**
+         * 作用域名称
+         */
+        private String scope = "";
+
+        /**
+         * 作用域描述
+         */
+        private String description = "";
+
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Contact {
         /**
          * 联系人
@@ -230,6 +293,15 @@ public class SwaggerProperties {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class ApiKey {
+        private String name;
+        private String keyname;
+        private String passAs = "header";
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Basic {
         private Boolean enable = false;
         private String username = "zuihou";
@@ -242,5 +314,13 @@ public class SwaggerProperties {
     public static class Markdown {
         private Boolean enable = false;
         private String basePath = "classpath:markdown/*";
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AllowableValues {
+        private List<String> values;
+        private String valueType;
     }
 }

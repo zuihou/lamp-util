@@ -19,7 +19,6 @@
             <groupId>com.github.zuihou</groupId>
             <artifactId>zuihou-core</artifactId>
         </dependency>
-
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>

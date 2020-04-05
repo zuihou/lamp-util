@@ -1,5 +1,6 @@
 package com.github.zuihou.swagger2;
 
+import cn.hutool.core.collection.CollUtil;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
@@ -99,20 +100,15 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                     .groupName(docketInfo.getGroup())
                     .select()
                     .apis(RequestHandlerSelectors.basePackage(docketInfo.getBasePackage()))
-                    .paths(
-                            Predicates.and(
-                                    Predicates.not(Predicates.or(excludePath)),
-                                    Predicates.or(basePath)
-                            )
-                    )
+                    .paths(Predicates.and(Predicates.not(Predicates.or(excludePath)), Predicates.or(basePath)))
                     .build()
-                    .securitySchemes(securitySchemes())
-                    .securityContexts(securityContexts())
+                    .securitySchemes(securitySchemes(swaggerProperties.getAuthorization(), docketInfo.getAuthorization(), swaggerProperties.getApiKeys(), docketInfo.getApiKeys()))
+                    .securityContexts(securityContexts(swaggerProperties.getAuthorization(), docketInfo.getAuthorization()))
+
                     .globalResponseMessage(RequestMethod.GET, getResponseMessages())
                     .globalResponseMessage(RequestMethod.POST, getResponseMessages())
                     .globalResponseMessage(RequestMethod.PUT, getResponseMessages())
                     .globalResponseMessage(RequestMethod.DELETE, getResponseMessages());
-//                    .extensions(Lists.newArrayList(new OrderExtensions(swaggerProperties.getOrder())));
 
             configurableBeanFactory.registerSingleton(groupName, docket);
             docketList.add(docket);
@@ -166,20 +162,14 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                 .select()
 
                 .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getBasePackage()))
-                .paths(
-                        Predicates.and(
-                                Predicates.not(Predicates.or(excludePath)),
-                                Predicates.or(basePath)
-                        )
-                )
+                .paths(Predicates.and(Predicates.not(Predicates.or(excludePath)), Predicates.or(basePath)))
                 .build()
-                .securitySchemes(securitySchemes())
-                .securityContexts(securityContexts())
+                .securitySchemes(securitySchemes(swaggerProperties.getAuthorization(), null, swaggerProperties.getApiKeys(), null))
+                .securityContexts(securityContexts(swaggerProperties.getAuthorization(), null))
                 .globalResponseMessage(RequestMethod.GET, getResponseMessages())
                 .globalResponseMessage(RequestMethod.POST, getResponseMessages())
                 .globalResponseMessage(RequestMethod.PUT, getResponseMessages())
                 .globalResponseMessage(RequestMethod.DELETE, getResponseMessages())
-//                .extensions(Lists.newArrayList(new OrderExtensions(swaggerProperties.getOrder())))
                 ;
     }
 
@@ -199,30 +189,82 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
         this.beanFactory = beanFactory;
     }
 
-    private List<SecurityContext> securityContexts() {
-        List<SecurityContext> contexts = new ArrayList<>(1);
-        SecurityContext securityContext = SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                //.forPaths(PathSelectors.regex("^(?!auth).*$"))
-                .build();
-        contexts.add(securityContext);
-        return contexts;
+    /**
+     * 默认的全局鉴权策略
+     *
+     * @return
+     */
+    private List<SecurityReference> defaultAuth(SwaggerProperties.Authorization authorization) {
+        ArrayList<AuthorizationScope> authorizationScopeList = new ArrayList<>();
+        authorization.getAuthorizationScopeList()
+                .forEach(authorizationScope -> authorizationScopeList.add(new AuthorizationScope(authorizationScope.getScope(), authorizationScope.getDescription())));
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[authorizationScopeList.size()];
+        return Collections.singletonList(SecurityReference.builder()
+                .reference(authorization.getName())
+                .scopes(authorizationScopeList.toArray(authorizationScopes))
+                .build());
     }
 
-    private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        List<SecurityReference> references = new ArrayList<>(1);
-        references.add(new SecurityReference(AUTH_KEY, authorizationScopes));
-        return references;
+    /**
+     * 配置默认的全局鉴权策略的开关，通过正则表达式进行匹配；默认匹配所有URL
+     * 感觉这里设置了没什么卵用？
+     *
+     * @return
+     */
+    private List<SecurityContext> securityContexts(SwaggerProperties.Authorization globalAuthorization,
+                                                   SwaggerProperties.Authorization docketAuthorization) {
+        SwaggerProperties.Authorization authorization = docketAuthorization == null ? globalAuthorization : docketAuthorization;
+        return authorization == null ? Collections.emptyList()
+                : Collections.singletonList(SecurityContext.builder()
+                .securityReferences(defaultAuth(authorization))
+                .forPaths(PathSelectors.regex(authorization.getAuthRegex()))
+                .build());
     }
 
-    private List<ApiKey> securitySchemes() {
-        List<ApiKey> apiKeys = new ArrayList<>(1);
-        ApiKey apiKey = new ApiKey(AUTH_KEY, AUTH_KEY, "header");
-        apiKeys.add(apiKey);
-        return apiKeys;
+    /**
+     * 控制 Authorize 界面
+     *
+     * @return
+     */
+
+    private List<SecurityScheme> securitySchemes(SwaggerProperties.Authorization globalAuthorization,
+                                                 SwaggerProperties.Authorization docketAuthorization,
+                                                 List<SwaggerProperties.ApiKey> globalApiKeys,
+                                                 List<SwaggerProperties.ApiKey> docketApiKeys) {
+        List<SecurityScheme> list = new ArrayList<>();
+
+        SwaggerProperties.Authorization authorization = docketAuthorization == null ? globalAuthorization : docketAuthorization;
+
+        if (authorization != null) {
+            ArrayList<AuthorizationScope> authorizationScopeList = new ArrayList<>();
+            authorization.getAuthorizationScopeList().forEach(authorizationScope ->
+                    authorizationScopeList.add(new AuthorizationScope(authorizationScope.getScope(), authorizationScope.getDescription())));
+            ArrayList<GrantType> grantTypes = new ArrayList<>();
+            authorization.getTokenUrlList().forEach(tokenUrl -> grantTypes.add(new ResourceOwnerPasswordCredentialsGrant(tokenUrl)));
+            OAuth oAuth = new OAuth(authorization.getName(), authorizationScopeList, grantTypes);
+            list.add(oAuth);
+        }
+
+        List<SwaggerProperties.ApiKey> apiKeys = CollUtil.isEmpty(docketApiKeys) ? globalApiKeys : docketApiKeys;
+        if (CollUtil.isNotEmpty(apiKeys)) {
+            List<SwaggerProperties.ApiKey> allApiKeys = new ArrayList<>(apiKeys);
+            if (globalApiKeys != null && apiKeys != globalApiKeys) {
+                allApiKeys = new ArrayList<>(globalApiKeys);
+
+                Set<String> docketNames = allApiKeys.stream()
+                        .map(SwaggerProperties.ApiKey::getKeyname)
+                        .collect(Collectors.toSet());
+
+                for (SwaggerProperties.ApiKey ak : docketApiKeys) {
+                    if (!docketNames.contains(ak.getKeyname())) {
+                        allApiKeys.add(ak);
+                    }
+                }
+            }
+            List<ApiKey> apiKeyList = allApiKeys.stream().map(item -> new ApiKey(item.getName(), item.getKeyname(), item.getPassAs())).collect(Collectors.toList());
+            list.addAll(apiKeyList);
+        }
+        return list;
     }
 
     private List<Parameter> buildGlobalOperationParametersFromSwaggerProperties(
@@ -230,25 +272,20 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
         List<Parameter> parameters = Lists.newArrayList();
 
         if (Objects.isNull(globalOperationParameters)) {
-            /*parameters.add(new ParameterBuilder()
-                    .name(AUTH_KEY)
-                    .description("token令牌")
-                    .modelRef(new ModelRef("string"))
-                    .parameterType("header")
-                    .defaultValue("test")
-                    .required(false)
-                    .order(1)
-                    .build());*/
             return parameters;
         }
         for (SwaggerProperties.GlobalOperationParameter globalOperationParameter : globalOperationParameters) {
             parameters.add(new ParameterBuilder()
                     .name(globalOperationParameter.getName())
                     .description(globalOperationParameter.getDescription())
-                    .modelRef(new ModelRef(globalOperationParameter.getModelRef()))
-                    .parameterType(globalOperationParameter.getParameterType())
-                    .required(globalOperationParameter.getRequired())
                     .defaultValue(globalOperationParameter.getDefaultValue())
+                    .required(globalOperationParameter.getRequired())
+                    .allowMultiple(globalOperationParameter.getAllowMultiple())
+                    .parameterType(globalOperationParameter.getParameterType())
+                    .modelRef(new ModelRef(globalOperationParameter.getModelRef()))
+                    .hidden(globalOperationParameter.getHidden())
+                    .pattern(globalOperationParameter.getPattern())
+                    .collectionFormat(globalOperationParameter.getCollectionFormat())
                     .allowEmptyValue(globalOperationParameter.getAllowEmptyValue())
                     .order(globalOperationParameter.getOrder())
                     .build());

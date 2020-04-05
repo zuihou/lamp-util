@@ -41,6 +41,7 @@ public enum ExceptionCode implements BaseExceptionCode {
     BASE_VALID_PARAM(-9, "统一验证参数异常"),
     OPERATION_EX(-10, "操作异常"),
     SERVICE_MAPPER_ERROR(-11, "Mapper类转换异常"),
+    CAPTCHA_ERROR(-12, "验证码校验失败"),
 
 
     OK(200, "OK"),
@@ -72,13 +73,15 @@ public enum ExceptionCode implements BaseExceptionCode {
     TOO_MUCH_DATA_ERROR(2002, "批量新增数据过多"),
     //jwt token 相关 start
 
+    JWT_BASIC_INVALID(40000, "无效的基本身份验证令牌"),
     JWT_TOKEN_EXPIRED(40001, "会话超时，请重新登录"),
     JWT_SIGNATURE(40002, "不合法的token，请认真比对 token 的签名"),
     JWT_ILLEGAL_ARGUMENT(40003, "缺少token参数"),
     JWT_GEN_TOKEN_FAIL(40004, "生成token失败"),
-    JWT_PARSER_TOKEN_FAIL(40005, "解析token失败"),
+    JWT_PARSER_TOKEN_FAIL(40005, "解析用户身份错误，请重新登录！"),
     JWT_USER_INVALID(40006, "用户名或密码错误"),
     JWT_USER_ENABLED(40007, "用户已经被禁用！"),
+    JWT_OFFLINE(40008, "您已在另一个设备登录！"),
     //jwt token 相关 end
 
     ;

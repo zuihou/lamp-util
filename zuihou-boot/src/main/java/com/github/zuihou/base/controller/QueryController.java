@@ -6,7 +6,7 @@ import com.github.zuihou.base.request.PageParams;
 import com.github.zuihou.database.mybatis.conditions.Wraps;
 import com.github.zuihou.database.mybatis.conditions.query.QueryWrap;
 import com.github.zuihou.log.annotation.SysLog;
-import com.github.zuihou.user.annotation.PreAuth;
+import com.github.zuihou.security.annotation.PreAuth;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -56,6 +56,7 @@ public interface QueryController<Entity, Id extends Serializable, PageDTO> exten
     @ApiOperation(value = "分页列表查询")
     @PostMapping(value = "/page")
     @SysLog(value = "'分页列表查询:第' + #params?.current + '页, 显示' + #params?.size + '行'", response = false)
+    @PreAuth("hasPermit('{}view')")
     default R<IPage<Entity>> page(@RequestBody @Validated PageParams<PageDTO> params) {
         // 处理参数
         IPage<Entity> page = params.getPage();
@@ -73,6 +74,7 @@ public interface QueryController<Entity, Id extends Serializable, PageDTO> exten
     @ApiOperation(value = "批量查询", notes = "批量查询")
     @PostMapping("/query")
     @SysLog("批量查询")
+    @PreAuth("hasPermit('{}view')")
     default R<List<Entity>> query(@RequestBody Entity data) {
         QueryWrap<Entity> wrapper = Wraps.q(data);
         return success(getBaseService().list(wrapper));

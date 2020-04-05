@@ -2,6 +2,7 @@ package com.github.zuihou.base.controller;
 
 import com.github.zuihou.base.R;
 import com.github.zuihou.log.annotation.SysLog;
+import com.github.zuihou.security.annotation.PreAuth;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +35,7 @@ public interface DeleteController<Entity, Id extends Serializable> extends BaseC
             @ApiImplicitParam(name = "ids[]", value = "主键id", dataType = "array", paramType = "query"),
     })
     @SysLog("'删除:' + #ids")
+    @PreAuth("hasPermit('{}delete')")
     default R<Boolean> delete(@RequestParam("ids[]") List<Id> ids) {
         R<Boolean> result = handlerDelete(ids);
         if (result.getDefExec()) {

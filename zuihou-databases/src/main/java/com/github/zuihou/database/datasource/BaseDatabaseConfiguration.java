@@ -45,6 +45,11 @@ import java.util.*;
 
 /**
  * 数据库& 事务& MyBatis & Mp 配置
+ * zuihou.database.multiTenantType != DATASOURCE时， 子类需要继承它，并让程序启动时加载
+ * <p>
+ * 注意：BaseDatabaseConfiguration 和 DynamicDataSourceAutoConfiguration 只能同时加载一个
+ * <p>
+ * DynamicDataSourceAutoConfiguration 不开源！
  *
  * @author zuihou
  * @date 2020年01月07日17:09:23
@@ -69,7 +74,7 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
 
     protected final MybatisPlusProperties properties;
 
-    private final DatabaseProperties databaseProperties;
+    protected final DatabaseProperties databaseProperties;
     private final Interceptor[] interceptors;
     private final TypeHandler[] typeHandlers;
     private final LanguageDriver[] languageDrivers;

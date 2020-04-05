@@ -44,7 +44,7 @@ public class ScanConfiguration {
     }
 
     @Configuration
-    @ConditionalOnProperty(name = "zuihou.scan.type", havingValue = "FEIGN")
+    @ConditionalOnProperty(name = "zuihou.scan.type", havingValue = "FEIGN", matchIfMissing = true)
     @EnableFeignClients(basePackageClasses = ScanFeignConfiguration.SystemApiApi.class)
     public static class ScanFeignConfiguration {
 
@@ -60,7 +60,7 @@ public class ScanConfiguration {
          * @author zuihou
          * @date 2019/12/16
          */
-        @FeignClient(name = "${zuihou.feign.authority-server:zuihou-authority-server}", path = "/systemApi", fallback = SystemApiApiFallback.class)
+        @FeignClient(name = "${zuihou.feign.oauth-server:zuihou-oauth-server}", path = "/systemApi", fallback = SystemApiApiFallback.class)
         public interface SystemApiApi {
             /**
              * 批量保存

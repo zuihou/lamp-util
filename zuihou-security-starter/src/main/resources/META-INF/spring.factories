@@ -1,4 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.github.zuihou.security.service.UserDetailsServiceImpl,\
-  com.github.zuihou.security.component.SecurityInnerAspect
-
+    com.github.zuihou.security.config.SecureConfiguration

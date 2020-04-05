@@ -4,8 +4,11 @@ package com.github.zuihou.log;
 import com.alibaba.fastjson.JSONObject;
 import com.github.zuihou.log.aspect.SysLogAspect;
 import com.github.zuihou.log.event.SysLogListener;
+import com.github.zuihou.log.interceptor.MdcMvcConfigurer;
 import com.github.zuihou.log.monitor.PointUtil;
+import com.github.zuihou.log.properties.OptLogProperties;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -27,7 +30,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @Configuration
 @AllArgsConstructor
 @ConditionalOnWebApplication
-@ConditionalOnProperty(name = "zuihou.log.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = OptLogProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 public class LogAutoConfiguration {
 
     @Bean
@@ -36,10 +39,14 @@ public class LogAutoConfiguration {
         return new SysLogAspect();
     }
 
+    @Bean
+    public MdcMvcConfigurer getMdcMvcConfigurer() {
+        return new MdcMvcConfigurer();
+    }
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(name = "zuihou.log.type", havingValue = "LOGGER", matchIfMissing = true)
+    @ConditionalOnExpression("${zuihou.log.enabled:true} && 'LOGGER'.equals('${zuihou.log.type:LOGGER}')")
     public SysLogListener sysLogListener() {
         return new SysLogListener((log) -> {
             PointUtil.debug("0", "OPT_LOG", JSONObject.toJSONString(log));
