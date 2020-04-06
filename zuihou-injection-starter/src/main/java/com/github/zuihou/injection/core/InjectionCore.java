@@ -63,7 +63,7 @@ public class InjectionCore {
                     .build(new CacheLoader<InjectionFieldExtPo, Map<Serializable, Object>>() {
                         @Override
                         public Map<Serializable, Object> load(InjectionFieldExtPo type) throws Exception {
-                            log.info("首次读取缓存: " + type);
+                            log.debug("首次读取缓存: " + type);
                             return loadMap(type);
                         }
 
@@ -83,10 +83,10 @@ public class InjectionCore {
         Object bean = null;
         if (StrUtil.isNotEmpty(type.getApi())) {
             bean = SpringUtils.getBean(type.getApi());
-            log.info("建议在方法： [{}.{}]，上加入缓存，加速查询", type.getApi(), type.getMethod());
+            log.debug("建议在方法： [{}.{}]，上加入缓存，加速查询", type.getApi(), type.getMethod());
         } else {
             bean = SpringUtils.getBean(type.getFeign());
-            log.info("建议在方法： [{}.{}]，上加入缓存，加速查询", type.getFeign().toString(), type.getMethod());
+            log.debug("建议在方法： [{}.{}]，上加入缓存，加速查询", type.getFeign().toString(), type.getMethod());
         }
         Map<Serializable, Object> value = ReflectUtil.invoke(bean, type.getMethod(), type.getKeys());
         return value;
@@ -110,7 +110,7 @@ public class InjectionCore {
             parse(obj, typeMap, 1, MAX_DEPTH);
             long parseEnd = System.currentTimeMillis();
 
-            log.info("解析耗时={} ms", (parseEnd - parseStart));
+            log.debug("解析耗时={} ms", (parseEnd - parseStart));
             if (typeMap.isEmpty()) {
                 return;
             }
@@ -120,26 +120,23 @@ public class InjectionCore {
                 InjectionFieldPo type = entries.getKey();
                 Map<Serializable, Object> valueMap = entries.getValue();
                 Set<Serializable> keys = valueMap.keySet();
-                try {
-                    InjectionFieldExtPo extPo = new InjectionFieldExtPo(type, keys);
-                    // 根据是否启用guava缓存 决定从那里调用
-                    Map<Serializable, Object> value = ips.getGuavaCache().getEnabled() && isUseCache ? caches.get(extPo) : loadMap(extPo);
-                    typeMap.put(type, value);
-                } catch (Exception e) {
-                    log.error("远程调用方法 [{}({}).{}] 失败， 请确保系统存在该方法", type.getApi(), type.getFeign().toString(), type.getMethod(), e);
-                }
+
+                InjectionFieldExtPo extPo = new InjectionFieldExtPo(type, keys);
+                // 根据是否启用guava缓存 决定从那里调用
+                Map<Serializable, Object> value = ips.getGuavaCache().getEnabled() && isUseCache ? caches.get(extPo) : loadMap(extPo);
+                typeMap.put(type, value);
             }
 
             long injectionStart = System.currentTimeMillis();
-            log.info("批量查询耗时={} ms", (injectionStart - parseEnd));
+            log.debug("批量查询耗时={} ms", (injectionStart - parseEnd));
 
             // 3. 将查询出来结果注入到obj的 @InjectionFiled注解的字段中
             injection(obj, typeMap, 1, MAX_DEPTH);
             long injectionEnd = System.currentTimeMillis();
 
-            log.info("注入耗时={} ms", (injectionEnd - injectionStart));
+            log.debug("注入耗时={} ms", (injectionEnd - injectionStart));
         } catch (Exception e) {
-            log.warn("注入失败", e);
+            log.warn("自动注入属性值失败", e);
         }
     }
 
@@ -157,13 +154,8 @@ public class InjectionCore {
      */
     public Object injection(ProceedingJoinPoint pjp, InjectionResult anno) throws Throwable {
         Object proceed = pjp.proceed();
-        try {
-            injection(proceed);
-            return proceed;
-        } catch (Exception e) {
-            log.error("某属性数据聚合失败", e);
-            return proceed;
-        }
+        injection(proceed);
+        return proceed;
     }
 
     /**
@@ -205,7 +197,7 @@ public class InjectionCore {
             return;
         }
         if (depth > maxDepth) {
-            log.info("出现循环依赖，对多执行 {} 次， 已执行 {} 次，已为您跳出循环", depth, maxDepth);
+            log.debug("出现循环依赖，对多执行 {} 次， 已执行 {} 次，已为您跳出循环", depth, maxDepth);
             return;
         }
         if (typeMap == null) {
@@ -259,17 +251,12 @@ public class InjectionCore {
             if (StrUtil.isNotEmpty(key)) {
                 queryKey = key;
             } else {
-                try {
-                    Object curField = ReflectUtil.getFieldValue(obj, field);
-                    if (curField instanceof RemoteData) {
-                        RemoteData remoteData = (RemoteData) curField;
-                        queryKey = (Serializable) remoteData.getKey();
-                    } else {
-                        queryKey = (Serializable) curField;
-                    }
-                } catch (Exception e) {
-                    log.warn("类型装换失败忽略注入字段: {}.{}", field.getType(), field.getName());
-                    continue;
+                Object curField = ReflectUtil.getFieldValue(obj, field);
+                if (curField instanceof RemoteData) {
+                    RemoteData remoteData = (RemoteData) curField;
+                    queryKey = (Serializable) remoteData.getKey();
+                } else {
+                    queryKey = (Serializable) curField;
                 }
             }
 
@@ -308,7 +295,7 @@ public class InjectionCore {
             return;
         }
         if (depth > maxDepth) {
-            log.info("出现循环依赖，对多执行 {} 次， 已执行 {} 次，已为您跳出循环", depth, maxDepth);
+            log.debug("出现循环依赖，对多执行 {} 次， 已执行 {} 次，已为您跳出循环", depth, maxDepth);
             return;
         }
         if (typeMap == null || typeMap.isEmpty()) {
