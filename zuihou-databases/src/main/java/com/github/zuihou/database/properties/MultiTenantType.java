@@ -4,6 +4,10 @@ import lombok.Getter;
 
 /**
  * 多租户类型
+ * <p>
+ * NONE、COLUMN、SCHEMA 模式开源
+ * <p>
+ * DATASOURCE 模式收费，购买咨询作者
  *
  * @author zuihou
  * @date 2018/11/20
@@ -23,7 +27,8 @@ public enum MultiTenantType {
     SCHEMA("独立schema模式"),
     /**
      * 独立数据源模式
-     * 研究中...
+     * <p>
+     * 该模式不开源，购买咨询作者。
      */
     DATASOURCE("独立数据源模式"),
     ;
