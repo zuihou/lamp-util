@@ -2,6 +2,9 @@ import com.github.zuihou.jwt.JwtProperties;
 import com.github.zuihou.jwt.TokenUtil;
 import com.github.zuihou.jwt.model.AuthInfo;
 import com.github.zuihou.jwt.model.JwtUserInfo;
+import com.github.zuihou.utils.Charsets;
+
+import java.util.Base64;
 
 public class SecureUtilTest {
 
@@ -12,8 +15,10 @@ public class SecureUtilTest {
 
 //        AuthInfo build = build(properties);
 //        String token = build.getToken();
-        String token = "eyJ0eXAiOiJKc29uV2ViVG9rZW4iLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoi5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MCIsInRva2VuX3R5cGUiOiJ0b2tlbiIsInVzZXJpZCI6IjkyMjMzNzIwMzY4NTQ3NzU4MDciLCJhY2NvdW50Ijoi5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MCIsImV4cCI6MTU4NTg0MTQ0NiwibmJmIjoxNTg1ODQxNDM2fQ.E4LNVX47P9PsxnUq7QA3UJzl_GNOd5qnmfWvBNwXtCc";
-        parse(properties, token);
+//        String token = "eyJ0eXAiOiJKc29uV2ViVG9rZW4iLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoi5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MCIsInRva2VuX3R5cGUiOiJ0b2tlbiIsInVzZXJpZCI6IjkyMjMzNzIwMzY4NTQ3NzU4MDciLCJhY2NvdW50Ijoi5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MCIsImV4cCI6MTU4NTg0MTQ0NiwibmJmIjoxNTg1ODQxNDM2fQ.E4LNVX47P9PsxnUq7QA3UJzl_GNOd5qnmfWvBNwXtCc";
+//        parse(properties, token);
+
+        System.out.println(Base64.getEncoder().encodeToString(new String("0000").getBytes()));
     }
 
 
