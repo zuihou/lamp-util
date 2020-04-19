@@ -145,8 +145,16 @@ public class BaseContextHandler {
         return get(BaseContextConstants.JWT_KEY_TENANT, String.class);
     }
 
+    public static String getClientId() {
+        return get(BaseContextConstants.JWT_KEY_CLIENT_ID, String.class);
+    }
+
     public static void setTenant(String val) {
         set(BaseContextConstants.JWT_KEY_TENANT, val);
+    }
+
+    public static void setClientId(String val) {
+        set(BaseContextConstants.JWT_KEY_CLIENT_ID, val);
     }
 
     public static String getGrayVersion() {

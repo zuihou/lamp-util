@@ -35,10 +35,12 @@ public class MdcHandlerInterceptor extends HandlerInterceptorAdapter {
             return super.preHandle(request, response, handler);
         }
 
-        String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
-        MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? StrUtil.EMPTY : traceId);
-        MDC.put(BaseContextConstants.JWT_KEY_TENANT, getHeader(request, BaseContextConstants.JWT_KEY_TENANT));
-        MDC.put(BaseContextConstants.JWT_KEY_USER_ID, getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
+        if (!BaseContextHandler.getBoot()) {
+            String traceId = request.getHeader(BaseContextConstants.TRACE_ID_HEADER);
+            MDC.put(BaseContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? StrUtil.EMPTY : traceId);
+            MDC.put(BaseContextConstants.JWT_KEY_TENANT, getHeader(request, BaseContextConstants.JWT_KEY_TENANT));
+            MDC.put(BaseContextConstants.JWT_KEY_USER_ID, getHeader(request, BaseContextConstants.JWT_KEY_USER_ID));
+        }
         return super.preHandle(request, response, handler);
     }
 

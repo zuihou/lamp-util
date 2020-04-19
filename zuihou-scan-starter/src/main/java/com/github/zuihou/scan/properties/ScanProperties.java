@@ -10,8 +10,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2019/12/17
  */
 @Data
-@ConfigurationProperties(prefix = "zuihou.scan")
+@ConfigurationProperties(prefix = ScanProperties.PREFIX)
 public class ScanProperties {
+    public final static String PREFIX = "zuihou.scan";
 
     private ScanPersistenceType type = ScanPersistenceType.FEIGN;
 }

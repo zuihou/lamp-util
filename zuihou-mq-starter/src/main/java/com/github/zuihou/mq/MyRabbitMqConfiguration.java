@@ -1,5 +1,6 @@
 package com.github.zuihou.mq;
 
+import com.github.zuihou.mq.properties.MqProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
@@ -24,9 +25,7 @@ import org.springframework.context.annotation.Import;
 public class MyRabbitMqConfiguration {
     @Slf4j
     @Configuration
-    @ConditionalOnProperty(name = {
-            "zuihou.rabbitmq.enabled"
-    }, havingValue = "false", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = MqProperties.PREFIX, name = "enabled", havingValue = "false", matchIfMissing = true)
     @EnableAutoConfiguration(exclude = {RabbitAutoConfiguration.class})
     public static class RabbitMqConfiguration {
         public RabbitMqConfiguration() {

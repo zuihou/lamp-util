@@ -21,6 +21,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import javax.servlet.ServletContext;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,9 +36,11 @@ import java.util.stream.Collectors;
 })
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerAutoConfiguration implements BeanFactoryAware {
-    private static final String AUTH_KEY = "token";
     @Autowired
     SwaggerProperties swaggerProperties;
+    @Autowired
+    protected ServletContext servletContext;
+
 
     private BeanFactory beanFactory;
 
@@ -78,12 +81,12 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
 
             // base-path处理
             // 当没有配置任何path的时候，解析/**
-            if (docketInfo.getBasePath().isEmpty()) {
-                docketInfo.getBasePath().add("/**");
+            if (docketInfo.getIncludePath().isEmpty()) {
+                docketInfo.getIncludePath().add("/**");
             }
-            List<Predicate<String>> basePath = new ArrayList<>(docketInfo.getBasePath().size());
-            for (String path : docketInfo.getBasePath()) {
-                basePath.add(PathSelectors.ant(path));
+            List<Predicate<String>> includePath = new ArrayList<>(docketInfo.getIncludePath().size());
+            for (String path : docketInfo.getIncludePath()) {
+                includePath.add(PathSelectors.ant(path));
             }
 
             // exclude-path处理
@@ -100,7 +103,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                     .groupName(docketInfo.getGroup())
                     .select()
                     .apis(RequestHandlerSelectors.basePackage(docketInfo.getBasePackage()))
-                    .paths(Predicates.and(Predicates.not(Predicates.or(excludePath)), Predicates.or(basePath)))
+                    .paths(Predicates.and(Predicates.not(Predicates.or(excludePath)), Predicates.or(includePath)))
                     .build()
                     .securitySchemes(securitySchemes(swaggerProperties.getAuthorization(), docketInfo.getAuthorization(), swaggerProperties.getApiKeys(), docketInfo.getApiKeys()))
                     .securityContexts(securityContexts(swaggerProperties.getAuthorization(), docketInfo.getAuthorization()))
@@ -108,7 +111,8 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                     .globalResponseMessage(RequestMethod.GET, getResponseMessages())
                     .globalResponseMessage(RequestMethod.POST, getResponseMessages())
                     .globalResponseMessage(RequestMethod.PUT, getResponseMessages())
-                    .globalResponseMessage(RequestMethod.DELETE, getResponseMessages());
+                    .globalResponseMessage(RequestMethod.DELETE, getResponseMessages())
+                    .pathProvider(new ExtRelativePathProvider(servletContext, docketInfo.getBasePath().isEmpty() ? swaggerProperties.getBasePath() : docketInfo.getBasePath()));
 
             configurableBeanFactory.registerSingleton(groupName, docket);
             docketList.add(docket);
@@ -138,11 +142,11 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
 
         // base-path处理
         // 当没有配置任何path的时候，解析/**
-        if (swaggerProperties.getBasePath().isEmpty()) {
-            swaggerProperties.getBasePath().add("/**");
+        if (swaggerProperties.getIncludePath().isEmpty()) {
+            swaggerProperties.getIncludePath().add("/**");
         }
         List<Predicate<String>> basePath = new ArrayList<>();
-        for (String path : swaggerProperties.getBasePath()) {
+        for (String path : swaggerProperties.getIncludePath()) {
             basePath.add(PathSelectors.ant(path));
         }
 
@@ -170,7 +174,7 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                 .globalResponseMessage(RequestMethod.POST, getResponseMessages())
                 .globalResponseMessage(RequestMethod.PUT, getResponseMessages())
                 .globalResponseMessage(RequestMethod.DELETE, getResponseMessages())
-                ;
+                .pathProvider(new ExtRelativePathProvider(servletContext, swaggerProperties.getBasePath()));
     }
 
     private List<ResponseMessage> getResponseMessages() {

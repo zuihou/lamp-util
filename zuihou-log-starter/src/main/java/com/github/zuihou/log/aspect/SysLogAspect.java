@@ -204,7 +204,11 @@ public class SysLogAspect {
                 sysLog.setRequestUri(URLUtil.getPath(request.getRequestURI()));
                 sysLog.setHttpMethod(request.getMethod());
                 sysLog.setUa(StrUtil.sub(request.getHeader("user-agent"), 0, 500));
-                sysLog.setTenantCode(request.getHeader(BaseContextConstants.JWT_KEY_TENANT));
+                if (BaseContextHandler.getBoot()) {
+                    sysLog.setTenantCode(BaseContextHandler.getTenant());
+                } else {
+                    sysLog.setTenantCode(request.getHeader(BaseContextConstants.JWT_KEY_TENANT));
+                }
                 if (StrUtil.isEmpty(sysLog.getTrace())) {
                     sysLog.setTrace(request.getHeader(BaseContextConstants.TRACE_ID_HEADER));
                 }

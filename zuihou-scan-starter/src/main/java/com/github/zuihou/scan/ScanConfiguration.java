@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.zuihou.base.R;
 import com.github.zuihou.mq.constant.QueueConstants;
 import com.github.zuihou.scan.model.SystemApiScanSaveDTO;
+import com.github.zuihou.scan.properties.ScanProperties;
 import com.github.zuihou.scan.service.SystemApiScanService;
 import com.github.zuihou.utils.SpringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -108,7 +109,7 @@ public class ScanConfiguration {
     /**
      * 使用队列时，消费者需要自行实现
      */
-    @ConditionalOnProperty(name = "zuihou.scan.type", havingValue = "RABBIT")
+    @ConditionalOnProperty(prefix = ScanProperties.PREFIX, name = "type", havingValue = "RABBIT")
     public static class ScanRabbitConfiguration {
 
         @Bean("systemApiScanService")

@@ -28,7 +28,9 @@ public class TenantContextHandlerInterceptor extends HandlerInterceptorAdapter {
         if (!(handler instanceof HandlerMethod)) {
             return super.preHandle(request, response, handler);
         }
-        BaseContextHandler.setTenant(this.getHeader(request, BaseContextConstants.JWT_KEY_TENANT));
+        if (!BaseContextHandler.getBoot()) {
+            BaseContextHandler.setTenant(this.getHeader(request, BaseContextConstants.JWT_KEY_TENANT));
+        }
         return super.preHandle(request, response, handler);
     }
 

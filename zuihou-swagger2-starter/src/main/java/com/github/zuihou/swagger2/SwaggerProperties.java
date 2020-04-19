@@ -73,6 +73,7 @@ public class SwaggerProperties {
      * swagger会解析的包路径
      **/
     private String basePackage = "com.github.zuihou";
+    private String basePath = "/";
     /**
      * SpringSecurity 全局统一鉴权配置
      **/
@@ -85,9 +86,9 @@ public class SwaggerProperties {
     /**
      * swagger会解析的url规则
      **/
-    private List<String> basePath = new ArrayList<>();
+    private List<String> includePath = new ArrayList<>();
     /**
-     * 在basePath基础上需要排除的url规则
+     * 在includePath基础上需要排除的url规则
      **/
     private List<String> excludePath = new ArrayList<>();
 
@@ -202,12 +203,13 @@ public class SwaggerProperties {
          **/
         private String basePackage = "";
 
+        private String basePath = "/";
         /**
          * swagger会解析的url规则
          **/
-        private List<String> basePath = new ArrayList<>();
+        private List<String> includePath = new ArrayList<>();
         /**
-         * 在basePath基础上需要排除的url规则
+         * 在includePath基础上需要排除的url规则
          **/
         private List<String> excludePath = new ArrayList<>();
 
