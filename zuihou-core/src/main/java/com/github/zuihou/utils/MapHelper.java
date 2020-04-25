@@ -31,6 +31,8 @@ public class MapHelper {
      * <p>
      * 将 list&lt;V&gt 转成 Map&lt;K , M&gt
      * K 需要自己指定， M需要自己指定
+     *
+     * 其中K不能重复，若重复，则会报错
      * </p>
      *
      * @param values        需要转换的集合 可以是任何实现了 Iterable 接口的集合(如List, Set, Collection)

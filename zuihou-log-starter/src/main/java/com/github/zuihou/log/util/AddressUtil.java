@@ -86,6 +86,10 @@ public class AddressUtil {
             if (Util.isIpAddress(ip) == false) {
                 log.warn("warning: Invalid ip address");
             }
+            if (method == null) {
+                log.warn("警告: 查询算法不存在");
+                return "";
+            }
             dataBlock = (DataBlock) method.invoke(searcher, ip);
             String result = dataBlock.getRegion();
             long endTime = System.currentTimeMillis();

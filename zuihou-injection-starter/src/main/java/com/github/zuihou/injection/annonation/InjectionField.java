@@ -30,9 +30,9 @@ public @interface InjectionField {
      * <p/>
      * api()  和 feign() 任选其一,  使用 api时，请填写实现类， 使用feign时，填写接口即可
      * 如： @InjectionField(api="userServiceImpl") 等价于 @InjectionField(feign=UserService.class)
-     * 如： @InjectionField(api="userController") 等价于 @InjectionField(feign=UserApi.class)
+     * 如： @InjectionField(api="userApi") 等价于 @InjectionField(feign=UserApi.class)
      * <p>
-     * 注意：若使用feignclient调用， 则一定要加上 @FeignClient(qualifier = "xxxApi"), 否则会注入失败
+     * 注意：若使用feignClient调用， 则一定要加上 @FeignClient(qualifier = "userApi"), 否则会注入失败
      *
      * @return
      */
@@ -43,9 +43,9 @@ public @interface InjectionField {
      * <p/>
      * api()  和 feign() 任选其一,  使用 api时，请填写实现类， 使用feign时，填写接口即可
      * 如： @InjectionField(api="userServiceImpl") 等价于 @InjectionField(feign=UserService.class)
-     * 如： @InjectionField(api="userController") 等价于 @InjectionField(feign=UserApi.class)
+     * 如： @InjectionField(api="userApi") 等价于 @InjectionField(feign=UserApi.class)
      * <p>
-     * 注意： 本系统中，最好不要使用feign 方式调用，否则 entity 会依赖 api 模块，造成依赖冲突！
+     * 注意：若使用feignClient调用， 则一定要加上 @FeignClient(qualifier = "userApi"), 否则会注入失败
      *
      * @return
      */
@@ -62,6 +62,9 @@ public @interface InjectionField {
      * 目标类中的调用方法
      * <p>
      * 若 找不到 api(feign) + method，则忽略该字段
+     * <p>
+     * 该方法的入参必须为 Set<Serializable> 类型
+     * 该方法的出参必须为 Map<Serializable, Object> 类型
      *
      * @return
      */

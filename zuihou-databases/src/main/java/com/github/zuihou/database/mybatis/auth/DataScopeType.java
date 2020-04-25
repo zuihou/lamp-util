@@ -23,25 +23,25 @@ import lombok.Getter;
 public enum DataScopeType implements BaseEnum {
 
     /**
-     * ALL=1全部
+     * ALL=5全部
      */
-    ALL(1, "全部"),
+    ALL(5, "全部"),
     /**
-     * THIS_LEVEL=2本级
+     * THIS_LEVEL=4本级
      */
-    THIS_LEVEL(2, "本级"),
+    THIS_LEVEL(4, "本级"),
     /**
      * THIS_LEVEL_CHILDREN=3本级以及子级
      */
     THIS_LEVEL_CHILDREN(3, "本级以及子级"),
     /**
-     * CUSTOMIZE=4自定义
+     * CUSTOMIZE=2自定义
      */
-    CUSTOMIZE(4, "自定义"),
+    CUSTOMIZE(2, "自定义"),
     /**
-     * SELF=5个人
+     * SELF=1个人
      */
-    SELF(5, "个人"),
+    SELF(1, "个人"),
     ;
 
     @ApiModelProperty(value = "描述")

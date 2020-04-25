@@ -31,7 +31,7 @@ public class SysLogListener {
     public void saveSysLog(SysLogEvent event) {
         OptLogDTO sysLog = (OptLogDTO) event.getSource();
         if (sysLog == null || StrUtil.isEmpty(sysLog.getTenantCode())) {
-            log.warn("租户编码不存在，忽略操作日志=={}", sysLog.getRequestUri());
+            log.warn("租户编码不存在，忽略操作日志=={}", sysLog != null ? sysLog.getRequestUri() : "");
             return;
         }
         BaseContextHandler.setTenant(sysLog.getTenantCode());
