@@ -19,7 +19,11 @@ import com.github.zuihou.utils.StrPool;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.MDC;
 import org.springframework.core.DefaultParameterNameDiscoverer;
@@ -182,7 +186,11 @@ public class SysLogAspect {
             if (StrUtil.isEmpty(controllerDescription)) {
                 sysLog.setDescription(controllerMethodDescription);
             } else {
-                sysLog.setDescription(controllerDescription + "-" + controllerMethodDescription);
+                if (sysLogAnno.controllerApiValue()) {
+                    sysLog.setDescription(controllerDescription + "-" + controllerMethodDescription);
+                } else {
+                    sysLog.setDescription(controllerMethodDescription);
+                }
             }
 
             // 类名
@@ -194,8 +202,10 @@ public class SysLogAspect {
             Object[] args = joinPoint.getArgs();
 
             HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-            String strArgs = getArgs(sysLogAnno, args, request);
-            sysLog.setParams(getText(strArgs));
+            if (sysLogAnno.request()) {
+                String strArgs = getArgs(sysLogAnno, args, request);
+                sysLog.setParams(getText(strArgs));
+            }
 
             sysLog.setTrace(MDC.get(BaseContextConstants.LOG_TRACE_ID));
 
@@ -277,17 +287,16 @@ public class SysLogAspect {
 
     private String getArgs(SysLog sysLogAnno, Object[] args, HttpServletRequest request) {
         String strArgs = StrPool.EMPTY;
-        if (sysLogAnno.request()) {
+
+        try {
+            if (!request.getContentType().contains("multipart/form-data")) {
+                strArgs = JSONObject.toJSONString(args);
+            }
+        } catch (Exception e) {
             try {
-                if (!request.getContentType().contains("multipart/form-data")) {
-                    strArgs = JSONObject.toJSONString(args);
-                }
-            } catch (Exception e) {
-                try {
-                    strArgs = Arrays.toString(args);
-                } catch (Exception ex) {
-                    log.warn("解析参数异常", ex);
-                }
+                strArgs = Arrays.toString(args);
+            } catch (Exception ex) {
+                log.warn("解析参数异常", ex);
             }
         }
         return strArgs;

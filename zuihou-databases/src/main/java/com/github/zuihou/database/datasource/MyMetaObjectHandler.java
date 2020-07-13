@@ -20,6 +20,17 @@ import java.time.LocalDateTime;
 /**
  * MyBatis Plus 元数据处理类
  * 用于自动 注入 id, createTime, updateTime, createUser, updateUser 等字段
+ * <p>
+ * 判断逻辑：
+ * 1. insert 方法，自动填充 id, createTime, updateTime, createUser, updateUser 字段，字段为空则自动生成，不为空则使用传递进来的
+ * 2. update 方法，自动填充 id, updateTime, updateUser 字段，字段为空则自动生成，不为空则使用传递进来的
+ * <p>
+ * 注入值：
+ * id：  IdUtil.getSnowflake(workerId, dataCenterId);
+ * createTime：LocalDateTime.now()
+ * updateTime：LocalDateTime.now()
+ * createUser：BaseContextHandler.getUserId()
+ * updateUser：BaseContextHandler.getUserId()
  *
  * @author zuihou
  * @date 2019/04/29

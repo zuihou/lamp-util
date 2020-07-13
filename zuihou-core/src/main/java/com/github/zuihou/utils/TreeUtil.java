@@ -1,8 +1,8 @@
 package com.github.zuihou.utils;
 
 
+import cn.hutool.core.collection.CollUtil;
 import com.github.zuihou.base.entity.TreeEntity;
-import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -78,7 +78,7 @@ public class TreeUtil {
      * @return
      */
     public static <E extends TreeEntity<E, ? extends Serializable>> List<E> buildTree(List<E> treeList) {
-        if (CollectionUtils.isEmpty(treeList)) {
+        if (CollUtil.isEmpty(treeList)) {
             return treeList;
         }
         //记录自己是自己的父节点的id集合

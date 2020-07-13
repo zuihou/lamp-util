@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.netflix.ribbon.RibbonClientConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 /**
@@ -16,7 +15,6 @@ import org.springframework.context.annotation.Scope;
  * @author zuihou
  * @date 2020年02月15日14:00:16
  */
-@Configuration
 @AutoConfigureBefore(RibbonClientConfiguration.class)
 public class RibbonMetaFilterAutoConfiguration {
 

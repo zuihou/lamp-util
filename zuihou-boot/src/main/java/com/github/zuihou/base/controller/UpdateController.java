@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
- * 修改
+ * 修改Controller
  *
  * @param <Entity>    实体
  * @param <UpdateDTO> 修改参数

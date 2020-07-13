@@ -4,6 +4,7 @@ import com.github.zuihou.base.R;
 import com.github.zuihou.security.feign.UserQuery;
 import com.github.zuihou.security.feign.UserResolverService;
 import com.github.zuihou.security.model.SysUser;
+import com.github.zuihou.security.properties.SecurityProperties;
 import com.github.zuihou.utils.SpringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @date 2020年02月29日21:35:37
  */
 @Configuration
-@ConditionalOnProperty(name = "zuihou.scan.type", havingValue = "FEIGN", matchIfMissing = true)
+@ConditionalOnProperty(prefix = SecurityProperties.PREFIX, name = "type", havingValue = "FEIGN", matchIfMissing = true)
 @EnableFeignClients(basePackageClasses = UserResolveFeignConfiguration.UserResolveApi.class)
 public class UserResolveFeignConfiguration {
 

@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
+import static com.github.zuihou.xss.filter.XssFilter.IGNORE_PARAM_VALUE;
+import static com.github.zuihou.xss.filter.XssFilter.IGNORE_PATH;
+
 /**
  * XSS 跨站攻击自动配置
  *
@@ -24,8 +27,7 @@ public class XssAuthConfiguration {
      */
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer2() {
-        return builder -> builder
-                .deserializerByType(String.class, new XssStringJsonDeserializer());
+        return builder -> builder.deserializerByType(String.class, new XssStringJsonDeserializer());
     }
 
 
@@ -43,7 +45,7 @@ public class XssAuthConfiguration {
         filterRegistration.setOrder(1);
 
         Map<String, String> initParameters = new HashMap<>(2);
-        String excludes = new StringJoiner(",")
+        String ignorePaths = new StringJoiner(",")
                 .add("/favicon.ico")
                 .add("/doc.html")
                 .add("/swagger-ui.html")
@@ -56,9 +58,14 @@ public class XssAuthConfiguration {
                 .add("/public/*")
                 .add("/classpath:*")
                 .add("/actuator/*")
+                .add("/**/noxss/**")
                 .toString();
-        initParameters.put("excludes", excludes);
-        initParameters.put("isIncludeRichText", "true");
+        initParameters.put(IGNORE_PATH, ignorePaths);
+
+        String ignoreParamNames = new StringJoiner(",")
+                .add("noxss")
+                .toString();
+        initParameters.put(IGNORE_PARAM_VALUE, ignoreParamNames);
         filterRegistration.setInitParameters(initParameters);
         return filterRegistration;
     }

@@ -34,10 +34,11 @@ public class InjectionFieldExtPo extends InjectionFieldPo {
 
     public InjectionFieldExtPo(InjectionFieldPo po, Set<Serializable> keys) {
         this.api = po.getApi();
-        this.feign = po.getFeign();
+        this.apiClass = po.getApiClass();
         this.key = po.getKey();
         this.method = po.getMethod();
         this.beanClass = po.getBeanClass();
+        this.type = po.getType();
         this.keys = keys;
         this.tenant = BaseContextHandler.getTenant();
     }
@@ -63,7 +64,7 @@ public class InjectionFieldExtPo extends InjectionFieldPo {
         if (StrUtil.isNotEmpty(api)) {
             isEquals = isEquals && Objects.equal(api, that.api);
         } else {
-            isEquals = isEquals && Objects.equal(feign, that.feign);
+            isEquals = isEquals && Objects.equal(apiClass, that.apiClass);
         }
 
         boolean isEqualsKeys = keys.size() == that.keys.size() && keys.containsAll(that.keys);
@@ -73,6 +74,6 @@ public class InjectionFieldExtPo extends InjectionFieldPo {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(api, feign, method, keys);
+        return Objects.hashCode(api, apiClass, method, keys);
     }
 }

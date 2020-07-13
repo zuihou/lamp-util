@@ -37,7 +37,7 @@ import java.util.Optional;
  * @date 2019-08-06 10:42
  */
 @ConditionalOnClass(RedisConnectionFactory.class)
-@ConditionalOnProperty(name = "zuihou.cache.type", havingValue = "REDIS", matchIfMissing = true)
+@ConditionalOnProperty(prefix = CustomCacheProperties.PREFIX, name = "type", havingValue = "REDIS", matchIfMissing = true)
 @EnableConfigurationProperties({RedisProperties.class, CustomCacheProperties.class})
 public class RedisAutoConfigure {
     @Autowired

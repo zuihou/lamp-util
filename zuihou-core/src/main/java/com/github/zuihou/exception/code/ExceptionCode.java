@@ -42,6 +42,7 @@ public enum ExceptionCode implements BaseExceptionCode {
     OPERATION_EX(-10, "操作异常"),
     SERVICE_MAPPER_ERROR(-11, "Mapper类转换异常"),
     CAPTCHA_ERROR(-12, "验证码校验失败"),
+    JSON_PARSE_ERROR(-13, "JSON解析异常"),
 
 
     OK(200, "OK"),

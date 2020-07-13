@@ -31,7 +31,7 @@ public class PingYinUtil {
                     // 左移运算符用“<<”表示，是将运算符左边的对象，向左移动运算符右边指定的位数，并且在低位补零。其实，向左移n位，就相当于乘上2的n次方
                     char1 <<= 8;
                     int chart = char1 + (b[i] & 255);
-                    buffer.append(getPYIndexChar((char) chart, bUpCase));
+                    buffer.append(getPyIndexChar((char) chart, bUpCase));
                     continue;
                 }
                 char c = (char) b[i];
@@ -53,7 +53,7 @@ public class PingYinUtil {
     /**
      * 得到首字母
      */
-    private static char getPYIndexChar(char strChinese, boolean bUpCase) {
+    private static char getPyIndexChar(char strChinese, boolean bUpCase) {
         int charGBK = strChinese;
         char result;
         if (charGBK >= 45217 && charGBK <= 45252) {

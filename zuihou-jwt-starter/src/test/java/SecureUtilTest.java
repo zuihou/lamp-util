@@ -10,9 +10,9 @@ public class SecureUtilTest {
         properties.setExpire(10L);
         properties.setRefreshExpire(7200L);
 
-//        AuthInfo build = build(properties);
-//        String token = build.getToken();
-        String token = "eyJ0eXAiOiJKc29uV2ViVG9rZW4iLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoi5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MCIsInRva2VuX3R5cGUiOiJ0b2tlbiIsInVzZXJpZCI6IjkyMjMzNzIwMzY4NTQ3NzU4MDciLCJhY2NvdW50Ijoi5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MCIsImV4cCI6MTU4NTg0MTQ0NiwibmJmIjoxNTg1ODQxNDM2fQ.E4LNVX47P9PsxnUq7QA3UJzl_GNOd5qnmfWvBNwXtCc";
+        AuthInfo build = build(properties);
+        String token = build.getToken();
+//        String token = "eyJ0eXAiOiJKc29uV2ViVG9rZW4iLCJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoi5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MCIsInRva2VuX3R5cGUiOiJ0b2tlbiIsInVzZXJpZCI6IjkyMjMzNzIwMzY4NTQ3NzU4MDciLCJhY2NvdW50Ijoi5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MOWnk-WQjemVv-W6puS4jeiDvei2hei_hzUw5aeT5ZCN6ZW_5bqm5LiN6IO96LaF6L-HNTDlp5PlkI3plb_luqbkuI3og73otoXov4c1MCIsImV4cCI6MTU4NTg0MTQ0NiwibmJmIjoxNTg1ODQxNDM2fQ.E4LNVX47P9PsxnUq7QA3UJzl_GNOd5qnmfWvBNwXtCc";
         parse(properties, token);
     }
 
@@ -38,7 +38,7 @@ public class SecureUtilTest {
     }
 
     private static void parse(JwtProperties properties, String token) {
-        AuthInfo authInfo = new TokenUtil(properties).parseJWT(token);
+        AuthInfo authInfo = new TokenUtil(properties).parseRefreshToken(token);
 
         System.out.println(authInfo);
     }

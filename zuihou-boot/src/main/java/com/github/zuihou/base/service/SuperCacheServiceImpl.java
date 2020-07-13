@@ -1,15 +1,24 @@
 package com.github.zuihou.base.service;
 
 import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.enums.SqlMethod;
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.github.zuihou.base.entity.SuperEntity;
 import com.github.zuihou.base.mapper.SuperMapper;
 import net.oschina.j2cache.CacheChannel;
 import net.oschina.j2cache.CacheObject;
+import org.apache.ibatis.binding.MapperMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * 基于SpringCache + J2Cache 实现的 缓存实现
@@ -82,7 +91,6 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
         return save;
     }
 
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateAllById(T model) {
@@ -103,6 +111,71 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
             cacheChannel.evict(getRegion(), key);
         }
         return updateBool;
+    }
+
+
+    // 以下方法还能优化成批量清理缓存和设置缓存-----------
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean saveBatch(Collection<T> entityList, int batchSize) {
+        String sqlStatement = sqlStatement(SqlMethod.INSERT_ONE);
+        return executeBatch(entityList, batchSize, (sqlSession, entity) -> {
+            sqlSession.insert(sqlStatement, entity);
+
+            // 设置缓存
+            if (entity instanceof SuperEntity) {
+                String key = key(((SuperEntity) entity).getId());
+                cacheChannel.set(getRegion(), key, entity);
+            }
+        });
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean saveOrUpdateBatch(Collection<T> entityList, int batchSize) {
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(entityClass);
+        Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
+        String keyProperty = tableInfo.getKeyProperty();
+        Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
+        return executeBatch(entityList, batchSize, (sqlSession, entity) -> {
+            Object idVal = ReflectionKit.getMethodValue(entityClass, entity, keyProperty);
+            if (StringUtils.checkValNull(idVal) || Objects.isNull(getById((Serializable) idVal))) {
+                sqlSession.insert(tableInfo.getSqlStatement(SqlMethod.INSERT_ONE.getMethod()), entity);
+
+                // 设置缓存
+                if (entity instanceof SuperEntity) {
+                    String key = key(((SuperEntity) entity).getId());
+                    cacheChannel.set(getRegion(), key, entity);
+                }
+            } else {
+                MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
+                param.put(Constants.ENTITY, entity);
+                sqlSession.update(tableInfo.getSqlStatement(SqlMethod.UPDATE_BY_ID.getMethod()), param);
+
+                // 清理缓存
+                if (entity instanceof SuperEntity) {
+                    String key = key(((SuperEntity) entity).getId());
+                    cacheChannel.evict(getRegion(), key);
+                }
+            }
+        });
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean updateBatchById(Collection<T> entityList, int batchSize) {
+        String sqlStatement = sqlStatement(SqlMethod.UPDATE_BY_ID);
+        return executeBatch(entityList, batchSize, (sqlSession, entity) -> {
+            MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
+            param.put(Constants.ENTITY, entity);
+            sqlSession.update(sqlStatement, param);
+
+            // 清理缓存
+            if (entity instanceof SuperEntity) {
+                String key = key(((SuperEntity) entity).getId());
+                cacheChannel.evict(getRegion(), key);
+            }
+        });
     }
 
 }

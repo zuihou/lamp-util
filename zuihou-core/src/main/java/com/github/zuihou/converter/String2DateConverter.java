@@ -12,7 +12,21 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.github.zuihou.exception.BaseException.BASE_VALID_PARAM;
-import static com.github.zuihou.utils.DateUtils.*;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_FORMAT;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_FORMAT_EN;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_FORMAT_EN_MATCHES;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_FORMAT_MATCHES;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT_EN;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT_EN_MATCHES;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT_MATCHES;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_MONTH_FORMAT;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_MONTH_FORMAT_SLASH;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_YEAR_FORMAT;
+import static com.github.zuihou.utils.DateUtils.SLASH_DATE_FORMAT;
+import static com.github.zuihou.utils.DateUtils.SLASH_DATE_FORMAT_MATCHES;
+import static com.github.zuihou.utils.DateUtils.SLASH_DATE_TIME_FORMAT;
+import static com.github.zuihou.utils.DateUtils.SLASH_DATE_TIME_FORMAT_MATCHES;
 
 /**
  * 解决入参为 Date类型
@@ -23,20 +37,22 @@ import static com.github.zuihou.utils.DateUtils.*;
 @Slf4j
 public class String2DateConverter extends BaseDateConverter<Date> implements Converter<String, Date> {
 
-    protected static final Map<String, String> FORMAT = new LinkedHashMap(11);
+    protected static final Map<String, String> FORMAT = new LinkedHashMap(13);
 
     static {
         FORMAT.put(DEFAULT_YEAR_FORMAT, "^\\d{4}");
         FORMAT.put(DEFAULT_MONTH_FORMAT, "^\\d{4}-\\d{1,2}$");
-        FORMAT.put(DEFAULT_DATE_FORMAT, "^\\d{4}-\\d{1,2}-\\d{1,2}$");
+        FORMAT.put(DEFAULT_DATE_FORMAT, DEFAULT_DATE_FORMAT_MATCHES);
         FORMAT.put("yyyy-MM-dd HH", "^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}");
         FORMAT.put("yyyy-MM-dd HH:mm", "^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}:\\d{1,2}$");
-        FORMAT.put(DEFAULT_DATE_TIME_FORMAT, "^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}:\\d{1,2}:\\d{1,2}$");
-        FORMAT.put("yyyy/MM", "^\\d{4}/\\d{1,2}$");
-        FORMAT.put("yyyy/MM/dd", "^\\d{4}/\\d{1,2}/\\d{1,2}$");
+        FORMAT.put(DEFAULT_DATE_TIME_FORMAT, DEFAULT_DATE_TIME_FORMAT_MATCHES);
+        FORMAT.put(DEFAULT_MONTH_FORMAT_SLASH, "^\\d{4}/\\d{1,2}$");
+        FORMAT.put(SLASH_DATE_FORMAT, SLASH_DATE_FORMAT_MATCHES);
         FORMAT.put("yyyy/MM/dd HH", "^\\d{4}/\\d{1,2}/\\d{1,2} {1}\\d{1,2}");
         FORMAT.put("yyyy/MM/dd HH:mm", "^\\d{4}/\\d{1,2}/\\d{1,2} {1}\\d{1,2}:\\d{1,2}$");
-        FORMAT.put("yyyy/MM/dd HH:mm:ss", "^\\d{4}/\\d{1,2}/\\d{1,2} {1}\\d{1,2}:\\d{1,2}:\\d{1,2}$");
+        FORMAT.put(SLASH_DATE_TIME_FORMAT, SLASH_DATE_TIME_FORMAT_MATCHES);
+        FORMAT.put(DEFAULT_DATE_FORMAT_EN, DEFAULT_DATE_FORMAT_EN_MATCHES);
+        FORMAT.put(DEFAULT_DATE_TIME_FORMAT_EN, DEFAULT_DATE_TIME_FORMAT_EN_MATCHES);
     }
 
     /**

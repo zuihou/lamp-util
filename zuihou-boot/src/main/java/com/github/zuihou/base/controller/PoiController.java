@@ -19,7 +19,11 @@ import com.github.zuihou.security.annotation.PreAuth;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +56,7 @@ public interface PoiController<Entity, PageDTO> extends PageController<Entity, P
     @SysLog("'导出Excel:'.concat(#params.map[" + NormalExcelConstants.FILE_NAME + "]?:'')")
     @PreAuth("hasPermit('{}export')")
     default void exportExcel(@RequestBody @Validated PageParams<PageDTO> params, HttpServletRequest request, HttpServletResponse response) {
-        IPage<Entity> page = params.getPage();
+        IPage<Entity> page = params.buildPage();
         ExportParams exportParams = getExportParams(params, page);
 
         Map<String, Object> map = new HashMap<>(5);
@@ -75,7 +79,7 @@ public interface PoiController<Entity, PageDTO> extends PageController<Entity, P
     @RequestMapping(value = "/preview", method = RequestMethod.POST)
     @PreAuth("hasPermit('{}export')")
     default R<String> preview(@RequestBody @Validated PageParams<PageDTO> params) {
-        IPage<Entity> page = params.getPage();
+        IPage<Entity> page = params.buildPage();
         ExportParams exportParams = getExportParams(params, page);
 
         Workbook workbook = ExcelExportUtil.exportExcel(exportParams, getEntityClass(), page.getRecords());

@@ -28,7 +28,7 @@ import java.lang.reflect.ParameterizedType;
  * @author zuihou
  * @date 2020年03月06日11:06:46
  */
-public class SuperNoPoiController<S extends SuperService<Entity>, Id extends Serializable, Entity, PageDTO, SaveDTO, UpdateDTO> extends SuperSimpleController<S, Entity>
+public abstract class SuperNoPoiController<S extends SuperService<Entity>, Id extends Serializable, Entity, PageDTO, SaveDTO, UpdateDTO> extends SuperSimpleController<S, Entity>
         implements SaveController<Entity, SaveDTO>, UpdateController<Entity, UpdateDTO>, DeleteController<Entity, Id>, QueryController<Entity, Id, PageDTO> {
 
     @Override

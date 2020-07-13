@@ -69,9 +69,8 @@ public interface PageController<Entity, PageDTO> extends BaseController<Entity> 
             page.setSize(defSize);
         }
         Entity model = BeanUtil.toBean(params.getModel(), getEntityClass());
-        QueryWrap<Entity> wrapper = Wraps.q(model);
 
-        handlerWrapper(wrapper, params);
+        QueryWrap<Entity> wrapper = handlerWrapper(model, params);
         getBaseService().page(page, wrapper);
 
         // 处理结果
@@ -82,10 +81,12 @@ public interface PageController<Entity, PageDTO> extends BaseController<Entity> 
     /**
      * 处理时间区间，可以覆盖后处理组装查询条件
      *
-     * @param wrapper
+     * @param model
      * @param params
      */
-    default void handlerWrapper(QueryWrap<Entity> wrapper, PageParams<PageDTO> params) {
+    default QueryWrap<Entity> handlerWrapper(Entity model, PageParams<PageDTO> params) {
+        QueryWrap<Entity> wrapper = model == null ? Wraps.q() : Wraps.q(model);
+
         if (CollUtil.isNotEmpty(params.getMap())) {
             Map<String, String> map = params.getMap();
             //拼装区间
@@ -105,6 +106,7 @@ public interface PageController<Entity, PageDTO> extends BaseController<Entity> 
                 }
             }
         }
+        return wrapper;
     }
 
     /**

@@ -33,10 +33,11 @@ import static com.github.zuihou.database.mybatis.conditions.Wraps.replace;
  * <p>
  * 相比 LambdaQueryWrapper 的增强如下：
  * 1，new QueryWrapper(T entity)时， 对entity 中的string字段 %和_ 符号进行转义，便于模糊查询
- * 2，对nested、eq、ne、gt、ge、lt、le、in、*like*、 等方法 进行条件判断，null 或 "" 字段不加入查询
- * 3，对*like*相关方法的参数 %和_ 符号进行转义，便于模糊查询
- * 4，增加 leFooter 方法， 将日期参数值，强制转换成当天 23：59：59
- * 5，增加 geHeader 方法， 将日期参数值，强制转换成当天 00：00：00
+ * 2，new QueryWrapper(T entity)时， 对entity 中 RemoteData 类型的字段 值为null或者 key为null或者""时，忽略拼接成查询条件
+ * 3，对nested、eq、ne、gt、ge、lt、le、in、*like*、 等方法 进行条件判断，null 或 "" 字段不加入查询
+ * 4，对*like*相关方法的参数 %和_ 符号进行转义，便于模糊查询
+ * 5，增加 leFooter 方法， 将日期参数值，强制转换成当天 23：59：59
+ * 6，增加 geHeader 方法， 将日期参数值，强制转换成当天 00：00：00
  *
  * @author zuihou
  * @date Created on 2019/5/27 17:11
@@ -267,7 +268,7 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
     //----------------以下为自定义方法---------
 
     /**
-     * 取消跳过空的字符串  不允许跳过空的字符串
+     * 取消跳过空的字符串
      *
      * @return
      */

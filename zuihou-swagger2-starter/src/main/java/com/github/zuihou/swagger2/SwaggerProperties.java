@@ -1,6 +1,10 @@
 package com.github.zuihou.swagger2;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;
@@ -34,7 +38,6 @@ public class SwaggerProperties {
      * 离线文档路径
      */
     private Markdown markdown = new Markdown();
-
 
     /**
      * 访问账号密码
@@ -73,6 +76,9 @@ public class SwaggerProperties {
      * swagger会解析的包路径
      **/
     private String basePackage = "com.github.zuihou";
+    /**
+     * 扩展swagger 基础路径
+     */
     private String basePath = "/";
     /**
      * SpringSecurity 全局统一鉴权配置
@@ -281,15 +287,15 @@ public class SwaggerProperties {
         /**
          * 联系人
          **/
-        private String name = "zuihou";
+        private String name = "";
         /**
          * 联系人url
          **/
-        private String url = "https://github.com/zuihou/zuihou-admin-cloud";
+        private String url = "";
         /**
          * 联系人email
          **/
-        private String email = "244387066@qq.com";
+        private String email = "";
     }
 
     @Data

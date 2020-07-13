@@ -47,26 +47,6 @@ public class LogUtil {
      */
     public static SysLog getTargetAnno(JoinPoint point) {
         try {
-//            // 获取连接点签名的方法名
-//            String methodName = point.getSignature().getName();
-//            //获取连接点参数
-//            Object[] args = point.getArgs();
-//            if (ArrayUtil.hasNull(args)) { // 参数为空时，只能参数长度
-//
-//            } else {  // 参数不为空时，能准确反射到具体的方法
-//                Method method = ReflectUtil.getMethodOfObj(point.getTarget(), methodName, args);
-////                Class[] classes = Arrays.stream(args).filter(Objects::isNull).map((arg) -> arg.getClass()).toArray(Class[]::new);
-//
-//                if (method != null) {
-//                    annotation = method.getAnnotation(SysLog.class);
-//                } else {
-//                    Method parentMethod = ReflectUtil.getMethodOfObj(point.getTarget().getClass().getSuperclass(), methodName, args);
-//                    if (parentMethod != null) {
-//                        annotation = parentMethod.getAnnotation(SysLog.class);
-//                    }
-//                }
-//            }
-
             SysLog annotation = null;
             if (point.getSignature() instanceof MethodSignature) {
                 Method method = ((MethodSignature) point.getSignature()).getMethod();

@@ -5,6 +5,7 @@ import com.github.zuihou.validator.extract.IConstraintExtract;
 import com.github.zuihou.validator.model.FieldValidatorDesc;
 import com.github.zuihou.validator.model.ValidConstraint;
 import com.github.zuihou.validator.wrapper.HttpServletRequestValidatorWrapper;
+import org.springframework.core.MethodParameter;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -152,35 +153,44 @@ public class FormValidatorController {
     private Collection<FieldValidatorDesc> loadValidatorDescribe(HandlerMethod handlerMethod) throws Exception {
         Method method = handlerMethod.getMethod();
         Parameter[] methodParams = method.getParameters();
-
         if (methodParams == null || methodParams.length < 1) {
             return Collections.EMPTY_LIST;
         }
-        ArrayList<Parameter> validateParams = new ArrayList<>(methodParams.length);
-        for (Parameter methodParameter : methodParams) {
-            //在参数和类上面找注解
-            if (methodParameter.getAnnotation(Validated.class) != null
-                    || method.getDeclaringClass().getAnnotation(Validated.class) != null) {
-                validateParams.add(methodParameter);
-            }
-        }
-        if (validateParams.isEmpty()) {
+        MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
+        if (methodParameters == null || methodParameters.length < 1) {
             return Collections.EMPTY_LIST;
         }
 
+        // 类上面的验证注解  handlerMethod.getBeanType().getAnnotation(Validated.class)
         Validated classValidated = method.getDeclaringClass().getAnnotation(Validated.class);
 
         List<ValidConstraint> validatorStandard = new ArrayList<>();
-        for (Parameter methodParameter : validateParams) {
-            Validated validate = methodParameter.getAnnotation(Validated.class);
-            if (validate == null) {
-                validate = classValidated;
+        for (int i = 0; i < methodParameters.length; i++) {
+            // 方法上的参数 (能正确获取到 当前类和父类Controller上的 参数类型)
+            MethodParameter methodParameter = methodParameters[i];
+            // 方法上的参数 (能正确获取到 当前类和父类Controller上的 参数注解)
+            Parameter methodParam = methodParams[i];
+
+            Validated methodParamValidate = methodParam.getAnnotation(Validated.class);
+
+            //在参数和类上面找注解
+            if (methodParamValidate == null && classValidated == null) {
+                continue;
             }
-            if (validate != null) {
-                validatorStandard.add(new ValidConstraint(methodParameter.getType(), validate.value()));
-            } else {
-                validatorStandard.add(new ValidConstraint(methodParameter.getType()));
+
+            // 优先获取方法上的 验证组，在取类上的验证组
+            Class<?>[] group = null;
+            if (methodParamValidate != null) {
+                group = methodParamValidate.value();
             }
+            if (group == null && classValidated != null) {
+                group = classValidated.value();
+            }
+
+            validatorStandard.add(new ValidConstraint(methodParameter.getParameterType(), group));
+        }
+        if (validatorStandard.isEmpty()) {
+            return Collections.EMPTY_LIST;
         }
 
         return constraintExtract.extract(validatorStandard);

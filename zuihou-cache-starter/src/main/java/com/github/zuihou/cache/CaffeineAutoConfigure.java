@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Primary;
  * @date 2019/08/07
  */
 @Slf4j
-@ConditionalOnProperty(name = "zuihou.cache.type", havingValue = "CAFFEINE")
+@ConditionalOnProperty(prefix = CustomCacheProperties.PREFIX, name = "type", havingValue = "CAFFEINE")
 @EnableConfigurationProperties({CustomCacheProperties.class})
 public class CaffeineAutoConfigure {
 
@@ -62,10 +62,10 @@ public class CaffeineAutoConfigure {
                 .initialCapacity(500)
                 .expireAfterWrite(cacheProperties.getDef().getTimeToLive())
                 .maximumSize(cacheProperties.getDef().getMaxSize());
-        cacheManager.setAllowNullValues(true);
+        cacheManager.setAllowNullValues(cacheProperties.getDef().isCacheNullValues());
         cacheManager.setCaffeine(caffeine);
 
-        //配置了这里，就必须实现在这里指定key 才能缓存
+        //配置了这里，就必须事先在配置文件中指定key 缓存才生效
 //        Map<String, CustomCacheProperties.Redis> configs = cacheProperties.getConfigs();
 //        Optional.ofNullable(configs).ifPresent((config)->{
 //            cacheManager.setCacheNames(config.keySet());

@@ -53,7 +53,7 @@ public class BaseMybatisConfiguration {
     @Bean
     @Order(15)
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(name = "zuihou.database.isNotWrite", havingValue = "true")
+    @ConditionalOnProperty(prefix = DatabaseProperties.PREFIX, name = "isNotWrite", havingValue = "true")
     public WriteInterceptor getWriteInterceptor() {
         return new WriteInterceptor();
     }
@@ -68,6 +68,7 @@ public class BaseMybatisConfiguration {
     @ConditionalOnMissingBean
     public PaginationInterceptor paginationInterceptor() {
         PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
+        paginationInterceptor.setLimit(databaseProperties.getLimit());
         List<ISqlParser> sqlParserList = new ArrayList<>();
 
         if (this.databaseProperties.getIsBlockAttack()) {
@@ -85,8 +86,7 @@ public class BaseMybatisConfiguration {
             tenantSqlParser.setTenantHandler(new TenantHandler() {
                 @Override
                 public Expression getTenantId(boolean where) {
-                    // 该 where 条件 3.2.0 版本开始添加的，用于分区是否为在 where 条件中使用
-                    // 如果是in/between之类的多个tenantId的情况，参考下方示例
+                    // 该 where 条件 3.2.0 版本开始添加的，用于区分是否为在 where 条件中使用
                     return new StringValue(BaseContextHandler.getTenant());
                 }
 

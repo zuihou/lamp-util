@@ -6,7 +6,6 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -14,15 +13,35 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.bind.annotation.RequestMethod;
-import springfox.documentation.builders.*;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.ResponseMessageBuilder;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.*;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.Contact;
+import springfox.documentation.service.GrantType;
+import springfox.documentation.service.OAuth;
+import springfox.documentation.service.Parameter;
+import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
+import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.servlet.ServletContext;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -34,19 +53,27 @@ import java.util.stream.Collectors;
 @Import({
         Swagger2Configuration.class
 })
+@ConditionalOnProperty(prefix = SwaggerProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerAutoConfiguration implements BeanFactoryAware {
-    @Autowired
-    SwaggerProperties swaggerProperties;
-    @Autowired
+
+    protected SwaggerProperties swaggerProperties;
     protected ServletContext servletContext;
-
-
     private BeanFactory beanFactory;
+
+    public SwaggerAutoConfiguration(SwaggerProperties swaggerProperties, ServletContext servletContext) {
+        this.swaggerProperties = swaggerProperties;
+        this.servletContext = servletContext;
+    }
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
+    }
+
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(name = "zuihou.swagger.enabled", havingValue = "true", matchIfMissing = true)
     public List<Docket> createRestApi() {
         ConfigurableBeanFactory configurableBeanFactory = (ConfigurableBeanFactory) beanFactory;
         List<Docket> docketList = new LinkedList<>();
@@ -107,7 +134,6 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                     .build()
                     .securitySchemes(securitySchemes(swaggerProperties.getAuthorization(), docketInfo.getAuthorization(), swaggerProperties.getApiKeys(), docketInfo.getApiKeys()))
                     .securityContexts(securityContexts(swaggerProperties.getAuthorization(), docketInfo.getAuthorization()))
-
                     .globalResponseMessage(RequestMethod.GET, getResponseMessages())
                     .globalResponseMessage(RequestMethod.POST, getResponseMessages())
                     .globalResponseMessage(RequestMethod.PUT, getResponseMessages())
@@ -186,11 +212,6 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                 new ResponseMessageBuilder().code(40003).message("缺少token参数").build()
         );
         return collect;
-    }
-
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
     }
 
     /**

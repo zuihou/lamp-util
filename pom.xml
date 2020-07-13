@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.zuihou</groupId>
     <artifactId>zuihou-commons</artifactId>
-    <version>2.3</version>
+    <version>2.4</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>zuihou项目公共模块</description>
@@ -27,7 +27,6 @@
         <module>zuihou-cache-starter</module>
         <module>zuihou-mq-starter</module>
         <module>zuihou-zipkin-client-starter</module>
-        <module>zuihou-scan-starter</module>
         <module>zuihou-injection-starter</module>
     </modules>
     <properties>
@@ -55,7 +54,7 @@
         <developer>
             <id>zuihou</id>
             <name>zuihou</name>
-            <email>244387066@qq.com</email>
+            <email>306479353@qq.com</email>
             <roles>
                 <role>Java Development Engineer</role>
             </roles>
@@ -84,7 +83,7 @@
             <dependency>
                 <groupId>com.github.zuihou</groupId>
                 <artifactId>zuihou-dependencies</artifactId>
-                <version>2.3</version>
+                <version>2.4</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

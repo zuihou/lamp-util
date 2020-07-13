@@ -21,6 +21,9 @@ import static com.github.zuihou.context.BaseContextConstants.GRAY_VERSION;
  * <p>
  * 若请求头中的 grayversion 若为空， 则优先从服务元数据中 没有设置 grayversion 的服务中获取，若所有服务均设置了 grayversion， 则从设置了 grayversion 的服务列表轮训
  * 若请求头中的 grayversion 若不为空， 则优先从服务元数据中 设置了 grayversion 的服务中获取，若所有服务均没有了 grayversion， 则从 所有的服务列表轮训
+ *
+ * @author zuihou
+ * @date 2020年03月30日15:59:14
  */
 @Slf4j
 public class GrayRule extends AvailabilityFilteringRule {

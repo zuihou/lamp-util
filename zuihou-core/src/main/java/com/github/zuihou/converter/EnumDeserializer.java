@@ -1,17 +1,17 @@
 package com.github.zuihou.converter;
 
-import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+
+import static com.github.zuihou.converter.EnumSerializer.ALL_ENUM_KEY_FIELD;
 
 /**
  * enum反序列化工具
@@ -22,44 +22,30 @@ import java.lang.reflect.Method;
 @Slf4j
 public class EnumDeserializer extends StdDeserializer<Enum<?>> {
     public final static EnumDeserializer INSTANCE = new EnumDeserializer();
-    private final static String ALL_ENUM_STRING_CONVERT_METHOD = "get";
-    private final static String ALL_ENUM_KEY_FIELD = "code";
+
 
     public EnumDeserializer() {
         super(Enum.class);
     }
 
     @Override
-    public Enum<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        JsonToken token = p.getCurrentToken();
-        String value = null;
-        while (!token.isStructEnd()) {
-            if (ALL_ENUM_KEY_FIELD.equals(p.getText())) {
-                p.nextToken();
-                value = p.getValueAsString();
-            } else {
-                p.nextToken();
-            }
-            token = p.getCurrentToken();
-        }
-        if (value == null || "".equals(value)) {
-            return null;
-        }
-
-        Object obj = p.getCurrentValue();
-        if (obj == null) {
-            return null;
-        }
-        Field field = ReflectUtil.getField(obj.getClass(), p.getCurrentName());
-        //找不到字段
-        if (field == null) {
-            return null;
-        }
-        Class<?> fieldType = field.getType();
+    public Enum<?> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         try {
-            Method method = fieldType.getMethod(ALL_ENUM_STRING_CONVERT_METHOD, String.class);
-            return (Enum<?>) method.invoke(null, value);
-        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
+            // 读取
+            JsonNode node = jp.getCodec().readTree(jp);
+            // 当前字段
+            String currentName = jp.currentName();
+            // 当前对象
+            Object currentValue = jp.getCurrentValue();
+            // 在对象中找到改字段
+            Class findPropertyType = BeanUtils.findPropertyType(currentName, currentValue.getClass());
+            JsonNode code = node.get(ALL_ENUM_KEY_FIELD);
+            String val = code != null ? code.asText() : node.asText();
+            if (StrUtil.isBlank(val)) {
+                return null;
+            }
+            return Enum.valueOf(findPropertyType, val);
+        } catch (Exception e) {
             log.warn("解析枚举失败", e);
             return null;
         }

@@ -62,7 +62,7 @@ public class R<T> {
      * 附加数据
      */
     @ApiModelProperty(value = "附加数据")
-    private Map<String, Object> extra;
+    private Map<Object, Object> extra;
 
     /**
      * 响应时间
@@ -71,7 +71,8 @@ public class R<T> {
     private long timestamp = System.currentTimeMillis();
 
     private R() {
-        super();
+        this.defExec = false;
+        this.timestamp = System.currentTimeMillis();
     }
 
     public R(int code, T data, String msg) {
@@ -79,6 +80,7 @@ public class R<T> {
         this.data = data;
         this.msg = msg;
         this.defExec = false;
+        this.timestamp = System.currentTimeMillis();
     }
 
     public R(int code, T data, String msg, boolean defExec) {
@@ -86,6 +88,7 @@ public class R<T> {
         this.data = data;
         this.msg = msg;
         this.defExec = defExec;
+        this.timestamp = System.currentTimeMillis();
     }
 
     public static <E> R<E> result(int code, E data, String msg) {
@@ -194,6 +197,14 @@ public class R<T> {
             this.extra = new HashMap<>(10);
         }
         this.extra.put(key, value);
+        return this;
+    }
+
+    public R<T> putAll(Map<Object, Object> extra) {
+        if (this.extra == null) {
+            this.extra = new HashMap<>(10);
+        }
+        this.extra.putAll(extra);
         return this;
     }
 

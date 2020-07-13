@@ -29,11 +29,12 @@ public class InjectionResultAspect {
 
     @Around("methodPointcut()&&@annotation(anno)")
     public Object interceptor(ProceedingJoinPoint pjp, InjectionResult anno) throws Throwable {
+        Object proceed = pjp.proceed();
         try {
-            return injectionCore.injection(pjp, anno);
+            injectionCore.injection(proceed, anno.isUseCache());
         } catch (Exception e) {
             log.error("AOP拦截@RemoteResult出错", e);
-            return pjp.proceed();
         }
+        return proceed;
     }
 }

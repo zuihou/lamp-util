@@ -11,7 +11,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.StandardEnvironment;
 
 import java.io.IOException;
@@ -24,7 +23,7 @@ import java.io.IOException;
 @ConditionalOnClass(J2Cache.class)
 @EnableConfigurationProperties({J2CacheConfig.class})
 @Configuration
-@PropertySource(value = "${j2cache.config-location}", encoding = "UTF-8", ignoreResourceNotFound = true)
+//@PropertySource(value = "${j2cache.config-location}", encoding = "UTF-8", ignoreResourceNotFound = true)
 public class J2CacheAutoConfiguration {
 
     @Autowired

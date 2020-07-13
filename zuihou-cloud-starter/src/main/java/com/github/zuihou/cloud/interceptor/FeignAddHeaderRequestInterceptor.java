@@ -1,9 +1,12 @@
 package com.github.zuihou.cloud.interceptor;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.zuihou.context.BaseContextConstants;
 import com.github.zuihou.context.BaseContextHandler;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
+import io.seata.core.context.RootContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -22,7 +25,7 @@ import java.util.List;
 @Slf4j
 public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
-    private static final List<String> HEADER_NAME_LIST = Arrays.asList(
+    public static final List<String> HEADER_NAME_LIST = Arrays.asList(
             BaseContextConstants.JWT_KEY_TENANT, BaseContextConstants.JWT_KEY_USER_ID,
             BaseContextConstants.JWT_KEY_ACCOUNT, BaseContextConstants.JWT_KEY_NAME, BaseContextConstants.GRAY_VERSION,
             BaseContextConstants.TRACE_ID_HEADER, "X-Real-IP", "x-forwarded-for"
@@ -34,6 +37,11 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
+        String xid = RootContext.getXID();
+        if (StrUtil.isNotEmpty(xid)) {
+            template.header(RootContext.KEY_XID, xid);
+        }
+
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
             HEADER_NAME_LIST.forEach((headerName) -> template.header(headerName, BaseContextHandler.get(headerName)));
@@ -45,6 +53,9 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
             log.warn("path={}, 在FeignClient API接口未配置FeignConfiguration类， 故而无法在远程调用时获取请求头中的参数!", template.path());
             return;
         }
-        HEADER_NAME_LIST.forEach((headerName) -> template.header(headerName, request.getHeader(headerName)));
+        HEADER_NAME_LIST.forEach((headerName) -> {
+            String header = request.getHeader(headerName);
+            template.header(headerName, ObjectUtil.isEmpty(header) ? BaseContextHandler.get(headerName) : header);
+        });
     }
 }

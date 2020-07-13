@@ -5,7 +5,7 @@
     <parent>
         <artifactId>zuihou-commons</artifactId>
         <groupId>com.github.zuihou</groupId>
-        <version>2.3</version>
+        <version>2.4</version>
         <relativePath>../</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -21,6 +21,14 @@
         <dependency>
             <groupId>org.springframework.amqp</groupId>
             <artifactId>spring-rabbit</artifactId>
+        </dependency>
+
+        <!-- 必须有这个jar 才能提示 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

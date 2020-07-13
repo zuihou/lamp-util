@@ -21,6 +21,16 @@ public class BaseUncheckedException extends RuntimeException implements BaseExce
      */
     protected int code;
 
+    public BaseUncheckedException(Throwable cause) {
+        super(cause);
+    }
+
+    public BaseUncheckedException(int code, Throwable cause) {
+        super(cause);
+        this.code = code;
+    }
+
+
     public BaseUncheckedException(int code, String message) {
         super(message);
         this.code = code;

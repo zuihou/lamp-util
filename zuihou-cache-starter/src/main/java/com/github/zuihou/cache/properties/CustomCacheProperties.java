@@ -14,11 +14,11 @@ import java.util.Map;
  * @date 2019/08/06
  */
 @Data
-@ConfigurationProperties(prefix = "zuihou.cache")
+@ConfigurationProperties(prefix = CustomCacheProperties.PREFIX)
 public class CustomCacheProperties {
-
+    public static final String PREFIX = "zuihou.cache";
     /**
-     * 目前只支持 redis 和 CAFFEINE ！
+     * 目前只支持 REDIS 和 CAFFEINE ！
      * CAFFEINE 只用于项目的开发环境或者演示环境使用， 生产环境请用redis！！！
      */
     private CacheType type = CacheType.REDIS;

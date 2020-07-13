@@ -91,7 +91,7 @@ public class AddressUtil {
                 return "";
             }
             dataBlock = (DataBlock) method.invoke(searcher, ip);
-            String result = dataBlock.getRegion();
+            String result = dataBlock != null ? dataBlock.getRegion() : StrUtil.EMPTY;
             long endTime = System.currentTimeMillis();
             log.debug("region use time[{}] result[{}]", endTime - startTime, result);
             return result;

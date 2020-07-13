@@ -83,6 +83,7 @@ public interface StrPool {
     String CONTENT_TYPE = "application/json; charset=utf-8";
 
 
+    String TEST_TOKEN = "Bearer test";
     String TEST = "test";
     String PROD = "prod";
 

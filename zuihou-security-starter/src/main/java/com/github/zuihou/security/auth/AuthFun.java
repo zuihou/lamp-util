@@ -74,7 +74,6 @@ public class AuthFun {
         // 查询当前用户拥有的所有资源
         Set<String> resources = new HashSet<>();
 
-//        UserResolverService userResolverService = SpringUtils.getBean(UserResolverService.class);
         R<SysUser> result = userResolverService.getById(UserQuery.buildResource());
         if (result.getIsSuccess() && result.getData() != null && result.getData().getResources() != null) {
             SysUser sysUser = result.getData();
@@ -95,7 +94,6 @@ public class AuthFun {
         // 查询当前用户拥有的所有角色
         Set<String> roles = new HashSet<>();
 
-//        UserResolverService userResolverService = SpringUtils.getBean(UserResolverService.class);
         R<SysUser> result = userResolverService.getById(UserQuery.buildRoles());
         if (result.getIsSuccess() && result.getData() != null && result.getData().getRoles() != null) {
             SysUser sysUser = result.getData();

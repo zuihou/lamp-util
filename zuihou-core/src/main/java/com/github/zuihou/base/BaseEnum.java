@@ -1,7 +1,6 @@
 package com.github.zuihou.base;
 
 import com.baomidou.mybatisplus.core.enums.IEnum;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.zuihou.utils.MapHelper;
 
 import java.util.Arrays;
@@ -26,7 +25,6 @@ public interface BaseEnum extends IEnum<String> {
         return MapHelper.uniqueIndex(Arrays.asList(list), BaseEnum::getCode, BaseEnum::getDesc);
     }
 
-
     /**
      * 编码重写
      *
@@ -44,12 +42,21 @@ public interface BaseEnum extends IEnum<String> {
     String getDesc();
 
     /**
+     * 判断val是否跟当前枚举相等
+     *
+     * @param val
+     * @return
+     */
+    default boolean eq(String val) {
+        return this.getCode().equalsIgnoreCase(val);
+    }
+
+    /**
      * 枚举值
      *
      * @return
      */
     @Override
-    @JsonIgnore
     default String getValue() {
         return getCode();
     }

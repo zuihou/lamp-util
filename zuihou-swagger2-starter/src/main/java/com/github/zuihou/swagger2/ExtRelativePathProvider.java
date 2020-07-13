@@ -5,7 +5,7 @@ import springfox.documentation.spring.web.paths.RelativePathProvider;
 import javax.servlet.ServletContext;
 
 /**
- * This is a Description
+ * 相对路径重写
  *
  * @author tangyh
  * @date 2018/11/23

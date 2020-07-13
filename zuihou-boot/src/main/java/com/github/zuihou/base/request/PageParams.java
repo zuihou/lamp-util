@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.zuihou.base.entity.Entity;
 import com.github.zuihou.base.entity.SuperEntity;
 import com.github.zuihou.utils.AntiSqlFilter;
+import com.github.zuihou.utils.StrPool;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -47,27 +48,46 @@ public class PageParams<T> {
     @ApiModelProperty("扩展参数")
     private Map<String, String> map = new HashMap<>(1);
 
+    /**
+     * 支持多个字段排序，用法：
+     * eg.1, 参数：{order:"name,id", order:"descending,ascending" }。 排序： name desc, id asc
+     * eg.2, 参数：{order:"name", order:"descending,ascending" }。 排序： name desc
+     * eg.3, 参数：{order:"name,id", order:"descending" }。 排序： name desc
+     *
+     * @return
+     */
     @JsonIgnore
-    public IPage getPage() {
+    public IPage buildPage() {
         PageParams params = this;
+        //没有排序参数
         if (StrUtil.isEmpty(params.getSort())) {
             Page page = new Page(params.getCurrent(), params.getSize());
             return page;
         }
 
         Page page = new Page(params.getCurrent(), params.getSize());
-        List<OrderItem> orders = new ArrayList<>();
-        // 简单的 驼峰 转 下划线
-        String sort = StrUtil.toUnderlineCase(params.getSort());
 
-        // 除了 create_time 和 updateTime 都过滤sql关键字
-        if (!StrUtil.equalsAny(params.getSort(), SuperEntity.CREATE_TIME, Entity.UPDATE_TIME)) {
-            sort = AntiSqlFilter.getSafeValue(sort);
+        List<OrderItem> orders = new ArrayList<>();
+        String[] sortArr = StrUtil.split(params.getSort(), StrPool.COMMA);
+        String[] orderArr = StrUtil.split(params.getOrder(), StrPool.COMMA);
+
+        int len = sortArr.length < orderArr.length ? sortArr.length : orderArr.length;
+        for (int i = 0; i < len; i++) {
+            String humpSort = sortArr[i];
+            // 简单的 驼峰 转 下划线
+            String underlineSort = StrUtil.toUnderlineCase(humpSort);
+
+            // 除了 create_time 和 updateTime 都过滤sql关键字
+            if (!StrUtil.equalsAny(humpSort, SuperEntity.CREATE_TIME, Entity.UPDATE_TIME)) {
+                underlineSort = AntiSqlFilter.getSafeValue(underlineSort);
+            }
+
+            orders.add("ascending".equals(orderArr[i]) ? OrderItem.asc(underlineSort) : OrderItem.desc(underlineSort));
         }
 
-        orders.add("ascending".equals(params.getOrder()) ? OrderItem.asc(sort) : OrderItem.desc(sort));
         page.setOrders(orders);
-        return page;
 
+        return page;
     }
+
 }

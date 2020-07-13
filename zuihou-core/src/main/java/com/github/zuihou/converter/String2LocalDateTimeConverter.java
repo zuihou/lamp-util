@@ -8,6 +8,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT_EN;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT_EN_MATCHES;
+import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT_MATCHES;
+import static com.github.zuihou.utils.DateUtils.SLASH_DATE_TIME_FORMAT;
+import static com.github.zuihou.utils.DateUtils.SLASH_DATE_TIME_FORMAT_MATCHES;
 
 /**
  * 解决入参为 Date类型
@@ -20,8 +25,9 @@ public class String2LocalDateTimeConverter extends BaseDateConverter<LocalDateTi
     protected static final Map<String, String> FORMAT = new LinkedHashMap(2);
 
     static {
-        FORMAT.put(DEFAULT_DATE_TIME_FORMAT, "^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}:\\d{1,2}:\\d{1,2}$");
-        FORMAT.put("yyyy/MM/dd HH:mm:ss", "^\\d{4}/\\d{1,2}/\\d{1,2} {1}\\d{1,2}:\\d{1,2}:\\d{1,2}$");
+        FORMAT.put(DEFAULT_DATE_TIME_FORMAT, DEFAULT_DATE_TIME_FORMAT_MATCHES);
+        FORMAT.put(SLASH_DATE_TIME_FORMAT, SLASH_DATE_TIME_FORMAT_MATCHES);
+        FORMAT.put(DEFAULT_DATE_TIME_FORMAT_EN, DEFAULT_DATE_TIME_FORMAT_EN_MATCHES);
     }
 
     @Override

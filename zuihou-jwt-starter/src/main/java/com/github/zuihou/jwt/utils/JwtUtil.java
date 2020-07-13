@@ -7,7 +7,12 @@ import com.github.zuihou.exception.code.ExceptionCode;
 import com.github.zuihou.jwt.model.Token;
 import com.github.zuihou.utils.Charsets;
 import com.github.zuihou.utils.StrPool;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -124,20 +129,25 @@ public class JwtUtil {
      */
     public static Claims parseJWT(String jsonWebToken) {
         try {
-            return Jwts.parser()
+            return Jwts.parserBuilder()
                     .setSigningKey(Base64.getDecoder().decode(BASE64_SECURITY))
-                    .parseClaimsJws(jsonWebToken).getBody();
+                    .build()
+                    .parseClaimsJws(jsonWebToken)
+                    .getBody();
         } catch (ExpiredJwtException ex) {
+            log.error("token 过期", ex);
             //过期
             throw new BizException(ExceptionCode.JWT_TOKEN_EXPIRED.getCode(), ExceptionCode.JWT_TOKEN_EXPIRED.getMsg());
         } catch (SignatureException ex) {
+            log.error("token 签名错误", ex);
             //签名错误
             throw new BizException(ExceptionCode.JWT_SIGNATURE.getCode(), ExceptionCode.JWT_SIGNATURE.getMsg());
         } catch (IllegalArgumentException ex) {
+            log.error("token 为空", ex);
             //token 为空
             throw new BizException(ExceptionCode.JWT_ILLEGAL_ARGUMENT.getCode(), ExceptionCode.JWT_ILLEGAL_ARGUMENT.getMsg());
         } catch (Exception e) {
-            log.error("errcode:{}, message:{}", JWT_PARSER_TOKEN_FAIL.getCode(), e.getMessage());
+            log.error("errcode:{}, message:{}", JWT_PARSER_TOKEN_FAIL.getCode(), e.getMessage(), e);
             throw new BizException(JWT_PARSER_TOKEN_FAIL.getCode(), JWT_PARSER_TOKEN_FAIL.getMsg());
         }
     }

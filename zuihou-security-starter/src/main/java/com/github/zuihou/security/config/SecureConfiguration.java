@@ -4,8 +4,9 @@ import com.github.zuihou.security.aspect.AuthAspect;
 import com.github.zuihou.security.auth.AuthFun;
 import com.github.zuihou.security.feign.UserResolverService;
 import com.github.zuihou.security.properties.ContextProperties;
-import com.github.zuihou.security.properties.UserProperties;
+import com.github.zuihou.security.properties.SecurityProperties;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,16 +20,17 @@ import org.springframework.core.annotation.Order;
  */
 @Order
 @AllArgsConstructor
-@EnableConfigurationProperties({UserProperties.class, ContextProperties.class})
+@EnableConfigurationProperties({SecurityProperties.class, ContextProperties.class})
 public class SecureConfiguration {
 
     @Bean
-    @ConditionalOnProperty(prefix = UserProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = SecurityProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
     public AuthAspect authAspect(AuthFun authFun) {
         return new AuthAspect(authFun);
     }
 
     @Bean("fun")
+    @ConditionalOnMissingBean(AuthFun.class)
     public AuthFun getAuthFun(UserResolverService userResolverService) {
         return new AuthFun(userResolverService);
     }

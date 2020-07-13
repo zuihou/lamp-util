@@ -34,6 +34,10 @@ public class DatabaseProperties {
      */
     public Boolean isSeata = false;
     /**
+     * 分页大小限制
+     */
+    protected long limit = -1;
+    /**
      * 是否禁止写入
      */
     private Boolean isNotWrite = false;

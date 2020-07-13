@@ -1,10 +1,9 @@
 package com.github.zuihou.injection;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.zuihou.injection.aspect.InjectionResultAspect;
-import com.github.zuihou.injection.configuration.InjectionProperties;
 import com.github.zuihou.injection.core.InjectionCore;
 import com.github.zuihou.injection.mybatis.typehandler.RemoteDataTypeHandler;
+import com.github.zuihou.injection.properties.InjectionProperties;
 import com.github.zuihou.utils.SpringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @AllArgsConstructor
 @EnableConfigurationProperties(InjectionProperties.class)
-@ConditionalOnProperty(name = "zuihou.injection.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = InjectionProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 public class InjectionDataAutoConfiguration {
     private InjectionProperties remoteProperties;
 
@@ -41,15 +40,15 @@ public class InjectionDataAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(name = {"zuihou.injection.aop-enabled"}, havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = InjectionProperties.PREFIX, name = "aop-enabled", havingValue = "true", matchIfMissing = true)
     public InjectionResultAspect getRemoteAspect(InjectionCore injectionCore) {
         return new InjectionResultAspect(injectionCore);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public InjectionCore getInjectionCore(ObjectMapper mapper) {
-        return new InjectionCore(mapper, remoteProperties);
+    public InjectionCore getInjectionCore() {
+        return new InjectionCore(remoteProperties);
     }
 
     /**

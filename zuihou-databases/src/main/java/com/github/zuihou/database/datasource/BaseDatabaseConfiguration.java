@@ -32,7 +32,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.interceptor.*;
+import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
+import org.springframework.transaction.interceptor.RollbackRuleAttribute;
+import org.springframework.transaction.interceptor.RuleBasedTransactionAttribute;
+import org.springframework.transaction.interceptor.TransactionAttribute;
+import org.springframework.transaction.interceptor.TransactionAttributeSource;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -41,15 +46,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * 数据库& 事务& MyBatis & Mp 配置
  * zuihou.database.multiTenantType != DATASOURCE时， 子类需要继承它，并让程序启动时加载
  * <p>
  * 注意：BaseDatabaseConfiguration 和 DynamicDataSourceAutoConfiguration 只能同时加载一个
- * <p>
- * DynamicDataSourceAutoConfiguration 不开源！
  *
  * @author zuihou
  * @date 2020年01月07日17:09:23

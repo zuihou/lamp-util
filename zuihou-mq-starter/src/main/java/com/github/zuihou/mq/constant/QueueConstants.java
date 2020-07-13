@@ -7,5 +7,4 @@ package com.github.zuihou.mq.constant;
  * @date 2019/12/17
  */
 public class QueueConstants {
-    public static final String QUEUE_SCAN_API_RESOURCE = "zuihou_scan_api_resource";
 }

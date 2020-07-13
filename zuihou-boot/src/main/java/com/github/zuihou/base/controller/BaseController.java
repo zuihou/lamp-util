@@ -15,8 +15,18 @@ import com.github.zuihou.exception.code.BaseExceptionCode;
  */
 public interface BaseController<Entity> {
 
+    /**
+     * 获取实体的类型
+     *
+     * @return
+     */
     Class<Entity> getEntityClass();
 
+    /**
+     * 获取Service
+     *
+     * @return
+     */
     SuperService<Entity> getBaseService();
 
 

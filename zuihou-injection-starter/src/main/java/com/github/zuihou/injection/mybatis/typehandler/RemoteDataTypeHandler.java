@@ -4,12 +4,17 @@ import com.github.zuihou.model.RemoteData;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 
 /**
  * 远程数据 类型转换器
  * <p>
- * 借鉴Hibernate的外键字段的思想，自定义一个类型处理器，将
+ * 借鉴Hibernate的外键字段的思想，自定义一个类型处理器，
+ * 将数据库中 bigint、int、varchar类型的字段映射成JavaBean中 RemoteData 类型的字段
  *
  * @author zuihou
  * @date 2020年01月18日17:20:34

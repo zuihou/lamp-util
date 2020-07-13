@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 /**
  * 很诡异，DozerUtils 工具类不能以 xxMapper 结尾
+ * <p>
+ * 使用dozer对复杂对象进行转换时，若对象标记了 @Accessors(chain = true) 注解， 会报NPE异常
  *
  * @author zuihou
  * @createTime 2017-12-08 14:41

@@ -27,7 +27,7 @@ public class MyCacheConfig extends CachingConfigurerSupport {
 
     /**
      * 解决注解：Cacheable 没有指定key时，会将key生成为 ${value}:SimpleKey []
-     * eg： @Cacheable(value = "zuihou") ->  zuihou:SimpleKey []
+     * eg： @Cacheable(value = "自己指定的前缀") ->  自己指定的前缀:SimpleKey []
      *
      * @return
      */

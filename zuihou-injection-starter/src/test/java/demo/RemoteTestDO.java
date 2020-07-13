@@ -19,13 +19,13 @@ public class RemoteTestDO {
      * 根据 type3 查询 dictionaryItemServiceImpl.findDictionaryItem 方法，
      * 并注入到 type3
      */
-    @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem")
+    @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem", dictType = "NATION")
     protected String type3;
     /**
      * 根据 key(BOSHI) 查询 dictionaryItemServiceImpl.findDictionaryItem 方法，
      * 并注入到 type3
      */
-    @InjectionField(key = "BOSHI", api = "dictionaryItemServiceImpl", method = "findDictionaryItem")
+    @InjectionField(key = "BOSHI", api = "dictionaryItemServiceImpl", method = "findDictionaryItem", dictType = "NATION")
     protected String type4;
     /**
      * 递归查询
@@ -42,7 +42,7 @@ public class RemoteTestDO {
      * 根据 dictionaryCodeAndName.key 查询 dictionaryItemServiceImpl.findDictionaryItem 方法，
      * 并注入到 dictionaryCodeAndName.data
      */
-    @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem")
+    @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem", dictType = "NATION")
     private RemoteData<String, String> dictionaryCodeAndName;
 
 }
@@ -56,7 +56,7 @@ class DictionaryItemTe {
      * 根据 dictionaryCodeAndName.key 查询 dictionaryItemServiceImpl.findDictionaryItem 方法，
      * 并注入到 dictionaryCodeAndName.data
      */
-    @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem")
+    @InjectionField(api = "dictionaryItemServiceImpl", method = "findDictionaryItem", dictType = "NATION")
     private RemoteData<String, String> dictionaryCodeAndName;
 
     /**

@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.ibatis.reflection.MetaObject;
 
-import java.util.Map;
-
 
 /**
  * 动态表名解析
@@ -23,43 +21,15 @@ import java.util.Map;
 @NoArgsConstructor
 public class DynamicTableNameParser implements ISqlParser {
 
-    private String database = "zuihou_base";
-    private ITableNameHandler defaultTableNameHandler = (metaObject, sql, tableName) -> {
-        String tenantCode = BaseContextHandler.getTenant();
-        if (StrUtil.isEmpty(tenantCode)) {
-            return tableName;
-        }
-        return database + StrUtil.DOT + tableName;
-    };
+    private String tenantDatabasePrefix;
 
-    private Map<String, ITableNameHandler> tableNameHandlerMap;
-
-    public DynamicTableNameParser(String database) {
-        this.database = database;
+    public DynamicTableNameParser(String tenantDatabasePrefix) {
+        this.tenantDatabasePrefix = tenantDatabasePrefix;
     }
 
     @Override
     public SqlInfo parser(MetaObject metaObject, String sql) {
         if (allowProcess(metaObject)) {
-            //Collection<String> tables = new TableNameParser(sql).tables();
-            //if (CollectionUtils.isNotEmpty(tables)) {
-            //    boolean sqlParsed = false;
-            //    String parsedSql = sql;
-            //    for (final String table : tables) {
-            //        ITableNameHandler tableNameHandler = defaultTableNameHandler;
-            //        if (CollectionUtils.isNotEmpty(tableNameHandlerMap)) {
-            //            tableNameHandler = tableNameHandlerMap.get(table);
-            //        }
-            //        if (tableNameHandler != null) {
-            //            parsedSql = tableNameHandler.process(metaObject, parsedSql, table);
-            //            sqlParsed = true;
-            //        }
-            //    }
-            //    if (sqlParsed) {
-            //        return SqlInfo.newInstance().setSql(parsedSql);
-            //    }
-            //}
-
             // 本项目所有服务连接的默认数据库都是zuihou_defaults， 不执行以下代码，将在默认库中执行sql
 
             // 想要 执行sql时， 不切换到 zuihou_base_{TENANT} 库, 请直接返回null
@@ -68,11 +38,9 @@ public class DynamicTableNameParser implements ISqlParser {
                 return null;
             }
 
-            MultiTenantInterceptor multiTenantInterceptor = new MultiTenantInterceptor();
-            String schemaName = StrUtil.format("{}_{}", database, tenantCode);
+            String schemaName = StrUtil.format("{}_{}", tenantDatabasePrefix, tenantCode);
             // 想要 执行sql时， 切换到 切换到自己指定的库， 直接修改 setSchemaName
-            multiTenantInterceptor.setSchemaName(schemaName);
-            String parsedSql = multiTenantInterceptor.processSqlByInterceptor(sql);
+            String parsedSql = ReplaceSql.replaceSql(schemaName, sql);
             return SqlInfo.newInstance().setSql(parsedSql);
         }
         return null;

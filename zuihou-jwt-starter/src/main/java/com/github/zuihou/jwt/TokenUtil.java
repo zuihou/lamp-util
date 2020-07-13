@@ -13,7 +13,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.github.zuihou.context.BaseContextConstants.*;
+import static com.github.zuihou.context.BaseContextConstants.BEARER_HEADER_KEY;
+import static com.github.zuihou.context.BaseContextConstants.JWT_KEY_ACCOUNT;
+import static com.github.zuihou.context.BaseContextConstants.JWT_KEY_NAME;
+import static com.github.zuihou.context.BaseContextConstants.JWT_KEY_TOKEN_TYPE;
+import static com.github.zuihou.context.BaseContextConstants.JWT_KEY_USER_ID;
+import static com.github.zuihou.context.BaseContextConstants.REFRESH_TOKEN_KEY;
 
 /**
  * 认证工具类
@@ -100,7 +105,7 @@ public class TokenUtil {
      * @param token
      * @return
      */
-    public AuthInfo parseJWT(String token) {
+    public AuthInfo parseRefreshToken(String token) {
         Claims claims = JwtUtil.parseJWT(token);
         String tokenType = Convert.toStr(claims.get(JWT_KEY_TOKEN_TYPE));
         Long userId = Convert.toLong(claims.get(JWT_KEY_USER_ID));
