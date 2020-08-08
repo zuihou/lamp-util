@@ -41,7 +41,7 @@ public class AuthAspect implements ApplicationContextAware {
     private static final ExpressionParser SPEL_PARSER = new SpelExpressionParser();
     private static final ParameterNameDiscoverer PARAMETER_NAME_DISCOVERER = new DefaultParameterNameDiscoverer();
     private final AuthFun authFun;
-    private ApplicationContext applicationContext;
+    private ApplicationContext ac;
 
     public AuthAspect(AuthFun authFun) {
         this.authFun = authFun;
@@ -136,37 +136,24 @@ public class AuthAspect implements ApplicationContextAware {
         Expression expression = SPEL_PARSER.parseExpression(condition);
         // 方法参数值
         Object[] args = point.getArgs();
-        StandardEvaluationContext context = getEvaluationContext(method, args);
+
+        StandardEvaluationContext context = new StandardEvaluationContext(authFun);
+        context.setBeanResolver(new BeanFactoryResolver(ac));
+        for (int i = 0; i < args.length; i++) {
+            MethodParameter mp = getMethodParameter(method, i);
+            context.setVariable(mp.getParameterName(), args[i]);
+        }
+
         if (expression.getValue(context, Boolean.class)) {
             return true;
         }
         throw BizException.wrap(ExceptionCode.UNAUTHORIZED.build("执行方法[%s]需要[%s]权限", method.getName(), condition));
     }
 
-    /**
-     * 获取方法上的参数
-     *
-     * @param method 方法
-     * @param args   变量
-     * @return {SimpleEvaluationContext}
-     */
-    private StandardEvaluationContext getEvaluationContext(Method method, Object[] args) {
-        // 初始化Sp el表达式上下文，并设置 AuthFun
-        StandardEvaluationContext context = new StandardEvaluationContext(authFun);
-        // 设置表达式支持spring bean
-        context.setBeanResolver(new BeanFactoryResolver(applicationContext));
-        for (int i = 0; i < args.length; i++) {
-            // 读取方法参数
-            MethodParameter methodParam = getMethodParameter(method, i);
-            // 设置方法 参数名和值 为sp el变量
-            context.setVariable(methodParam.getParameterName(), args[i]);
-        }
-        return context;
-    }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+        this.ac = applicationContext;
     }
 
 }
