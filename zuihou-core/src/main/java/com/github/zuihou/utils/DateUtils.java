@@ -739,4 +739,22 @@ public class DateUtils {
         }
         return LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT));
     }
+
+    /**
+     * 判断当前时间是否在指定时间范围
+     *
+     * @param from 开始时间
+     * @param to   结束时间
+     * @return 结果
+     */
+    public static boolean between(LocalTime from, LocalTime to) {
+        if (from == null) {
+            throw new IllegalArgumentException("开始时间不能为空");
+        }
+        if (to == null) {
+            throw new IllegalArgumentException("结束时间不能为空");
+        }
+        LocalTime now = LocalTime.now();
+        return now.isAfter(from) && now.isBefore(to);
+    }
 }

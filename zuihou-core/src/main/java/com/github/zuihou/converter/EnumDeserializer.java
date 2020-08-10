@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.github.zuihou.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 
@@ -41,7 +42,7 @@ public class EnumDeserializer extends StdDeserializer<Enum<?>> {
             Class findPropertyType = BeanUtils.findPropertyType(currentName, currentValue.getClass());
             JsonNode code = node.get(ALL_ENUM_KEY_FIELD);
             String val = code != null ? code.asText() : node.asText();
-            if (StrUtil.isBlank(val)) {
+            if (StrUtil.isBlank(val) || StrPool.NULL.equals(val)) {
                 return null;
             }
             return Enum.valueOf(findPropertyType, val);

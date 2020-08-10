@@ -1,7 +1,7 @@
 package com.github.zuihou.security.config;
 
-import com.github.zuihou.security.aspect.AuthAspect;
-import com.github.zuihou.security.auth.AuthFun;
+import com.github.zuihou.security.aspect.UriSecurityPreAuthAspect;
+import com.github.zuihou.security.aspect.VerifyAuthFunction;
 import com.github.zuihou.security.feign.UserResolverService;
 import com.github.zuihou.security.properties.ContextProperties;
 import com.github.zuihou.security.properties.SecurityProperties;
@@ -21,18 +21,18 @@ import org.springframework.core.annotation.Order;
 @Order
 @AllArgsConstructor
 @EnableConfigurationProperties({SecurityProperties.class, ContextProperties.class})
-public class SecureConfiguration {
+public class SecurityConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix = SecurityProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
-    public AuthAspect authAspect(AuthFun authFun) {
-        return new AuthAspect(authFun);
+    public UriSecurityPreAuthAspect uriSecurityPreAuthAspect(VerifyAuthFunction verifyAuthFunction) {
+        return new UriSecurityPreAuthAspect(verifyAuthFunction);
     }
 
     @Bean("fun")
-    @ConditionalOnMissingBean(AuthFun.class)
-    public AuthFun getAuthFun(UserResolverService userResolverService) {
-        return new AuthFun(userResolverService);
+    @ConditionalOnMissingBean(VerifyAuthFunction.class)
+    public VerifyAuthFunction getVerifyAuthFunction(UserResolverService userResolverService) {
+        return new VerifyAuthFunction(userResolverService);
     }
 
     @Bean

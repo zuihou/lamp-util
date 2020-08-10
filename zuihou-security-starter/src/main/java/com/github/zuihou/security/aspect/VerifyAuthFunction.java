@@ -1,4 +1,4 @@
-package com.github.zuihou.security.auth;
+package com.github.zuihou.security.aspect;
 
 
 import cn.hutool.core.collection.CollUtil;
@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
  * @author zuihou
  * @date 2020年03月29日21:14:58
  */
-public class AuthFun {
+public class VerifyAuthFunction {
     private final UserResolverService userResolverService;
 
-    public AuthFun(UserResolverService userResolverService) {
+    public VerifyAuthFunction(UserResolverService userResolverService) {
         this.userResolverService = userResolverService;
     }
 

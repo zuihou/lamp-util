@@ -2,6 +2,7 @@ package com.github.zuihou.jackson;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -10,36 +11,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.zuihou.exception.BizException;
 import com.github.zuihou.exception.code.ExceptionCode;
+import com.github.zuihou.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import static com.github.zuihou.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT;
-import static com.github.zuihou.utils.StrPool.LEFT_SQ_BRACKET;
-import static com.github.zuihou.utils.StrPool.RIGHT_SQ_BRACKET;
 
 /**
- * 跟Spring上线文中ObjectMapper统一的Jackson工具类
+ * 对jackjson进行封装
  *
  * @author zuihou
  */
 @Slf4j
 public class JsonUtil {
 
-    /**
-     * 将对象序列化成json字符串
-     *
-     * @param value javaBean
-     * @param <T>   T 泛型标记
-     * @return jsonString json字符串
-     */
     public static <T> String toJson(T value) {
         try {
             return getInstance().writeValueAsString(value);
@@ -49,14 +44,14 @@ public class JsonUtil {
         return null;
     }
 
-    /**
-     * 将json反序列化成对象
-     *
-     * @param content   content
-     * @param valueType class
-     * @param <T>       T 泛型标记
-     * @return Bean
-     */
+    public static byte[] toJsonAsBytes(Object object) {
+        try {
+            return getInstance().writeValueAsBytes(object);
+        } catch (JsonProcessingException e) {
+            throw new BizException(ExceptionCode.JSON_PARSE_ERROR.getCode(), e);
+        }
+    }
+
     public static <T> T parse(String content, Class<T> valueType) {
         try {
             return getInstance().readValue(content, valueType);
@@ -66,14 +61,6 @@ public class JsonUtil {
         return null;
     }
 
-    /**
-     * 将json反序列化成对象
-     *
-     * @param content       content
-     * @param typeReference 泛型类型
-     * @param <T>           T 泛型标记
-     * @return Bean
-     */
     public static <T> T parse(String content, TypeReference<T> typeReference) {
         try {
             return getInstance().readValue(content, typeReference);
@@ -82,27 +69,72 @@ public class JsonUtil {
         }
     }
 
-    /**
-     * 将json反序列化成List对象
-     *
-     * @param content      content
-     * @param valueTypeRef class
-     * @param <T>          T 泛型标记
-     * @return List
-     */
+    public static <T> T parse(byte[] bytes, Class<T> valueType) {
+        try {
+            return getInstance().readValue(bytes, valueType);
+        } catch (IOException e) {
+            throw new BizException(ExceptionCode.JSON_PARSE_ERROR.getCode(), e);
+        }
+    }
+
+    public static <T> T parse(byte[] bytes, TypeReference<T> typeReference) {
+        try {
+            return getInstance().readValue(bytes, typeReference);
+        } catch (IOException e) {
+            throw new BizException(ExceptionCode.JSON_PARSE_ERROR.getCode(), e);
+        }
+    }
+
+    public static <T> T parse(InputStream in, Class<T> valueType) {
+        try {
+            return getInstance().readValue(in, valueType);
+        } catch (IOException e) {
+            throw new BizException(ExceptionCode.JSON_PARSE_ERROR.getCode(), e);
+        }
+    }
+
+    public static <T> T parse(InputStream in, TypeReference<T> typeReference) {
+        try {
+            return getInstance().readValue(in, typeReference);
+        } catch (IOException e) {
+            throw new BizException(ExceptionCode.JSON_PARSE_ERROR.getCode(), e);
+        }
+    }
+
     public static <T> List<T> parseArray(String content, Class<T> valueTypeRef) {
         try {
-            if (!StrUtil.startWith(content, LEFT_SQ_BRACKET)) {
-                content = new StringBuilder().append(LEFT_SQ_BRACKET).append(content).append(RIGHT_SQ_BRACKET).toString();
+            if (!StrUtil.startWith(content, StrPool.LEFT_SQ_BRACKET)) {
+                content = new StringBuilder().append(StrPool.LEFT_SQ_BRACKET).append(content).append(StrPool.RIGHT_SQ_BRACKET).toString();
             }
 
             List<Map<String, Object>> list = getInstance().readValue(content, new TypeReference<List<Map<String, Object>>>() {
             });
-            List<T> result = new ArrayList<>();
 
-            list.forEach((map) -> {
-                result.add(toPojo(map, valueTypeRef));
+            return list.stream().map((map) -> toPojo(map, valueTypeRef)).collect(Collectors.toList());
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public static Map<String, Object> toMap(String content) {
+        try {
+            return getInstance().readValue(content, Map.class);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public static <T> Map<String, T> toMap(String content, Class<T> valueTypeRef) {
+        try {
+            Map<String, Map<String, Object>> map = getInstance().readValue(content, new TypeReference<Map<String, Map<String, Object>>>() {
             });
+            Map<String, T> result = new HashMap<>(map.size());
+            map.forEach((key, value) -> {
+                result.put(key, toPojo(value, valueTypeRef));
+            });
+
             return result;
         } catch (IOException e) {
             log.error(e.getMessage(), e);
@@ -114,15 +146,37 @@ public class JsonUtil {
         return getInstance().convertValue(fromValue, toValueType);
     }
 
-    /**
-     * 将json字符串转成 JsonNode
-     *
-     * @param jsonString jsonString
-     * @return jsonString json字符串
-     */
+    public static <T> T toPojo(JsonNode resultNode, Class<T> toValueType) {
+        return getInstance().convertValue(resultNode, toValueType);
+    }
+
     public static JsonNode readTree(String jsonString) {
         try {
             return getInstance().readTree(jsonString);
+        } catch (IOException e) {
+            throw new BizException(ExceptionCode.JSON_PARSE_ERROR.getCode(), e);
+        }
+    }
+
+    public static JsonNode readTree(InputStream in) {
+        try {
+            return getInstance().readTree(in);
+        } catch (IOException e) {
+            throw new BizException(ExceptionCode.JSON_PARSE_ERROR.getCode(), e);
+        }
+    }
+
+    public static JsonNode readTree(byte[] content) {
+        try {
+            return getInstance().readTree(content);
+        } catch (IOException e) {
+            throw new BizException(ExceptionCode.JSON_PARSE_ERROR.getCode(), e);
+        }
+    }
+
+    public static JsonNode readTree(JsonParser jsonParser) {
+        try {
+            return getInstance().readTree(jsonParser);
         } catch (IOException e) {
             throw new BizException(ExceptionCode.JSON_PARSE_ERROR.getCode(), e);
         }
@@ -133,36 +187,26 @@ public class JsonUtil {
     }
 
     private static class JacksonHolder {
-        private static ObjectMapper INSTANCE = new JacksonObjectMapper();
+        private final static ObjectMapper INSTANCE = new JacksonObjectMapper();
     }
 
     public static class JacksonObjectMapper extends ObjectMapper {
-        private static final long serialVersionUID = 4288193147502386170L;
-
-        private static final Locale CHINA = Locale.CHINA;
+        private static final long serialVersionUID = 1L;
 
         public JacksonObjectMapper() {
             super();
-            //设置地点为中国
-            super.setLocale(CHINA)
-                    //去掉默认的时间戳格式
+            // 参考BaseConfig
+            super.setLocale(Locale.CHINA)
                     .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-                    //设置为中国上海时区
                     .setTimeZone(TimeZone.getTimeZone(ZoneId.systemDefault()))
-                    //序列化时，日期的统一格式
                     .setDateFormat(new SimpleDateFormat(DEFAULT_DATE_TIME_FORMAT, Locale.CHINA))
-                    //序列化处理
                     .configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true)
                     .configure(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature(), true)
                     .findAndRegisterModules()
-                    //失败处理
                     .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                    //单引号
                     .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
-                    //忽略未知字段
                     .getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-            //日期格式化
             super.registerModule(new MyJacksonModule());
             super.findAndRegisterModules();
         }

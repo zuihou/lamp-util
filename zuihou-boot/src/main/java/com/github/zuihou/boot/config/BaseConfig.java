@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -174,10 +175,16 @@ public abstract class BaseConfig {
     }
 
 
-    @Bean
-    @ConditionalOnClass(Undertow.class)
-    public UndertowServerFactoryCustomizer getUndertowServerFactoryCustomizer() {
-        return new UndertowServerFactoryCustomizer();
+    /**
+     * gateway 网关模块需要禁用 spring-webmvc 相关配置，必须通过在类上面加限制条件方式来实现， 不能直接Bean上面加
+     */
+    @ConditionalOnProperty(prefix = "zuihou.webmvc", name = "enabled", havingValue = "true", matchIfMissing = true)
+    public static class WebMvcConfig {
+        @Bean
+        @ConditionalOnProperty(prefix = "zuihou.webmvc", name = "enabled", havingValue = "true", matchIfMissing = true)
+        @ConditionalOnClass(Undertow.class)
+        public UndertowServerFactoryCustomizer getUndertowServerFactoryCustomizer() {
+            return new UndertowServerFactoryCustomizer();
+        }
     }
-
 }

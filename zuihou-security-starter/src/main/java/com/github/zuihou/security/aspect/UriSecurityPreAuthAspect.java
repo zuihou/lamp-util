@@ -4,7 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import com.github.zuihou.exception.BizException;
 import com.github.zuihou.exception.code.ExceptionCode;
 import com.github.zuihou.security.annotation.PreAuth;
-import com.github.zuihou.security.auth.AuthFun;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -33,31 +32,18 @@ import java.lang.reflect.Method;
  */
 @Aspect
 @Slf4j
-public class AuthAspect implements ApplicationContextAware {
+public class UriSecurityPreAuthAspect implements ApplicationContextAware {
 
     /**
      * 表达式处理
      */
     private static final ExpressionParser SPEL_PARSER = new SpelExpressionParser();
     private static final ParameterNameDiscoverer PARAMETER_NAME_DISCOVERER = new DefaultParameterNameDiscoverer();
-    private final AuthFun authFun;
+    private final VerifyAuthFunction verifyAuthFunction;
     private ApplicationContext ac;
 
-    public AuthAspect(AuthFun authFun) {
-        this.authFun = authFun;
-    }
-
-    /**
-     * 获取方法参数信息
-     *
-     * @param method         方法
-     * @param parameterIndex 参数序号
-     * @return {MethodParameter}
-     */
-    public static MethodParameter getMethodParameter(Method method, int parameterIndex) {
-        MethodParameter methodParameter = new SynthesizingMethodParameter(method, parameterIndex);
-        methodParameter.initParameterNameDiscovery(PARAMETER_NAME_DISCOVERER);
-        return methodParameter;
+    public UriSecurityPreAuthAspect(VerifyAuthFunction verifyAuthFunction) {
+        this.verifyAuthFunction = verifyAuthFunction;
     }
 
     /**
@@ -137,10 +123,11 @@ public class AuthAspect implements ApplicationContextAware {
         // 方法参数值
         Object[] args = point.getArgs();
 
-        StandardEvaluationContext context = new StandardEvaluationContext(authFun);
+        StandardEvaluationContext context = new StandardEvaluationContext(verifyAuthFunction);
         context.setBeanResolver(new BeanFactoryResolver(ac));
         for (int i = 0; i < args.length; i++) {
-            MethodParameter mp = getMethodParameter(method, i);
+            MethodParameter mp = new SynthesizingMethodParameter(method, i);
+            mp.initParameterNameDiscovery(PARAMETER_NAME_DISCOVERER);
             context.setVariable(mp.getParameterName(), args[i]);
         }
 
