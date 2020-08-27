@@ -28,10 +28,17 @@ public class RemoteTestDO {
     @InjectionField(key = "BOSHI", api = "dictionaryItemServiceImpl", method = "findDictionaryItem", dictType = "NATION")
     protected String type4;
     /**
-     * 递归查询
+     * 递归注入
      */
     @InjectionField
     protected DictionaryItemTe dictionaryItem;
+    /**
+     * 错误的使用示例：
+     * 无法给 RemoteData 的Value 注入
+     */
+    @InjectionField
+    protected RemoteData<String, DictionaryItemTe> dictionaryItem2;
+
     /**
      * 递归查询
      */
