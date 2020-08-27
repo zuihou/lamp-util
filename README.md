@@ -59,5 +59,16 @@
 | 租户后台 | http://tangyh.top:10000/zuihou-ui/ | zuihou/zuihou | test/zuiou |
 | 开发&运营后台 | http://tangyh.top:180/zuihou-admin-ui/ | demoAdmin/zuihou | 无 |
 
-## 相关链接
-* 文档地址（语雀-可关注订阅）：[https://www.yuque.com/dreamlu](https://www.yuque.com/dreamlu)
+## 友情链接 & 特别鸣谢
+* SaaS型微服务快速开发平台：[https://github.com/zuihou/zuihou-admin-cloud](https://github.com/zuihou/zuihou-admin-cloud)
+* SaaS型单体快速开发平台：[https://github.com/zuihou/zuihou-admin-boot](https://github.com/zuihou/zuihou-admin-boot)
+* MyBatis-Plus：[https://mybatis.plus/](https://mybatis.plus/)
+* knife4j：[http://doc.xiaominfo.com/](http://doc.xiaominfo.com/)
+* hutool：[https://hutool.cn/](https://hutool.cn/)
+* xxl-job：[http://www.xuxueli.com/xxl-job/](http://www.xuxueli.com/xxl-job/)
+* kkfileview：[https://kkfileview.keking.cn](https://kkfileview.keking.cn)
+* j2cache：[https://gitee.com/ld/J2Cache](https://gitee.com/ld/J2Cache)
+* FEBS Cloud Web： [https://gitee.com/mrbirdd/FEBS-Cloud-Web](https://gitee.com/mrbirdd/FEBS-Cloud-Web)
+    zuihou-ui 和 zuihou-admin-ui 基于本项目改造
+* Cloud-Platform： [https://gitee.com/geek_qi/cloud-platform](https://gitee.com/geek_qi/cloud-platform)
+    作者学习时接触到的第一个微服务项目
