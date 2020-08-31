@@ -7,7 +7,7 @@ import lombok.Getter;
  * <p>
  * NONE、COLUMN、SCHEMA 模式开源
  * <p>
- * DATASOURCE 模式收费，购买咨询作者
+ * DATASOURCE 咨询作者
  *
  * @author zuihou
  * @date 2018/11/20
