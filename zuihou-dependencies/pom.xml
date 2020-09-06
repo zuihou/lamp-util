@@ -4,11 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.zuihou</groupId>
     <artifactId>zuihou-dependencies</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.1</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>Spring Boot 2.x项目依赖管理</description>
     <url>https://gitee.com/zuihou111/zuihou-admin-cloud</url>
+
     <properties>
         <spring.boot.version>2.2.9.RELEASE</spring.boot.version>
         <spring.cloud.version>Hoxton.SR7</spring.cloud.version>
@@ -16,13 +17,13 @@
         <seata.version>1.2.0</seata.version>
         <spring-boot-admin.version>2.2.4</spring-boot-admin.version>
 
-        <mybatis.version>3.5.4</mybatis.version>
-        <mybatis-spring.version>2.0.4</mybatis-spring.version>
+        <mybatis.version>3.5.5</mybatis.version>
+        <mybatis-spring.version>2.0.5</mybatis-spring.version>
         <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
-        <mybatisplus.version>3.3.2</mybatisplus.version>
+        <mybatisplus.version>3.4.0</mybatisplus.version>
         <dynamic.datasource.version>3.2.0</dynamic.datasource.version>
         <jasypt.version>2.1.0</jasypt.version>
-        <p6spy.version>3.9.0</p6spy.version>
+        <p6spy.version>3.9.1</p6spy.version>
         <fastjson.version>1.2.73</fastjson.version>
         <transmittable-thread-local.version>2.11.4</transmittable-thread-local.version>
         <druid.version>1.1.22</druid.version>

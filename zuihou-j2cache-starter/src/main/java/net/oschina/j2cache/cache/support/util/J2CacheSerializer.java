@@ -1,5 +1,6 @@
 package net.oschina.j2cache.cache.support.util;
 
+import lombok.extern.slf4j.Slf4j;
 import net.oschina.j2cache.util.SerializationUtils;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
@@ -7,6 +8,7 @@ import org.springframework.data.redis.serializer.SerializationException;
 import java.io.IOException;
 
 
+@Slf4j
 public class J2CacheSerializer implements RedisSerializer<Object> {
 
     @Override
@@ -14,8 +16,7 @@ public class J2CacheSerializer implements RedisSerializer<Object> {
         try {
             return SerializationUtils.serialize(t);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error("序列化失败", e);
         }
         return null;
     }
@@ -25,8 +26,7 @@ public class J2CacheSerializer implements RedisSerializer<Object> {
         try {
             return SerializationUtils.deserialize(bytes);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error("反序列化失败", e);
         }
         return null;
     }

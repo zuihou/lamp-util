@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2011-2020, baomidou (jobob@qq.com).
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * <p>
+ * https://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.github.zuihou.database.mybatis.conditions.query;
 
 import cn.hutool.core.bean.BeanUtil;
@@ -24,7 +39,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static com.baomidou.mybatisplus.core.enums.WrapperKeyword.BRACKET;
+import static com.baomidou.mybatisplus.core.enums.WrapperKeyword.APPLY;
 import static com.github.zuihou.database.mybatis.conditions.Wraps.replace;
 
 
@@ -40,6 +55,7 @@ import static com.github.zuihou.database.mybatis.conditions.Wraps.replace;
  * 6，增加 geHeader 方法， 将日期参数值，强制转换成当天 00：00：00
  *
  * @author zuihou
+ * @author hubin miemie HCL
  * @date Created on 2019/5/27 17:11
  * @description 查询构造器
  */
@@ -112,7 +128,7 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
         if (ArrayUtils.isNotEmpty(columns)) {
             this.sqlSelect.setStringValue(columnsToString(false, columns));
         }
-        return this.typedThis;
+        return typedThis;
     }
 
     /**
@@ -130,7 +146,7 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
     public LbqWrapper<T> select(Class<T> entityClass, Predicate<TableFieldInfo> predicate) {
         super.setEntityClass(entityClass);
         this.sqlSelect.setStringValue(TableInfoHelper.getTableInfo(getEntityClass()).chooseSelect(predicate));
-        return this.typedThis;
+        return typedThis;
     }
 
     @Override
@@ -160,7 +176,7 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
         final LbqWrapper<T> instance = instance();
         consumer.accept(instance);
         if (!instance.isEmptyOfWhere()) {
-            return doIt(true, BRACKET, instance);
+            return doIt(true, APPLY, instance);
         }
         return this;
     }

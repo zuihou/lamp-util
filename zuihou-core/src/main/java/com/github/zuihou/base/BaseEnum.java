@@ -1,6 +1,6 @@
 package com.github.zuihou.base;
 
-import com.baomidou.mybatisplus.core.enums.IEnum;
+import com.baomidou.mybatisplus.annotation.IEnum;
 import com.github.zuihou.utils.MapHelper;
 
 import java.util.Arrays;

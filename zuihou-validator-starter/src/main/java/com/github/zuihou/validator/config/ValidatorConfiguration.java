@@ -69,8 +69,6 @@ public class ValidatorConfiguration {
      * Method:  开启快速返回
      * Description:
      * 如果参数校验有异常，直接抛异常，不会进入到 controller，使用全局异常拦截进行拦截
-     * Author: liu kai
-     * Date: 2018/7/12 17:33
      *
      * @param
      * @return org.springframework.validation.beanvalidation.MethodValidationPostProcessor

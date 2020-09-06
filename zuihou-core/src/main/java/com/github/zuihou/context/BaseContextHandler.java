@@ -29,12 +29,12 @@ public class BaseContextHandler {
 
     public static <T> T get(String key, Class<T> type, Object def) {
         Map<String, String> map = getLocalMap();
-        return Convert.convert(type, map.getOrDefault(key, String.valueOf(def == null ? "" : def)));
+        return Convert.convert(type, map.getOrDefault(key, String.valueOf(def == null ? StrPool.EMPTY : def)));
     }
 
     public static String get(String key) {
         Map<String, String> map = getLocalMap();
-        return map.getOrDefault(key, "");
+        return map.getOrDefault(key, StrPool.EMPTY);
     }
 
     public static Map<String, String> getLocalMap() {
@@ -142,7 +142,7 @@ public class BaseContextHandler {
 
 
     public static String getTenant() {
-        return get(BaseContextConstants.JWT_KEY_TENANT, String.class);
+        return get(BaseContextConstants.JWT_KEY_TENANT, String.class, StrPool.EMPTY);
     }
 
     public static String getClientId() {

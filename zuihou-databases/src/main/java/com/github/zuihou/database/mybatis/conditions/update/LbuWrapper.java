@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-import static com.baomidou.mybatisplus.core.enums.WrapperKeyword.BRACKET;
+import static com.baomidou.mybatisplus.core.enums.WrapperKeyword.APPLY;
 
 /**
  * @author zuihou
@@ -38,7 +38,7 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
      */
     public LbuWrapper() {
         // 如果无参构造函数，请注意实体 NULL 情况 SET 必须有否则 SQL 异常
-        this(null);
+        this((T) null);
     }
 
     /**
@@ -51,18 +51,29 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
     }
 
     /**
+     * 不建议直接 new 该实例，使用 Wrappers.lambdaUpdate(entity)
+     */
+    public LbuWrapper(Class<T> entityClass) {
+        super.setEntityClass(entityClass);
+        super.initNeed();
+        this.sqlSet = new ArrayList<>();
+    }
+
+    /**
      * 不建议直接 new 该实例，使用 Wrappers.lambdaUpdate(...)
      */
-    private LbuWrapper(T entity, List<String> sqlSet, AtomicInteger paramNameSeq,
+    private LbuWrapper(T entity, Class<T> entityClass, List<String> sqlSet, AtomicInteger paramNameSeq,
                        Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments,
-                       SharedString lastSql, SharedString sqlComment) {
+                       SharedString lastSql, SharedString sqlComment, SharedString sqlFirst) {
         super.setEntity(entity);
+        super.setEntityClass(entityClass);
         this.sqlSet = sqlSet;
         this.paramNameSeq = paramNameSeq;
         this.paramNameValuePairs = paramNameValuePairs;
         this.expression = mergeSegments;
         this.lastSql = lastSql;
         this.sqlComment = sqlComment;
+        this.sqlFirst = sqlFirst;
     }
 
     /**
@@ -70,6 +81,7 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
      * 传入空字符串("")时， 视为： 字段名 = ""
      *
      * @param val 参数值
+     * @author zuihou
      */
     private static boolean checkCondition(Object val) {
         return val != null;
@@ -78,31 +90,37 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
     @Override
     public LbuWrapper<T> set(boolean condition, SFunction<T, ?> column, Object val) {
         if (condition) {
-            this.sqlSet.add(String.format("%s=%s", this.columnToString(column), this.formatSql("{0}", val)));
+            sqlSet.add(String.format("%s=%s", columnToString(column), formatSql("{0}", val)));
         }
-        return this.typedThis;
+        return typedThis;
     }
 
     @Override
     public LbuWrapper<T> setSql(boolean condition, String sql) {
-        if (condition && StringUtils.isNotEmpty(sql)) {
-            this.sqlSet.add(sql);
+        if (condition && StringUtils.isNotBlank(sql)) {
+            sqlSet.add(sql);
         }
-        return this.typedThis;
+        return typedThis;
     }
 
     @Override
     public String getSqlSet() {
-        if (CollectionUtils.isEmpty(this.sqlSet)) {
+        if (CollectionUtils.isEmpty(sqlSet)) {
             return null;
         }
-        return String.join(StringPool.COMMA, this.sqlSet);
+        return String.join(StringPool.COMMA, sqlSet);
     }
 
     @Override
     protected LbuWrapper<T> instance() {
-        return new LbuWrapper<>(this.getEntity(), this.sqlSet, this.paramNameSeq, this.paramNameValuePairs, new MergeSegments(),
-                SharedString.emptyString(), SharedString.emptyString());
+        return new LbuWrapper<>(getEntity(), getEntityClass(), null, paramNameSeq, paramNameValuePairs,
+                new MergeSegments(), SharedString.emptyString(), SharedString.emptyString(), SharedString.emptyString());
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
+        sqlSet.clear();
     }
 
     @Override
@@ -110,10 +128,11 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
         final LbuWrapper<T> instance = instance();
         consumer.accept(instance);
         if (!instance.isEmptyOfWhere()) {
-            return doIt(true, BRACKET, instance);
+            return doIt(true, APPLY, instance);
         }
         return this;
     }
+
 
     @Override
     public LbuWrapper<T> eq(SFunction<T, ?> column, Object val) {

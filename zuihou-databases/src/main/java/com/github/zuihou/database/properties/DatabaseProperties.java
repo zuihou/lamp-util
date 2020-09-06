@@ -1,5 +1,6 @@
 package com.github.zuihou.database.properties;
 
+import com.baomidou.mybatisplus.annotation.DbType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -24,11 +25,15 @@ import static com.github.zuihou.database.properties.MultiTenantType.SCHEMA;
 public class DatabaseProperties {
     public static final String PREFIX = "zuihou.database";
     /**
-     * 攻击 SQL 阻断解析器
+     * 是否启用 防止全表更新与删除插件
      *
      * @return
      */
     public Boolean isBlockAttack = false;
+    /**
+     * 是否启用  sql性能规范插件
+     */
+    public Boolean isIllegalSql = false;
     /**
      * 是否启用 seata
      */
@@ -37,6 +42,8 @@ public class DatabaseProperties {
      * 分页大小限制
      */
     protected long limit = -1;
+
+    protected DbType dbType = DbType.MYSQL;
     /**
      * 是否禁止写入
      */

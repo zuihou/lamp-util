@@ -1,6 +1,7 @@
 package com.github.zuihou.base.service;
 
 import java.io.Serializable;
+import java.util.function.Function;
 
 /**
  * 基于MP的 IService 新增了3个方法： getByIdCache
@@ -21,4 +22,14 @@ public interface SuperCacheService<T> extends SuperService<T> {
      * @return
      */
     T getByIdCache(Serializable id);
+
+    /**
+     * 根据 region 和 key 查询缓存中存放的id，缓存不存在根据loader加载并写入数据，然后根据查询出来的id查询 实体
+     *
+     * @param region
+     * @param key
+     * @param loader
+     * @return
+     */
+    T getByKey(String region, String key, Function<String, Object> loader);
 }

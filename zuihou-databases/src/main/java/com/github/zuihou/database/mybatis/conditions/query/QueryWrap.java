@@ -23,7 +23,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static com.baomidou.mybatisplus.core.enums.WrapperKeyword.BRACKET;
+import static com.baomidou.mybatisplus.core.enums.WrapperKeyword.APPLY;
 import static com.github.zuihou.database.mybatis.conditions.Wraps.replace;
 
 /**
@@ -141,7 +141,7 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
         final QueryWrap<T> instance = instance();
         consumer.accept(instance);
         if (!instance.isEmptyOfWhere()) {
-            return doIt(true, BRACKET, instance);
+            return doIt(true, APPLY, instance);
         }
         return this;
     }

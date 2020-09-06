@@ -19,7 +19,7 @@ import java.lang.reflect.ParameterizedType;
  * 8，export 导出，并支持子类扩展3个方法：handlerQueryParams、query、handlerResult
  * 9，preview 导出预览，并支持子类扩展3个方法：handlerQueryParams、query、handlerResult
  * <p>
- * 其中 page、export、preview 的查询条件一致，若子类重写了 handlerQueryParams、query、handlerResult 等任意方法，均衡收到影响
+ * 其中 page、export、preview 的查询条件一致，若子类重写了 handlerQueryParams、query、handlerResult 等任意方法，均衡受到影响
  * <p>
  * 若重写扩展方法无法满足，则可以重写page、save等方法，但切记不要修改 @RequestMapping 参数
  *
