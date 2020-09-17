@@ -82,7 +82,7 @@ public class BaseMybatisConfiguration {
             interceptor.addInnerInterceptor(dtni);
             log.info("检测到 zuihou.database.multiTenantType=SCHEMA，已启用 SCHEMA模式");
         } else if (MultiTenantType.COLUMN.eq(this.databaseProperties.getMultiTenantType())) {
-            log.info("检测到 zuihou.database.multiTenantType=SCHEMA，已启用 字段模式");
+            log.info("检测到 zuihou.database.multiTenantType=COLUMN，已启用 字段模式");
             // COLUMN 模式 多租户插件
             TenantLineInnerInterceptor tli = new TenantLineInnerInterceptor();
             tli.setTenantLineHandler(new TenantLineHandler() {
