@@ -1,9 +1,8 @@
 package com.github.zuihou.database.datasource;
 
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
+import com.baidu.fsg.uid.UidGenerator;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
@@ -11,6 +10,7 @@ import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.github.zuihou.base.entity.Entity;
 import com.github.zuihou.base.entity.SuperEntity;
 import com.github.zuihou.context.BaseContextHandler;
+import com.github.zuihou.utils.SpringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 
@@ -43,17 +43,10 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
      */
     private final static String ID_TYPE = "java.lang.String";
 
-    private long workerId;
-    private long dataCenterId;
+    private UidGenerator uidGenerator;
 
-    /**
-     * @param workerId     终端ID
-     * @param dataCenterId 数据中心ID
-     */
-    public MyMetaObjectHandler(long workerId, long dataCenterId) {
+    public MyMetaObjectHandler() {
         super();
-        this.workerId = workerId;
-        this.dataCenterId = dataCenterId;
     }
 
     /**
@@ -99,8 +92,12 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         if (!flag) {
             return;
         }
-        Snowflake snowflake = IdUtil.getSnowflake(workerId, dataCenterId);
-        Long id = snowflake.nextId();
+        if (uidGenerator == null) {
+            // 这里使用SpringUtils的方式"异步"获取对象，防止启动时，报循环注入的错
+            uidGenerator = SpringUtils.getBean(UidGenerator.class);
+        }
+        Long id = uidGenerator.getUID();
+
         if (metaObject.hasGetter(SuperEntity.FIELD_ID)) {
             Object idVal = ID_TYPE.equals(metaObject.getGetterType(SuperEntity.FIELD_ID).getName()) ? String.valueOf(id) : id;
             this.setFieldValByName(SuperEntity.FIELD_ID, idVal, metaObject);
@@ -135,7 +132,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     private void update(MetaObject metaObject, Entity entity, String et) {
         if (entity.getUpdateUser() == null || entity.getUpdateUser().equals(0)) {
-            Object userIdVal = ID_TYPE.equals(metaObject.getGetterType(et + Entity.UPDATE_USER).getName()) ? String.valueOf(BaseContextHandler.getUserId()) : BaseContextHandler.getUserId();
+//            Object userIdVal = ID_TYPE.equals(metaObject.getGetterType(et + Entity.UPDATE_USER).getName()) ? String.valueOf(BaseContextHandler.getUserId()) : BaseContextHandler.getUserId();
             this.setFieldValByName(Entity.UPDATE_USER, BaseContextHandler.getUserId(), metaObject);
         }
         if (entity.getUpdateTime() == null) {

@@ -6,10 +6,10 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.servlet.ServletUtil;
-import com.alibaba.fastjson.JSONObject;
 import com.github.zuihou.base.R;
 import com.github.zuihou.context.BaseContextConstants;
 import com.github.zuihou.context.BaseContextHandler;
+import com.github.zuihou.jackson.JsonUtil;
 import com.github.zuihou.log.annotation.SysLog;
 import com.github.zuihou.log.entity.OptLogDTO;
 import com.github.zuihou.log.event.SysLogEvent;
@@ -290,7 +290,7 @@ public class SysLogAspect {
 
         try {
             if (!request.getContentType().contains("multipart/form-data")) {
-                strArgs = JSONObject.toJSONString(args);
+                strArgs = JsonUtil.toJson(args);
             }
         } catch (Exception e) {
             try {

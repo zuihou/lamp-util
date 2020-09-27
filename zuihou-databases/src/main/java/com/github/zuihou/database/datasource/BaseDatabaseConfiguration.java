@@ -84,7 +84,6 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
     private static final List<Class<? extends Annotation>> AOP_POINTCUT_ANNOTATIONS = new ArrayList<>(2);
 
     static {
-        //事务在controller层开启。
         AOP_POINTCUT_ANNOTATIONS.add(RestController.class);
         AOP_POINTCUT_ANNOTATIONS.add(Controller.class);
     }

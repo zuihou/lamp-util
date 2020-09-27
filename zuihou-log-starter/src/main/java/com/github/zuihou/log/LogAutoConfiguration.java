@@ -1,7 +1,7 @@
 package com.github.zuihou.log;
 
 
-import com.alibaba.fastjson.JSONObject;
+import com.github.zuihou.jackson.JsonUtil;
 import com.github.zuihou.log.aspect.SysLogAspect;
 import com.github.zuihou.log.event.SysLogListener;
 import com.github.zuihou.log.interceptor.MdcMvcConfigurer;
@@ -55,7 +55,7 @@ public class LogAutoConfiguration {
     @ConditionalOnExpression("${zuihou.log.enabled:true} && 'LOGGER'.equals('${zuihou.log.type:LOGGER}')")
     public SysLogListener sysLogListener() {
         return new SysLogListener((log) -> {
-            PointUtil.debug("0", "OPT_LOG", JSONObject.toJSONString(log));
+            PointUtil.debug("0", "OPT_LOG", JsonUtil.toJson(log));
         });
     }
 }

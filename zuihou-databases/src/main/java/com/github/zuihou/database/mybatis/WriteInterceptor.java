@@ -13,7 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
-import org.apache.ibatis.plugin.*;
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.plugin.Intercepts;
+import org.apache.ibatis.plugin.Invocation;
+import org.apache.ibatis.plugin.Plugin;
+import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 
@@ -21,7 +25,8 @@ import java.sql.Connection;
 import java.util.Arrays;
 import java.util.Properties;
 
-import static org.apache.ibatis.mapping.SqlCommandType.*;
+import static org.apache.ibatis.mapping.SqlCommandType.DELETE;
+import static org.apache.ibatis.mapping.SqlCommandType.UPDATE;
 
 
 /**
@@ -42,6 +47,9 @@ public class WriteInterceptor extends AbstractSqlParserHandler implements Interc
     @SneakyThrows
     public Object intercept(Invocation invocation) {
         // 为什么在拦截器里使用 @RefreshScope 无效？
+        if (SpringUtils.getApplicationContext() == null) {
+            return invocation.proceed();
+        }
         if (!SpringUtils.getApplicationContext().getEnvironment().getProperty("zuihou.database.isNotWrite", Boolean.class, false)) {
             return invocation.proceed();
         }
@@ -55,7 +63,8 @@ public class WriteInterceptor extends AbstractSqlParserHandler implements Interc
             return invocation.proceed();
         }
         // 记录日志相关的 放行
-        if (StrUtil.containsAnyIgnoreCase(mappedStatement.getId(), "UserToken", "sms", "MsgsCenterInfo", "resetPassErrorNum", "updateLastLoginTime", "OptLog", "LoginLog", "File", "xxl")) {
+        if (StrUtil.containsAnyIgnoreCase(mappedStatement.getId(), "uid", "UserToken", "resetPassErrorNum", "updateLastLoginTime")) {
+//        if (StrUtil.containsAnyIgnoreCase(mappedStatement.getId(), "UserToken", "sms", "MsgsCenterInfo", "resetPassErrorNum", "updateLastLoginTime", "OptLog", "LoginLog", "File", "xxl")) {
             return invocation.proceed();
         }
         // userId=1 的超级管理员 放行
@@ -69,15 +78,16 @@ public class WriteInterceptor extends AbstractSqlParserHandler implements Interc
             throw new BizException(-1, "演示环境，无删除权限，请本地部署后测试");
         }
 
-        //内置的租户 不能写入
-        boolean isWrite = CollectionUtil.contains(Arrays.asList(DELETE, INSERT, UPDATE), mappedStatement.getSqlCommandType());
-        if ("0000".equals(tenant) && isWrite) {
-            throw new BizException(-1, "演示环境，无权限, 请自行创建租户后测试写入");
+        //内置的租户 不能 修改、删除 权限数据
+        boolean isAuthority = StrUtil.containsAnyIgnoreCase(mappedStatement.getId(), "Tenant", "GlobalUser", "User", "Menu", "Resource", "Role", "Dictionary", "Parameter", "Application");
+        boolean isWrite = CollectionUtil.contains(Arrays.asList(DELETE, UPDATE), mappedStatement.getSqlCommandType());
+        if ("0000".equals(tenant) && isWrite && isAuthority) {
+            throw new BizException(-1, "演示环境禁止修改、删除重要数据！请在 zuihou-admin-ui 使用其他租户登录后测试 全部功能");
         }
 
         // 你还可以自定义其他限制规则， 比如：IP 等
 
-        //其他用户
+        //放行
         return invocation.proceed();
     }
 

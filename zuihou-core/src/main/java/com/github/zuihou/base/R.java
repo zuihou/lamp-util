@@ -1,9 +1,9 @@
 package com.github.zuihou.base;
 
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.zuihou.exception.BizException;
 import com.github.zuihou.exception.code.BaseExceptionCode;
+import com.github.zuihou.jackson.JsonUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -228,6 +228,6 @@ public class R<T> {
 
     @Override
     public String toString() {
-        return JSONObject.toJSONString(this);
+        return JsonUtil.toJson(this);
     }
 }

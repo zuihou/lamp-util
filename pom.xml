@@ -28,6 +28,7 @@
         <module>zuihou-mq-starter</module>
         <module>zuihou-zipkin-client-starter</module>
         <module>zuihou-injection-starter</module>
+        <module>zuihou-uid</module>
     </modules>
     <properties>
         <zuihou-dependencies.version>2.5.1</zuihou-dependencies.version>
@@ -92,6 +93,11 @@
             <dependency>
                 <groupId>com.github.zuihou</groupId>
                 <artifactId>zuihou-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.zuihou</groupId>
+                <artifactId>zuihou-uid</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

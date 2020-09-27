@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.github.zuihou.base.R;
 import com.github.zuihou.base.mapper.SuperMapper;
+import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.exception.BizException;
 import com.github.zuihou.utils.StrPool;
 
@@ -49,6 +50,14 @@ public class SuperServiceImpl<M extends SuperMapper<T>, T> extends ServiceImpl<M
         }
     }
 
+    protected static String buildTenantKey(Object... args) {
+        if (args.length > 0) {
+            return StrUtil.join(StrPool.COLON, BaseContextHandler.getTenant(), args);
+        } else {
+            return BaseContextHandler.getTenant();
+        }
+    }
+
     /**
      * 构建key
      *
@@ -56,7 +65,7 @@ public class SuperServiceImpl<M extends SuperMapper<T>, T> extends ServiceImpl<M
      * @return
      */
     protected String key(Object... args) {
-        return buildKey(args);
+        return buildTenantKey(args);
     }
 
     @Override
