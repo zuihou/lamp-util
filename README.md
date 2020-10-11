@@ -11,6 +11,24 @@
 ## 简介
 `zuihou-commons` 是 [zuihou-admin-cloud](https://gitee.com/zuihou111/zuihou-admin-cloud) 和 [zuihou-admin-boot](https://gitee.com/zuihou111/zuihou-admin-boot) 项目的核心工具包，开发宗旨是打造一套兼顾 SpringBoot 和 SpringCloud 项目的公共工具类。
 
+## 项目组成及项目名由来
+本项目由`zuihou-admin-cloud`、`zuihou-admin-boot`、`zuihou-commons`、`zuihou-ui`、`zuihou-admin-ui`、`zuihou-generator` 等6个项目组成，其中：
+- zuihou-commons：是项目的核心工具包，开发宗旨是打造一套按模块独立使用的工具类。 （cloud、boot项目必须先编译它）
+- zuihou-admin-cloud：是基于SpringCloud的SaaS型微服务快速开发平台
+- zuihou-admin-boot： 是基于SpringBoot的SaaS型单体架构快速开发平台，功能和zuihou-admin-cloud完全一致
+- zuihou-generator：  是基于`mybatis-plus-generator`定制的代码生成器，专门按 zuihou-admin-cloud 和 zuihou-admin-boot 项目的结构生成Controller、Service、Dao、Entity、DTO、XML、前端Vue页面等代码。生成代码后，能实现不写一行代码、不移动一个类，即拥有CRUD、导入、导出等功能。
+- zuihou-ui： 给客户使用的后台系统
+- zuihou-admin-ui： 公司内部管理人员使用的后台管理系统，用于管理租户信息。
+
+项目名解释：
+- zuihou：即中文名：最后，是十多年来在各大平台一直使用的网名
+- admin： 最初的设想是做一个后台管理系统
+- cloud： 基于SpringCloud框架
+- boot：  基于SpringBoot框架
+- commons： 公共的组件、工具类
+- generator： 代码生成
+- ui：前端项目
+
 ## 结构介绍
 ![zuihou-commons功能介绍.png](docs/images/zuihou-commons功能介绍.png)
 
