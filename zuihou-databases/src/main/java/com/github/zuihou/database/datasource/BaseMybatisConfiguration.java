@@ -197,7 +197,7 @@ public abstract class BaseMybatisConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnExpression("'DEFAULT'.equals('${zuihou.database.id-typ:DEFAULT}') || 'CACHE'.equals('${zuihou.database.id-typ:DEFAULT}')")
+    @ConditionalOnExpression("'DEFAULT'.equals('${zuihou.database.id-type:DEFAULT}') || 'CACHE'.equals('${zuihou.database.id-type:DEFAULT}')")
     public DisposableWorkerIdAssigner disposableWorkerIdAssigner() {
         return new DisposableWorkerIdAssigner();
     }
