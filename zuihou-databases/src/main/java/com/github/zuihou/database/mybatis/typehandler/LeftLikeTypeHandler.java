@@ -1,6 +1,7 @@
 package com.github.zuihou.database.mybatis.typehandler;
 
 
+import com.baomidou.mybatisplus.core.enums.SqlLike;
 import org.apache.ibatis.type.Alias;
 
 /**
@@ -11,6 +12,6 @@ import org.apache.ibatis.type.Alias;
 @Alias("leftLike")
 public class LeftLikeTypeHandler extends BaseLikeTypeHandler {
     public LeftLikeTypeHandler() {
-        super(true, false);
+        super(SqlLike.LEFT);
     }
 }

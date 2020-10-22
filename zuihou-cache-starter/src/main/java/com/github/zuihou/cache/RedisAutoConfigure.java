@@ -2,8 +2,10 @@ package com.github.zuihou.cache;
 
 import com.github.zuihou.cache.lock.RedisDistributedLock;
 import com.github.zuihou.cache.properties.CustomCacheProperties;
-import com.github.zuihou.cache.repository.CacheRepository;
-import com.github.zuihou.cache.repository.RedisRepositoryImpl;
+import com.github.zuihou.cache.redis.RedisOps;
+import com.github.zuihou.cache.repository.CacheOps;
+import com.github.zuihou.cache.repository.CachePlusOps;
+import com.github.zuihou.cache.repository.impl.RedisOpsImpl;
 import com.github.zuihou.cache.utils.RedisObjectSerializer;
 import com.github.zuihou.lock.DistributedLock;
 import com.github.zuihou.utils.StrPool;
@@ -63,7 +65,6 @@ public class RedisAutoConfigure {
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(factory);
 
         RedisObjectSerializer redisObjectSerializer = new RedisObjectSerializer();
         RedisSerializer stringSerializer = new StringRedisSerializer();
@@ -71,20 +72,32 @@ public class RedisAutoConfigure {
         redisTemplate.setHashKeySerializer(stringSerializer);
         redisTemplate.setHashValueSerializer(redisObjectSerializer);
         redisTemplate.setValueSerializer(redisObjectSerializer);
-        redisTemplate.afterPropertiesSet();
+        redisTemplate.setConnectionFactory(factory);
         return redisTemplate;
     }
 
     /**
      * redis 持久库
      *
-     * @param redisTemplate the redis template
+     * @param redisOps the redis template
      * @return the redis repository
      */
     @Bean
     @ConditionalOnMissingBean
-    public CacheRepository redisRepository(RedisTemplate<String, Object> redisTemplate) {
-        return new RedisRepositoryImpl(redisTemplate);
+    public CacheOps cacheOps(RedisOps redisOps) {
+        return new RedisOpsImpl(redisOps);
+    }
+
+    /**
+     * redis 增强持久库
+     *
+     * @param redisOps the redis template
+     * @return the redis repository
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public CachePlusOps cachePlusOps(RedisOps redisOps) {
+        return new RedisOpsImpl(redisOps);
     }
 
     /**
@@ -144,5 +157,10 @@ public class RedisAutoConfigure {
 
         return config;
     }
-}
 
+    @Bean
+    @ConditionalOnMissingBean
+    public RedisOps getRedisOps(RedisTemplate<String, Object> redisTemplate) {
+        return new RedisOps(redisTemplate, cacheProperties.getCacheNullVal());
+    }
+}

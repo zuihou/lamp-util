@@ -8,9 +8,9 @@ package com.github.zuihou.security.constant;
  */
 public class RoleConstant {
 
-    public static final String ADMIN = "PT_ADMIN";
+    public static final String PT_ADMIN = "PT_ADMIN";
 
-    public static final String HAS_ROLE_ADMIN = "hasRole('" + ADMIN + "')";
+    public static final String HAS_ROLE_ADMIN = "hasRole('" + PT_ADMIN + "')";
 
     public static final String USER = "user";
 

@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.github.zuihou.model.RemoteData;
+import com.github.zuihou.utils.StrHelper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -219,22 +220,22 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
 
     @Override
     public QueryWrap<T> like(String column, Object val) {
-        return super.like(this.checkCondition(val), column, val);
+        return super.like(this.checkCondition(val), column, StrHelper.keywordConvert(val));
     }
 
     @Override
     public QueryWrap<T> notLike(String column, Object val) {
-        return super.notLike(this.checkCondition(val), column, val);
+        return super.notLike(this.checkCondition(val), column, StrHelper.keywordConvert(val));
     }
 
     @Override
     public QueryWrap<T> likeLeft(String column, Object val) {
-        return super.likeLeft(this.checkCondition(val), column, val);
+        return super.likeLeft(this.checkCondition(val), column, StrHelper.keywordConvert(val));
     }
 
     @Override
     public QueryWrap<T> likeRight(String column, Object val) {
-        return super.likeRight(this.checkCondition(val), column, val);
+        return super.likeRight(this.checkCondition(val), column, StrHelper.keywordConvert(val));
     }
 
     @Override

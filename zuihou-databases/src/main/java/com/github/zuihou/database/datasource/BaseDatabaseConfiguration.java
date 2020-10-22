@@ -90,14 +90,14 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
 
     protected final MybatisPlusProperties properties;
     protected final DatabaseProperties databaseProperties;
-    private final Interceptor[] interceptors;
-    private final TypeHandler[] typeHandlers;
-    private final LanguageDriver[] languageDrivers;
-    private final ResourceLoader resourceLoader;
-    private final DatabaseIdProvider databaseIdProvider;
-    private final List<ConfigurationCustomizer> configurationCustomizers;
-    private final List<MybatisPlusPropertiesCustomizer> mybatisPlusPropertiesCustomizers;
-    private final ApplicationContext applicationContext;
+    protected final Interceptor[] interceptors;
+    protected final TypeHandler[] typeHandlers;
+    protected final LanguageDriver[] languageDrivers;
+    protected final ResourceLoader resourceLoader;
+    protected final DatabaseIdProvider databaseIdProvider;
+    protected final List<ConfigurationCustomizer> configurationCustomizers;
+    protected final List<MybatisPlusPropertiesCustomizer> mybatisPlusPropertiesCustomizers;
+    protected final ApplicationContext applicationContext;
 
     public BaseDatabaseConfiguration(MybatisPlusProperties properties,
                                      DatabaseProperties databaseProperties,
@@ -252,13 +252,13 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
      * @param consumer 消费
      * @param <T>      泛型
      */
-    private <T> void getBeanThen(Class<T> clazz, Consumer<T> consumer) {
+    protected <T> void getBeanThen(Class<T> clazz, Consumer<T> consumer) {
         if (this.applicationContext.getBeanNamesForType(clazz, false, false).length > 0) {
             consumer.accept(this.applicationContext.getBean(clazz));
         }
     }
 
-    private void applyConfiguration(MybatisSqlSessionFactoryBean factory) {
+    protected void applyConfiguration(MybatisSqlSessionFactoryBean factory) {
         MybatisConfiguration newConfiguration = this.properties.getConfiguration();
         if (newConfiguration == null && !StringUtils.hasText(this.properties.getConfigLocation())) {
             newConfiguration = new MybatisConfiguration();

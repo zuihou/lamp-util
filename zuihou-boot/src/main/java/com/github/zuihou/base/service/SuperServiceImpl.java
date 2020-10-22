@@ -9,6 +9,8 @@ import com.github.zuihou.context.BaseContextHandler;
 import com.github.zuihou.exception.BizException;
 import com.github.zuihou.utils.StrPool;
 
+import java.lang.reflect.ParameterizedType;
+
 import static com.github.zuihou.exception.code.ExceptionCode.SERVICE_MAPPER_ERROR;
 
 /**
@@ -27,11 +29,21 @@ import static com.github.zuihou.exception.code.ExceptionCode.SERVICE_MAPPER_ERRO
  */
 public class SuperServiceImpl<M extends SuperMapper<T>, T> extends ServiceImpl<M, T> implements SuperService<T> {
 
+    protected Class<T> entityClass = null;
+
     public SuperMapper getSuperMapper() {
         if (baseMapper instanceof SuperMapper) {
             return baseMapper;
         }
         throw BizException.wrap(SERVICE_MAPPER_ERROR);
+    }
+
+    @Override
+    public Class<T> getEntityClass() {
+        if (entityClass == null) {
+            this.entityClass = (Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+        }
+        return this.entityClass;
     }
 
     /**

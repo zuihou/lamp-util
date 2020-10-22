@@ -19,6 +19,12 @@ import java.util.List;
  * @date 2020年03月03日20:49:03
  */
 public interface SuperService<T> extends IService<T> {
+    /**
+     * 获取实体的类型
+     *
+     * @return
+     */
+    Class<T> getEntityClass();
 
     /**
      * 批量保存数据

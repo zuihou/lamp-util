@@ -1,14 +1,13 @@
 package com.github.zuihou.cache.properties;
 
 import lombok.Data;
-import org.springframework.boot.autoconfigure.cache.CacheType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Duration;
 import java.util.Map;
 
 /**
- * 主要用来设置通过 @Cacheable 注解标注的方法的缓存策略
+ * 缓存配置
  *
  * @author zuihou
  * @date 2019/08/06
@@ -19,15 +18,18 @@ public class CustomCacheProperties {
     public static final String PREFIX = "zuihou.cache";
     /**
      * 目前只支持 REDIS 和 CAFFEINE ！
-     * CAFFEINE 只用于项目的开发环境或者演示环境使用， 生产环境请用redis！！！
+     * CAFFEINE 只用于项目的开发环境或者演示环境使用，  生产环境请用redis！！！
      */
     private CacheType type = CacheType.REDIS;
+    /**
+     * 是否缓存 null 值
+     */
+    private Boolean cacheNullVal = true;
 
     /**
-     * 全局配置
+     * 通过 @Cacheable 注解标注的方法的缓存策略
      */
     private Cache def = new Cache();
-
     /**
      * 针对某几个具体的key特殊配置
      * <p>
@@ -69,7 +71,6 @@ public class CustomCacheProperties {
          * Caffeine 的最大缓存个数
          */
         private int maxSize = 1000;
-
 
     }
 

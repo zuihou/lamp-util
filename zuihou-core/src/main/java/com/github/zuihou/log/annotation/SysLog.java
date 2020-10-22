@@ -32,7 +32,6 @@ public @interface SysLog {
 
     /**
      * 是否拼接Controller类上的描述值
-     *
      * @return
      */
     boolean controllerApiValue() default true;

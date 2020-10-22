@@ -59,6 +59,9 @@ public class XssAuthConfiguration {
                 .add("/classpath:*")
                 .add("/actuator/*")
                 .add("/**/noxss/**")
+                .add("/**/activiti/**")
+                .add("/**/service/model/**")
+                .add("/**/service/editor/**")
                 .toString();
         initParameters.put(IGNORE_PATH, ignorePaths);
 

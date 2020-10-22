@@ -1,6 +1,7 @@
 package com.github.zuihou.base.service;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
@@ -207,5 +209,55 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
         // 根据id查询数据
         Long id = (Long) cacheObject.getValue();
         return getByIdCache(id);
+    }
+
+    protected Object getId(T model) {
+        if (model instanceof SuperEntity) {
+            return ((SuperEntity) model).getId();
+        } else {
+            // 实体没有继承 Entity 和 SuperEntity
+            TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
+            if (tableInfo == null) {
+                return null;
+            }
+            // 主键类型
+            Class<?> keyType = tableInfo.getKeyType();
+            if (keyType == null) {
+                return null;
+            }
+            // id 字段名
+            String keyProperty = tableInfo.getKeyProperty();
+
+            // 反射得到 主键的值
+            Field idField = ReflectUtil.getField(getEntityClass(), keyProperty);
+            return ReflectUtil.getFieldValue(model, idField);
+        }
+    }
+
+    protected void setCache(T model) {
+        Object id = getId(model);
+        if (id != null) {
+            String key = key(id);
+            cacheChannel.set(getRegion(), key, model);
+        }
+    }
+
+
+    protected void delCache(T model) {
+        Object id = getId(model);
+        if (id != null) {
+            String key = key(id);
+            cacheChannel.evict(getRegion(), key);
+        }
+    }
+
+    @Override
+    public void refreshCache() {
+        list().forEach(this::setCache);
+    }
+
+    @Override
+    public void clearCache() {
+        list().forEach(this::delCache);
     }
 }

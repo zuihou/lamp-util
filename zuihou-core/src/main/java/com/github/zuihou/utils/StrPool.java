@@ -95,4 +95,6 @@ public interface StrPool {
      * 默认的父id
      */
     Long DEF_PARENT_ID = 0L;
+
+    String UNKNOW = "unknown";
 }

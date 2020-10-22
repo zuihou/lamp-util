@@ -90,4 +90,15 @@ public class PageParams<T> {
         return page;
     }
 
+    /**
+     * 计算当前分页偏移量
+     */
+    @JsonIgnore
+    public long offset() {
+        long current = this.current;
+        if (current <= 1L) {
+            return 0L;
+        }
+        return (current - 1) * this.size;
+    }
 }

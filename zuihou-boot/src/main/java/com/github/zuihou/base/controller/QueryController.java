@@ -39,7 +39,7 @@ public interface QueryController<Entity, Id extends Serializable, PageDTO> exten
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "主键", dataType = "long", paramType = "query"),
     })
-    @ApiOperation(value = "查询", notes = "查询")
+    @ApiOperation(value = "单体查询", notes = "单体查询")
     @GetMapping("/{id}")
     @SysLog("'查询:' + #id")
     @PreAuth("hasPermit('{}view')")

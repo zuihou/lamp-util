@@ -13,6 +13,13 @@ import org.springframework.context.annotation.Import;
  * @author zuihou
  * @date 2019/08/07
  */
+
+/**
+ * 缓存配置
+ *
+ * @author zuihou
+ * @date 2019/08/07
+ */
 @Slf4j
 @EnableCaching
 @Import({

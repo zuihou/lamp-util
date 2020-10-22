@@ -8,6 +8,7 @@ import com.github.zuihou.security.feign.UserQuery;
 import com.github.zuihou.security.feign.UserResolverService;
 import com.github.zuihou.security.model.SysRole;
 import com.github.zuihou.security.model.SysUser;
+import org.springframework.lang.NonNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,7 +42,7 @@ public class VerifyAuthFunction {
      * @return {boolean}
      */
     public boolean denyAll() {
-        return hasRole(RoleConstant.ADMIN);
+        return hasRole(RoleConstant.PT_ADMIN);
     }
 
     /**
@@ -72,6 +73,28 @@ public class VerifyAuthFunction {
      */
     public boolean hasAnyPermit(String... permit) {
         // 查询当前用户拥有的所有资源
+        Set<String> resources = getAllResources();
+
+        // 判断是否包含所需的角色
+        return CollUtil.containsAny(resources, CollUtil.newHashSet(permit));
+    }
+
+    /**
+     * 判断是否包含所有资源
+     *
+     * @param permit 多个资源编码
+     * @return {boolean}
+     */
+    public boolean hasAllPermit(String... permit) {
+        Set<String> resources = getAllResources();
+
+        // 判断是否包含所需的角色
+        return CollUtil.containsAll(resources, CollUtil.newHashSet(permit));
+    }
+
+    @NonNull
+    private Set<String> getAllResources() {
+        // 查询当前用户拥有的所有资源
         Set<String> resources = new HashSet<>();
 
         R<SysUser> result = userResolverService.getById(UserQuery.buildResource());
@@ -79,18 +102,37 @@ public class VerifyAuthFunction {
             SysUser sysUser = result.getData();
             resources = new HashSet<>(sysUser.getResources());
         }
-
-        // 判断是否包含所需的角色
-        return CollUtil.containsAny(resources, CollUtil.newHashSet(permit));
+        return resources;
     }
 
     /**
-     * 判断是否有该角色权限
+     * 判断是否包含任意角色
      *
      * @param role 角色集合
      * @return {boolean}
      */
     public boolean hasAnyRole(String... role) {
+        Set<String> roles = getAllRoles();
+
+        // 判断是否包含所需的角色
+        return CollUtil.containsAny(roles, CollUtil.newHashSet(role));
+    }
+
+    /**
+     * 判断是否拥有所有的角色编码
+     *
+     * @param role 角色集合
+     * @return {boolean}
+     */
+    public boolean hasAllRole(String... role) {
+        Set<String> roles = getAllRoles();
+
+        // 判断是否包含所需的角色
+        return CollUtil.containsAll(roles, CollUtil.newHashSet(role));
+    }
+
+    @NonNull
+    private Set<String> getAllRoles() {
         // 查询当前用户拥有的所有角色
         Set<String> roles = new HashSet<>();
 
@@ -99,9 +141,6 @@ public class VerifyAuthFunction {
             SysUser sysUser = result.getData();
             roles = sysUser.getRoles().stream().map(SysRole::getCode).collect(Collectors.toSet());
         }
-
-        // 判断是否包含所需的角色
-        return CollUtil.containsAny(roles, CollUtil.newHashSet(role));
+        return roles;
     }
-
 }

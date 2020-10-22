@@ -40,11 +40,15 @@ import java.util.List;
  * <p>
  * 1. 本类的子类的 @MapperScan(basePackages = {"com.github.zuihou"}) 修改为  @MapperScan(basePackages = {"com.github.zuihou.product.dao"})
  * 2. 修改本类的子类的 @ConfigurationProperties(prefix = "spring.datasource.druid") 为 @ConfigurationProperties(prefix = "spring.datasource.druid.master")
- * 3. 复制该类 重命名为 SlaveDatabaseAutoConfiguration
- * 4. 修改 DATABASE_PREFIX 为 slave
+ * 3. 在zuihou-xxx-server层复制该类，重命名为 SlaveDatabaseAutoConfiguration （跟AuthorityDatabaseAutoConfiguration放一起）
+ * 4. 修改 DATABASE_PREFIX 为 slave  (任意命名，不要跟当前的重复即可)
  * 5. 修改 @ConfigurationProperties(prefix = "spring.datasource.druid") 为 @ConfigurationProperties(prefix = "spring.datasource.druid.slave")
  * 6. SlaveDatabaseAutoConfiguration 中的 basePackages = {"com.github.zuihou"}, 修改为  basePackages = {"com.github.zuihou.order.dao"} # 这个路径根据你的情况修改
  * 7. mysql.yml 中增加2个数据源的配置 spring.database.druid.master 和 spring.database.druid.slave
+ * 8. mysql.yml 中将 mybatis-plus: 相关的所有配置完整的复制一份为： mybatis-plus-slave: ， 并修改各自的子项 mapper-locations: 进行修改
+ * 8. 复制 MybatisPlusProperties 为 MybatisPlusSlaveProperties， 并修改类上的配置为 @ConfigurationProperties(prefix = "mybatis-plus-slave")
+ * 9. SlaveDatabaseAutoConfiguration 类上面需要配置 AuthorityDatabaseAutoConfiguration 类上的一系列注解
+ * 10. SlaveDatabaseAutoConfiguration 类上面需要配置 @EnableConfigurationProperties({MybatisPlusSlaveProperties.class}) ， 构造器第一个参数也改成 MybatisPlusSlaveProperties
  * <p>
  * 完成上述修改后， 位于com.github.zuihou.product.dao 包下的dao 将操作  master 库， com.github.zuihou.order.dao中的dao 将操作slave库
  *
@@ -88,13 +92,13 @@ public abstract class MasterDatabaseConfiguration extends BaseDatabaseConfigurat
      *
      * @return
      */
-    @Primary
     @Bean(name = DATABASE_PREFIX + "DruidDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.druid")
     public DataSource druidDataSource() {
         return DruidDataSourceBuilder.create().build();
     }
 
+    @Primary
     @Bean(name = DATABASE_PREFIX + "DataSource")
     public DataSource dataSource(@Qualifier(DATABASE_PREFIX + "DruidDataSource") DataSource dataSource) {
         if (ArrayUtil.contains(DEV_PROFILES, this.profiles)) {
@@ -121,6 +125,7 @@ public abstract class MasterDatabaseConfiguration extends BaseDatabaseConfigurat
      * @return
      */
     @Bean(name = DATABASE_PREFIX + "TransactionManager")
+    @Primary
     public DataSourceTransactionManager dsTransactionManager(@Qualifier(DATABASE_PREFIX + "DataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }

@@ -1,5 +1,6 @@
 package com.github.zuihou.database.mybatis.typehandler;
 
+import com.baomidou.mybatisplus.core.enums.SqlLike;
 import org.apache.ibatis.type.Alias;
 
 /**
@@ -10,6 +11,6 @@ import org.apache.ibatis.type.Alias;
 @Alias("fullLike")
 public class FullLikeTypeHandler extends BaseLikeTypeHandler {
     public FullLikeTypeHandler() {
-        super(true, true);
+        super(SqlLike.DEFAULT);
     }
 }

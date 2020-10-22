@@ -173,6 +173,19 @@ public class BizAssert {
         }
     }
 
+    /**
+     * 断言集合不为空，如果为null或者empty，用指定错误码抛出异常
+     * {@link BizException}
+     *
+     * @param exceptionMsg 错误码
+     * @param collection   集合
+     */
+    public static void notEmpty(Collection<?> collection, String exceptionMsg) {
+        if (collection == null || collection.isEmpty()) {
+            fail(exceptionMsg);
+        }
+    }
+
     public static <T> void notEmpty(T[] array, BaseExceptionCode exceptionCode) {
         if (ArrayUtil.hasNull(array)) {
             fail(exceptionCode);

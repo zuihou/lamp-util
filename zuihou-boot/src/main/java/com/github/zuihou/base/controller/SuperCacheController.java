@@ -4,7 +4,9 @@ import com.github.zuihou.base.R;
 import com.github.zuihou.base.service.SuperCacheService;
 import com.github.zuihou.log.annotation.SysLog;
 import com.github.zuihou.security.annotation.PreAuth;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.Serializable;
 
@@ -33,4 +35,32 @@ public abstract class SuperCacheController<S extends SuperCacheService<Entity>, 
         return success(baseService.getByIdCache(id));
     }
 
+
+    /**
+     * 刷新缓存
+     *
+     * @return
+     */
+    @ApiOperation(value = "刷新缓存", notes = "刷新缓存")
+    @PostMapping("refreshCache")
+    @SysLog("'刷新缓存'")
+    @PreAuth("hasPermit('{}add')")
+    public R<Boolean> refreshCache() {
+        baseService.refreshCache();
+        return success(true);
+    }
+
+    /**
+     * 清理缓存
+     *
+     * @return
+     */
+    @ApiOperation(value = "清理缓存", notes = "清理缓存")
+    @PostMapping("clearCache")
+    @SysLog("'清理缓存'")
+    @PreAuth("hasPermit('{}add')")
+    public R<Boolean> clearCache() {
+        baseService.clearCache();
+        return success(true);
+    }
 }

@@ -3,8 +3,9 @@ package com.github.zuihou.cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.zuihou.cache.lock.CaffeineDistributedLock;
 import com.github.zuihou.cache.properties.CustomCacheProperties;
-import com.github.zuihou.cache.repository.CacheRepository;
-import com.github.zuihou.cache.repository.CaffeineRepositoryImpl;
+import com.github.zuihou.cache.repository.CacheOps;
+import com.github.zuihou.cache.repository.CachePlusOps;
+import com.github.zuihou.cache.repository.impl.CaffeineOpsImpl;
 import com.github.zuihou.lock.DistributedLock;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+
 
 /**
  * 内存缓存配置
@@ -48,8 +50,20 @@ public class CaffeineAutoConfigure {
      */
     @Bean
     @ConditionalOnMissingBean
-    public CacheRepository redisRepository() {
-        return new CaffeineRepositoryImpl();
+    public CacheOps cacheOps() {
+        return new CaffeineOpsImpl();
+    }
+
+    /**
+     * caffeine 增强持久库
+     * 仅用于避免报错， 正式环境请勿使用
+     *
+     * @return the redis repository
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public CachePlusOps cachePlusOps() {
+        return new CaffeineOpsImpl();
     }
 
     @Bean

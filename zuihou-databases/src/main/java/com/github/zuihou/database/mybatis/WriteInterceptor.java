@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Properties;
 
 import static org.apache.ibatis.mapping.SqlCommandType.DELETE;
+import static org.apache.ibatis.mapping.SqlCommandType.INSERT;
 import static org.apache.ibatis.mapping.SqlCommandType.UPDATE;
 
 
@@ -80,7 +81,7 @@ public class WriteInterceptor extends AbstractSqlParserHandler implements Interc
 
         //内置的租户 不能 修改、删除 权限数据
         boolean isAuthority = StrUtil.containsAnyIgnoreCase(mappedStatement.getId(), "Tenant", "GlobalUser", "User", "Menu", "Resource", "Role", "Dictionary", "Parameter", "Application");
-        boolean isWrite = CollectionUtil.contains(Arrays.asList(DELETE, UPDATE), mappedStatement.getSqlCommandType());
+        boolean isWrite = CollectionUtil.contains(Arrays.asList(DELETE, UPDATE, INSERT), mappedStatement.getSqlCommandType());
         if ("0000".equals(tenant) && isWrite && isAuthority) {
             throw new BizException(-1, "演示环境禁止修改、删除重要数据！请在 zuihou-admin-ui 使用其他租户登录后测试 全部功能");
         }

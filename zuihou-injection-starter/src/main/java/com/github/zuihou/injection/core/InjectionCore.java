@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+import static com.github.zuihou.utils.StrPool.EMPTY;
+
 
 /**
  * 字典数据注入工具类
@@ -164,20 +169,29 @@ public class InjectionCore {
     }
 
     public void injection(Object obj) {
-        injection(obj, true);
+        injection(obj, false);
     }
 
 
     /**
-     * 判断是否为基本类型
+     * 判断字段是否不为基本类型
      *
-     * @param obj
      * @param field 字段
      * @return
      */
-    private boolean isNotBaseType(Object obj, Field field) {
+    private boolean isNotBaseType(Field field) {
+        return !isBaseType(field);
+    }
+
+    /**
+     * 判断字段是否为基本类型
+     *
+     * @param field 字段
+     * @return
+     */
+    private boolean isBaseType(Field field) {
         String typeName = field.getType().getName();
-        if ("java.lang.Integer".equals(typeName) ||
+        boolean isBaseType = "java.lang.Integer".equals(typeName) ||
                 "java.lang.Byte".equals(typeName) ||
                 "java.lang.Long".equals(typeName) ||
                 "java.lang.Double".equals(typeName) ||
@@ -186,12 +200,8 @@ public class InjectionCore {
                 "java.lang.Short".equals(typeName) ||
                 "java.lang.Boolean".equals(typeName) ||
                 "java.lang.String".equals(typeName) ||
-                "com.github.zuihou.model.RemoteData".equals(typeName)
-        ) {
-            return false;
-        } else {
-            return true;
-        }
+                "com.github.zuihou.model.RemoteData".equals(typeName);
+        return isBaseType;
     }
 
 
@@ -308,8 +318,20 @@ public class InjectionCore {
             }
 
             Object newVal = valueMap.get(queryKey);
+            // 可能由于序列化原因导致 get 失败，重新尝试get
             if (ObjectUtil.isNull(newVal) && ObjectUtil.isNotEmpty(queryKey)) {
                 newVal = valueMap.get(queryKey.toString());
+
+                // 可能由于是多key原因导致get失败
+                if (ObjectUtil.isNull(newVal) && StrUtil.contains(queryKey.toString(), ips.getDictItemSeparator())) {
+                    String[] typeCodes = StrUtil.split(queryKey.toString(), ips.getDictSeparator());
+                    String[] codes = StrUtil.split(typeCodes[1], ips.getDictItemSeparator());
+
+                    newVal = Arrays.stream(codes).map(item -> {
+                        String val = valueMap.getOrDefault(typeCodes[0] + ips.getDictSeparator() + item, EMPTY).toString();
+                        return val == null ? EMPTY : val;
+                    }).collect(Collectors.joining(ips.getDictItemSeparator()));
+                }
             }
 
             if (curField instanceof RemoteData) {
@@ -325,7 +347,6 @@ public class InjectionCore {
             }
         }
     }
-
 
     /**
      * 注入 集合
@@ -356,7 +377,7 @@ public class InjectionCore {
         }
         field.setAccessible(true);
         //类型
-        if (isNotBaseType(obj, field)) {
+        if (isNotBaseType(field)) {
             consumer.accept(typeMap);
             return null;
         }
@@ -409,6 +430,4 @@ public class InjectionCore {
         }
         return queryKey;
     }
-
-
 }

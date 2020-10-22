@@ -32,4 +32,15 @@ public interface SuperCacheService<T> extends SuperService<T> {
      * @return
      */
     T getByKey(String region, String key, Function<String, Object> loader);
+
+
+    /**
+     * 刷新缓存
+     */
+    void refreshCache();
+
+    /**
+     * 清理
+     */
+    void clearCache();
 }
