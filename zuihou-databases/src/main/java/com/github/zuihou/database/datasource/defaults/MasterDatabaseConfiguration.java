@@ -98,6 +98,7 @@ public abstract class MasterDatabaseConfiguration extends BaseDatabaseConfigurat
         return DruidDataSourceBuilder.create().build();
     }
 
+
     @Primary
     @Bean(name = DATABASE_PREFIX + "DataSource")
     public DataSource dataSource(@Qualifier(DATABASE_PREFIX + "DruidDataSource") DataSource dataSource) {
