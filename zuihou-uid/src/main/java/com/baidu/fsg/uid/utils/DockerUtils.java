@@ -15,7 +15,7 @@
  */
 package com.baidu.fsg.uid.utils;
 
-import org.apache.commons.lang.StringUtils;
+import cn.hutool.core.util.StrUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,12 +85,12 @@ public abstract class DockerUtils {
         DOCKER_PORT = System.getenv(ENV_KEY_PORT);
 
         // not found from 'JPAAS_HTTP_PORT', then try to find from 'JPAAS_HOST_PORT_8080'
-        if (StringUtils.isBlank(DOCKER_PORT)) {
+        if (StrUtil.isBlank(DOCKER_PORT)) {
             DOCKER_PORT = System.getenv(ENV_KEY_PORT_ORIGINAL);
         }
 
-        boolean hasEnvHost = StringUtils.isNotBlank(DOCKER_HOST);
-        boolean hasEnvPort = StringUtils.isNotBlank(DOCKER_PORT);
+        boolean hasEnvHost = StrUtil.isNotBlank(DOCKER_HOST);
+        boolean hasEnvPort = StrUtil.isNotBlank(DOCKER_PORT);
 
         // docker can find both host & port from environment
         if (hasEnvHost && hasEnvPort) {
