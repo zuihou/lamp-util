@@ -90,18 +90,6 @@ public class BaseContextConstants {
     public static final String LOG_TRACE_ID = "trace";
 
     /**
-     * 租户 编码
-     */
-//    @Deprecated
-//    public static final String TENANT = JWT_KEY_TENANT;
-
-    /**
-     * token
-     */
-    @Deprecated
-    public static final String TOKEN_NAME = BEARER_HEADER_KEY;
-
-    /**
      * 灰度发布版本号
      */
     public static final String GRAY_VERSION = "grayversion";

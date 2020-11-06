@@ -2,6 +2,7 @@ package com.github.zuihou.database.mybatis.conditions.query;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.core.conditions.SharedString;
 import com.baomidou.mybatisplus.core.conditions.query.Query;
@@ -10,7 +11,6 @@ import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.github.zuihou.model.RemoteData;
 import com.github.zuihou.utils.StrHelper;
 
@@ -269,7 +269,7 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
      */
     private boolean checkCondition(Object val) {
         if (val instanceof String && this.skipEmpty) {
-            return StringUtils.isNotBlank((String) val);
+            return StrUtil.isNotBlank((String) val);
         }
         if (val instanceof Collection && this.skipEmpty) {
             return !((Collection) val).isEmpty();

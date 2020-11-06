@@ -104,15 +104,8 @@ public class DataScopeInnerInterceptor implements InnerInterceptor {
             originalSql = "select * from (" + originalSql + ") temp_data_scope where temp_data_scope." + scopeName + " in (" + join + ")";
         }
 
-//        metaObject.setValue("delegate.boundSql.sql", originalSql);
-
-//        final Configuration configuration = ms.getConfiguration();
-
         PluginUtils.MPBoundSql mpBoundSql = PluginUtils.mpBoundSql(boundSql);
-//        List<ParameterMapping> mappings = mpBoundSql.parameterMappings();
-//        Map<String, Object> additionalParameter = mpBoundSql.additionalParameters();
         mpBoundSql.sql(originalSql);
-//        mpBoundSql.parameterMappings(mappings);
     }
 
 }

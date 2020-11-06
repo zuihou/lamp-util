@@ -32,7 +32,13 @@ import static com.github.zuihou.utils.DateUtils.SLASH_DATE_TIME_FORMAT_MATCHES;
 
 
 /**
- * Json格式 LocalDateTime 类型的参数，支持6中格式
+ * 字段类型是LocalDateTime时，可以按照以下6种格式反序列化：
+ * 1. yyyy-MM-dd
+ * 2. yyyy年MM月dd日
+ * 3. yyyy/MM/dd
+ * 4. yyyy-MM-dd HH:mm:ss
+ * 5. yyyy年MM月dd日HH时mm分ss秒
+ * 6. yyyy/MM/dd HH:mm:ss
  *
  * @author zuihou
  * @date 2020/6/18 上午10:50

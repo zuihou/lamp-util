@@ -27,7 +27,6 @@ import com.github.zuihou.database.mybatis.typehandler.RightLikeTypeHandler;
 import com.github.zuihou.database.plugins.SchemaInterceptor;
 import com.github.zuihou.database.properties.DatabaseProperties;
 import com.github.zuihou.database.properties.MultiTenantType;
-import com.github.zuihou.database.servlet.TenantWebMvcConfigurer;
 import com.github.zuihou.uid.service.DisposableWorkerIdAssigner;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
@@ -156,7 +155,7 @@ public abstract class BaseMybatisConfiguration {
 
 
     /**
-     * 分页拦截器之前的插件
+     * 分页拦截器之后的插件
      *
      * @return
      */
@@ -165,7 +164,7 @@ public abstract class BaseMybatisConfiguration {
     }
 
     /**
-     * 分页拦截器之后的插件
+     * 分页拦截器之前的插件
      *
      * @return
      */
@@ -289,17 +288,4 @@ public abstract class BaseMybatisConfiguration {
         return new MySqlInjector();
     }
 
-    /**
-     * gateway 网关模块需要禁用 spring-webmvc 相关配置，必须通过在类上面加限制条件方式来实现， 不能直接Bean上面加
-     */
-    @ConditionalOnProperty(prefix = "zuihou.webmvc", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public static class WebMvcConfig {
-
-        @Bean
-        @ConditionalOnProperty(prefix = "zuihou.webmvc", name = "enabled", havingValue = "true", matchIfMissing = true)
-        public TenantWebMvcConfigurer getTenantWebMvcConfigurer() {
-            return new TenantWebMvcConfigurer();
-        }
-
-    }
 }

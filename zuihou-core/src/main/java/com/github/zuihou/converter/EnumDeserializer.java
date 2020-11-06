@@ -16,6 +16,12 @@ import static com.github.zuihou.converter.EnumSerializer.ALL_ENUM_KEY_FIELD;
 
 /**
  * enum反序列化工具
+ * <p>
+ * 字段类型是枚举类型时，可以按照以下2种格式反序列化：
+ * 1. 字符串形式：字段名： "XX"
+ * 2. 对象形式： 字段名： {
+ * "code": "XX"
+ * }
  *
  * @author zuihou
  * @date 2019-07-25 22:15

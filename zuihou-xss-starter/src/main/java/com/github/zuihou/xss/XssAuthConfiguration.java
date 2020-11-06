@@ -1,14 +1,17 @@
 package com.github.zuihou.xss;
 
+import cn.hutool.core.collection.CollUtil;
 import com.github.zuihou.xss.converter.XssStringJsonDeserializer;
 import com.github.zuihou.xss.filter.XssFilter;
+import com.github.zuihou.xss.properties.XssProperties;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringJoiner;
 
 import static com.github.zuihou.xss.filter.XssFilter.IGNORE_PARAM_VALUE;
 import static com.github.zuihou.xss.filter.XssFilter.IGNORE_PATH;
@@ -19,7 +22,11 @@ import static com.github.zuihou.xss.filter.XssFilter.IGNORE_PATH;
  * @author zuihou
  * @date 2019/07/25
  */
+@AllArgsConstructor
+@EnableConfigurationProperties({XssProperties.class})
 public class XssAuthConfiguration {
+    private final XssProperties xssProperties;
+
     /**
      * 配置跨站攻击 反序列化处理器
      *
@@ -38,37 +45,14 @@ public class XssAuthConfiguration {
      */
     @Bean
     public FilterRegistrationBean filterRegistrationBean() {
-        //TODO 想想这里如何扩展
-
         FilterRegistrationBean filterRegistration = new FilterRegistrationBean(new XssFilter());
-        filterRegistration.addUrlPatterns("/*");
-        filterRegistration.setOrder(1);
+        filterRegistration.setEnabled(xssProperties.getEnabled());
+        filterRegistration.addUrlPatterns(xssProperties.getPatterns().stream().toArray(String[]::new));
+        filterRegistration.setOrder(xssProperties.getOrder());
 
         Map<String, String> initParameters = new HashMap<>(2);
-        String ignorePaths = new StringJoiner(",")
-                .add("/favicon.ico")
-                .add("/doc.html")
-                .add("/swagger-ui.html")
-                .add("/csrf")
-                .add("/webjars/*")
-                .add("/v2/*")
-                .add("/swagger-resources/*")
-                .add("/resources/*")
-                .add("/static/*")
-                .add("/public/*")
-                .add("/classpath:*")
-                .add("/actuator/*")
-                .add("/**/noxss/**")
-                .add("/**/activiti/**")
-                .add("/**/service/model/**")
-                .add("/**/service/editor/**")
-                .toString();
-        initParameters.put(IGNORE_PATH, ignorePaths);
-
-        String ignoreParamNames = new StringJoiner(",")
-                .add("noxss")
-                .toString();
-        initParameters.put(IGNORE_PARAM_VALUE, ignoreParamNames);
+        initParameters.put(IGNORE_PATH, CollUtil.join(xssProperties.getIgnorePaths(), ","));
+        initParameters.put(IGNORE_PARAM_VALUE, CollUtil.join(xssProperties.getIgnoreParamValues(), ","));
         filterRegistration.setInitParameters(initParameters);
         return filterRegistration;
     }

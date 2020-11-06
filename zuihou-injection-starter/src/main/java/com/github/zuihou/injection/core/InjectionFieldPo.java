@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
+ * 封装 InjectionField 注解中解析出来的参数
+ * <p>
+ * 必须重写该类的 equals() 和 hashCode() 便于Map操作
+ *
  * @author zuihou
  * @date 2020年02月03日18:48:29
  */

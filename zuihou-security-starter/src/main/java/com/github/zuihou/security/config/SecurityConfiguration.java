@@ -3,7 +3,6 @@ package com.github.zuihou.security.config;
 import com.github.zuihou.security.aspect.UriSecurityPreAuthAspect;
 import com.github.zuihou.security.aspect.VerifyAuthFunction;
 import com.github.zuihou.security.feign.UserResolverService;
-import com.github.zuihou.security.properties.ContextProperties;
 import com.github.zuihou.security.properties.SecurityProperties;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -20,7 +19,7 @@ import org.springframework.core.annotation.Order;
  */
 @Order
 @AllArgsConstructor
-@EnableConfigurationProperties({SecurityProperties.class, ContextProperties.class})
+@EnableConfigurationProperties({SecurityProperties.class})
 public class SecurityConfiguration {
 
     @Bean
@@ -33,11 +32,6 @@ public class SecurityConfiguration {
     @ConditionalOnMissingBean(VerifyAuthFunction.class)
     public VerifyAuthFunction getVerifyAuthFunction(UserResolverService userResolverService) {
         return new VerifyAuthFunction(userResolverService);
-    }
-
-    @Bean
-    public GlobalMvcConfigurer getGlobalMvcConfigurer(ContextProperties contextProperties) {
-        return new GlobalMvcConfigurer(contextProperties);
     }
 
 }

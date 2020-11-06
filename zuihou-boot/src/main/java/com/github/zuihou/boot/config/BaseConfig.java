@@ -181,10 +181,16 @@ public abstract class BaseConfig {
     @ConditionalOnProperty(prefix = "zuihou.webmvc", name = "enabled", havingValue = "true", matchIfMissing = true)
     public static class WebMvcConfig {
         @Bean
-        @ConditionalOnProperty(prefix = "zuihou.webmvc", name = "enabled", havingValue = "true", matchIfMissing = true)
         @ConditionalOnClass(Undertow.class)
         public UndertowServerFactoryCustomizer getUndertowServerFactoryCustomizer() {
             return new UndertowServerFactoryCustomizer();
+        }
+
+
+        @Bean
+        @ConditionalOnClass
+        public GlobalMvcConfigurer getGlobalMvcConfigurer() {
+            return new GlobalMvcConfigurer();
         }
     }
 }

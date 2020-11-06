@@ -3,8 +3,8 @@ package com.github.zuihou.context;
 import cn.hutool.core.convert.Convert;
 import com.github.zuihou.utils.StrPool;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -40,7 +40,7 @@ public class BaseContextHandler {
     public static Map<String, String> getLocalMap() {
         Map<String, String> map = THREAD_LOCAL.get();
         if (map == null) {
-            map = new HashMap<>(10);
+            map = new ConcurrentHashMap<>(10);
             THREAD_LOCAL.set(map);
         }
         return map;

@@ -4,7 +4,6 @@ package com.github.zuihou.log;
 import com.github.zuihou.jackson.JsonUtil;
 import com.github.zuihou.log.aspect.SysLogAspect;
 import com.github.zuihou.log.event.SysLogListener;
-import com.github.zuihou.log.interceptor.MdcMvcConfigurer;
 import com.github.zuihou.log.monitor.PointUtil;
 import com.github.zuihou.log.properties.OptLogProperties;
 import lombok.AllArgsConstructor;
@@ -39,16 +38,16 @@ public class LogAutoConfiguration {
         return new SysLogAspect();
     }
 
-    /**
-     * gateway 网关模块需要禁用 spring-webmvc 相关配置，必须通过在类上面加限制条件方式来实现， 不能直接Bean上面加
-     */
-    @ConditionalOnProperty(prefix = "zuihou.webmvc", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public static class WebMvcConfig {
-        @Bean
-        public MdcMvcConfigurer getMdcMvcConfigurer() {
-            return new MdcMvcConfigurer();
-        }
-    }
+//    /**
+//     * gateway 网关模块需要禁用 spring-webmvc 相关配置，必须通过在类上面加限制条件方式来实现， 不能直接Bean上面加
+//     */
+//    @ConditionalOnProperty(prefix = "zuihou.webmvc", name = "enabled", havingValue = "true", matchIfMissing = true)
+//    public static class WebMvcConfig {
+//        @Bean
+//        public MdcMvcConfigurer getMdcMvcConfigurer() {
+//            return new MdcMvcConfigurer();
+//        }
+//    }
 
     @Bean
     @ConditionalOnMissingBean

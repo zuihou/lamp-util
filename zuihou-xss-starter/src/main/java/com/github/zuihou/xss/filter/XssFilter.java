@@ -14,8 +14,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,10 +35,7 @@ public class XssFilter implements Filter {
      */
     public static final String IGNORE_PARAM_VALUE = "ignoreParamValue";
     private static final AntPathMatcher ANT_PATH_MATCHER = new AntPathMatcher();
-    /**
-     * 默认放行单点登录的登出响应(响应中包含samlp:LogoutRequest标签，直接放行)
-     */
-    private static final String CAS_LOGOUT_RESPONSE_TAG = "samlp:LogoutRequest";
+
     /**
      * 可放行的请求路径列表
      */
@@ -55,29 +50,14 @@ public class XssFilter implements Filter {
         log.debug("XSS fiter [XSSFilter] init start ...");
         String ignorePaths = filterConfig.getInitParameter(IGNORE_PATH);
         String ignoreParamValues = filterConfig.getInitParameter(IGNORE_PARAM_VALUE);
-        if (!StrUtil.isBlank(ignorePaths)) {
-            String[] ignorePathArr = ignorePaths.split(",");
-            ignorePathList = new ArrayList<>(Arrays.asList(ignorePathArr));
-        }
-        if (!StrUtil.isBlank(ignoreParamValues)) {
-            String[] ignoreParamValueArr = ignoreParamValues.split(",");
-            ignoreParamValueList = new ArrayList<>(Arrays.asList(ignoreParamValueArr));
-            //默认放行单点登录的登出响应(响应中包含samlp:LogoutRequest标签，直接放行)
-            if (!ignoreParamValueList.contains(CAS_LOGOUT_RESPONSE_TAG)) {
-                ignoreParamValueList.add(CAS_LOGOUT_RESPONSE_TAG);
-            }
-        } else {
-            //默认放行单点登录的登出响应(响应中包含samlp:LogoutRequest标签，直接放行)
-            ignoreParamValueList = new ArrayList<String>();
-            ignoreParamValueList.add(CAS_LOGOUT_RESPONSE_TAG);
-        }
+        ignorePathList = StrUtil.split(ignorePaths, ',');
+        ignoreParamValueList = StrUtil.split(ignoreParamValues, ',');
         log.debug("XSS fiter [XSSFilter] init end");
     }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        log.debug("XSS fiter [XSSFilter] starting");
         // 判断uri是否包含项目名称
         String uriPath = ((HttpServletRequest) request).getRequestURI();
         if (isIgnorePath(uriPath)) {
@@ -88,7 +68,6 @@ public class XssFilter implements Filter {
             log.debug("has xssfiter path[" + uriPath + "] need XssFilter, go to XssRequestWrapper");
             chain.doFilter(new XssRequestWrapper((HttpServletRequest) request, ignoreParamValueList), response);
         }
-        log.debug("XSS fiter [XSSFilter] stop");
     }
 
     @Override
@@ -103,13 +82,7 @@ public class XssFilter implements Filter {
         if (CollectionUtil.isEmpty(ignorePathList)) {
             return false;
         } else {
-//            for (String ignorePath : ignorePathList) {
-//                if (!StrUtil.isBlank(ignorePath) && uriPath.contains(ignorePath.trim())) {
-//                    return true;
-//                }
-//            }
             return ignorePathList.stream().anyMatch((url) -> uriPath.startsWith(url) || ANT_PATH_MATCHER.match(url, uriPath));
         }
     }
-
 }

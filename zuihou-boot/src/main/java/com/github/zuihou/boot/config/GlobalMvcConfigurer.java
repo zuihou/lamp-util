@@ -1,7 +1,6 @@
-package com.github.zuihou.security.config;
+package com.github.zuihou.boot.config;
 
-import com.github.zuihou.security.interceptor.ContextHandlerInterceptor;
-import com.github.zuihou.security.properties.ContextProperties;
+import com.github.zuihou.boot.interceptor.HeaderThreadLocalInterceptor;
 import lombok.AllArgsConstructor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -15,8 +14,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @AllArgsConstructor
 public class GlobalMvcConfigurer implements WebMvcConfigurer {
 
-    private ContextProperties contextProperties;
-
     /**
      * 注册 拦截器
      *
@@ -24,9 +21,8 @@ public class GlobalMvcConfigurer implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new ContextHandlerInterceptor())
-                .addPathPatterns(contextProperties.getPathPatterns())
-                .order(contextProperties.getOrder())
-                .excludePathPatterns(contextProperties.getExcludePatterns());
+        registry.addInterceptor(new HeaderThreadLocalInterceptor())
+                .addPathPatterns("/**")
+                .order(-20);
     }
 }
