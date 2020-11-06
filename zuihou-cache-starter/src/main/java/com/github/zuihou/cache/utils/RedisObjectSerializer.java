@@ -18,7 +18,7 @@ public class RedisObjectSerializer extends Jackson2JsonRedisSerializer<Object> {
     public RedisObjectSerializer() {
         super(Object.class);
 
-        ObjectMapper objectMapper = JsonUtil.getInstance();
+        ObjectMapper objectMapper = JsonUtil.newInstance();
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,
                 ObjectMapper.DefaultTyping.NON_FINAL,

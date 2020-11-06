@@ -186,6 +186,10 @@ public class JsonUtil {
         return JacksonHolder.INSTANCE;
     }
 
+    public static ObjectMapper newInstance() {
+        return new JacksonObjectMapper();
+    }
+
     private static class JacksonHolder {
         private final static ObjectMapper INSTANCE = new JacksonObjectMapper();
     }

@@ -63,6 +63,7 @@ public class RedisAutoConfigure {
      * @param factory
      */
     @Bean
+    @ConditionalOnMissingBean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 

@@ -28,6 +28,7 @@ public class CustomCacheProperties {
 
     /**
      * 通过 @Cacheable 注解标注的方法的缓存策略
+     *
      */
     private Cache def = new Cache();
     /**
