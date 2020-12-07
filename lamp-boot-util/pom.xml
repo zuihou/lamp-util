@@ -11,7 +11,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.tangyh.basic</groupId>
-    <artifactId>lamp-boot</artifactId>
+    <artifactId>lamp-boot-util</artifactId>
     <name>${project.artifactId}</name>
     <description>公共模块</description>
 

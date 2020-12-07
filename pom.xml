@@ -15,7 +15,7 @@
         <module>lamp-dependencies</module>
         <module>lamp-annotation</module>
         <module>lamp-core</module>
-        <module>lamp-boot</module>
+        <module>lamp-boot-util</module>
         <module>lamp-databases</module>
         <module>lamp-log-starter</module>
         <module>lamp-swagger2-starter</module>
@@ -108,7 +108,7 @@
             </dependency>
             <dependency>
                 <groupId>com.tangyh.basic</groupId>
-                <artifactId>lamp-boot</artifactId>
+                <artifactId>lamp-boot-util</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
