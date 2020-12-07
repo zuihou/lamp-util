@@ -36,7 +36,7 @@ public interface WorkerNodeDAO {
      * @param port
      * @return
      */
-//    @Select("SELECT ID, HOST_NAME, PORT, TYPE,LAUNCH_DATE, MODIFIED, CREATED FROM WORKER_NODE WHERE HOST_NAME = #{host} AND PORT = #{port}")
+//    @Select("SELECT id, host_name, port, type,launch_date, modified, created FROM worker_node WHERE host_name = #{host} AND port = #{port}")
 //    WorkerNodeEntity getWorkerNodeByHostPort(@Param("host") String host, @Param("port") String port);
 
     /**
@@ -44,7 +44,7 @@ public interface WorkerNodeDAO {
      *
      * @param workerNodeEntity
      */
-    @Insert("INSERT INTO WORKER_NODE(HOST_NAME,PORT, TYPE, LAUNCH_DATE,MODIFIED,CREATED) " +
+    @Insert("INSERT INTO worker_node(host_name,port, type, launch_date,modified,created) " +
             "VALUES (#{hostName},#{port},#{type},#{launchDate},NOW(),NOW())")
     void addWorkerNode(WorkerNodeEntity workerNodeEntity);
 
