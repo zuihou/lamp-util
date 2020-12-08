@@ -190,8 +190,8 @@
                         <source>${java.version}</source>
                         <target>${java.version}</target>
                         <encoding>${project.build.sourceEncoding}</encoding>
-<!--                        <compilerArgs>-Xlint:deprecation</compilerArgs>-->
-<!--                        <compilerArgs>-Xlint:unchecked</compilerArgs>-->
+                        <!--                        <compilerArgs>-Xlint:deprecation</compilerArgs>-->
+                        <!--                        <compilerArgs>-Xlint:unchecked</compilerArgs>-->
                     </configuration>
                 </plugin>
                 <!-- resources资源插件 -->
@@ -310,31 +310,17 @@
                         </executions>
                     </plugin>
                     <!-- Javadoc -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-<!--                        <configuration>-->
-<!--                            <additionalparam>-Xdoclint:none</additionalparam>-->
-<!--                        </configuration>-->
-                        <!--                        <executions>-->
-                        <!--                            <execution>-->
-                        <!--                                <phase>package</phase>-->
-                        <!--                                <goals>-->
-                        <!--                                    <goal>jar</goal>-->
-                        <!--                                </goals>-->
-                        <!--                            </execution>-->
-                        <!--                        </executions>-->
-                    </plugin>
-                    <!-- GPG  打包插件-->
                     <!--                    <plugin>-->
                     <!--                        <groupId>org.apache.maven.plugins</groupId>-->
-                    <!--                        <artifactId>maven-gpg-plugin</artifactId>-->
-                    <!--                        <version>1.6</version>-->
+                    <!--                        <artifactId>maven-javadoc-plugin</artifactId>-->
+                    <!--                        <configuration>-->
+                    <!--                            <additionalparam>-Xdoclint:none</additionalparam>-->
+                    <!--                        </configuration>-->
                     <!--                        <executions>-->
                     <!--                            <execution>-->
-                    <!--                                <phase>verify</phase>-->
+                    <!--                                <phase>package</phase>-->
                     <!--                                <goals>-->
-                    <!--                                    <goal>sign</goal>-->
+                    <!--                                    <goal>jar</goal>-->
                     <!--                                </goals>-->
                     <!--                            </execution>-->
                     <!--                        </executions>-->
