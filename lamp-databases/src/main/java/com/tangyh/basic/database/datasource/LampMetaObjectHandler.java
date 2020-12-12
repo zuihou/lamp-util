@@ -185,7 +185,7 @@ public class LampMetaObjectHandler implements MetaObjectHandler {
     private void update(MetaObject metaObject) {
         Entity entity = (Entity) metaObject.getOriginalObject();
         if (entity.getUpdatedBy() == null || entity.getUpdatedBy().equals(0)) {
-            Object userIdVal = STRING_TYPE.equals(metaObject.getGetterType(SuperEntity.CREATED_BY).getName()) ? String.valueOf(ContextUtil.getUserId()) : ContextUtil.getUserId();
+            Object userIdVal = STRING_TYPE.equals(metaObject.getGetterType(Entity.UPDATED_BY).getName()) ? String.valueOf(ContextUtil.getUserId()) : ContextUtil.getUserId();
             this.setFieldValByName(Entity.UPDATED_BY, userIdVal, metaObject);
         }
         if (entity.getUpdateTime() == null) {
