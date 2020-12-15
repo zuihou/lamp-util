@@ -17,6 +17,10 @@ import java.util.List;
 public class XssProperties {
     public static final String PREFIX = "lamp.xss";
     private Boolean enabled = true;
+    /**
+     * 是否启用 RequestBody 注解标记的参数 反序列化时过滤XSS
+     */
+    private Boolean requestBodyEnabled = false;
     private int order = 1;
     private List<String> patterns = CollUtil.newArrayList("/*");
     private List<String> ignorePaths = CollUtil.newArrayList("favicon.ico",

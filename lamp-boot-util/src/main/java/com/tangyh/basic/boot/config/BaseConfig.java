@@ -85,17 +85,13 @@ public abstract class BaseConfig {
                 .configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true)
                 // 忽略不能转移的字符
                 .configure(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature(), true)
-                .findAndRegisterModules()
 
                 //在使用spring boot + jpa/hibernate，如果实体字段上加有FetchType.LAZY，并使用jackson序列化为json串时，会遇到SerializationFeature.FAIL_ON_EMPTY_BEANS异常
                 .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
                 //忽略未知字段
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 //单引号处理
-                .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
-                //反序列化时，属性不存在的兼容处理
-                .getDeserializationConfig()
-                .withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+                .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
         objectMapper.registerModule(new LampJacksonModule()).findAndRegisterModules();
         return objectMapper;
     }

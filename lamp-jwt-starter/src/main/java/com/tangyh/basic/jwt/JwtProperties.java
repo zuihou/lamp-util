@@ -16,7 +16,7 @@ import static com.tangyh.basic.jwt.JwtProperties.PREFIX;
 @NoArgsConstructor
 @ConfigurationProperties(prefix = PREFIX)
 public class JwtProperties {
-    public static final String PREFIX = "authentication";
+    public static final String PREFIX = "lamp.authentication";
 
     /**
      * 过期时间 2h

@@ -21,6 +21,9 @@ import static com.baomidou.mybatisplus.core.enums.WrapperKeyword.APPLY;
 
 /**
  * 修改构造器
+ * <p>
+ * 1, 对nested、eq、ne、gt、ge、lt、le、in、*like*、 等方法 进行条件判断，null 或 "" 字段不加入查询
+ * 2，对*like*相关方法的参数 %和_ 符号进行转义，便于模糊查询
  *
  * @author zuihou
  * @date Created on 2019/5/27 17:15

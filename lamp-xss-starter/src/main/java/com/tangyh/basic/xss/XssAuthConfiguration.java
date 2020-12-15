@@ -5,6 +5,7 @@ import com.tangyh.basic.xss.converter.XssStringJsonDeserializer;
 import com.tangyh.basic.xss.filter.XssFilter;
 import com.tangyh.basic.xss.properties.XssProperties;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -31,6 +32,7 @@ public class XssAuthConfiguration {
      * 配置跨站攻击 反序列化处理器
      */
     @Bean
+    @ConditionalOnProperty(prefix = XssProperties.PREFIX, name = "requestBodyEnabled", havingValue = "true")
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer2() {
         return builder -> builder.deserializerByType(String.class, new XssStringJsonDeserializer());
     }

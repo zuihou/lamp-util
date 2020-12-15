@@ -92,6 +92,11 @@ public class VerifyAuthFunction {
         return AuthorizingRealm.hasAllPermission(resources, permit, securityProperties.getCaseSensitive());
     }
 
+    /**
+     * 远程查询当前登录的用户拥有那些权限
+     *
+     * @return
+     */
     @NonNull
     private Set<String> getAllResources() {
         // 查询当前用户拥有的所有资源
