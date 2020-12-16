@@ -42,6 +42,7 @@ public class XssAuthConfiguration {
      * 配置跨站攻击过滤器
      */
     @Bean
+    @ConditionalOnProperty(prefix = XssProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
     public FilterRegistrationBean filterRegistrationBean() {
         FilterRegistrationBean filterRegistration = new FilterRegistrationBean();
         filterRegistration.setFilter(new XssFilter());
