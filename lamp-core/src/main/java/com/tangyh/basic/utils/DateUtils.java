@@ -56,6 +56,7 @@ public final class DateUtils {
     public static final String SLASH_DATE_TIME_FORMAT_MATCHES = "^\\d{4}/\\d{1,2}/\\d{1,2} {1}\\d{1,2}:\\d{1,2}:\\d{1,2}$";
     public static final String SLASH_DATE_FORMAT = "yyyy/MM/dd";
     public static final String SLASH_DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
+    public static final String CRON_FORMAT = "ss mm HH dd MM ? yyyy";
 
     /**
      * 一个月平均天数
@@ -74,6 +75,26 @@ public final class DateUtils {
     private DateUtils() {
     }
 //--格式化日期start-----------------------------------------
+
+    /**
+     * 转换 Date 为 cron , eg.  "0 07 10 15 1 ? 2016"
+     *
+     * @param date 时间点
+     * @return cron 表达式
+     */
+    public static String getCron(Date date) {
+        return format(date, CRON_FORMAT);
+    }
+
+    /**
+     * 转换 LocalDateTime 为 cron , eg.  "0 07 10 15 1 ? 2016"
+     *
+     * @param date 时间点
+     * @return cron 表达式
+     */
+    public static String getCron(LocalDateTime date) {
+        return format(date, CRON_FORMAT);
+    }
 
     /**
      * 格式化日期,返回格式为 yyyy-MM
