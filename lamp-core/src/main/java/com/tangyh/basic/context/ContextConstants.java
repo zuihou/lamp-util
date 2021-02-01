@@ -81,7 +81,10 @@ public final class ContextConstants {
      * 是否boot项目
      */
     public static final String IS_BOOT = "boot";
-
+    /**
+     * 是否 内部调用项目
+     */
+    public static final String FEIGN = "x-feign";
     /**
      * 日志链路追踪id信息头
      */

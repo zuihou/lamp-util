@@ -12,6 +12,7 @@ import com.tangyh.basic.annotation.injection.InjectionField;
 import com.tangyh.basic.injection.properties.InjectionProperties;
 import com.tangyh.basic.jackson.JsonUtil;
 import com.tangyh.basic.model.RemoteData;
+import com.tangyh.basic.utils.StrPool;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,7 +46,7 @@ public class InjectionCore {
     private static final int DEF_MAP_SIZE = 20;
     private static final String[] BASE_TYPES = {
             "java.lang.Integer", "java.lang.Byte", "java.lang.Long", "java.lang.Double",
-            "java.lang.Float", "java.lang.Character", "java.lang.Short", "java.lang.Boolean", "java.lang.String",
+            "java.lang.Float", "java.lang.Character", "java.lang.Short", "java.lang.Boolean", StrPool.STRING_TYPE_NAME,
             "com.tangyh.basic.model.RemoteData"
     };
     /**

@@ -11,6 +11,7 @@ import com.tangyh.basic.base.entity.Entity;
 import com.tangyh.basic.base.entity.SuperEntity;
 import com.tangyh.basic.context.ContextUtil;
 import com.tangyh.basic.utils.SpringUtils;
+import com.tangyh.basic.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 
@@ -38,10 +39,6 @@ import java.time.LocalDateTime;
 @Slf4j
 public class LampMetaObjectHandler implements MetaObjectHandler {
 
-    /**
-     * 字符串类型判断符
-     */
-    private static final String STRING_TYPE = "java.lang.String";
 
     private UidGenerator uidGenerator;
 
@@ -80,7 +77,7 @@ public class LampMetaObjectHandler implements MetaObjectHandler {
             if (oldId != null) {
                 return;
             }
-            Object idVal = STRING_TYPE.equals(metaObject.getGetterType(SuperEntity.FIELD_ID).getName()) ? String.valueOf(id) : id;
+            Object idVal = StrPool.STRING_TYPE_NAME.equals(metaObject.getGetterType(SuperEntity.FIELD_ID).getName()) ? String.valueOf(id) : id;
             this.setFieldValByName(SuperEntity.FIELD_ID, idVal, metaObject);
             return;
         }
@@ -92,7 +89,7 @@ public class LampMetaObjectHandler implements MetaObjectHandler {
                 return;
             }
 
-            Object idVal = STRING_TYPE.equals(metaObject.getGetterType(SuperEntity.FIELD_ID).getName()) ? String.valueOf(id) : id;
+            Object idVal = StrPool.STRING_TYPE_NAME.equals(metaObject.getGetterType(SuperEntity.FIELD_ID).getName()) ? String.valueOf(id) : id;
             this.setFieldValByName(SuperEntity.FIELD_ID, idVal, metaObject);
             return;
         }
@@ -123,7 +120,7 @@ public class LampMetaObjectHandler implements MetaObjectHandler {
         if (ObjectUtil.isNotEmpty(fieldValue)) {
             return;
         }
-        Object idVal = keyType.getName().equalsIgnoreCase(STRING_TYPE) ? String.valueOf(id) : id;
+        Object idVal = keyType.getName().equalsIgnoreCase(StrPool.STRING_TYPE_NAME) ? String.valueOf(id) : id;
         this.setFieldValByName(keyProperty, idVal, metaObject);
     }
 
@@ -155,7 +152,7 @@ public class LampMetaObjectHandler implements MetaObjectHandler {
             this.setFieldValByName(Entity.CREATE_TIME, LocalDateTime.now(), metaObject);
         }
         if (entity.getCreatedBy() == null || entity.getCreatedBy().equals(0)) {
-            Object userIdVal = STRING_TYPE.equals(metaObject.getGetterType(SuperEntity.CREATED_BY).getName()) ? String.valueOf(ContextUtil.getUserId()) : ContextUtil.getUserId();
+            Object userIdVal = StrPool.STRING_TYPE_NAME.equals(metaObject.getGetterType(SuperEntity.CREATED_BY).getName()) ? String.valueOf(ContextUtil.getUserId()) : ContextUtil.getUserId();
             this.setFieldValByName(Entity.CREATED_BY, userIdVal, metaObject);
         }
     }
@@ -185,7 +182,7 @@ public class LampMetaObjectHandler implements MetaObjectHandler {
     private void update(MetaObject metaObject) {
         Entity entity = (Entity) metaObject.getOriginalObject();
         if (entity.getUpdatedBy() == null || entity.getUpdatedBy().equals(0)) {
-            Object userIdVal = STRING_TYPE.equals(metaObject.getGetterType(Entity.UPDATED_BY).getName()) ? String.valueOf(ContextUtil.getUserId()) : ContextUtil.getUserId();
+            Object userIdVal = StrPool.STRING_TYPE_NAME.equals(metaObject.getGetterType(Entity.UPDATED_BY).getName()) ? String.valueOf(ContextUtil.getUserId()) : ContextUtil.getUserId();
             this.setFieldValByName(Entity.UPDATED_BY, userIdVal, metaObject);
         }
         if (entity.getUpdateTime() == null) {

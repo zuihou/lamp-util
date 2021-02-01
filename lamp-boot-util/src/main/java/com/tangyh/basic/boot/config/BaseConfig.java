@@ -5,12 +5,15 @@ import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.tangyh.basic.boot.undertow.UndertowServerFactoryCustomizer;
+import com.tangyh.basic.converter.RemoteDataDeserializer;
 import com.tangyh.basic.converter.String2DateConverter;
 import com.tangyh.basic.converter.String2LocalDateConverter;
 import com.tangyh.basic.converter.String2LocalDateTimeConverter;
 import com.tangyh.basic.converter.String2LocalTimeConverter;
 import com.tangyh.basic.jackson.LampJacksonModule;
+import com.tangyh.basic.model.RemoteData;
 import com.tangyh.basic.utils.SpringUtils;
 import io.undertow.Undertow;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -85,6 +88,7 @@ public abstract class BaseConfig {
                 .configure(JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS.mappedFeature(), true)
                 // 忽略不能转移的字符
                 .configure(JsonReadFeature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER.mappedFeature(), true)
+//                .findAndRegisterModules()
 
                 //在使用spring boot + jpa/hibernate，如果实体字段上加有FetchType.LAZY，并使用jackson序列化为json串时，会遇到SerializationFeature.FAIL_ON_EMPTY_BEANS异常
                 .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
@@ -92,7 +96,10 @@ public abstract class BaseConfig {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 //单引号处理
                 .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-        objectMapper.registerModule(new LampJacksonModule()).findAndRegisterModules();
+        objectMapper.registerModule(new LampJacksonModule())
+                .registerModule(new SimpleModule().addDeserializer(RemoteData.class, RemoteDataDeserializer.INSTANCE))
+                .findAndRegisterModules();
+
         return objectMapper;
     }
 

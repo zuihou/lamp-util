@@ -74,6 +74,7 @@ public interface StrPool {
     String HTML_QUOTE = "&quot;";
     String HTML_LT = "&lt;";
     String HTML_GT = "&gt;";
+    String STRING_TYPE_NAME = "java.lang.String";
     /**
      * 编码
      */

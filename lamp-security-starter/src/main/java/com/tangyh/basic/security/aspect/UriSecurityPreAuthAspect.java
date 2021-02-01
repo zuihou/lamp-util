@@ -2,6 +2,7 @@ package com.tangyh.basic.security.aspect;
 
 import cn.hutool.core.util.StrUtil;
 import com.tangyh.basic.annotation.security.PreAuth;
+import com.tangyh.basic.context.ContextConstants;
 import com.tangyh.basic.exception.BizException;
 import com.tangyh.basic.exception.code.ExceptionCode;
 import com.tangyh.basic.utils.StrPool;
@@ -24,7 +25,11 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 
 /**
@@ -35,7 +40,8 @@ import java.lang.reflect.Method;
  */
 @Aspect
 @Slf4j
-public class UriSecurityPreAuthAspect implements ApplicationContextAware {
+public class
+UriSecurityPreAuthAspect implements ApplicationContextAware {
 
     /**
      * 表达式处理
@@ -103,6 +109,11 @@ public class UriSecurityPreAuthAspect implements ApplicationContextAware {
             return;
         }
 
+        // feign 远程调用
+        if (isFeign(methodName)) {
+            return;
+        }
+
         String condition = getCondition(preAuth, targetClass);
         if (StrUtil.isBlank(condition)) {
             return;
@@ -111,6 +122,20 @@ public class UriSecurityPreAuthAspect implements ApplicationContextAware {
         if (!hasPermit) {
             throw BizException.wrap(ExceptionCode.UNAUTHORIZED.build("执行方法[%s]需要[%s]权限", methodName, condition));
         }
+    }
+
+    private boolean isFeign(String methodName) {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+            if (request != null) {
+                if (StrPool.TRUE.equals(request.getHeader(ContextConstants.FEIGN))) {
+                    log.debug("内部调用方法[{}]无需校验权限", methodName);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Nullable

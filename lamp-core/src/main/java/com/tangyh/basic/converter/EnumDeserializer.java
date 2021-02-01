@@ -41,7 +41,7 @@ public class EnumDeserializer extends StdDeserializer<Enum<?>> {
             String currentName = jp.currentName();
             // 当前对象
             Object currentValue = jp.getCurrentValue();
-            // 在对象中找到改字段
+            // 在对象中找到该字段
             Class propertyType = BeanUtils.findPropertyType(currentName, currentValue.getClass());
             JsonNode code = node.get(ALL_ENUM_KEY_FIELD);
             String val = code != null ? code.asText() : node.asText();
