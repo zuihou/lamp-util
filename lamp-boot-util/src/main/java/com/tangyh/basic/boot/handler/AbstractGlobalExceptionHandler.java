@@ -3,6 +3,8 @@ package com.tangyh.basic.boot.handler;
 import cn.hutool.core.util.StrUtil;
 import com.tangyh.basic.base.R;
 import com.tangyh.basic.exception.BizException;
+import com.tangyh.basic.exception.ForbiddenException;
+import com.tangyh.basic.exception.UnauthorizedException;
 import com.tangyh.basic.exception.code.ExceptionCode;
 import com.tangyh.basic.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +55,20 @@ public abstract class AbstractGlobalExceptionHandler {
     @ExceptionHandler(BizException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public R bizException(BizException ex) {
+        log.warn("BizException:", ex);
+        return R.result(ex.getCode(), null, ex.getMessage(), ex.getLocalizedMessage()).setPath(getPath());
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public R bizException(ForbiddenException ex) {
+        log.warn("BizException:", ex);
+        return R.result(ex.getCode(), null, ex.getMessage(), ex.getLocalizedMessage()).setPath(getPath());
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public R bizException(UnauthorizedException ex) {
         log.warn("BizException:", ex);
         return R.result(ex.getCode(), null, ex.getMessage(), ex.getLocalizedMessage()).setPath(getPath());
     }

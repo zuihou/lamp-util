@@ -3,7 +3,7 @@ package com.tangyh.basic.security.aspect;
 import cn.hutool.core.util.StrUtil;
 import com.tangyh.basic.annotation.security.PreAuth;
 import com.tangyh.basic.context.ContextConstants;
-import com.tangyh.basic.exception.BizException;
+import com.tangyh.basic.exception.ForbiddenException;
 import com.tangyh.basic.exception.code.ExceptionCode;
 import com.tangyh.basic.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
@@ -120,7 +120,7 @@ UriSecurityPreAuthAspect implements ApplicationContextAware {
         }
         Boolean hasPermit = invokePermit(point, method, condition);
         if (!hasPermit) {
-            throw BizException.wrap(ExceptionCode.UNAUTHORIZED.build("执行方法[%s]需要[%s]权限", methodName, condition));
+            throw ForbiddenException.wrap(ExceptionCode.FORBIDDEN.build("执行方法[%s]需要[%s]权限", methodName, condition));
         }
     }
 

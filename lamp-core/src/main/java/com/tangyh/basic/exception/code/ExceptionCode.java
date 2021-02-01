@@ -34,6 +34,7 @@ public enum ExceptionCode implements BaseExceptionCode {
      * @see <a href="http://tools.ietf.org/html/rfc7235#section-3.1">HTTP/1.1: Authentication, section 3.1</a>
      */
     UNAUTHORIZED(401, "未经授权"),
+    FORBIDDEN(403, "被禁止的"),
     /**
      * {@code 404 Not Found}.
      *
