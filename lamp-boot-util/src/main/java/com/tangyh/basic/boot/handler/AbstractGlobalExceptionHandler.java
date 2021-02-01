@@ -61,14 +61,14 @@ public abstract class AbstractGlobalExceptionHandler {
 
     @ExceptionHandler(ForbiddenException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public R bizException(ForbiddenException ex) {
+    public R forbiddenException(ForbiddenException ex) {
         log.warn("BizException:", ex);
         return R.result(ex.getCode(), null, ex.getMessage(), ex.getLocalizedMessage()).setPath(getPath());
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public R bizException(UnauthorizedException ex) {
+    public R unauthorizedException(UnauthorizedException ex) {
         log.warn("BizException:", ex);
         return R.result(ex.getCode(), null, ex.getMessage(), ex.getLocalizedMessage()).setPath(getPath());
     }
