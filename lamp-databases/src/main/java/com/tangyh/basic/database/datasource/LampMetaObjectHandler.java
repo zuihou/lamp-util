@@ -66,7 +66,7 @@ public class LampMetaObjectHandler implements MetaObjectHandler {
 
     private void fillId(MetaObject metaObject) {
         if (uidGenerator == null) {
-            // 这里使用SpringUtils的方式"异步"获取对象，防止启动时，报循环注入的错
+            // 这里使用SpringUtils的方式"延迟"获取对象，防止启动时，报循环注入的错
             uidGenerator = SpringUtils.getBean(UidGenerator.class);
         }
         Long id = uidGenerator.getUid();
