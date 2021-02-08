@@ -12,14 +12,14 @@ import static com.tangyh.basic.swagger2.Swagger2Configuration.TRUE;
 /**
  * Swagger2 启动类. 参考： Knife4jAutoConfiguration
  * 启动条件：
- * 1，配置文件中： ${SwaggerProperties.PREFIX}.enabled=true
- * 2，配置文件中不存在： ${SwaggerProperties.PREFIX}.enabled 值
+ * 1，配置文件中： ${SwaggerProperties.PREFIX}.enable=true
+ * 2，配置文件中不存在： ${SwaggerProperties.PREFIX}.enable 值
  *
  * @author zuihou
  * @date 2018/11/18 9:20
  */
 @EnableSwagger2WebMvc
-@ConditionalOnProperty(prefix = "knife4j", name = "enabled", havingValue = TRUE, matchIfMissing = true)
+@ConditionalOnProperty(prefix = "knife4j", name = "enable", havingValue = TRUE, matchIfMissing = true)
 @Import(BeanValidatorPluginsConfiguration.class)
 public class Swagger2Configuration {
 

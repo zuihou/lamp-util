@@ -61,7 +61,7 @@ import java.util.stream.Collectors;
 @Import({
         Swagger2Configuration.class
 })
-@ConditionalOnProperty(prefix = "knife4j", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "knife4j", name = "enable", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerAutoConfiguration implements BeanFactoryAware {
 
