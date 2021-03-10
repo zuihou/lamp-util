@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.tangyh.basic</groupId>
     <artifactId>lamp-util</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>lamp项目公共模块</description>
@@ -32,7 +32,7 @@
         <module>lamp-uid</module>
     </modules>
     <properties>
-        <lamp-dependencies.version>3.1.0</lamp-dependencies.version>
+        <lamp-dependencies.version>3.1.1</lamp-dependencies.version>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
