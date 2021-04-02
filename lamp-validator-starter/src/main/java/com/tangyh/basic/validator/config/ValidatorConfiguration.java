@@ -56,7 +56,6 @@ public class ValidatorConfiguration {
         // 增加一个我们自定义的校验处理器与length的映射
         GetterPropertySelectionStrategy getterPropertySelectionStrategyToUse = new DefaultGetterPropertySelectionStrategy();
         PropertyNodeNameProvider defaultPropertyNodeNameProvider = new DefaultPropertyNodeNameProvider();
-//TODO 测试这里
         ConstraintMapping mapping = new DefaultConstraintMapping(new JavaBeanHelper(getterPropertySelectionStrategyToUse, defaultPropertyNodeNameProvider));
         ConstraintDefinitionContext<Length> length = mapping.constraintDefinition(Length.class);
         length.includeExistingValidators(true);

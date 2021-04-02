@@ -19,6 +19,7 @@ import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.core.annotation.SynthesizingMethodParameter;
+import org.springframework.core.env.Environment;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -40,8 +41,7 @@ import java.lang.reflect.Method;
  */
 @Aspect
 @Slf4j
-public class
-UriSecurityPreAuthAspect implements ApplicationContextAware {
+public class UriSecurityPreAuthAspect implements ApplicationContextAware {
 
     /**
      * 表达式处理
@@ -77,6 +77,12 @@ UriSecurityPreAuthAspect implements ApplicationContextAware {
      * @param point 切点
      */
     private void handleAuth(ProceedingJoinPoint point) {
+        Environment env = ac.getEnvironment();
+        Boolean property = env.getProperty("lamp.security.enabled", Boolean.class, false);
+        if (!property) {
+            log.debug("全局校验权限已经关闭");
+            return;
+        }
         MethodSignature ms = (MethodSignature) point.getSignature();
         Method method = ms.getMethod();
         // 读取权限注解，优先方法上，没有则读取类
@@ -120,7 +126,7 @@ UriSecurityPreAuthAspect implements ApplicationContextAware {
         }
         Boolean hasPermit = invokePermit(point, method, condition);
         if (!hasPermit) {
-            throw ForbiddenException.wrap(ExceptionCode.FORBIDDEN.build("执行方法[%s]需要[%s]权限", methodName, condition));
+            throw ForbiddenException.wrap(ExceptionCode.UNAUTHORIZED.build("执行方法[%s]需要[%s]权限", methodName, condition));
         }
     }
 

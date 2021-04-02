@@ -296,7 +296,12 @@ public class CaffeineOpsImpl implements CacheOps, CachePlusOps {
     }
 
     @Override
-    public Map<Object, Object> hGetAll(@NonNull CacheHashKey key) {
+    public <K, V> Map<K, V> hGetAll(CacheHashKey key) {
+        return Collections.emptyMap();
+    }
+
+    @Override
+    public <K, V> Map<K, V> hGetAll(CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues) {
         return Collections.emptyMap();
     }
 

@@ -25,18 +25,6 @@
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
 
-        <!-- jdk8 Time-->
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-parameter-names</artifactId>
-            <scope>compile</scope>
-        </dependency>
-
         <!-- 默认使用redis 作为缓存， 若演示项目时，不想部署redis，则将业务代码pom 中的 redis 排除 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

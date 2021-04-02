@@ -50,15 +50,7 @@
             <exclusions>
                 <exclusion>
                     <groupId>com.alibaba.nacos</groupId>
-                    <artifactId>nacos-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.alibaba.nacos</groupId>
-                    <artifactId>nacos-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.alibaba.nacos</groupId>
-                    <artifactId>nacos-common</artifactId>
+                    <artifactId>nacos-client</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -69,29 +61,13 @@
             <exclusions>
                 <exclusion>
                     <groupId>com.alibaba.nacos</groupId>
-                    <artifactId>nacos-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.alibaba.nacos</groupId>
-                    <artifactId>nacos-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.alibaba.nacos</groupId>
-                    <artifactId>nacos-common</artifactId>
+                    <artifactId>nacos-client</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <groupId>com.alibaba.nacos</groupId>
-            <artifactId>nacos-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.nacos</groupId>
-            <artifactId>nacos-common</artifactId>
         </dependency>
 
 

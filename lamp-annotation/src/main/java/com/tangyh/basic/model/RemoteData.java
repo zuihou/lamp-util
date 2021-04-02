@@ -17,6 +17,7 @@ import java.io.Serializable;
  * @date 2020年02月02日21:16:22
  */
 @Data
+@Deprecated
 @NoArgsConstructor
 @AllArgsConstructor
 public class RemoteData<K, D> implements Serializable, IValidatable {

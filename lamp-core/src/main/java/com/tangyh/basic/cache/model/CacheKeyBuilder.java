@@ -64,17 +64,44 @@ public interface CacheKeyBuilder {
      */
     default CacheKey key(Object... suffix) {
         String field = suffix.length > 0 ? Convert.toStr(suffix[0], StrPool.EMPTY) : StrPool.EMPTY;
-        return hashKey(field, suffix);
+        return hashFieldKey(field, suffix);
     }
 
     /**
      * 构建 redis 类型的 hash cache key
      *
      * @param field  field
-     * @param suffix 参数
+     * @param suffix 动态参数
      * @return cache key
      */
-    default CacheHashKey hashKey(@NonNull Object field, Object... suffix) {
+    default CacheHashKey hashFieldKey(@NonNull Object field, Object... suffix) {
+        String key = getKey(suffix);
+
+        BizAssert.notEmpty(key, "key 不能为空");
+        BizAssert.notNull(field, "field 不能为空");
+        return new CacheHashKey(key, field, getExpire());
+    }
+
+    /**
+     * 构建 redis 类型的 hash cache key （无field)
+     *
+     * @param suffix 动态参数
+     * @return
+     */
+    default CacheHashKey hashKey(Object... suffix) {
+        String key = getKey(suffix);
+
+        BizAssert.notEmpty(key, "key 不能为空");
+        return new CacheHashKey(key, null, getExpire());
+    }
+
+    /**
+     * 根据动态参数 拼接参数
+     *
+     * @param suffix 动态参数
+     * @return
+     */
+    default String getKey(Object... suffix) {
         ArrayList<String> regionList = new ArrayList<>();
         String tenant = this.getTenant();
         if (StrUtil.isNotEmpty(tenant)) {
@@ -89,11 +116,6 @@ public interface CacheKeyBuilder {
                 regionList.add(String.valueOf(s));
             }
         }
-        String key = CollUtil.join(regionList, COLON);
-
-        BizAssert.notEmpty(key, "key 不能为空");
-        BizAssert.notNull(field, "field 不能为空");
-        return new CacheHashKey(key, field, getExpire());
+        return CollUtil.join(regionList, COLON);
     }
-
 }

@@ -127,7 +127,6 @@ public class RestTemplateConfiguration {
      * @return RestTemplate
      */
     @Bean
-    @ConditionalOnMissingBean(RestTemplate.class)
     public RestTemplate restTemplate(okhttp3.OkHttpClient httpClient) {
         RestTemplate restTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory(httpClient));
         this.configMessageConverters(restTemplate.getMessageConverters());

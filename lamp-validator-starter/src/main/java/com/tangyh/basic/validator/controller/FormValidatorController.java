@@ -67,7 +67,7 @@ import java.util.List;
  * Hibernate Validator 附加的 constraint
  * \@NotBlank(message =)   验证字符串非null，且长度必须大于0
  * \@Email 被注释的元素必须是电子邮箱地址
- * \@Length(min=,max=) 被注释的字符串的大小必须在指定的范围内
+ * \@Size(min=,max=) 被注释的字符串的大小必须在指定的范围内
  * \@NotEmpty 被注释的字符串的必须非空
  * \@Range(min=,max=,message=) 被注释的元素必须在合适的范围内
  * <p>

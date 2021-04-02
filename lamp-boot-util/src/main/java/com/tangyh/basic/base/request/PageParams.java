@@ -81,7 +81,7 @@ public class PageParams<T> {
                 underlineSort = AntiSqlFilterUtils.getSafeValue(underlineSort);
             }
 
-            orders.add("ascending".equals(orderArr[i]) ? OrderItem.asc(underlineSort) : OrderItem.desc(underlineSort));
+            orders.add(StrUtil.equalsAny(orderArr[i], "ascending", "ascend") ? OrderItem.asc(underlineSort) : OrderItem.desc(underlineSort));
         }
 
         page.setOrders(orders);

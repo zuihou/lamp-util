@@ -16,7 +16,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static cn.hutool.core.date.DatePattern.CHINESE_DATE_PATTERN;
@@ -75,6 +78,32 @@ public final class DateUtils {
     private DateUtils() {
     }
 //--格式化日期start-----------------------------------------
+
+    protected static final Map<String, String> DATE_FORMAT = new LinkedHashMap(5);
+
+    static {
+        DATE_FORMAT.put(DEFAULT_DATE_FORMAT, DEFAULT_DATE_FORMAT_MATCHES);
+        DATE_FORMAT.put(SLASH_DATE_FORMAT, SLASH_DATE_FORMAT_MATCHES);
+        DATE_FORMAT.put(DEFAULT_DATE_FORMAT_EN, DEFAULT_DATE_FORMAT_EN_MATCHES);
+    }
+
+    /**
+     * 解析日期
+     *
+     * @param source
+     * @return
+     */
+    public static LocalDate parse(String source) {
+        String sourceTrim = source.trim();
+        Set<Map.Entry<String, String>> entries = DATE_FORMAT.entrySet();
+        for (Map.Entry<String, String> entry : entries) {
+            if (sourceTrim.matches(entry.getValue())) {
+                return LocalDate.parse(source, DateTimeFormatter.ofPattern(entry.getKey()));
+            }
+        }
+        throw BizException.wrap("解析日期失败, 请传递正确的日期格式");
+    }
+
 
     /**
      * 转换 Date 为 cron , eg.  "0 07 10 15 1 ? 2016"
@@ -290,16 +319,22 @@ public final class DateUtils {
     /**
      * 根据传入的String返回对应的date
      *
-     * @param dateString 日期字符串
+     * @param source 日期字符串
      * @return 日期
      */
-    public static Date parseAsDate(String dateString) {
-        SimpleDateFormat df = new SimpleDateFormat(DEFAULT_DATE_FORMAT);
+    public static Date parseAsDate(String source) {
+        String sourceTrim = source.trim();
+        Set<Map.Entry<String, String>> entries = DATE_FORMAT.entrySet();
         try {
-            return df.parse(dateString);
+            for (Map.Entry<String, String> entry : entries) {
+                if (sourceTrim.matches(entry.getValue())) {
+                    return new SimpleDateFormat(entry.getKey()).parse(source);
+                }
+            }
         } catch (ParseException e) {
-            return new Date();
+            throw BizException.wrap("解析日期失败, 请传递正确的日期格式");
         }
+        throw BizException.wrap("解析日期失败, 请传递正确的日期格式");
     }
 
     /**

@@ -28,8 +28,9 @@
         <module>lamp-cache-starter</module>
         <module>lamp-mq-starter</module>
         <module>lamp-zipkin-client-starter</module>
-        <module>lamp-injection-starter</module>
+        <module>lamp-echo-starter</module>
         <module>lamp-uid</module>
+        <module>lamp-all</module>
     </modules>
     <properties>
         <lamp-dependencies.version>3.1.1</lamp-dependencies.version>
@@ -113,7 +114,7 @@
             </dependency>
             <dependency>
                 <groupId>com.tangyh.basic</groupId>
-                <artifactId>lamp-injection-starter</artifactId>
+                <artifactId>lamp-echo-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

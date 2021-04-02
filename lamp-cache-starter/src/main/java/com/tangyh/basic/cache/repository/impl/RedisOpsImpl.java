@@ -204,10 +204,17 @@ public class RedisOpsImpl implements CacheOps, CachePlusOps {
         return redisOps.hVals(key.getKey());
     }
 
+
     @Override
-    public Map<Object, Object> hGetAll(@NonNull CacheHashKey key) {
-        return redisOps.hGetAll(key.getKey());
+    public <K, V> Map<K, V> hGetAll(@NonNull CacheHashKey key) {
+        return redisOps.hGetAll(key);
     }
+
+    @Override
+    public <K, V> Map<K, V> hGetAll(@NonNull CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues) {
+        return redisOps.hGetAll(key, loader, cacheNullValues);
+    }
+
 
     @Override
     public Long sAdd(@NonNull CacheKey key, Object value) {

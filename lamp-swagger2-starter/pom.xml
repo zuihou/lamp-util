@@ -26,8 +26,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <optional>true</optional>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>

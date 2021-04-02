@@ -23,17 +23,16 @@
         <dependency>
             <groupId>com.tangyh.basic</groupId>
             <artifactId>lamp-databases</artifactId>
-            <optional>true</optional>
-            <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>com.tangyh.basic</groupId>
             <artifactId>lamp-cache-starter</artifactId>
-            <optional>true</optional>
-            <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
@@ -50,22 +49,9 @@
             <groupId>cn.afterturn</groupId>
             <artifactId>easypoi-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-        </dependency>
-
-        <!-- jdk8 Time-->
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-parameter-names</artifactId>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

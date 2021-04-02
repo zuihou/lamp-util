@@ -1,8 +1,10 @@
 package com.tangyh.basic.cache.redis;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import com.tangyh.basic.cache.model.CacheHashKey;
 import com.tangyh.basic.cache.model.CacheKey;
+import com.tangyh.basic.utils.BizAssert;
 import com.tangyh.basic.utils.CollHelper;
 import lombok.Getter;
 import org.springframework.data.redis.connection.DataType;
@@ -15,11 +17,11 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
 
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -65,7 +67,7 @@ public class RedisOps {
 
     public RedisOps(RedisTemplate<String, Object> redisTemplate, boolean defaultCacheNullVal) {
         this.redisTemplate = redisTemplate;
-        Assert.notNull(redisTemplate, "redisTemplate 为空");
+        BizAssert.notNull(redisTemplate, "redisTemplate 为空");
         valueOps = redisTemplate.opsForValue();
         hashOps = redisTemplate.opsForHash();
         listOps = redisTemplate.opsForList();
@@ -74,14 +76,36 @@ public class RedisOps {
         this.defaultCacheNullVal = defaultCacheNullVal;
     }
 
+    /**
+     * 判断缓存值是否为空对象
+     *
+     * @param value
+     * @param <T>
+     * @return
+     */
+    private static <T> boolean isNullVal(T value) {
+        boolean isNull = value == null || NullVal.class.equals(value.getClass());
+        return isNull || value.getClass().equals(Object.class) || (value instanceof Map && ((Map<?, ?>) value).isEmpty());
+    }
+
+    /**
+     * new 一个空值
+     *
+     * @return
+     */
     private NullVal newNullVal() {
         return new NullVal();
     }
 
-
-    private <T> boolean isNullVal(T value) {
-        boolean isNull = value == null || NullVal.class.equals(value.getClass());
-        return isNull || value.getClass().equals(Object.class) || (value instanceof Map && ((Map<?, ?>) value).isEmpty());
+    /**
+     * 返回正常值 or null
+     *
+     * @param value
+     * @param <T>
+     * @return
+     */
+    private <T> T returnVal(T value) {
+        return isNullVal(value) ? null : value;
     }
 
     // ---------------------------- common start ----------------------------
@@ -222,7 +246,7 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/expire">Redis Documentation: EXPIRE</a>
      */
     public Boolean expire(@NonNull String key, long seconds) {
-        Assert.hasText(key, KEY_NOT_NULL);
+        BizAssert.notEmpty(key, KEY_NOT_NULL);
         return redisTemplate.expire(key, seconds, TimeUnit.SECONDS);
     }
 
@@ -345,7 +369,7 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/set">Redis Documentation: SET</a>
      */
     public void set(@NonNull String key, Object value, boolean... cacheNullValues) {
-        Assert.notNull(key, KEY_NOT_NULL);
+        BizAssert.notNull(key, KEY_NOT_NULL);
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
         if (!cacheNullVal && value == null) {
             return;
@@ -363,7 +387,7 @@ public class RedisOps {
      */
     public void set(@NonNull CacheKey cacheKey, Object value, boolean... cacheNullValues) {
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
-        Assert.notNull(cacheKey, CACHE_KEY_NOT_NULL);
+        BizAssert.notNull(cacheKey, CACHE_KEY_NOT_NULL);
         String key = cacheKey.getKey();
         Duration expire = cacheKey.getExpire();
         if (expire == null) {
@@ -391,7 +415,7 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/setex">Redis Documentation: SETEX</a>
      */
     public void setEx(@NonNull String key, Object value, Duration timeout, boolean... cacheNullValues) {
-        Assert.notNull(key, KEY_NOT_NULL);
+        BizAssert.notNull(key, KEY_NOT_NULL);
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
         if (!cacheNullVal && value == null) {
             return;
@@ -505,7 +529,7 @@ public class RedisOps {
             set(key, newNullVal(), true);
         }
         // NullVal 值
-        return isNullVal(value) ? null : value;
+        return returnVal(value);
     }
 
     /**
@@ -522,15 +546,15 @@ public class RedisOps {
     @Nullable
     public <T> T get(@NonNull String key, Function<String, T> loader, boolean... cacheNullValues) {
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
-        T value = this.get(key, false);
+        T value = (T) valueOps.get(key);
         if (value != null) {
-            return isNullVal(value) ? null : value;
+            return returnVal(value);
         }
         // 加锁解决缓存击穿
         synchronized (KEY_LOCKS.computeIfAbsent(key, v -> new Object())) {
-            value = this.get(key, false);
+            value = (T) valueOps.get(key);
             if (value != null) {
-                return isNullVal(value) ? null : value;
+                return returnVal(value);
             }
 
             try {
@@ -541,7 +565,7 @@ public class RedisOps {
             }
         }
         // NullVal 值
-        return isNullVal(value) ? null : value;
+        return returnVal(value);
     }
 
     /**
@@ -557,8 +581,9 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/getset">Redis Documentation: GETSET</a>
      */
     public <T> T getSet(@NonNull String key, Object value) {
+        BizAssert.notNull(key, CACHE_KEY_NOT_NULL);
         T val = (T) valueOps.getAndSet(key, value == null ? newNullVal() : value);
-        return isNullVal(val) ? null : val;
+        return returnVal(val);
     }
 
     /**
@@ -574,14 +599,14 @@ public class RedisOps {
     @Nullable
     public <T> T get(@NonNull CacheKey key, boolean... cacheNullValues) {
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
-        Assert.notNull(key, CACHE_KEY_NOT_NULL);
-        Assert.notNull(key.getKey(), KEY_NOT_NULL);
+        BizAssert.notNull(key, CACHE_KEY_NOT_NULL);
+        BizAssert.notNull(key.getKey(), KEY_NOT_NULL);
         T value = (T) valueOps.get(key.getKey());
         if (value == null && cacheNullVal) {
             set(key, newNullVal(), true);
         }
         // NullVal 值
-        return isNullVal(value) ? null : value;
+        return returnVal(value);
     }
 
     /**
@@ -597,15 +622,18 @@ public class RedisOps {
      */
     @Nullable
     public <T> T get(@NonNull CacheKey key, Function<CacheKey, T> loader, boolean... cacheNullValues) {
+        BizAssert.notNull(key, CACHE_KEY_NOT_NULL);
+        BizAssert.notNull(key.getKey(), KEY_NOT_NULL);
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
-        T value = this.get(key, false);
+        T value = (T) valueOps.get(key.getKey());
+
         if (value != null) {
-            return isNullVal(value) ? null : value;
+            return returnVal(value);
         }
         synchronized (KEY_LOCKS.computeIfAbsent(key.getKey(), v -> new Object())) {
-            value = this.get(key, false);
+            value = (T) valueOps.get(key.getKey());
             if (value != null) {
-                return isNullVal(value) ? null : value;
+                return returnVal(value);
             }
 
             try {
@@ -615,7 +643,7 @@ public class RedisOps {
                 KEY_LOCKS.remove(key.getKey());
             }
         }
-        return isNullVal(value) ? null : value;
+        return returnVal(value);
     }
 
     /**
@@ -678,6 +706,18 @@ public class RedisOps {
         return valueOps.get(key, start, end);
     }
 
+    private Map<String, Object> mSetMap(@NonNull Map<String, Object> map, boolean cacheNullVal) {
+        Map<String, Object> mSetMap = new HashMap<>(CollHelper.initialCapacity(map.size()));
+        map.forEach((k, v) -> {
+            if (v == null && cacheNullVal) {
+                mSetMap.put(k, newNullVal());
+            } else {
+                mSetMap.put(k, v);
+            }
+        });
+        return mSetMap;
+    }
+
     /**
      * 同时为一个或多个键设置值。
      * 如果某个给定键已经存在， 那么 MSET 将使用新值去覆盖旧值， 如果这不是你所希望的效果， 请考虑使用 MSETNX 命令， 这个命令只会在所有给定键都不存在的情况下进行设置。
@@ -732,17 +772,6 @@ public class RedisOps {
         mSetNx(map, defaultCacheNullVal);
     }
 
-    private Map<String, Object> mSetMap(@NonNull Map<String, Object> map, boolean cacheNullVal) {
-        Map<String, Object> mSetMap = new HashMap<>((CollHelper.initialCapacity(map.size())));
-        map.forEach((k, v) -> {
-            if (v == null && cacheNullVal) {
-                mSetMap.put(k, newNullVal());
-            } else {
-                mSetMap.put(k, v);
-            }
-        });
-        return mSetMap;
-    }
 
     /**
      * 返回所有(一个或多个)给定 key 的值, 值按请求的键的顺序返回。
@@ -778,7 +807,7 @@ public class RedisOps {
      */
     public <T> List<T> mGet(@NonNull Collection<String> keys) {
         List<T> list = (List<T>) valueOps.multiGet(keys);
-        return list == null ? null : list.stream().map(item -> isNullVal(item) ? null : item).collect(Collectors.toList());
+        return list == null ? Collections.emptyList() : list.stream().map(this::returnVal).collect(Collectors.toList());
     }
 
     /**
@@ -792,7 +821,7 @@ public class RedisOps {
     public <T> List<T> mGetByCacheKey(@NonNull Collection<CacheKey> cacheKeys) {
         List<String> keys = cacheKeys.stream().map(CacheKey::getKey).collect(Collectors.toList());
         List<T> list = (List<T>) valueOps.multiGet(keys);
-        return list == null ? null : list.stream().map(item -> isNullVal(item) ? null : item).collect(Collectors.toList());
+        return list == null ? Collections.emptyList() : list.stream().map(this::returnVal).collect(Collectors.toList());
     }
 
     /**
@@ -905,8 +934,8 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/hset">Redis Documentation: HSET</a>
      */
     public void hSet(@NonNull String key, @NonNull Object field, Object value, boolean... cacheNullValues) {
-        Assert.hasText(key, KEY_NOT_NULL);
-        Assert.notNull(field, "field不能为空");
+        BizAssert.notEmpty(key, KEY_NOT_NULL);
+        BizAssert.notNull(field, "field不能为空");
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
 
         if (!cacheNullVal && value == null) {
@@ -926,7 +955,7 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/hset">Redis Documentation: HSET</a>
      */
     public void hSet(@NonNull CacheHashKey cacheHashKey, Object value, boolean... cacheNullValues) {
-        Assert.notNull(cacheHashKey, "CacheHashKey不能为空");
+        BizAssert.notNull(cacheHashKey, "CacheHashKey不能为空");
 
         this.hSet(cacheHashKey.getKey(), cacheHashKey.getField(), value, cacheNullValues);
         if (cacheHashKey.getExpire() != null) {
@@ -951,7 +980,7 @@ public class RedisOps {
         if (value == null && cacheNullVal) {
             hSet(key, field, newNullVal(), true);
         }
-        return isNullVal(value) ? null : value;
+        return returnVal(value);
     }
 
     /**
@@ -967,16 +996,16 @@ public class RedisOps {
     @Nullable
     public <T> T hGet(@NonNull String key, @NonNull Object field, BiFunction<String, Object, T> loader, boolean... cacheNullValues) {
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
-        T value = this.hGet(key, field, false);
+        T value = (T) hashOps.get(key, field);
         if (value != null) {
-            return isNullVal(value) ? null : value;
+            return returnVal(value);
         }
 
         String lockKey = key + "@" + field;
         synchronized (KEY_LOCKS.computeIfAbsent(lockKey, v -> new Object())) {
-            value = this.hGet(key, field, false);
+            value = (T) hashOps.get(key, field);
             if (value != null) {
-                return isNullVal(value) ? null : value;
+                return returnVal(value);
             }
 
             try {
@@ -986,7 +1015,7 @@ public class RedisOps {
                 KEY_LOCKS.remove(lockKey);
             }
         }
-        return isNullVal(value) ? null : value;
+        return returnVal(value);
     }
 
     /**
@@ -1000,16 +1029,16 @@ public class RedisOps {
     @Nullable
     public <T> T hGet(@NonNull CacheHashKey key, boolean... cacheNullValues) {
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
-        Assert.notNull(key, "CacheHashKey不能为空");
-        Assert.hasText(key.getKey(), KEY_NOT_NULL);
-        Assert.notNull(key.getField(), "field不能为空");
+        BizAssert.notNull(key, "CacheHashKey不能为空");
+        BizAssert.notEmpty(key.getKey(), KEY_NOT_NULL);
+        BizAssert.notNull(key.getField(), "field不能为空");
 
         T value = (T) hashOps.get(key.getKey(), key.getField());
         if (value == null && cacheNullVal) {
             hSet(key, newNullVal(), true);
         }
         // NullVal 值
-        return isNullVal(value) ? null : value;
+        return returnVal(value);
     }
 
     /**
@@ -1024,15 +1053,15 @@ public class RedisOps {
     @Nullable
     public <T> T hGet(@NonNull CacheHashKey key, Function<CacheHashKey, T> loader, boolean... cacheNullValues) {
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
-        T value = this.hGet(key, false);
+        T value = (T) hashOps.get(key.getKey(), key.getField());
         if (value != null) {
-            return isNullVal(value) ? null : value;
+            return returnVal(value);
         }
         String lockKey = key.getKey() + "@" + key.getField();
         synchronized (KEY_LOCKS.computeIfAbsent(lockKey, v -> new Object())) {
-            value = this.hGet(key, false);
+            value = (T) hashOps.get(key.getKey(), key.getField());
             if (value != null) {
-                return isNullVal(value) ? null : value;
+                return returnVal(value);
             }
             try {
                 value = loader.apply(key);
@@ -1041,7 +1070,7 @@ public class RedisOps {
                 KEY_LOCKS.remove(key.getKey());
             }
         }
-        return isNullVal(value) ? null : value;
+        return returnVal(value);
     }
 
     /**
@@ -1077,6 +1106,10 @@ public class RedisOps {
      */
     public Long hDel(@NonNull String key, Object... fields) {
         return hashOps.delete(key, fields);
+    }
+
+    public Long hDel(@NonNull CacheHashKey key) {
+        return hashOps.delete(key.getKey(), key.getField());
     }
 
 
@@ -1150,7 +1183,7 @@ public class RedisOps {
      * @param cacheNullValues 是否缓存空值
      * @see <a href="https://redis.io/commands/hmset">Redis Documentation: hmset</a>
      */
-    public void hmSet(@NonNull String key, @NonNull Map<Object, Object> hash, boolean... cacheNullValues) {
+    public <K, V> void hmSet(@NonNull String key, @NonNull Map<K, V> hash, boolean... cacheNullValues) {
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
         Map<Object, Object> newMap = new HashMap<>(CollHelper.initialCapacity(hash.size()));
 
@@ -1189,7 +1222,7 @@ public class RedisOps {
      */
     public List<Object> hmGet(@NonNull String key, @NonNull Collection<Object> fields) {
         List<Object> list = hashOps.multiGet(key, fields);
-        return list.stream().map(item -> isNullVal(item) ? null : item).collect(Collectors.toList());
+        return list.stream().map(this::returnVal).collect(Collectors.toList());
     }
 
     /**
@@ -1224,10 +1257,59 @@ public class RedisOps {
      * @return 以列表形式返回哈希表的域和域的值
      * @see <a href="https://redis.io/commands/hgetall">Redis Documentation: hgetall</a>
      */
-    public Map<Object, Object> hGetAll(@NonNull String key) {
-        return hashOps.entries(key);
+    public <K, V> Map<K, V> hGetAll(@NonNull String key) {
+        Map<K, V> map = (Map<K, V>) hashOps.entries(key);
+        return returnMapVal(map);
     }
 
+    public <K, V> Map<K, V> hGetAll(@NonNull CacheHashKey key) {
+        Map<K, V> map = (Map<K, V>) hashOps.entries(key.getKey());
+        return returnMapVal(map);
+    }
+
+    private <K, V> Map<K, V> returnMapVal(Map<K, V> map) {
+        Map<K, V> newMap = new HashMap<>(CollHelper.initialCapacity(map.size()));
+        if (CollUtil.isNotEmpty(map)) {
+            map.forEach((k, v) -> {
+                if (!isNullVal(v)) {
+                    newMap.put(k, v);
+                }
+            });
+        }
+        return newMap;
+    }
+
+    /**
+     * 返回哈希表 key 中给定域 field 的值。
+     *
+     * @param key             一定不能为 {@literal null}.
+     * @param cacheNullValues 是否缓存空值
+     * @param loader          加载器
+     * @return 默认情况下返回给定域的值, 如果给定域不存在于哈希表中， 又或者给定的哈希表并不存在， 那么命令返回 nil
+     * @see <a href="https://redis.io/commands/hget">Redis Documentation: HGET</a>
+     */
+    @Nullable
+    public <K, V> Map<K, V> hGetAll(@NonNull CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues) {
+        boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
+        Map<K, V> map = (Map<K, V>) hashOps.entries(key.getKey());
+        if (CollUtil.isNotEmpty(map)) {
+            return returnMapVal(map);
+        }
+        String lockKey = key.getKey();
+        synchronized (KEY_LOCKS.computeIfAbsent(lockKey, v -> new Object())) {
+            map = (Map<K, V>) hashOps.entries(key.getKey());
+            if (CollUtil.isNotEmpty(map)) {
+                return returnMapVal(map);
+            }
+            try {
+                map = loader.apply(key);
+                this.hmSet(key.getKey(), map, cacheNullVal);
+            } finally {
+                KEY_LOCKS.remove(key.getKey());
+            }
+        }
+        return returnMapVal(map);
+    }
     // ---------------------------- hash end ----------------------------
 
     // ---------------------------- list start ----------------------------
@@ -2188,6 +2270,4 @@ public class RedisOps {
     public Long zRemRangeByScore(@NonNull String key, double min, double max) {
         return zSetOps.removeRangeByScore(key, min, max);
     }
-
-
 }
