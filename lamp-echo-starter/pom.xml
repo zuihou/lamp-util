@@ -3,9 +3,9 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>lamp-util-plus</artifactId>
+        <artifactId>lamp-util</artifactId>
         <groupId>com.tangyh.basic</groupId>
-        <version>3.1.1</version>
+        <version>3.1.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
