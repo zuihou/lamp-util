@@ -36,10 +36,10 @@ import static com.tangyh.basic.utils.StrPool.EMPTY;
 
 
 /**
- * 字典数据注入工具类
+ * 字典数据回显工具类
  * 1. 通过反射将obj的字段上标记了@Echo注解的字段解析出来
- * 2. 依次查询待注入的数据
- * 3. 将查询出来结果注入到obj的 @Echo注解的字段中
+ * 2. 依次查询待回显的数据
+ * 3. 将查询出来结果回显到obj的 @Echo注解的字段中
  *
  * @author zuihou
  * @date 2019/11/13
@@ -66,15 +66,15 @@ public class EchoService {
 
 
     /**
-     * 手动注入数据的3个步骤：（出现注入失败时，认真debug该方法）
+     * 回显数据的3个步骤：（出现回显失败时，认真debug该方法）
      * <p>
-     * 1. 通过反射将obj的字段上标记了 @Echo 注解的字段解析出来
-     * 2. 依次查询待注入的数据
-     * 3. 将查询出来结果注入到obj的 @Echo 注解的字段中
+     * 1. parse: 通过反射将obj的字段上标记了 @Echo 注解的字段解析出来, 封装到typeMap中
+     * 2. load: 依次查询待回显的数据
+     * 3. write: 将查询出来的结果 反射或put 到obj的 字段或echoMap 中
      * <p>
-     * 注意：若对象中需要注入的字段之间出现循环引用，很可能发生异常，所以请保证不要出现循环引用！！！
+     * 注意：若对象中需要回显的字段之间出现循环引用，很可能发生异常，所以请保证不要出现循环引用！！！
      *
-     * @param obj          需要注入的对象、集合、IPage
+     * @param obj          需要回显的参数，支持 自定义对象(User)、集合(List<User>、Set<User>)、IPage
      * @param ignoreFields 忽略字段
      */
     public void action(Object obj, String... ignoreFields) {
@@ -88,68 +88,48 @@ public class EchoService {
             Map<LoadKey, Map<Serializable, Object>> typeMap = new ConcurrentHashMap<>(DEF_MAP_SIZE);
 
             long parseStart = System.currentTimeMillis();
+
             //1. 通过反射将obj的字段上标记了@Echo注解的字段解析出来
-            parse(obj, typeMap, 1, ignoreFields);
+            this.parse(obj, typeMap, 1, ignoreFields);
+
             long parseEnd = System.currentTimeMillis();
 
-            log.info("解析耗时={} ms", (parseEnd - parseStart));
             if (typeMap.isEmpty()) {
                 return;
             }
 
-            // 2. 依次查询待注入的数据
-            load(typeMap);
+            // 2. 依次查询待回显的数据
+            this.load(typeMap);
 
-            long injectionStart = System.currentTimeMillis();
-            log.info("批量查询耗时={} ms", (injectionStart - parseEnd));
+            long echoStart = System.currentTimeMillis();
 
-            // 3. 将查询出来结果注入到obj的 @Echo注解的字段中
-            write(obj, typeMap, 1);
-            long injectionEnd = System.currentTimeMillis();
+            // 3. 将查询出来结果回显到obj的 @Echo注解的字段中
+            this.write(obj, typeMap, 1);
 
-            log.info("注入耗时={} ms", (injectionEnd - injectionStart));
+            long echoEnd = System.currentTimeMillis();
+
+            log.info("解析耗时={} ms", (parseEnd - parseStart));
+            log.info("批量查询耗时={} ms", (echoStart - parseEnd));
+            log.info("回显耗时={} ms", (echoEnd - echoStart));
         } catch (Exception e) {
-            log.warn("注入失败", e);
+            log.warn("回显失败", e);
         }
     }
-
-    private void load(Map<LoadKey, Map<Serializable, Object>> typeMap) {
-        for (Map.Entry<LoadKey, Map<Serializable, Object>> entries : typeMap.entrySet()) {
-            LoadKey type = entries.getKey();
-            Map<Serializable, Object> valueMap = entries.getValue();
-            Set<Serializable> keys = valueMap.keySet();
-
-            LoadService loadService = strategyMap.get(type.getApi());
-            if (loadService == null) {
-                log.warn("处理字段的回显数据时，没有找到 @Echo 中的api字段：[{}]。请确保你自定义的接口实现了 LoadService 中的 [{}] 方法", type.getApi(), type.getMethod());
-                continue;
-            }
-            Map<Serializable, Object> value;
-            if ("findByIds".equals(type.getMethod())) {
-                value = loadService.findByIds(keys);
-            } else {
-                value = loadService.findNameByIds(keys);
-            }
-            typeMap.put(type, value);
-        }
-    }
-
 
     /**
-     * 1，遍历字段，解析出数据
-     * 2，遍历字段，设值
+     * 1，遍历字段，解析出那些字段上标记了@Echo注解
      *
      * @param obj          对象
      * @param typeMap      数据
      * @param depth        当前递归深度
-     * @param ignoreFields 忽略注入的字段
+     * @param ignoreFields 忽略回显的字段
      */
     private void parse(Object obj, Map<LoadKey, Map<Serializable, Object>> typeMap, int depth, String... ignoreFields) {
         if (obj == null) {
             return;
         }
         if (depth > ips.getMaxDepth()) {
-            log.info("出现循环注入，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", ips.getMaxDepth(), depth);
+            log.info("出现循环依赖，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", ips.getMaxDepth(), depth);
             return;
         }
 
@@ -158,13 +138,10 @@ public class EchoService {
             parseList(records, typeMap, depth, ignoreFields);
             return;
         }
+
         if (obj instanceof Collection) {
             parseList((Collection<?>) obj, typeMap, depth, ignoreFields);
             return;
-        }
-
-        if (obj instanceof RemoteData) {
-            // 做些事情
         }
 
         //解析方法上的注解，计算出obj对象中所有需要查询的数据
@@ -191,7 +168,7 @@ public class EchoService {
      *
      * @param list         数据集合
      * @param typeMap      待查询的参数
-     * @param ignoreFields 忽略注入的字段
+     * @param ignoreFields 忽略回显的字段
      */
     private void parseList(Collection<?> list, Map<LoadKey, Map<Serializable, Object>> typeMap, int depth, String... ignoreFields) {
         for (Object item : list) {
@@ -200,12 +177,40 @@ public class EchoService {
     }
 
     /**
-     * 向obj对象的字段中注入值
+     * 加载数据
+     * <p>
+     * 注意： 需要自行实现LoadService的2个方法
+     *
+     * @param typeMap
+     */
+    private void load(Map<LoadKey, Map<Serializable, Object>> typeMap) {
+        for (Map.Entry<LoadKey, Map<Serializable, Object>> entries : typeMap.entrySet()) {
+            LoadKey type = entries.getKey();
+            Map<Serializable, Object> valueMap = entries.getValue();
+            Set<Serializable> keys = valueMap.keySet();
+
+            LoadService loadService = strategyMap.get(type.getApi());
+            if (loadService == null) {
+                log.warn("处理字段的回显数据时，没有找到 @Echo 中的api字段：[{}]。请确保你自定义的接口实现了 LoadService 中的 [{}] 方法", type.getApi(), type.getMethod());
+                continue;
+            }
+            Map<Serializable, Object> value;
+            if ("findByIds".equals(type.getMethod())) {
+                value = loadService.findByIds(keys);
+            } else {
+                value = loadService.findNameByIds(keys);
+            }
+            typeMap.put(type, value);
+        }
+    }
+
+    /**
+     * 向obj对象的字段中回显值
      *
      * @param obj          当前对象
      * @param typeMap      数据
      * @param depth        当前递归深度
-     * @param ignoreFields 忽略注入的字段
+     * @param ignoreFields 忽略回显的字段
      */
     @SneakyThrows
     private void write(Object obj, Map<LoadKey, Map<Serializable, Object>> typeMap, int depth, String... ignoreFields) {
@@ -213,7 +218,7 @@ public class EchoService {
             return;
         }
         if (depth > ips.getMaxDepth()) {
-            log.info("出现循环注入，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", ips.getMaxDepth(), depth);
+            log.info("出现循环依赖，最多执行 {} 次， 已执行 {} 次，已为您跳出循环", ips.getMaxDepth(), depth);
             return;
         }
 
@@ -230,7 +235,7 @@ public class EchoService {
         iterationWrite(obj, typeMap, depth, ignoreFields);
     }
 
-    private void iterationWrite(Object obj, Map<LoadKey, Map<Serializable, Object>> typeMap, int depth, String[] ignoreFields) {
+    private void iterationWrite(Object obj, Map<LoadKey, Map<Serializable, Object>> typeMap, int depth, String... ignoreFields) {
         //解析方法上的注解，计算出obj对象中所有需要查询的数据
         List<Field> fields = ClassManager.getFields(obj.getClass());
         for (Field field : fields) {
@@ -314,11 +319,11 @@ public class EchoService {
     }
 
     /**
-     * 注入 集合
+     * 回显 集合
      *
      * @param list         数据集合
      * @param typeMap      待查询的参数
-     * @param ignoreFields 忽略注入的字段
+     * @param ignoreFields 忽略回显的字段
      */
     private void writeList(Collection<?> list, Map<LoadKey, Map<Serializable, Object>> typeMap, String... ignoreFields) {
         for (Object item : list) {
@@ -333,7 +338,7 @@ public class EchoService {
      * @param field        当前字段
      * @param typeMap      待查询的集合
      * @param consumer     字段为复杂类型时的回调处理
-     * @param ignoreFields 忽略注入的字段
+     * @param ignoreFields 忽略回显的字段
      * @return 字段参数
      */
     private FieldParam getFieldParam(Object obj, Field field, Map<LoadKey, Map<Serializable, Object>> typeMap,
