@@ -25,12 +25,11 @@ public class RangeConstraintConverter extends BaseConstraintConverter implements
 
     @Override
     protected String getType(Class<? extends Annotation> type) {
-        return "range";
+        return "Range";
     }
 
     @Override
     protected List<Class<? extends Annotation>> getSupport() {
         return Arrays.asList(Length.class, Size.class, Range.class);
     }
-
 }

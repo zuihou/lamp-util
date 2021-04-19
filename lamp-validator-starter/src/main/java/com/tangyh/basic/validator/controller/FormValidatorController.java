@@ -1,6 +1,7 @@
 package com.tangyh.basic.validator.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.tangyh.basic.base.R;
 import com.tangyh.basic.validator.extract.IConstraintExtract;
 import com.tangyh.basic.validator.model.FieldValidatorDesc;
 import com.tangyh.basic.validator.model.ValidConstraint;
@@ -30,16 +31,16 @@ import java.util.List;
  * 加入了一个前端验证接口控制器，专门处理所有的拉取表单验证规则的请求。<br>
  * 在拉取表单验证规则的时候，有两种拉取方式<br>
  * 第一种如下（通过路径变量来传输要拉取的uri路径） ：<br>
- * A表单的保存url为       http://2.8.1.1:3/porjectName/role/save <br>
- * 那么A表单的验证url：http://2.8.1.1:3/porjectName/from<font color="red">/validator/role</font>/save <br>
+ * A表单的保存url为       http://ip:port/porjectName/role/save <br>
+ * 那么A表单的验证url：http://ip:port/porjectName<font color="red">/from/validator</font>/role/save <br>
  * <br>
  * 仅仅追加了<font color="red">/from/validator/</font>而已。<br>
  * <br>
  * 第二种如下是（通过参数传递uri路径的方式来拉取）：<br>
  * 表单保存url ：    <br>
- * http://2.8.1.1:3/porjectName/role/save <br>
+ * http://ip:port/porjectName/role/save <br>
  * 那么验证url：<br/>
- * http://2.8.1.1:3/porjectName/from/validator?fromPath=/porjectName/role/save <br>
+ * http://ip:port/porjectName<font color="red">/from/validator</font>?fromPath=/porjectName/role/save <br>
  * <br>
  * 固定了验证uri地址，而要验证的表单地址作为参数进行传输。当然，可以一次性拿多个表单验证地址。有些界面可能同时存在多个表单需要提交。
  * <br>
@@ -49,27 +50,29 @@ import java.util.List;
  *
  * <p>
  * <p>
- * \@Null 被注释的元素必须为 null
- * \@NotNull 被注释的元素必须不为 null
- * \@AssertTrue 被注释的元素必须为 true
- * \@AssertFalse 被注释的元素必须为 false
- * \@Min(value) 被注释的元素必须是一个数字，其值必须大于等于指定的最小值
- * \@Max(value) 被注释的元素必须是一个数字，其值必须小于等于指定的最大值
- * \@DecimalMin(value) 被注释的元素必须是一个数字，其值必须大于等于指定的最小值
- * \@DecimalMax(value) 被注释的元素必须是一个数字，其值必须小于等于指定的最大值
- * \@Size(max=, min=)   被注释的元素的大小必须在指定的范围内
- * \@Digits (integer, fraction)     被注释的元素必须是一个数字，其值必须在可接受的范围内
- * \@Past 被注释的元素必须是一个过去的日期
- * \@Future 被注释的元素必须是一个将来的日期
- * \@Pattern(regex=,flag=) 被注释的元素必须符合指定的正则表达式
+ * {@literal @}Null 被注释的元素必须为 null<br/>
+ * {@literal @}NotNull 被注释的元素必须不为 null<br/>
+ * {@literal @}AssertTrue 被注释的元素必须为 true<br/>
+ * {@literal @}AssertFalse 被注释的元素必须为 false<br/>
+ * {@literal @}Min(value) 被注释的元素必须是一个数字，其值必须大于等于指定的最小值<br/>
+ * {@literal @}Max(value) 被注释的元素必须是一个数字，其值必须小于等于指定的最大值<br/>
+ * {@literal @}DecimalMin(value) 被注释的元素必须是一个数字，其值必须大于等于指定的最小值<br/>
+ * {@literal @}DecimalMax(value) 被注释的元素必须是一个数字，其值必须小于等于指定的最大值<br/>
+ * {@literal @}Size(max=, min=)   被注释的元素的大小必须在指定的范围内<br/>
+ * {@literal @}Digits (integer, fraction)     被注释的元素必须是一个数字，其值必须在可接受的范围内<br/>
+ * {@literal @}Past 被注释的元素必须是一个过去的日期<br/>
+ * {@literal @}Future 被注释的元素必须是一个将来的日期<br/>
+ * {@literal @}Pattern(regex=,flag=) 被注释的元素必须符合指定的正则表达式<br/>
+ * {@literal @}NotEmptyPattern(regex=,flag=) 被注释的元素必须符合指定的正则表达式<br/>
  * </p>
  * <p>
- * Hibernate Validator 附加的 constraint
- * \@NotBlank(message =)   验证字符串非null，且长度必须大于0
- * \@Email 被注释的元素必须是电子邮箱地址
- * \@Size(min=,max=) 被注释的字符串的大小必须在指定的范围内
- * \@NotEmpty 被注释的字符串的必须非空
- * \@Range(min=,max=,message=) 被注释的元素必须在合适的范围内
+ * 注意： 不建议使用 Hibernate Validator  提供的注解！！！
+ * Hibernate Validator 附加的 constraint <br/>
+ * {@literal @}NotBlank(message =)   验证字符串非null，且长度必须大于0<br/>
+ * {@literal @}Email 被注释的元素必须是电子邮箱地址<br/>
+ * {@literal @}Size(min=,max=) 被注释的字符串的大小必须在指定的范围内<br/>
+ * {@literal @}NotEmpty 被注释的字符串的必须非空<br/>
+ * {@literal @}Range(min=,max=,message=) 被注释的元素必须在合适的范围内<br/>
  * <p>
  *
  * @author zuihou
@@ -97,10 +100,10 @@ public class FormValidatorController {
      */
     @RequestMapping(FORM_VALIDATOR_URL + "/**")
     @ResponseBody
-    public Collection<FieldValidatorDesc> standardByPathVar(HttpServletRequest request) throws Exception {
+    public R<Collection<FieldValidatorDesc>> standardByPathVar(HttpServletRequest request) throws Exception {
         String requestUri = request.getRequestURI();
         String formPath = StrUtil.subAfter(requestUri, FORM_VALIDATOR_URL, false);
-        return localFieldValidatorDescribe(request, formPath);
+        return R.success(localFieldValidatorDescribe(request, formPath));
     }
 
     /**
@@ -113,8 +116,8 @@ public class FormValidatorController {
      */
     @RequestMapping(FORM_VALIDATOR_URL)
     @ResponseBody
-    public Collection<FieldValidatorDesc> standardByQueryParam(@RequestParam(value = "formPath", required = false) String formPath, HttpServletRequest request) throws Exception {
-        return localFieldValidatorDescribe(request, formPath);
+    public R<Collection<FieldValidatorDesc>> standardByQueryParam(@RequestParam(value = "formPath", required = false) String formPath, HttpServletRequest request) throws Exception {
+        return R.success(localFieldValidatorDescribe(request, formPath));
     }
 
     private Collection<FieldValidatorDesc> localFieldValidatorDescribe(HttpServletRequest request, String formPath) throws Exception {
@@ -197,3 +200,4 @@ public class FormValidatorController {
         return validatorStandard;
     }
 }
+

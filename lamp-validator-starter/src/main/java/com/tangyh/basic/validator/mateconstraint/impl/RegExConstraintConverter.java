@@ -1,6 +1,7 @@
 package com.tangyh.basic.validator.mateconstraint.impl;
 
 
+import com.tangyh.basic.annotation.constraints.NotEmptyPattern;
 import com.tangyh.basic.validator.mateconstraint.IConstraintConverter;
 import org.hibernate.validator.constraints.URL;
 
@@ -18,12 +19,12 @@ import java.util.List;
 public class RegExConstraintConverter extends BaseConstraintConverter implements IConstraintConverter {
     @Override
     protected String getType(Class<? extends Annotation> type) {
-        return "regEx";
+        return "RegEx";
     }
 
     @Override
     protected List<Class<? extends Annotation>> getSupport() {
-        return Arrays.asList(Pattern.class, Email.class, URL.class);
+        return Arrays.asList(Pattern.class, Email.class, URL.class, NotEmptyPattern.class);
     }
 
     @Override

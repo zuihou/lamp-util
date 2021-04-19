@@ -99,6 +99,15 @@ public interface CacheOps {
     Long incr(@NonNull CacheKey key);
 
     /**
+     * 获取key中存放的Long值
+     *
+     * @param key    一定不能为 {@literal null}.
+     * @param loader 加载
+     * @return key中存储的的数字
+     */
+    Long getCounter(@NonNull CacheKey key, Function<CacheKey, Long> loader);
+
+    /**
      * 为键 key 储存的数字值加上increment。
      *
      * @param key       一定不能为 {@literal null}.

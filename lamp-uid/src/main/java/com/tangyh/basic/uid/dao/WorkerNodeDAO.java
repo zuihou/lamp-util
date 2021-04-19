@@ -27,7 +27,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @InterceptorIgnore(tenantLine = "true", dynamicTableName = "true")
-public interface WorkerNodeDAO {
+public interface WorkerNodeDao {
 
     /**
      * Get {@link WorkerNodeEntity} by node host

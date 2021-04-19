@@ -80,7 +80,7 @@ public class CaffeineOpsImpl implements CacheOps, CachePlusOps {
         if (ifPresent == null) {
             return null;
         }
-        return (T) ifPresent.getIfPresent(key);
+        return (T) ifPresent.getIfPresent(key.getKey());
     }
 
     @Override
@@ -134,6 +134,11 @@ public class CaffeineOpsImpl implements CacheOps, CachePlusOps {
         Long newVal = old + 1;
         set(key, newVal);
         return newVal;
+    }
+
+    @Override
+    public Long getCounter(CacheKey key, Function<CacheKey, Long> loader) {
+        return get(key);
     }
 
     @Override

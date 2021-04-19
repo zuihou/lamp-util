@@ -17,7 +17,6 @@ import java.util.Map;
  */
 public abstract class BaseConstraintConverter implements IConstraintConverter {
 
-
     private final List<String> methods = Collections.emptyList();
 
     /**
@@ -44,18 +43,17 @@ public abstract class BaseConstraintConverter implements IConstraintConverter {
     @Override
     public ConstraintInfo converter(Annotation ano) throws Exception {
         Class<? extends Annotation> clazz = ano.getClass();
-        Map<String, Object> attr = new HashMap<>(4);
+        Map<String, Object> attr = new HashMap<>();
         for (String method : getMethods()) {
             Object value = clazz.getMethod(method).invoke(ano);
-            if (value instanceof String && ((String) value).contains("{")) {
-                attr.put(method, "");
-            } else {
-                attr.put(method, value);
-            }
+//            if (value instanceof String && ((String) value).contains("{")) {
+//                attr.put(method, "");
+//            } else {
+            attr.put(method, value);
+//            }
         }
         return new ConstraintInfo().setType(getType(ano.annotationType())).setAttrs(attr);
     }
-
 
     /**
      * 子类返回各自具体支持的验证注解 类型
@@ -63,7 +61,6 @@ public abstract class BaseConstraintConverter implements IConstraintConverter {
      * @return 注解
      */
     protected abstract List<Class<? extends Annotation>> getSupport();
-
 
     /**
      * 子类返回需要反射的验证注解的 字段值
@@ -74,13 +71,12 @@ public abstract class BaseConstraintConverter implements IConstraintConverter {
         return methods;
     }
 
-
     /**
      * 子类返回自定义的类型
      *
      * @param type 注解类型
+     * @return
      */
     protected abstract String getType(Class<? extends Annotation> type);
-
 
 }

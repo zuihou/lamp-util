@@ -21,7 +21,7 @@ public class NotNullConstraintConverter extends BaseConstraintConverter implemen
 
     @Override
     protected String getType(Class<? extends Annotation> type) {
-        return "notNull";
+        return "NotNull";
     }
 
     @Override

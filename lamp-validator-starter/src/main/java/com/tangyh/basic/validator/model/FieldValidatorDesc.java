@@ -16,15 +16,10 @@ import java.util.List;
 @ToString
 @Accessors(chain = true)
 public class FieldValidatorDesc {
-
     /**
      * 字段名称
      */
-    private String fieldName;
-    /**
-     * 字段所在的类名称短名称（也可以叫做领域名称）
-     */
-    private String domainName;
+    private String field;
     /**
      * 字段的类型
      */
@@ -33,5 +28,4 @@ public class FieldValidatorDesc {
      * 约束集合
      */
     private List<ConstraintInfo> constraints;
-
 }

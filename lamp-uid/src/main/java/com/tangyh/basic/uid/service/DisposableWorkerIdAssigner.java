@@ -20,12 +20,11 @@ import com.baidu.fsg.uid.utils.DockerUtils;
 import com.baidu.fsg.uid.utils.NetUtils;
 import com.baidu.fsg.uid.worker.WorkerNodeType;
 import com.baidu.fsg.uid.worker.entity.WorkerNodeEntity;
-import com.tangyh.basic.uid.dao.WorkerNodeDAO;
+import com.tangyh.basic.uid.dao.WorkerNodeDao;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 
 /**
  * Represents an implementation of {@link WorkerIdAssigner},
@@ -40,11 +39,11 @@ import javax.annotation.Resource;
  *
  * @author yutianbao
  */
+@RequiredArgsConstructor
 public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
     private static final Logger LOGGER = LoggerFactory.getLogger(DisposableWorkerIdAssigner.class);
 
-    @Resource
-    private WorkerNodeDAO workerNodeDAO;
+    private final WorkerNodeDao workerNodeDao;
 
     /**
      * Assign worker id base on database.<p>
@@ -60,7 +59,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
         WorkerNodeEntity workerNodeEntity = buildWorkerNode();
 
         // add worker node for new (ignore the same IP + PORT)
-        workerNodeDAO.addWorkerNode(workerNodeEntity);
+        workerNodeDao.addWorkerNode(workerNodeEntity);
         LOGGER.info("Add worker node:" + workerNodeEntity);
 
         return workerNodeEntity.getId();

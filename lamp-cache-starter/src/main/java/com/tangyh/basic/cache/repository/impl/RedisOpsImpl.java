@@ -95,27 +95,32 @@ public class RedisOpsImpl implements CacheOps, CachePlusOps {
 
     @Override
     public Long incr(@NonNull CacheKey key) {
-        return redisOps.incr(key.getKey());
+        return redisOps.incr(key);
+    }
+
+    @Override
+    public Long getCounter(CacheKey key, Function<CacheKey, Long> loader) {
+        return redisOps.getCounter(key, loader);
     }
 
     @Override
     public Long incrBy(@NonNull CacheKey key, long increment) {
-        return redisOps.incrBy(key.getKey(), increment);
+        return redisOps.incrBy(key, increment);
     }
 
     @Override
     public Double incrByFloat(@NonNull CacheKey key, double increment) {
-        return redisOps.incrByFloat(key.getKey(), increment);
+        return redisOps.incrByFloat(key, increment);
     }
 
     @Override
     public Long decr(@NonNull CacheKey key) {
-        return redisOps.decr(key.getKey());
+        return redisOps.decr(key);
     }
 
     @Override
     public Long decrBy(@NonNull CacheKey key, long decrement) {
-        return redisOps.decrBy(key.getKey(), decrement);
+        return redisOps.decrBy(key, decrement);
     }
 
     @Override
@@ -186,12 +191,12 @@ public class RedisOpsImpl implements CacheOps, CachePlusOps {
 
     @Override
     public Long hIncrBy(@NonNull CacheHashKey key, long increment) {
-        return redisOps.hIncrBy(key.getKey(), key.getField(), increment);
+        return redisOps.hIncrBy(key, increment);
     }
 
     @Override
     public Double hIncrBy(@NonNull CacheHashKey key, double increment) {
-        return redisOps.hIncrByFloat(key.getKey(), key.getField(), increment);
+        return redisOps.hIncrByFloat(key, increment);
     }
 
     @Override
@@ -218,7 +223,7 @@ public class RedisOpsImpl implements CacheOps, CachePlusOps {
 
     @Override
     public Long sAdd(@NonNull CacheKey key, Object value) {
-        Long result = redisOps.sAdd(key.getKey(), value);
+        Long result = redisOps.sAdd(key, value);
         if (key.getExpire() != null) {
             redisOps.expire(key.getKey(), key.getExpire());
         }
@@ -227,21 +232,21 @@ public class RedisOpsImpl implements CacheOps, CachePlusOps {
 
     @Override
     public Long sRem(@NonNull CacheKey key, Object... members) {
-        return redisOps.sRem(key.getKey(), members);
+        return redisOps.sRem(key, members);
     }
 
     @Override
     public Set<Object> sMembers(@NonNull CacheKey key) {
-        return redisOps.sMembers(key.getKey());
+        return redisOps.sMembers(key);
     }
 
     @Override
     public <T> T sPop(@NonNull CacheKey key) {
-        return redisOps.sPop(key.getKey());
+        return redisOps.sPop(key);
     }
 
     @Override
     public Long sCard(@NonNull CacheKey key) {
-        return redisOps.sCard(key.getKey());
+        return redisOps.sCard(key);
     }
 }

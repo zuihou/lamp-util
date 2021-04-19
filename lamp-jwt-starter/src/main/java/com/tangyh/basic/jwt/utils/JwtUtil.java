@@ -147,19 +147,19 @@ public final class JwtUtil {
                     .parseClaimsJws(jsonWebToken)
                     .getBody();
         } catch (ExpiredJwtException ex) {
-            log.error("token 过期", ex);
+            log.error("token=[{}], 过期", jsonWebToken, ex);
             //过期
             throw new BizException(ExceptionCode.JWT_TOKEN_EXPIRED.getCode(), ExceptionCode.JWT_TOKEN_EXPIRED.getMsg(), ex);
         } catch (SignatureException ex) {
-            log.error("token 签名错误", ex);
+            log.error("token=[{}] 签名错误", jsonWebToken, ex);
             //签名错误
             throw new BizException(ExceptionCode.JWT_SIGNATURE.getCode(), ExceptionCode.JWT_SIGNATURE.getMsg(), ex);
         } catch (IllegalArgumentException ex) {
-            log.error("token 为空", ex);
+            log.error("token=[{}] 为空", jsonWebToken, ex);
             //token 为空
             throw new BizException(ExceptionCode.JWT_ILLEGAL_ARGUMENT.getCode(), ExceptionCode.JWT_ILLEGAL_ARGUMENT.getMsg(), ex);
         } catch (Exception e) {
-            log.error("errCode:{}, message:{}", JWT_PARSER_TOKEN_FAIL.getCode(), e.getMessage(), e);
+            log.error("token=[{}] errCode:{}, message:{}", jsonWebToken, JWT_PARSER_TOKEN_FAIL.getCode(), e.getMessage(), e);
             throw new BizException(JWT_PARSER_TOKEN_FAIL.getCode(), JWT_PARSER_TOKEN_FAIL.getMsg(), e);
         }
     }
@@ -171,6 +171,7 @@ public final class JwtUtil {
         if (token.startsWith(ContextConstants.BEARER_HEADER_PREFIX)) {
             return StrUtil.subAfter(token, ContextConstants.BEARER_HEADER_PREFIX, false);
         }
+        log.info("jsonWebToken={}", token);
         throw BizException.wrap(JWT_PARSER_TOKEN_FAIL);
     }
 
@@ -188,6 +189,7 @@ public final class JwtUtil {
             String headStr = StrUtil.subAfter(token, ContextConstants.BEARER_HEADER_PREFIX, false);
             return parseJwt(headStr, allowedClockSkewSeconds);
         }
+        log.info("jsonWebToken={}", token);
         throw BizException.wrap(JWT_PARSER_TOKEN_FAIL);
     }
 

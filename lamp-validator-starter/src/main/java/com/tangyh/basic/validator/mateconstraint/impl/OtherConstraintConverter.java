@@ -15,7 +15,6 @@ import java.util.List;
  */
 public class OtherConstraintConverter extends BaseConstraintConverter implements IConstraintConverter {
 
-
     @Override
     protected String getType(Class<? extends Annotation> type) {
         return type.getSimpleName();

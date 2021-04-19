@@ -75,6 +75,19 @@ public interface StrPool {
     String HTML_LT = "&lt;";
     String HTML_GT = "&gt;";
     String STRING_TYPE_NAME = "java.lang.String";
+    String LONG_TYPE_NAME = "java.lang.Long";
+    String INTEGER_TYPE_NAME = "java.lang.Integer";
+    String SHORT_TYPE_NAME = "java.lang.Short";
+    String DOUBLE_TYPE_NAME = "java.lang.Double";
+    String FLOAT_TYPE_NAME = "java.lang.Float";
+    String BOOLEAN_TYPE_NAME = "java.lang.Boolean";
+    String SET_TYPE_NAME = "java.lang.Set";
+    String LIST_TYPE_NAME = "java.lang.List";
+    String COLLECTION_TYPE_NAME = "java.lang.Collection";
+    String DATE_TYPE_NAME = "java.util.Date";
+    String LOCAL_DATE_TIME_TYPE_NAME = "java.time.LocalDateTime";
+    String LOCAL_DATE_TYPE_NAME = "java.time.LocalDate";
+    String LOCAL_TIME_TYPE_NAME = "java.time.LocalTime";
     /**
      * 编码
      */

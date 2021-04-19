@@ -32,9 +32,7 @@ public class ValidConstraint {
             groups = new Class[0];
         }
         if (groups.length == 0) {
-            groups = new Class[]{
-                    Default.class
-            };
+            groups = new Class[]{Default.class};
         }
         return groups;
     }

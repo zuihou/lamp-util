@@ -1,7 +1,9 @@
 package com.tangyh.basic.validator.config;
 
+import com.tangyh.basic.annotation.constraints.NotEmptyPattern;
 import com.tangyh.basic.validator.constraintvalidators.LengthConstraintValidator;
 import com.tangyh.basic.validator.constraintvalidators.NotEmptyConstraintValidator;
+import com.tangyh.basic.validator.constraintvalidators.NotEmptyPatternConstraintValidator;
 import com.tangyh.basic.validator.constraintvalidators.NotNullConstraintValidator;
 import com.tangyh.basic.validator.controller.FormValidatorController;
 import com.tangyh.basic.validator.extract.DefaultConstraintExtractImpl;
@@ -43,7 +45,8 @@ public class ValidatorConfiguration {
                 //快速失败返回模式
                 .addProperty("hibernate.validator.fail_fast", "true"))
                 .buildValidatorFactory();
-        return validatorFactory.getValidator();
+        Validator validator = validatorFactory.getValidator();
+        return validator;
     }
 
     private Configuration<HibernateValidatorConfiguration> warp(HibernateValidatorConfiguration configuration) {
@@ -57,6 +60,7 @@ public class ValidatorConfiguration {
         GetterPropertySelectionStrategy getterPropertySelectionStrategyToUse = new DefaultGetterPropertySelectionStrategy();
         PropertyNodeNameProvider defaultPropertyNodeNameProvider = new DefaultPropertyNodeNameProvider();
         ConstraintMapping mapping = new DefaultConstraintMapping(new JavaBeanHelper(getterPropertySelectionStrategyToUse, defaultPropertyNodeNameProvider));
+
         ConstraintDefinitionContext<Length> length = mapping.constraintDefinition(Length.class);
         length.includeExistingValidators(true);
         length.validatedBy(LengthConstraintValidator.class);
@@ -68,6 +72,10 @@ public class ValidatorConfiguration {
         ConstraintDefinitionContext<NotEmpty> notEmpty = mapping.constraintDefinition(NotEmpty.class);
         notEmpty.includeExistingValidators(true);
         notEmpty.validatedBy(NotEmptyConstraintValidator.class);
+
+        ConstraintDefinitionContext<NotEmptyPattern> notEmptyPattern = mapping.constraintDefinition(NotEmptyPattern.class);
+        notEmptyPattern.includeExistingValidators(true);
+        notEmptyPattern.validatedBy(NotEmptyPatternConstraintValidator.class);
 
         configuration.addMapping(mapping);
     }

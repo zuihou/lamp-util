@@ -24,5 +24,4 @@ public class ConstraintInfo {
      * 约束属性
      */
     private Map<String, Object> attrs;
-
 }
