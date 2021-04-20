@@ -30,7 +30,7 @@ import org.springframework.stereotype.Repository;
 public interface WorkerNodeDao {
 
     /**
-     * Get {@link WorkerNodeEntity} by node host
+     * Get {@link WorkerNodeEntity} by node host !
      *
      * @param host
      * @param port
