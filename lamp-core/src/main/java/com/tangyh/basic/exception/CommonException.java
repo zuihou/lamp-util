@@ -25,6 +25,6 @@ public class CommonException extends BaseCheckedException {
 
     @Override
     public String toString() {
-        return "BizException [message=" + getMessage() + ", code=" + getCode() + "]";
+        return "CommonException [message=" + getMessage() + ", code=" + getCode() + "]";
     }
 }
