@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.Serializable;
@@ -31,12 +32,9 @@ public interface DeleteController<Entity, Id extends Serializable> extends BaseC
      */
     @ApiOperation(value = "删除")
     @DeleteMapping
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "ids[]", value = "主键id", dataType = "array", paramType = "query"),
-    })
     @SysLog("'删除:' + #ids")
     @PreAuth("hasAnyPermission('{}delete')")
-    default R<Boolean> delete(@RequestParam("ids[]") List<Id> ids) {
+    default R<Boolean> delete(@RequestBody List<Id> ids) {
         R<Boolean> result = handlerDelete(ids);
         if (result.getDefExec()) {
             getBaseService().removeByIds(ids);
