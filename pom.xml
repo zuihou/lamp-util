@@ -34,6 +34,7 @@
     </modules>
     <properties>
         <lamp-dependencies.version>3.2.0</lamp-dependencies.version>
+        <!-- jdk8 将这里改成 8 -->
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
