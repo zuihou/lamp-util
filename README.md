@@ -9,26 +9,32 @@
 [![fork](https://gitee.com/zuihou111/lamp-cloud/badge/fork.svg?theme=white)](https://gitee.com/zuihou111/lamp-cloud/members)
 
 # lamp 项目名字由来
-## 叙事版：
+`灯灯`(简称灯， 英文名：lamp)，他是一个项目的统称，由"工具集"、"后端"、"前端"组成，包含以下几个子项目
 
-在一个夜黑风高的晚上，小孩吵着要出去玩，于是和`程序员老婆`一起带小孩出去放风，路上顺便讨论起项目要换个什么名字，在各自想出的名字都被对方一一否决后，大家陷入了沉思。 走着走着，在一盏路灯下，孩砸盯着路灯打破宁静，喊出：灯灯～
-我和媳妇愣了一下，然后对视着一起说：哈哈，这个名字好～
+[点我了解项目详细介绍](简介.md)
 
-## 解释版：
-`灯灯`： 是我小孩学说话时会说的第一个词，也是我在想了很多项目名后，小孩一语点破的一个名字，灯灯象征着光明，给困境的我们带来希望，给加班夜归的程序员们指引前方～
-
-`灯灯`(简称灯， 英文名：lamp)，他是一个项目的统称，包含以下几个子项目
-
-## lamp 项目组成
+## 工具集
 
 | 项目 | gitee | github | 备注 |
-|---|---|---|---|
-| 工具集 | https://gitee.com/zuihou111/lamp-util | https://github.com/zuihou/lamp-util | 业务无关的工具集，cloud和boot 项目都依赖它 |
-| 微服务版 | https://gitee.com/zuihou111/lamp-cloud | https://github.com/zuihou/lamp-cloud | SpringCloud 版 |
-| 单体版 | https://gitee.com/zuihou111/lamp-boot | https://github.com/zuihou/lamp-boot | SpringBoot 版(和lamp-cloud功能基本一致)|
-| 租户后台 | https://gitee.com/zuihou111/lamp-web | https://github.com/zuihou/lamp-web | PC端管理系统 |
-| 代码生成器 | https://gitee.com/zuihou111/lamp-generator | https://github.com/zuihou/lamp-generator | 给开发人员使用 |
-| 定时调度器 | https://gitee.com/zuihou111/lamp-jobs | https://github.com/zuihou/lamp-jobs | 尚未开发 |
+| --- | --- | --- | --- |
+| lamp-util | https://gitee.com/zuihou111/lamp-util | https://github.com/zuihou/lamp-util | 核心工具集 |
+| lamp-generator | https://gitee.com/zuihou111/lamp-generator | https://github.com/zuihou/lamp-generator | 代码生成器 |
+| lamp-job | https://gitee.com/zuihou111/lamp-job | https://github.com/zuihou/lamp-job | 分布式定时调度器 |
+
+## 后端
+
+| 项目 | gitee | github | 备注 |
+| --- | --- | --- | --- |
+| lamp-cloud | https://gitee.com/zuihou111/lamp-cloud | https://github.com/zuihou/lamp-cloud | SpringCloud(微服务)版 |
+| lamp-boot | https://gitee.com/zuihou111/lamp-boot | https://github.com/zuihou/lamp-boot | SpringBoot(单体)版 |
+
+## 前端
+
+| 项目 | gitee | github | 备注 | 演示地址 |
+| --- | --- | --- | --- | --- |
+| lamp-web | https://gitee.com/zuihou111/lamp-web | https://github.com/zuihou/lamp-web | 基于 vue-admin-element (element-ui) | http://tangyh.top:10000 |
+| lamp-web-plus(强烈推荐！👏👏👏) | https://gitee.com/zuihou111/lamp-web-plus | https://github.com/zuihou/lamp-web-plus | 基于 vue-vben-admin （vue 3 + ant design vue 2） | http://tangyh.top:3100 |
+| lamp-web-beautiful(暂时停更) | https://gitee.com/zuihou111/lamp-web-beautiful | https://github.com/zuihou/lamp-web-beautiful | 基于 vue-admin-beautiful | http://tangyh.top:180 |
 
 # lamp-util 简介
 
@@ -37,6 +43,7 @@
 和 [lamp-boot](https://github.com/zuihou/lamp-boot) 项目的核心工具包，开发宗旨是打造一套兼顾 SpringBoot 和 SpringCloud 项目的公共工具类。
 
 ## 结构介绍
+
 ![lamp-util 功能介绍.png](docs/images/lamp-util功能介绍.png)
 
 ## lamp-util 亮点功能
@@ -53,46 +60,20 @@
 - 轻量级接口权限
 - 快去看源码和文档发现 [更多功能](https://www.kancloud.cn/zuihou/zuihou-admin-cloud) 吧
 
-# 如果觉得对您有任何一点帮助，请点右上角 "Star" 支持一下吧，谢谢！
-
-# [点我详细查看如何使用本项目的高级功能](https://www.kancloud.cn/zuihou/zuihou-admin-cloud)
-
-        ps: gitee捐献 或者 二维码打赏(本页最下方)： 45元及以上 并 备注邮箱，可得"离线开发文档"一份，支持后续文档更新 
-        打赏或者捐献后直接加群：1039545140 并备注打赏时填写的邮箱，本群仅用于持续的获取最新的"离线开发文档"。 
-        "离线开发文档"和看云上的"在线文档"内容一样，在看云在线购买的不用申请入群，看云购买的可以申请上面的交流群。 
-
-# 会员版
-
-本项目分为开源版、会员版，github和gitee上能搜索到的为开源版本，遵循Apache协议。 会员版源码在私有gitlab托管，购买后开通账号。
-
-会员版和会员版区别请看：[会员版](会员版.md)
-
 # lamp 会员版项目演示地址
 
-- 地址： http://tangyh.top:10000/lamp-web/
+- lamp-web-plus演示地址： http://tangyh.top:3100
+- lamp-web演示地址： http://tangyh.top:10000/lamp-web
+- lamp-web-beautiful演示地址： http://tangyh.top:180
 - 以下内置账号仅限于内置的0000租户
 - 平台管理员： lamp_pt/lamp (内置给公司内部运营人员使用)
 - 超级管理员： lamp/lamp
 - 普通管理员： general/lamp
 - 普通账号： normal/lamp
 
-# 友情链接 & 特别鸣谢
+# 会员版
 
-* SaaS型微服务快速开发平台：[https://github.com/zuihou/lamp-cloud](https://github.com/zuihou/lamp-cloud)
-* SaaS型单体快速开发平台：[https://github.com/zuihou/lamp-boot](https://github.com/zuihou/lamp-boot)
-* MyBatis-Plus：[https://mybatis.plus/](https://mybatis.plus/)
-* knife4j：[http://doc.xiaominfo.com/](http://doc.xiaominfo.com/)
-* hutool：[https://hutool.cn/](https://hutool.cn/)
-* xxl-job：[http://www.xuxueli.com/xxl-job/](http://www.xuxueli.com/xxl-job/)
-* kkfileview：[https://kkfileview.keking.cn](https://kkfileview.keking.cn)
-* vue-vben-admin(vue3.x + vite2.x)： [https://github.com/anncwb/vue-vben-admin](https://github.com/anncwb/vue-vben-admin)
+本项目分为开源版和会员版，github和gitee上能搜索到的为开源版本，遵循Apache协议。 会员版源码在私有gitlab托管，购买后开通账号。
 
-> lamp-web-plus 基于本项目改造,感谢 [anncwb](https://github.com/anncwb) 提供的支持和帮助
+会员版和开源版区别请看：[会员版](会员版.md)
 
-* FEBS Cloud Web： [https://gitee.com/mrbirdd/FEBS-Cloud-Web](https://gitee.com/mrbirdd/FEBS-Cloud-Web)
-
-> lamp-web 基于本项目改造,感谢 [wuyouzhuguli](https://github.com/wuyouzhuguli)
-
-* Cloud-Platform： [https://gitee.com/geek_qi/cloud-platform](https://gitee.com/geek_qi/cloud-platform)
-
-> 作者学习时接触到的第一个微服务项目
