@@ -90,13 +90,12 @@ public abstract class BaseMybatisConfiguration {
     @ConditionalOnMissingBean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        log.info("检测到 lamp.database.multiTenantType={}，已启用{}模式", databaseProperties.getMultiTenantType(), databaseProperties.getMultiTenantType());
         if (MultiTenantType.SCHEMA.eq(this.databaseProperties.getMultiTenantType())) {
             // SCHEMA 动态表名插件
             SchemaInterceptor schemaInterceptor = new SchemaInterceptor(databaseProperties.getTenantDatabasePrefix());
             interceptor.addInnerInterceptor(schemaInterceptor);
-            log.info("检测到 lamp.database.multiTenantType=SCHEMA，已启用 SCHEMA模式");
         } else if (MultiTenantType.COLUMN.eq(this.databaseProperties.getMultiTenantType())) {
-            log.info("检测到 lamp.database.multiTenantType=COLUMN，已启用 字段模式");
             // COLUMN 模式 多租户插件
             TenantLineInnerInterceptor tli = new TenantLineInnerInterceptor();
             tli.setTenantLineHandler(new TenantLineHandler() {

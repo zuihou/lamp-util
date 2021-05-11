@@ -42,6 +42,11 @@
 `lamp-util` 是基于`jdk11`的， [lamp-cloud](https://github.com/zuihou/lamp-cloud)
 和 [lamp-boot](https://github.com/zuihou/lamp-boot) 项目的核心工具包，开发宗旨是打造一套兼顾 SpringBoot 和 SpringCloud 项目的公共工具类。
 
+# 快速上手
+- 入门到精通，参考文档： https://www.kancloud.cn/zuihou/zuihou-admin-cloud
+- 发现bug和建议，请提交issue： https://github.com/zuihou/lamp-cloud/issues
+- 常见问题，请参考Discussions： https://github.com/zuihou/lamp-cloud/discussions
+
 ## 结构介绍
 
 ![lamp-util 功能介绍.png](docs/images/lamp-util功能介绍.png)
