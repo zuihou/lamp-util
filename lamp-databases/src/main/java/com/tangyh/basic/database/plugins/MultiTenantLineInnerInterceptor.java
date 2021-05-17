@@ -28,12 +28,6 @@ import net.sf.jsqlparser.schema.Table;
  * @create [2021/5/17 8:49 下午 ] [zuihou] [增强]
  * @see TenantLineInnerInterceptor
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-@SuppressWarnings({"rawtypes"})
 public class MultiTenantLineInnerInterceptor extends TenantLineInnerInterceptor {
     /**
      * 处理条件
