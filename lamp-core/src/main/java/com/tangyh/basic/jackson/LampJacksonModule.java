@@ -44,7 +44,6 @@ public class LampJacksonModule extends SimpleModule {
         this.addSerializer(BigInteger.class, ToStringSerializer.instance);
         this.addSerializer(BigDecimal.class, ToStringSerializer.instance);
         this.addSerializer(BaseEnum.class, EnumSerializer.INSTANCE);
-        this.addDeserializer(Enum.class, EnumDeserializer.INSTANCE);
     }
 
 }
