@@ -54,28 +54,28 @@ import static com.tangyh.basic.exception.code.ExceptionCode.REQUIRED_FILE_PARAM_
 public abstract class AbstractGlobalExceptionHandler {
     @ExceptionHandler(BizException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R bizException(BizException ex) {
+    public R<?> bizException(BizException ex) {
         log.warn("BizException:", ex);
         return R.result(ex.getCode(), null, ex.getMessage(), ex.getLocalizedMessage()).setPath(getPath());
     }
 
     @ExceptionHandler(ForbiddenException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public R forbiddenException(ForbiddenException ex) {
+    public R<?> forbiddenException(ForbiddenException ex) {
         log.warn("BizException:", ex);
         return R.result(ex.getCode(), null, ex.getMessage(), ex.getLocalizedMessage()).setPath(getPath());
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public R unauthorizedException(UnauthorizedException ex) {
+    public R<?> unauthorizedException(UnauthorizedException ex) {
         log.warn("BizException:", ex);
         return R.result(ex.getCode(), null, ex.getMessage(), ex.getLocalizedMessage()).setPath(getPath());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R httpMessageNotReadableException(HttpMessageNotReadableException ex) {
+    public R<?> httpMessageNotReadableException(HttpMessageNotReadableException ex) {
         log.warn("HttpMessageNotReadableException:", ex);
         String message = ex.getMessage();
         if (StrUtil.containsAny(message, "Could not read document:")) {
@@ -87,7 +87,7 @@ public abstract class AbstractGlobalExceptionHandler {
 
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R bindException(BindException ex) {
+    public R<?> bindException(BindException ex) {
         log.warn("BindException:", ex);
         try {
             String msg = Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage();
@@ -110,7 +110,7 @@ public abstract class AbstractGlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+    public R<?> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         log.warn("MethodArgumentTypeMismatchException:", ex);
         String msg = "参数：[" + ex.getName() + "]的传入值：[" + ex.getValue() +
                 "]与预期的字段类型：[" + Objects.requireNonNull(ex.getRequiredType()).getName() + "]不匹配";
@@ -119,53 +119,53 @@ public abstract class AbstractGlobalExceptionHandler {
 
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R illegalStateException(IllegalStateException ex) {
+    public R<?> illegalStateException(IllegalStateException ex) {
         log.warn("IllegalStateException:", ex);
         return R.result(ExceptionCode.ILLEGAL_ARGUMENT_EX.getCode(), null, ExceptionCode.ILLEGAL_ARGUMENT_EX.getMsg(), ex.getMessage()).setPath(getPath());
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R missingServletRequestParameterException(MissingServletRequestParameterException ex) {
+    public R<?> missingServletRequestParameterException(MissingServletRequestParameterException ex) {
         log.warn("MissingServletRequestParameterException:", ex);
         return R.result(ExceptionCode.ILLEGAL_ARGUMENT_EX.getCode(), null, "缺少必须的[" + ex.getParameterType() + "]类型的参数[" + ex.getParameterName() + "]", ex.getMessage()).setPath(getPath());
     }
 
     @ExceptionHandler(NullPointerException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R nullPointerException(NullPointerException ex) {
+    public R<?> nullPointerException(NullPointerException ex) {
         log.warn("NullPointerException:", ex);
         return R.result(ExceptionCode.NULL_POINT_EX.getCode(), null, ExceptionCode.NULL_POINT_EX.getMsg(), ex.getMessage()).setPath(getPath());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R illegalArgumentException(IllegalArgumentException ex) {
+    public R<?> illegalArgumentException(IllegalArgumentException ex) {
         log.warn("IllegalArgumentException:", ex);
         return R.result(ExceptionCode.ILLEGAL_ARGUMENT_EX.getCode(), null, ExceptionCode.ILLEGAL_ARGUMENT_EX.getMsg(), ex.getMessage()).setPath(getPath());
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException ex) {
+    public R<?> httpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException ex) {
         log.warn("HttpMediaTypeNotSupportedException:", ex);
         MediaType contentType = ex.getContentType();
         if (contentType != null) {
-            return R.result(ExceptionCode.MEDIA_TYPE_EX.getCode(), null, "请求类型(Content-Type)[" + contentType.toString() + "] 与实际接口的请求类型不匹配", ex.getMessage()).setPath(getPath());
+            return R.result(ExceptionCode.MEDIA_TYPE_EX.getCode(), null, "请求类型(Content-Type)[" + contentType + "] 与实际接口的请求类型不匹配", ex.getMessage()).setPath(getPath());
         }
         return R.result(ExceptionCode.MEDIA_TYPE_EX.getCode(), null, "无效的Content-Type类型", ex.getMessage()).setPath(getPath());
     }
 
     @ExceptionHandler(MissingServletRequestPartException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R missingServletRequestPartException(MissingServletRequestPartException ex) {
+    public R<?> missingServletRequestPartException(MissingServletRequestPartException ex) {
         log.warn("MissingServletRequestPartException:", ex);
         return R.result(REQUIRED_FILE_PARAM_EX.getCode(), null, REQUIRED_FILE_PARAM_EX.getMsg(), ex.getMessage()).setPath(getPath());
     }
 
     @ExceptionHandler(ServletException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R servletException(ServletException ex) {
+    public R<?> servletException(ServletException ex) {
         log.warn("ServletException:", ex);
         String msg = "UT010016: Not a multi part request";
         if (msg.equalsIgnoreCase(ex.getMessage())) {
@@ -176,7 +176,7 @@ public abstract class AbstractGlobalExceptionHandler {
 
     @ExceptionHandler(MultipartException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R multipartException(MultipartException ex) {
+    public R<?> multipartException(MultipartException ex) {
         log.warn("MultipartException:", ex);
         return R.result(REQUIRED_FILE_PARAM_EX.getCode(), null, REQUIRED_FILE_PARAM_EX.getMsg(), ex.getMessage()).setPath(getPath());
     }
@@ -186,7 +186,7 @@ public abstract class AbstractGlobalExceptionHandler {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R constraintViolationException(ConstraintViolationException ex) {
+    public R<?> constraintViolationException(ConstraintViolationException ex) {
         log.warn("ConstraintViolationException:", ex);
         Set<ConstraintViolation<?>> violations = ex.getConstraintViolations();
         String message = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(";"));
@@ -199,7 +199,7 @@ public abstract class AbstractGlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R methodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public R<?> methodArgumentNotValidException(MethodArgumentNotValidException ex) {
         log.warn("MethodArgumentNotValidException:", ex);
         return R.result(ExceptionCode.BASE_VALID_PARAM.getCode(), null, Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage(), ex.getMessage()).setPath(getPath());
     }
@@ -209,9 +209,7 @@ public abstract class AbstractGlobalExceptionHandler {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes != null) {
             HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-            if (request != null) {
-                path = request.getRequestURI();
-            }
+            path = request.getRequestURI();
         }
         return path;
     }
@@ -223,7 +221,7 @@ public abstract class AbstractGlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R otherExceptionHandler(Exception ex) {
+    public R<?> otherExceptionHandler(Exception ex) {
         log.warn("Exception:", ex);
         if (ex.getCause() instanceof BizException) {
             return this.bizException((BizException) ex.getCause());
@@ -237,7 +235,7 @@ public abstract class AbstractGlobalExceptionHandler {
      */
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+    public R<?> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
         log.warn("HttpRequestMethodNotSupportedException:", ex);
         return R.result(METHOD_NOT_ALLOWED.getCode(), null, METHOD_NOT_ALLOWED.getMsg(), ex.getMessage()).setPath(getPath());
     }
@@ -245,7 +243,7 @@ public abstract class AbstractGlobalExceptionHandler {
 
     @ExceptionHandler(PersistenceException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R persistenceException(PersistenceException ex) {
+    public R<?> persistenceException(PersistenceException ex) {
         log.warn("PersistenceException:", ex);
         if (ex.getCause() instanceof BizException) {
             BizException cause = (BizException) ex.getCause();
@@ -256,7 +254,7 @@ public abstract class AbstractGlobalExceptionHandler {
 
     @ExceptionHandler(MyBatisSystemException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R myBatisSystemException(MyBatisSystemException ex) {
+    public R<?> myBatisSystemException(MyBatisSystemException ex) {
         log.warn("PersistenceException:", ex);
         if (ex.getCause() instanceof PersistenceException) {
             return this.persistenceException((PersistenceException) ex.getCause());
@@ -266,14 +264,14 @@ public abstract class AbstractGlobalExceptionHandler {
 
     @ExceptionHandler(SQLException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R sqlException(SQLException ex) {
+    public R<?> sqlException(SQLException ex) {
         log.warn("SQLException:", ex);
         return R.result(ExceptionCode.SQL_EX.getCode(), null, ExceptionCode.SQL_EX.getMsg(), ex.getMessage()).setPath(getPath());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public R dataIntegrityViolationException(DataIntegrityViolationException ex) {
+    public R<?> dataIntegrityViolationException(DataIntegrityViolationException ex) {
         log.warn("DataIntegrityViolationException:", ex);
         return R.result(ExceptionCode.SQL_EX.getCode(), null, ExceptionCode.SQL_EX.getMsg(), ex.getMessage()).setPath(getPath());
     }

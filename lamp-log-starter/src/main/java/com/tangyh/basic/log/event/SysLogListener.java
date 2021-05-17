@@ -30,6 +30,7 @@ public class SysLogListener {
     @EventListener(SysLogEvent.class)
     public void saveSysLog(SysLogEvent event) {
         OptLogDTO sysLog = (OptLogDTO) event.getSource();
+        // 非租户模式 (NONE) ， 需要修改这里的判断AbstractGlobalExceptionHandler
         if (sysLog == null || StrUtil.isEmpty(sysLog.getTenantCode())) {
             log.warn("租户编码不存在，忽略操作日志=={}", sysLog != null ? sysLog.getRequestUri() : "");
             return;
