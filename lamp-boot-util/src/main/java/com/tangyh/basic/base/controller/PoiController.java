@@ -137,6 +137,6 @@ public interface PoiController<Entity, PageQuery> extends PageController<Entity,
         Object sheetName = params.getExtra().getOrDefault("sheetName", "SheetName");
 
         ExcelType excelType = ExcelType.XSSF.name().equals(type) ? ExcelType.XSSF : ExcelType.HSSF;
-        return new ExportParams(String.valueOf(title), sheetName.toString(), excelType);
+        return new ExportParams(title == null ? null : String.valueOf(title), sheetName.toString(), excelType);
     }
 }
