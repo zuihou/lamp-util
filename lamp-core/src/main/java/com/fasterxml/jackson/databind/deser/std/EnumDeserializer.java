@@ -181,6 +181,9 @@ public class EnumDeserializer
             CompactStringObjectMap lookup = ctxt.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
                     ? _getToStringLookup(ctxt) : _lookupByName;
             final String name = p.getText();
+            if (name == null || "".equals(name)) {
+                return null;
+            }
             Object result = lookup.find(name);
             if (result == null) {
                 return _deserializeAltString(p, ctxt, lookup, name);
