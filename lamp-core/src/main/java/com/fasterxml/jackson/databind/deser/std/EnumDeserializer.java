@@ -181,7 +181,7 @@ public class EnumDeserializer
             CompactStringObjectMap lookup = ctxt.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
                     ? _getToStringLookup(ctxt) : _lookupByName;
             final String name = p.getText();
-            if (name == null || "".equals(name)) {
+            if (name == null || "".equals(name) || "null".equals(name)) {
                 return null;
             }
             Object result = lookup.find(name);
@@ -198,6 +198,9 @@ public class EnumDeserializer
             JsonNode node = p.getCodec().readTree(p);
             JsonNode code = node.get(EnumSerializer.ALL_ENUM_KEY_FIELD);
             String name = code != null ? code.asText() : node.asText();
+            if (name == null || "".equals(name) || "null".equals(name)) {
+                return null;
+            }
             Object result = lookup.find(name);
             if (result == null) {
                 return _deserializeAltString(p, ctxt, lookup, name);
