@@ -18,8 +18,6 @@ import org.apache.ibatis.type.TypeHandler;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -92,14 +90,12 @@ public abstract class BaseMasterDatabaseConfiguration extends BaseDatabaseConfig
      *
      * @return Druid数据源
      */
-    @Bean(name = DATABASE_PREFIX + "DruidDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.druid")
+    @Bean(name = DATABASE_PREFIX + "DruidDataSource", initMethod = "init")
     public DataSource druidDataSource() {
         return DruidDataSourceBuilder.create().build();
     }
 
     @Primary
-    @ConditionalOnMissingBean
     @Bean(name = DATABASE_PREFIX + "DataSource")
     public DataSource dataSource(@Qualifier(DATABASE_PREFIX + "DruidDataSource") DataSource dataSource) {
         if (databaseProperties.getP6spy()) {
@@ -116,6 +112,7 @@ public abstract class BaseMasterDatabaseConfiguration extends BaseDatabaseConfig
      * @throws Exception 异常
      */
     @Bean(DATABASE_PREFIX + "SqlSessionFactory")
+    @Primary
     public SqlSessionFactory getSqlSessionFactory(@Qualifier(DATABASE_PREFIX + "DataSource") DataSource dataSource) throws Exception {
         return super.sqlSessionFactory(dataSource);
     }
