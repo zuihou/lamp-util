@@ -19,6 +19,7 @@ import java.sql.Types;
  * @author zuihou
  * @date 2020年01月18日17:20:34
  */
+@Deprecated
 public class RemoteDataTypeHandler extends BaseTypeHandler<RemoteData> {
     /**
      * insert 、update 时执行该方法

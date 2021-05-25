@@ -16,6 +16,7 @@ import com.tangyh.basic.annotation.log.SysLog;
 import com.tangyh.basic.annotation.security.PreAuth;
 import com.tangyh.basic.base.R;
 import com.tangyh.basic.base.request.PageParams;
+import com.tangyh.basic.utils.BeanPlusUtil;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.validation.annotation.Validated;
@@ -41,6 +42,15 @@ import java.util.Map;
  * @date 2020年03月07日22:02:06
  */
 public interface PoiController<Entity, PageQuery> extends PageController<Entity, PageQuery> {
+    /**
+     * 获取实体的类型
+     *
+     * @return 实体的类型
+     */
+    default Class<?> getExcelClass() {
+        return getEntityClass();
+    }
+
 
     /**
      * 导出Excel
@@ -54,16 +64,35 @@ public interface PoiController<Entity, PageQuery> extends PageController<Entity,
     @SysLog("'导出Excel:'.concat(#params.extra[" + NormalExcelConstants.FILE_NAME + "]?:'')")
     @PreAuth("hasAnyPermission('{}export')")
     default void exportExcel(@RequestBody @Validated PageParams<PageQuery> params, HttpServletRequest request, HttpServletResponse response) {
-        IPage<Entity> page = params.buildPage();
-        ExportParams exportParams = getExportParams(params, page);
+        ExportParams exportParams = getExportParams(params);
+
+        List<?> list = findExportList(params);
 
         Map<String, Object> map = new HashMap<>(7);
-        map.put(NormalExcelConstants.DATA_LIST, page.getRecords());
-        map.put(NormalExcelConstants.CLASS, getEntityClass());
+        map.put(NormalExcelConstants.DATA_LIST, list);
+        map.put(NormalExcelConstants.CLASS, getExcelClass());
         map.put(NormalExcelConstants.PARAMS, exportParams);
         Object fileName = params.getExtra().getOrDefault(NormalExcelConstants.FILE_NAME, "临时文件");
         map.put(NormalExcelConstants.FILE_NAME, fileName);
         PoiBaseView.render(map, request, response, NormalExcelConstants.EASYPOI_EXCEL_VIEW);
+    }
+
+
+    /**
+     * 查询待导出的数据， 子类可以重写
+     *
+     * @param params params
+     * @return java.util.List<?>
+     * @author tangyh
+     * @date 2021/5/23 10:25 下午
+     * @create [2021/5/23 10:25 下午 ] [tangyh] [初始创建]
+     * @update [2021/5/23 10:25 下午 ] [tangyh] [变更描述]
+     */
+    default List<?> findExportList(PageParams<PageQuery> params) {
+        IPage<Entity> page = params.buildPage();
+        query(params, page, params.getSize() == -1 ? Convert.toLong(Integer.MAX_VALUE) : params.getSize());
+
+        return BeanPlusUtil.toBeanList(page.getRecords(), getExcelClass());
     }
 
     /**
@@ -77,10 +106,9 @@ public interface PoiController<Entity, PageQuery> extends PageController<Entity,
     @RequestMapping(value = "/preview", method = RequestMethod.POST)
     @PreAuth("hasAnyPermission('{}export')")
     default R<String> preview(@RequestBody @Validated PageParams<PageQuery> params) {
-        IPage<Entity> page = params.buildPage();
-        ExportParams exportParams = getExportParams(params, page);
-
-        Workbook workbook = ExcelExportUtil.exportExcel(exportParams, getEntityClass(), page.getRecords());
+        ExportParams exportParams = getExportParams(params);
+        List<?> list = findExportList(params);
+        Workbook workbook = ExcelExportUtil.exportExcel(exportParams, getExcelClass(), list);
         return success(ExcelXorHtmlUtil.excelToHtml(new ExcelToHtmlParams(workbook)));
     }
 
@@ -124,19 +152,30 @@ public interface PoiController<Entity, PageQuery> extends PageController<Entity,
 
     /**
      * 构建导出参数
+     * 子类可以重写
      *
      * @param params 分页参数
-     * @param page   分页
      * @return 导出参数
      */
-    default ExportParams getExportParams(PageParams<PageQuery> params, IPage<Entity> page) {
-        query(params, page, params.getSize() == -1 ? Convert.toLong(Integer.MAX_VALUE) : params.getSize());
-
+    default ExportParams getExportParams(PageParams<PageQuery> params) {
         Object title = params.getExtra().get("title");
         Object type = params.getExtra().getOrDefault("type", ExcelType.XSSF.name());
         Object sheetName = params.getExtra().getOrDefault("sheetName", "SheetName");
 
         ExcelType excelType = ExcelType.XSSF.name().equals(type) ? ExcelType.XSSF : ExcelType.HSSF;
-        return new ExportParams(title == null ? null : String.valueOf(title), sheetName.toString(), excelType);
+        ExportParams ep = new ExportParams(title == null ? null : String.valueOf(title), sheetName.toString(), excelType);
+        enhanceExportParams(ep);
+        return ep;
+    }
+
+    /**
+     * 子类增强ExportParams
+     *
+     * @param ep ep
+     * @author tangyh
+     * @date 2021/5/23 10:27 下午
+     * @create [2021/5/23 10:27 下午 ] [tangyh] [初始创建]
+     */
+    default void enhanceExportParams(ExportParams ep) {
     }
 }
