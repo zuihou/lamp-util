@@ -41,6 +41,14 @@ public class DatabaseProperties {
      */
     private Boolean isSeata = false;
     /**
+     * 是否启用控制台sql记录
+     *
+     * @author zuihou
+     * @date 2021/5/25 11:40 上午
+     * @create [2021/5/25 11:40 上午 ] [zuihou] [初始创建]
+     */
+    private Boolean p6spy = false;
+    /**
      * 分页大小限制
      */
     private long limit = -1;

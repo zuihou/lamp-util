@@ -23,7 +23,6 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.type.TypeHandler;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -55,12 +54,6 @@ import java.util.function.Consumer;
 @Slf4j
 public abstract class BaseDatabaseConfiguration implements InitializingBean {
 
-    /**
-     * 测试环境
-     */
-    protected static final String[] DEV_PROFILES = new String[]{"dev"};
-    @Value("${spring.profiles.active:dev}")
-    protected String profiles;
 
     protected final MybatisPlusProperties properties;
     protected final DatabaseProperties databaseProperties;
