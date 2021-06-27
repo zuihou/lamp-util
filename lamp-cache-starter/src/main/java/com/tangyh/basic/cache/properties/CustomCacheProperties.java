@@ -24,7 +24,7 @@ public class CustomCacheProperties {
     /**
      * 序列化类型
      */
-    private SerializerType serializerType = SerializerType.JDK;
+    private SerializerType serializerType = SerializerType.JACK_SON;
     /**
      * 是否缓存 null 值
      */

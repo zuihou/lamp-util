@@ -2,6 +2,7 @@ package com.tangyh.basic.utils;
 
 
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.tangyh.basic.exception.BizException;
 import com.tangyh.basic.exception.code.BaseExceptionCode;
 
@@ -111,9 +112,9 @@ public final class BizAssert {
         }
     }
 
-    public static void isFalse(boolean condition, String exceptionMessage) {
+    public static void isFalse(boolean condition, String exceptionMessage, String... args) {
         if (condition) {
-            fail(exceptionMessage);
+            fail(StrUtil.format(exceptionMessage, args));
         }
     }
 

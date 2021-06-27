@@ -9,7 +9,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.tangyh.basic.base.BaseEnum;
-import com.tangyh.basic.converter.EnumDeserializer;
 import com.tangyh.basic.converter.EnumSerializer;
 import com.tangyh.basic.converter.LampLocalDateTimeDeserializer;
 
@@ -20,9 +19,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import static com.tangyh.basic.utils.DateUtils.DEFAULT_DATE_FORMAT;
-import static com.tangyh.basic.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT;
-import static com.tangyh.basic.utils.DateUtils.DEFAULT_TIME_FORMAT;
+import static com.tangyh.basic.utils.DateUtils.*;
 
 /**
  * jackson 自定义序列化 & 反序列化 规则
@@ -44,6 +41,8 @@ public class LampJacksonModule extends SimpleModule {
         this.addSerializer(BigInteger.class, ToStringSerializer.instance);
         this.addSerializer(BigDecimal.class, ToStringSerializer.instance);
         this.addSerializer(BaseEnum.class, EnumSerializer.INSTANCE);
+        // 3.2.1 版本以后，覆盖官方的EnumDeserializer
+//        this.addDeserializer(Enum.class, EnumDeserializer.INSTANCE);
     }
 
 }

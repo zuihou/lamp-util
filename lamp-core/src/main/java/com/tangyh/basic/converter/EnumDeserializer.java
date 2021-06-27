@@ -22,7 +22,7 @@ import static com.tangyh.basic.converter.EnumSerializer.ALL_ENUM_KEY_FIELD;
  * <p>
  * 此反序列化类有bug，请使用 com.fasterxml.jackson.databind.deser.std.EnumDeserializer
  * bug1： 不支持接收List<Enum>
- * bug2: 传错删除没有报错
+ * bug2: 传错参数没有报错
  *
  * @author zuihou
  * @date 2019-07-25 22:15

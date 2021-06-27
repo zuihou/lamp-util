@@ -10,6 +10,7 @@ import com.tangyh.basic.cache.repository.CachePlusOps;
 import com.tangyh.basic.utils.StrPool;
 import org.springframework.lang.NonNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -213,6 +214,17 @@ public class CaffeineOpsImpl implements CacheOps, CachePlusOps {
             }
         });
         return list;
+    }
+
+    @Override
+    public List<String> scan(String pattern) {
+        return new ArrayList<>(keys(pattern));
+    }
+
+    @Override
+    public void scanUnlink(String pattern) {
+        Set<String> keys = keys(pattern);
+        del(keys.stream().toArray(String[]::new));
     }
 
     @Override

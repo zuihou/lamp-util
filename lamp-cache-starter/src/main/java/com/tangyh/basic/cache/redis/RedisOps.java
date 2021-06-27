@@ -2,16 +2,25 @@ package com.tangyh.basic.cache.redis;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.google.common.collect.Lists;
 import com.tangyh.basic.cache.model.CacheHashKey;
 import com.tangyh.basic.cache.model.CacheKey;
+import com.tangyh.basic.exception.BizException;
 import com.tangyh.basic.utils.BizAssert;
 import com.tangyh.basic.utils.CollHelper;
+import com.tangyh.basic.utils.StrPool;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.DataType;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.DefaultTypedTuple;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -19,7 +28,9 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,6 +43,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -48,11 +60,13 @@ import java.util.stream.Collectors;
  * @author zuihou
  */
 @Getter
+@Slf4j
 @SuppressWarnings({"unused", "SpellCheckingInspection", "unchecked"})
 public class RedisOps {
 
     private static final String KEY_NOT_NULL = "key不能为空";
     private static final String CACHE_KEY_NOT_NULL = "cacheKey不能为空";
+    private static final int BATCH_SIZE = 1000;
 
     private static final Map<String, Object> KEY_LOCKS = new ConcurrentHashMap<>();
     private final RedisTemplate<String, Object> redisTemplate;
@@ -88,9 +102,8 @@ public class RedisOps {
     /**
      * 判断缓存值是否为空对象
      *
-     * @param value
-     * @param <T>
-     * @return
+     * @param value 返回值
+     * @return 是否为空
      */
     private static <T> boolean isNullVal(T value) {
         boolean isNull = value == null || NullVal.class.equals(value.getClass());
@@ -100,7 +113,7 @@ public class RedisOps {
     /**
      * new 一个空值
      *
-     * @return
+     * @return 空对象
      */
     private NullVal newNullVal() {
         return new NullVal();
@@ -109,9 +122,8 @@ public class RedisOps {
     /**
      * 返回正常值 or null
      *
-     * @param value
-     * @param <T>
-     * @return
+     * @param value 返回值
+     * @return 对象
      */
     private <T> T returnVal(T value) {
         return isNullVal(value) ? null : value;
@@ -128,7 +140,7 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/del">Redis Documentation: DEL</a>
      */
     public Long del(@NonNull CacheKey... keys) {
-        return redisTemplate.delete(Arrays.stream(keys).map(CacheKey::getKey).collect(Collectors.toList()));
+        return del(Arrays.stream(keys).map(CacheKey::getKey).collect(Collectors.toList()));
     }
 
     /**
@@ -140,7 +152,27 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/del">Redis Documentation: DEL</a>
      */
     public Long del(@NonNull String... keys) {
-        return redisTemplate.delete(Arrays.stream(keys).collect(Collectors.toList()));
+        return del(Arrays.stream(keys).collect(Collectors.toList()));
+    }
+
+    /**
+     * 删除给定的一个 key 或 多个key
+     * 不存在的 key 会被忽略。
+     *
+     * @param keys 一定不能为 {@literal null}.
+     * @return key 被删除返回true
+     * @see <a href="https://redis.io/commands/del">Redis Documentation: DEL</a>
+     */
+    public Long del(@NonNull List<String> keys) {
+        if (CollUtil.isEmpty(keys)) {
+            return 0L;
+        }
+        List<List<String>> partitionKeys = Lists.partition(keys, BATCH_SIZE);
+        long count = 0;
+        for (List<String> list : partitionKeys) {
+            count += redisTemplate.delete(list);
+        }
+        return count;
     }
 
     /**
@@ -152,7 +184,129 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/del">Redis Documentation: DEL</a>
      */
     public Long del(@NonNull Collection<CacheKey> keys) {
-        return redisTemplate.delete(keys.stream().map(CacheKey::getKey).collect(Collectors.toList()));
+        return del(keys.stream().map(CacheKey::getKey).collect(Collectors.toList()));
+    }
+
+    /**
+     * 异步删除给定的一个 key 或 多个key
+     * 不存在的 key 会被忽略。
+     *
+     * @param keys 一定不能为 {@literal null}.
+     * @return key 被删除返回true
+     * @see <a href="https://redis.io/commands/unlink">Redis Documentation: DEL</a>
+     */
+    public Long unlink(@NonNull CacheKey... keys) {
+        return unlinkStrs(Arrays.stream(keys).map(CacheKey::getKey).collect(Collectors.toList()));
+    }
+
+    /**
+     * 异步删除给定的一个 key 或 多个key
+     * 不存在的 key 会被忽略。
+     *
+     * @param keys 一定不能为 {@literal null}.
+     * @return key 被删除返回true
+     * @see <a href="https://redis.io/commands/unlink">Redis Documentation: DEL</a>
+     */
+    public Long unlink(@NonNull String... keys) {
+        return unlinkStrs(Arrays.stream(keys).collect(Collectors.toList()));
+    }
+
+    /**
+     * 异步删除给定的一个 key 或 多个key
+     * 不存在的 key 会被忽略。
+     *
+     * @param keys 一定不能为 {@literal null}.
+     * @return key 被删除返回true
+     * @see <a href="https://redis.io/commands/unlink">Redis Documentation: DEL</a>
+     */
+    public Long unlinkCacheKeys(@NonNull Collection<CacheKey> keys) {
+        return unlinkStrs(keys.stream().map(CacheKey::getKey).collect(Collectors.toList()));
+    }
+
+    /**
+     * 异步删除给定的一个 key 或 多个key
+     * 不存在的 key 会被忽略。
+     *
+     * @param keys 一定不能为 {@literal null}.
+     * @return key 被删除返回true
+     * @see <a href="https://redis.io/commands/unlink">Redis Documentation: DEL</a>
+     */
+    public Long unlinkStrs(@NonNull List<String> keys) {
+        if (CollUtil.isEmpty(keys)) {
+            return 0L;
+        }
+        List<List<String>> partitionKeys = Lists.partition(keys, BATCH_SIZE);
+        long count = 0;
+        for (List<String> list : partitionKeys) {
+            count += redisTemplate.unlink(list);
+        }
+        return count;
+    }
+
+    /**
+     * 批量扫描后删除 匹配到的key
+     *
+     * @param pattern pattern
+     * @author tangyh
+     * @date 2021/6/18 3:21 下午
+     * @create [2021/6/18 3:21 下午 ] [tangyh] [初始创建]
+     */
+    public void scanUnlink(@NonNull String pattern) {
+        log.info("pattern={}", pattern);
+        if (StrUtil.isEmpty(pattern) || StrPool.STAR.equals(pattern.trim())) {
+            throw BizException.wrap("必须指定匹配符");
+        }
+        List<String> keys = scan(pattern);
+        log.info("keys={}", keys.size());
+        if (CollUtil.isEmpty(keys)) {
+            return;
+        }
+        unlinkStrs(keys);
+    }
+
+    /**
+     * 查找所有符合给定模式 pattern 的 key 。
+     * <p>
+     * 例子：
+     * KEYS * 匹配数据库中所有 key 。
+     * KEYS h?llo 匹配 hello ， hallo 和 hxllo 等。
+     * KEYS h*llo 匹配 hllo 和 heeeeello 等。
+     * KEYS h[ae]llo 匹配 hello 和 hallo ，但不匹配 hillo 。
+     * <p>
+     * 特殊符号用 \ 隔开
+     *
+     * @param pattern 表达式
+     * @return 符合给定模式的 key 列表
+     * @see <a href="https://redis.io/commands/keys">Redis Documentation: KEYS</a>
+     */
+    public List<String> scan(@NonNull String pattern) {
+        List<String> keyList = new ArrayList<>();
+        scan(pattern, item -> {
+            //符合条件的key
+            Object key = redisTemplate.getKeySerializer().deserialize(item);
+            if (ObjectUtil.isNotEmpty(key)) {
+                keyList.add(String.valueOf(key));
+            }
+        });
+        return keyList;
+    }
+
+    /**
+     * scan 实现
+     *
+     * @param pattern  表达式
+     * @param consumer 对迭代到的key进行操作
+     */
+    private void scan(String pattern, Consumer<byte[]> consumer) {
+        redisTemplate.execute((RedisConnection connection) -> {
+            try (Cursor<byte[]> cursor = connection.scan(ScanOptions.scanOptions().count(BATCH_SIZE).match(pattern).build())) {
+                cursor.forEachRemaining(consumer);
+                return null;
+            } catch (IOException e) {
+                log.error("scan 异常", e);
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     /**

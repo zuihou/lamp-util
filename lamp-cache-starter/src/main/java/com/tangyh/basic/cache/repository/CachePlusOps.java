@@ -35,6 +35,38 @@ public interface CachePlusOps extends CacheOps {
     Set<String> keys(@NonNull String pattern);
 
     /**
+     * 查找所有符合给定模式 pattern 的 key 。
+     * <p>
+     * 例子：
+     * KEYS * 匹配数据库中所有 key 。
+     * KEYS h?llo 匹配 hello ， hallo 和 hxllo 等。
+     * KEYS a*cde 匹配 acde 和 aeeeeecde 等。
+     * KEYS h[ae]llo 匹配 hello 和 hallo ，但不匹配 hillo 。
+     * <p>
+     * 特殊符号用 \ 隔开
+     *
+     * @param pattern 表达式
+     * @return 符合给定模式的 key 列表
+     */
+    List<String> scan(@NonNull String pattern);
+
+    /**
+     * 查找所有符合给定模式 pattern 的 key ,并将其删除
+     * <p>
+     * 例子：
+     * KEYS * 匹配数据库中所有 key 。
+     * KEYS h?llo 匹配 hello ， hallo 和 hxllo 等。
+     * KEYS a*cde 匹配 acde 和 aeeeeecde 等。
+     * KEYS h[ae]llo 匹配 hello 和 hallo ，但不匹配 hillo 。
+     * <p>
+     * 特殊符号用 \ 隔开
+     *
+     * @param pattern 表达式
+     * @return 符合给定模式的 key 列表
+     */
+    void scanUnlink(@NonNull String pattern);
+
+    /**
      * 为给定 key 设置生存时间，当 key 过期时(生存时间为 0 )，它会被自动删除。
      *
      * @param key 一定不能为 {@literal null}.

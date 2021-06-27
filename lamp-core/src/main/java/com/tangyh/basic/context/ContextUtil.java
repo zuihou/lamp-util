@@ -1,6 +1,7 @@
 package com.tangyh.basic.context;
 
 import cn.hutool.core.convert.Convert;
+import com.alibaba.ttl.TransmittableThreadLocal;
 import com.tangyh.basic.utils.StrPool;
 
 import java.util.Map;
@@ -17,7 +18,21 @@ public final class ContextUtil {
     private ContextUtil() {
     }
 
-    private static final ThreadLocal<Map<String, String>> THREAD_LOCAL = new ThreadLocal<>();
+//    private static final ThreadLocal<Map<String, String>> THREAD_LOCAL = new ThreadLocal<>();
+    /**
+     * 支持多线程传递参数
+     *
+     * @author tangyh
+     * @date 2021/6/23 9:26 下午
+     * @create [2021/6/23 9:26 下午 ] [tangyh] [初始创建]
+     */
+    private static final ThreadLocal<Map<String, String>> THREAD_LOCAL = new TransmittableThreadLocal<>();
+
+    public static void putAll(Map<String, String> map) {
+        map.forEach((k, v) -> {
+            set(k, v);
+        });
+    }
 
     public static void set(String key, Object value) {
         Map<String, String> map = getLocalMap();

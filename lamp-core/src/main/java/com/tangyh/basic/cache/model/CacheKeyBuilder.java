@@ -13,6 +13,7 @@ import org.springframework.lang.Nullable;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.tangyh.basic.utils.StrPool.COLON;
 
@@ -53,6 +54,42 @@ public interface CacheKeyBuilder {
     @Nullable
     default Duration getExpire() {
         return null;
+    }
+
+    /**
+     * 获取通配符
+     *
+     * @return key 前缀
+     */
+    default String getPattern() {
+        return StrUtil.format("*:{}:*", getPrefix());
+    }
+
+
+    /**
+     * 获取通配符
+     *
+     * @param tenant 企业编码
+     * @param suffix 前缀
+     * @return key 前缀
+     */
+    default String getPattern(String tenant, Object... suffix) {
+        String prefix = this.getPrefix();
+        BizAssert.notEmpty(prefix, "缓存前缀不能为空");
+
+        List<String> regionList = new ArrayList<>();
+        tenant = StrUtil.isEmpty(tenant) ? StrPool.STAR : tenant;
+        // 企业id
+        if (StrUtil.isNotEmpty(tenant)) {
+            regionList.add(tenant);
+        }
+        // 缓存前缀
+        regionList.add(prefix);
+
+        for (Object s : suffix) {
+            regionList.add(ObjectUtil.isNotEmpty(s) ? String.valueOf(s) : StrPool.STAR);
+        }
+        return CollUtil.join(regionList, COLON);
     }
 
     /**

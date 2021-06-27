@@ -21,8 +21,9 @@ public interface PageController<Entity, PageQuery> extends BaseController<Entity
      * 处理参数
      *
      * @param params 分页参数
+     * @param page   分页对象
      */
-    default void handlerQueryParams(PageParams<PageQuery> params) {
+    default void handlerQueryParams(PageParams<PageQuery> params, IPage<Entity> page) {
     }
 
     /**
@@ -35,7 +36,7 @@ public interface PageController<Entity, PageQuery> extends BaseController<Entity
      * @param defSize 默认查询数
      */
     default void query(PageParams<PageQuery> params, IPage<Entity> page, Long defSize) {
-        handlerQueryParams(params);
+        handlerQueryParams(params, page);
 
         if (defSize != null) {
             page.setSize(defSize);
@@ -43,10 +44,9 @@ public interface PageController<Entity, PageQuery> extends BaseController<Entity
         Entity model = BeanUtil.toBean(params.getModel(), getEntityClass());
 
         QueryWrap<Entity> wrapper = handlerWrapper(model, params);
-        getBaseService().page(page, wrapper);
 
         // 处理结果
-        handlerResult(page);
+        handlerResult(page, wrapper);
     }
 
 
@@ -64,9 +64,11 @@ public interface PageController<Entity, PageQuery> extends BaseController<Entity
     /**
      * 自定义处理返回结果
      *
-     * @param page 分页对象
+     * @param page    分页对象
+     * @param wrapper 分页参数
      */
-    default void handlerResult(IPage<Entity> page) {
+    default void handlerResult(IPage<Entity> page, QueryWrap<Entity> wrapper) {
+        getBaseService().page(page, wrapper);
         // 调用注入方法
     }
 

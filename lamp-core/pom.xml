@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lamp-util</artifactId>
         <groupId>com.tangyh.basic</groupId>
-        <version>3.2.2</version>
+        <version>3.2.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -37,7 +37,10 @@
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-parameter-names</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>transmittable-thread-local</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus</artifactId>
