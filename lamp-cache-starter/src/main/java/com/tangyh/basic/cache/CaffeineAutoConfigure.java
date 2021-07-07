@@ -49,6 +49,7 @@ public class CaffeineAutoConfigure {
     @Bean
     @ConditionalOnMissingBean
     public CacheOps cacheOps() {
+        log.warn("检查到缓存采用了 Caffeine(内存模式)");
         return new CaffeineOpsImpl();
     }
 

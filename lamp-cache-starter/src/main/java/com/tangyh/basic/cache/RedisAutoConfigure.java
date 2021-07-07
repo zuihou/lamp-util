@@ -12,6 +12,7 @@ import com.tangyh.basic.cache.utils.RedisObjectSerializer;
 import com.tangyh.basic.lock.DistributedLock;
 import com.tangyh.basic.utils.StrPool;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -46,6 +47,7 @@ import java.util.Optional;
 @ConditionalOnProperty(prefix = CustomCacheProperties.PREFIX, name = "type", havingValue = "REDIS", matchIfMissing = true)
 @EnableConfigurationProperties({RedisProperties.class, CustomCacheProperties.class})
 @RequiredArgsConstructor
+@Slf4j
 public class RedisAutoConfigure {
     private final CustomCacheProperties cacheProperties;
 
@@ -110,6 +112,7 @@ public class RedisAutoConfigure {
     @Bean
     @ConditionalOnMissingBean
     public CacheOps cacheOps(RedisOps redisOps) {
+        log.warn("检查到缓存采用了 Redis模式");
         return new RedisOpsImpl(redisOps);
     }
 

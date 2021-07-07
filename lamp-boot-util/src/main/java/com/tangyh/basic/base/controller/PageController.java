@@ -16,42 +16,40 @@ import com.tangyh.basic.database.mybatis.conditions.query.QueryWrap;
  */
 public interface PageController<Entity, PageQuery> extends BaseController<Entity> {
 
-
     /**
-     * 处理参数
+     * 处理查询参数
      *
-     * @param params 分页参数
-     * @param page   分页对象
+     * @param params 前端传递的参数
+     * @author tangyh
+     * @date 2021/7/3 3:25 下午
+     * @create [2021/7/3 3:25 下午 ] [tangyh] [初始创建]
      */
-    default void handlerQueryParams(PageParams<PageQuery> params, IPage<Entity> page) {
+    default void handlerQueryParams(PageParams<PageQuery> params) {
     }
 
     /**
-     * 执行查询
+     * 执行分页查询
      * <p>
-     * 可以覆盖后重写查询逻辑
+     * 子类可以覆盖后重写查询逻辑
      *
-     * @param params  分页参数
-     * @param page    分页对象
-     * @param defSize 默认查询数
+     * @param params 分页参数
+     * @return 分页信息
      */
-    default void query(PageParams<PageQuery> params, IPage<Entity> page, Long defSize) {
-        handlerQueryParams(params, page);
+    default IPage<Entity> query(PageParams<PageQuery> params) {
+        handlerQueryParams(params);
 
-        if (defSize != null) {
-            page.setSize(defSize);
-        }
+        IPage<Entity> page = params.buildPage();
         Entity model = BeanUtil.toBean(params.getModel(), getEntityClass());
 
         QueryWrap<Entity> wrapper = handlerWrapper(model, params);
-
+        getBaseService().page(page, wrapper);
         // 处理结果
-        handlerResult(page, wrapper);
+        handlerResult(page);
+        return page;
     }
 
-
     /**
-     * 处理时间区间，可以覆盖后处理组装查询条件
+     * 处理对象中的非空参数和扩展字段中的区间参数，可以覆盖后处理组装查询条件
      *
      * @param model  实体类
      * @param params 分页参数
@@ -62,14 +60,12 @@ public interface PageController<Entity, PageQuery> extends BaseController<Entity
     }
 
     /**
-     * 自定义处理返回结果
+     * 处理查询后的数据
+     * <p>
+     * 如：执行@Echo回显
      *
-     * @param page    分页对象
-     * @param wrapper 分页参数
+     * @param page 分页对象
      */
-    default void handlerResult(IPage<Entity> page, QueryWrap<Entity> wrapper) {
-        getBaseService().page(page, wrapper);
-        // 调用注入方法
+    default void handlerResult(IPage<Entity> page) {
     }
-
 }

@@ -89,9 +89,8 @@ public interface PoiController<Entity, PageQuery> extends PageController<Entity,
      * @update [2021/5/23 10:25 下午 ] [tangyh] [变更描述]
      */
     default List<?> findExportList(PageParams<PageQuery> params) {
-        IPage<Entity> page = params.buildPage();
-        query(params, page, params.getSize() == -1 ? Convert.toLong(Integer.MAX_VALUE) : params.getSize());
-
+        params.setSize(params.getSize() == -1 ? Convert.toLong(Integer.MAX_VALUE) : params.getSize());
+        IPage<Entity> page = query(params);
         return BeanPlusUtil.toBeanList(page.getRecords(), getExcelClass());
     }
 

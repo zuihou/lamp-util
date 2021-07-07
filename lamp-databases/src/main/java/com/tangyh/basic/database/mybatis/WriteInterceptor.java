@@ -75,7 +75,7 @@ public class WriteInterceptor extends AbstractSqlParserHandler implements Interc
 
 
         //演示用的超级管理员 能查 和 增
-        if (userId == 2 && (DELETE.equals(mappedStatement.getSqlCommandType()))) {
+        if (new Long(2).equals(userId) && (DELETE.equals(mappedStatement.getSqlCommandType()))) {
             throw new BizException(-1, "演示环境，无删除权限，请本地部署后测试");
         }
 
