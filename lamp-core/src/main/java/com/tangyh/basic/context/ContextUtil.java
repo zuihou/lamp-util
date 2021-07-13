@@ -170,6 +170,14 @@ public final class ContextUtil {
         set(ContextConstants.JWT_KEY_TENANT, val);
     }
 
+    public static String getSubTenant() {
+        return get(ContextConstants.JWT_KEY_SUB_TENANT, String.class, StrPool.EMPTY);
+    }
+
+    public static void setSubTenant(String val) {
+        set(ContextConstants.JWT_KEY_SUB_TENANT, val);
+    }
+
     public static String getClientId() {
         return get(ContextConstants.JWT_KEY_CLIENT_ID, String.class);
     }

@@ -37,10 +37,12 @@ public class HeaderThreadLocalInterceptor extends HandlerInterceptorAdapter {
             ContextUtil.setAccount(getHeader(request, ContextConstants.JWT_KEY_ACCOUNT));
             ContextUtil.setName(getHeader(request, ContextConstants.JWT_KEY_NAME));
             ContextUtil.setTenant(getHeader(request, ContextConstants.JWT_KEY_TENANT));
+            ContextUtil.setSubTenant(getHeader(request, ContextConstants.JWT_KEY_SUB_TENANT));
 
             String traceId = request.getHeader(ContextConstants.TRACE_ID_HEADER);
             MDC.put(ContextConstants.LOG_TRACE_ID, StrUtil.isEmpty(traceId) ? StrUtil.EMPTY : traceId);
             MDC.put(ContextConstants.JWT_KEY_TENANT, getHeader(request, ContextConstants.JWT_KEY_TENANT));
+            MDC.put(ContextConstants.JWT_KEY_SUB_TENANT, getHeader(request, ContextConstants.JWT_KEY_SUB_TENANT));
             MDC.put(ContextConstants.JWT_KEY_USER_ID, getHeader(request, ContextConstants.JWT_KEY_USER_ID));
         }
         // cloud

@@ -175,7 +175,7 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
         final LbqWrapper<T> instance = instance();
         consumer.accept(instance);
         if (!instance.isEmptyOfWhere()) {
-            return doIt(true, APPLY, instance);
+            appendSqlSegments(APPLY, instance);
         }
         return this;
     }

@@ -40,7 +40,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
-import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -64,17 +63,18 @@ import java.util.stream.Collectors;
 @ConditionalOnProperty(prefix = "knife4j", name = "enable", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerAutoConfiguration implements BeanFactoryAware {
-
+    private static final String SEMICOLON = ";";
     private SwaggerProperties swaggerProperties;
-    private ServletContext servletContext;
     private BeanFactory beanFactory;
-    private static final String SPLITOR = ";";
     private OpenApiExtensionResolver openApiExtensionResolver;
 
-    public SwaggerAutoConfiguration(SwaggerProperties swaggerProperties, ServletContext servletContext, OpenApiExtensionResolver openApiExtensionResolver) {
+    public SwaggerAutoConfiguration(SwaggerProperties swaggerProperties, OpenApiExtensionResolver openApiExtensionResolver) {
         this.swaggerProperties = swaggerProperties;
-        this.servletContext = servletContext;
         this.openApiExtensionResolver = openApiExtensionResolver;
+    }
+
+    private static Predicate<String> ant(final String antPattern) {
+        return input -> new AntPathMatcher().match(antPattern, input);
     }
 
     @Override
@@ -82,16 +82,12 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
         this.beanFactory = beanFactory;
     }
 
-    private static Predicate<String> ant(final String antPattern) {
-        return input -> new AntPathMatcher().match(antPattern, input);
-    }
-
     private static Predicate<RequestHandler> basePackage(final String basePackage) {
         return input -> declaringClass(input).map(handlerPackage(basePackage)).orElse(true);
     }
 
     private static Function<Class<?>, Boolean> handlerPackage(final String basePackage) {
-        return input -> Arrays.stream(StrUtil.split(basePackage, SPLITOR)).anyMatch(ClassUtils.getPackageName(input)::startsWith);
+        return input -> StrUtil.split(basePackage, SEMICOLON).stream().anyMatch(ClassUtils.getPackageName(input)::startsWith);
     }
 
     private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {

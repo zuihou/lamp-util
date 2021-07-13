@@ -9,10 +9,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import static com.tangyh.basic.database.properties.DatabaseProperties.PREFIX;
 import static com.tangyh.basic.database.properties.MultiTenantType.SCHEMA;
 
@@ -41,11 +37,7 @@ public class DatabaseProperties {
      */
     private Boolean isSeata = false;
     /**
-     * 是否启用控制台sql记录
-     *
-     * @author zuihou
-     * @date 2021/5/25 11:40 上午
-     * @create [2021/5/25 11:40 上午 ] [zuihou] [初始创建]
+     * 是否p6spy在控制台打印日志
      */
     private Boolean p6spy = false;
     /**
@@ -62,10 +54,7 @@ public class DatabaseProperties {
      * 是否启用数据权限
      */
     private Boolean isDataScope = true;
-    /**
-     * 事务超时时间
-     */
-    private int txTimeout = 60 * 60;
+
 
     /**
      * 租户库 前缀
@@ -78,6 +67,8 @@ public class DatabaseProperties {
     private MultiTenantType multiTenantType = SCHEMA;
     /**
      * 租户id 列名
+     * <p>
+     * 使用于 COLUMN 模式
      */
     private String tenantIdColumn = "tenant_code";
     /**
@@ -90,19 +81,6 @@ public class DatabaseProperties {
     private CacheId cacheId = new CacheId();
     private DefaultId defaultId = new DefaultId();
     private HutoolId hutoolId = new HutoolId();
-
-    /**
-     * 统一管理事务的方法名
-     */
-    private List<String> transactionAttributeList = new ArrayList<>(Arrays.asList("add*", "save*", "insert*",
-            "create*", "update*", "edit*", "upload*", "delete*", "remove*",
-            "clean*", "recycle*", "batch*", "mark*", "disable*", "enable*", "handle*", "syn*",
-            "reg*", "gen*", "*Tx"
-    ));
-    /**
-     * 事务扫描基础包
-     */
-    private String transactionScanPackage = "com.tangyh.basic";
 
     @Data
     public static class HutoolId {

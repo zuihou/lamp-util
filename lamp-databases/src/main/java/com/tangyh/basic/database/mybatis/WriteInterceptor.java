@@ -3,7 +3,6 @@ package com.tangyh.basic.database.mybatis;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
-import com.baomidou.mybatisplus.extension.handlers.AbstractSqlParserHandler;
 import com.tangyh.basic.context.ContextUtil;
 import com.tangyh.basic.exception.BizException;
 import com.tangyh.basic.utils.SpringUtils;
@@ -42,7 +41,7 @@ import static org.apache.ibatis.mapping.SqlCommandType.UPDATE;
 @Slf4j
 @NoArgsConstructor
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
-public class WriteInterceptor extends AbstractSqlParserHandler implements Interceptor {
+public class WriteInterceptor implements Interceptor {
 
 
     @Override
@@ -58,7 +57,7 @@ public class WriteInterceptor extends AbstractSqlParserHandler implements Interc
 
         StatementHandler statementHandler = PluginUtils.realTarget(invocation.getTarget());
         MetaObject metaObject = SystemMetaObject.forObject(statementHandler);
-        sqlParser(metaObject);
+//        sqlParser(metaObject);
         // 读操作 放行
         MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
         if (SqlCommandType.SELECT.equals(mappedStatement.getSqlCommandType())) {
@@ -75,7 +74,7 @@ public class WriteInterceptor extends AbstractSqlParserHandler implements Interc
 
 
         //演示用的超级管理员 能查 和 增
-        if (new Long(2).equals(userId) && (DELETE.equals(mappedStatement.getSqlCommandType()))) {
+        if (Long.valueOf(2).equals(userId) && (DELETE.equals(mappedStatement.getSqlCommandType()))) {
             throw new BizException(-1, "演示环境，无删除权限，请本地部署后测试");
         }
 

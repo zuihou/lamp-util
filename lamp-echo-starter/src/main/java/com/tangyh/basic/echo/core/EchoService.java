@@ -1,12 +1,15 @@
 package com.tangyh.basic.echo.core;
 
-import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.LoadingCache;
 import com.tangyh.basic.annotation.echo.Echo;
+import com.tangyh.basic.echo.manager.CacheLoadKeys;
 import com.tangyh.basic.echo.manager.ClassManager;
 import com.tangyh.basic.echo.manager.FieldParam;
 import com.tangyh.basic.echo.manager.LoadKey;
@@ -21,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -58,12 +61,27 @@ public class EchoService {
      * 动态配置参数
      */
     private final EchoProperties ips;
+    /**
+     * 内存缓存
+     */
+    private LoadingCache<CacheLoadKeys, Map<Serializable, Object>> caches;
 
     public EchoService(EchoProperties ips, Map<String, LoadService> strategyMap) {
-        this.ips = ips;
         strategyMap.forEach(this.strategyMap::put);
+        this.ips = ips;
+        EchoProperties.GuavaCache guavaCache = ips.getGuavaCache();
+        if (guavaCache.getEnabled()) {
+            this.caches = CacheBuilder.newBuilder()
+                    .maximumSize(guavaCache.getMaximumSize())
+                    .refreshAfterWrite(guavaCache.getRefreshWriteTime(), TimeUnit.MINUTES)
+                    .build(new DefCacheLoader(guavaCache));
+        }
+
     }
 
+    public void action(Object obj, String... ignoreFields) {
+        this.action(obj, false, ignoreFields);
+    }
 
     /**
      * 回显数据的3个步骤：（出现回显失败时，认真debug该方法）
@@ -75,9 +93,10 @@ public class EchoService {
      * 注意：若对象中需要回显的字段之间出现循环引用，很可能发生异常，所以请保证不要出现循环引用！！！
      *
      * @param obj          需要回显的参数，支持 自定义对象(User)、集合(List<User>、Set<User>)、IPage
+     * @param isUseCache   是否使用内存缓存
      * @param ignoreFields 忽略字段
      */
-    public void action(Object obj, String... ignoreFields) {
+    public void action(Object obj, boolean isUseCache, String... ignoreFields) {
         try {
             /*
              LoadKey 为远程查询的类+方法
@@ -99,7 +118,7 @@ public class EchoService {
             }
 
             // 2. 依次查询待回显的数据
-            this.load(typeMap);
+            this.load(typeMap, isUseCache);
 
             long echoStart = System.currentTimeMillis();
 
@@ -183,7 +202,8 @@ public class EchoService {
      *
      * @param typeMap
      */
-    private void load(Map<LoadKey, Map<Serializable, Object>> typeMap) {
+    @SneakyThrows
+    private void load(Map<LoadKey, Map<Serializable, Object>> typeMap, boolean isUseCache) {
         for (Map.Entry<LoadKey, Map<Serializable, Object>> entries : typeMap.entrySet()) {
             LoadKey type = entries.getKey();
             Map<Serializable, Object> valueMap = entries.getValue();
@@ -191,15 +211,15 @@ public class EchoService {
 
             LoadService loadService = strategyMap.get(type.getApi());
             if (loadService == null) {
-                log.warn("处理字段的回显数据时，没有找到 @Echo 中的api字段：[{}]。请确保你自定义的接口实现了 LoadService 中的 [{}] 方法", type.getApi(), type.getMethod());
+                log.warn("处理字段的回显数据时，没有找到 @Echo 中的api：[{}]实例。" +
+                        "请确保你自定义的接口实现了 LoadService 中的 findByIds 方法。" +
+                        "若api指定的是ServiceImpl，请确保在同一个服务内。", type.getApi());
                 continue;
             }
-            Map<Serializable, Object> value;
-            if ("findByIds".equals(type.getMethod())) {
-                value = loadService.findByIds(keys);
-            } else {
-                value = loadService.findNameByIds(keys);
-            }
+
+            CacheLoadKeys lk = new CacheLoadKeys(type, loadService, keys);
+            Map<Serializable, Object> value = ips.getGuavaCache().getEnabled() && isUseCache ? caches.get(lk) : lk.loadMap();
+
             typeMap.put(type, value);
         }
     }
@@ -295,7 +315,7 @@ public class EchoService {
         }
         Map<Serializable, Object> valueMap = typeMap.get(loadKey);
 
-        if (CollUtil.isEmpty(valueMap)) {
+        if (MapUtil.isEmpty(valueMap)) {
             return null;
         }
 
@@ -308,9 +328,9 @@ public class EchoService {
         newVal = valueMap.get(actualValue.toString());
         // 可能由于是多key原因导致get失败
         if (ObjectUtil.isNull(newVal) && StrUtil.isNotEmpty(echo.dictType())) {
-            String[] codes = StrUtil.split(originalValue.toString(), ips.getDictItemSeparator());
+            List<String> codes = StrUtil.split(originalValue.toString(), ips.getDictItemSeparator());
 
-            newVal = Arrays.stream(codes).map(item -> {
+            newVal = codes.stream().map(item -> {
                 String val = valueMap.getOrDefault(echo.dictType() + ips.getDictSeparator() + item, EMPTY).toString();
                 return val == null ? EMPTY : val;
             }).collect(Collectors.joining(ips.getDictItemSeparator()));

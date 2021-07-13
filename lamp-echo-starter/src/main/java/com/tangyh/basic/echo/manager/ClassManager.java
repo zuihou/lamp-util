@@ -46,8 +46,8 @@ public class ClassManager implements Serializable {
             if (echo == null) {
                 continue;
             }
-            if (StrUtil.hasEmpty(echo.api(), echo.method())) {
-                log.warn("类 {} 属性 [{}] api 或 method 为空。", clazz.getName(), field.getName());
+            if (StrUtil.hasEmpty(echo.api())) {
+                log.warn("类 {} 属性 [{}] api 为空。", clazz.getName(), field.getName());
                 continue;
             }
             fieldList.add(field);

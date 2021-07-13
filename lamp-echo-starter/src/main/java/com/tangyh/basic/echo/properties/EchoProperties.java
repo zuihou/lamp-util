@@ -36,4 +36,31 @@ public class EchoProperties {
      */
     private Integer maxDepth = 3;
 
+    /**
+     * 本地缓存配置信息
+     */
+    private GuavaCache guavaCache = new GuavaCache();
+
+
+    @Data
+    public static class GuavaCache {
+        /**
+         * 是否启用本地缓存
+         * <p>
+         * 注意：本地缓存开启后，会存在短暂的数据不一致情况(由guavaCacheRefreshWriteTime决定)， 所以对数据正确性有要求的项目建议禁用，然后在@Echo.method 方法上执行添加redis等缓存！
+         */
+        private Boolean enabled = false;
+        /**
+         * guava缓存的 最大数
+         */
+        private Integer maximumSize = 1000;
+        /**
+         * guava更新缓存的下一次时间,分钟
+         */
+        private Integer refreshWriteTime = 2;
+        /**
+         * guava自动刷新缓存的线程数量
+         */
+        private Integer refreshThreadPoolSize = 10;
+    }
 }

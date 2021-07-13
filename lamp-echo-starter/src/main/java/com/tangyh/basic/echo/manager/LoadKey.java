@@ -28,14 +28,8 @@ public class LoadKey {
      */
     private String api;
 
-    /**
-     * 调用方法
-     */
-    private String method;
-
     public LoadKey(Echo rf) {
         this.api = rf.api();
-        this.method = rf.method();
     }
 
     @Override
@@ -47,11 +41,11 @@ public class LoadKey {
             return false;
         }
         LoadKey that = (LoadKey) o;
-        return Objects.equal(api, that.api) && Objects.equal(method, that.method);
+        return Objects.equal(api, that.api);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(api, method);
+        return Objects.hashCode(api);
     }
 }

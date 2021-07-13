@@ -26,6 +26,8 @@ public enum MultiTenantType {
     /**
      * 独立schema模式
      * 在sql中拼接 数据库 schema
+     * <p>
+     * 该模式暂不支持复杂sql、存储过程、函数等，欢迎大家提供解决方案。
      */
     SCHEMA("独立schema模式"),
     /**
@@ -34,6 +36,16 @@ public enum MultiTenantType {
      * 该模式不开源，购买咨询作者。
      */
     DATASOURCE("独立数据源模式"),
+    /**
+     * 数据源 + 字段 混合模式
+     * <p>
+     * 该模式不开源，购买咨询作者。
+     */
+    DATASOURCE_COLUMN("数据源&字段混合模式"),
+    /**
+     * SCHEMA + 字段 混合模式
+     */
+    SCHEMA_COLUMN("SCHEMA&字段混合模式"),
     ;
     private String describe;
 

@@ -1,6 +1,7 @@
 package com.tangyh.basic.utils;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.HashBiMap;
@@ -93,7 +94,7 @@ public final class CollHelper {
      * @return 反转的map
      */
     public static <K, V> Map<V, K> inverse(Map<K, V> map) {
-        if (CollUtil.isEmpty(map)) {
+        if (MapUtil.isEmpty(map)) {
             return Collections.emptyMap();
         }
         HashBiMap<K, V> biMap = HashBiMap.create();
@@ -134,7 +135,7 @@ public final class CollHelper {
         if (CollUtil.isEmpty(list)) {
             return new ArrayList<>();
         }
-        return list.parallelStream().map(function).map(item -> StrUtil.split(String.valueOf(item), separator))
+        return list.parallelStream().map(function).map(item -> StrUtil.splitToArray(String.valueOf(item), separator))
                 .flatMap(Arrays::stream).filter(ObjectUtil::isNotEmpty).distinct().collect(Collectors.toList());
     }
 
@@ -149,7 +150,7 @@ public final class CollHelper {
         if (CollUtil.isEmpty(list)) {
             return new ArrayList<>();
         }
-        return list.parallelStream().map(item -> StrUtil.split(item, separator))
+        return list.parallelStream().map(item -> StrUtil.splitToArray(item, separator))
                 .flatMap(Arrays::stream).filter(ObjectUtil::isNotEmpty).distinct().collect(Collectors.toList());
     }
 

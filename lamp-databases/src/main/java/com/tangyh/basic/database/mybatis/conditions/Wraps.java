@@ -1,7 +1,7 @@
 package com.tangyh.basic.database.mybatis.conditions;
 
 
-import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -103,7 +103,7 @@ public final class Wraps {
     public static <Entity> QueryWrap<Entity> q(Entity model, Map<String, Object> extra, Class<Entity> modelClazz) {
         QueryWrap<Entity> wrapper = model != null ? Wraps.q(model) : Wraps.q();
 
-        if (CollUtil.isNotEmpty(extra)) {
+        if (MapUtil.isNotEmpty(extra)) {
             //拼装区间
             for (Map.Entry<String, Object> field : extra.entrySet()) {
                 String key = field.getKey();

@@ -1,6 +1,6 @@
 package com.tangyh.basic.base.request;
 
-import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.tangyh.basic.utils.DateUtils;
 
@@ -26,7 +26,7 @@ public class PageUtil {
             return;
         }
         Map<String, Object> extra = params.getExtra();
-        if (CollUtil.isEmpty(extra)) {
+        if (MapUtil.isEmpty(extra)) {
             return;
         }
         for (Map.Entry<String, Object> field : extra.entrySet()) {

@@ -38,6 +38,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -192,8 +194,10 @@ public class SysLogAspect {
         optLogDTO.setUa(StrUtil.sub(request.getHeader("user-agent"), 0, 500));
         if (ContextUtil.getBoot()) {
             optLogDTO.setTenantCode(ContextUtil.getTenant());
+            optLogDTO.setSubTenantCode(ContextUtil.getSubTenant());
         } else {
             optLogDTO.setTenantCode(request.getHeader(ContextConstants.JWT_KEY_TENANT));
+            optLogDTO.setSubTenantCode(request.getHeader(ContextConstants.JWT_KEY_SUB_TENANT));
         }
         optLogDTO.setTrace(MDC.get(ContextConstants.LOG_TRACE_ID));
         if (StrUtil.isEmpty(optLogDTO.getTrace())) {
@@ -301,14 +305,15 @@ public class SysLogAspect {
 
     private String getArgs(Object[] args, HttpServletRequest request) {
         String strArgs = StrPool.EMPTY;
+        Object[] params = Arrays.stream(args).filter(item -> !(item instanceof ServletRequest || item instanceof ServletResponse)).toArray();
 
         try {
             if (!request.getContentType().contains(FORM_DATA_CONTENT_TYPE)) {
-                strArgs = JsonUtil.toJson(args);
+                strArgs = JsonUtil.toJson(params);
             }
         } catch (Exception e) {
             try {
-                strArgs = Arrays.toString(args);
+                strArgs = Arrays.toString(params);
             } catch (Exception ex) {
                 log.warn("解析参数异常", ex);
             }

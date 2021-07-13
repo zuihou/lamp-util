@@ -37,7 +37,7 @@ public class EchoAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = EchoProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
+//    @ConditionalOnProperty(prefix = EchoProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
     public EchoService getEchoService(Map<String, LoadService> strategyMap) {
         return new EchoService(remoteProperties, strategyMap);
     }

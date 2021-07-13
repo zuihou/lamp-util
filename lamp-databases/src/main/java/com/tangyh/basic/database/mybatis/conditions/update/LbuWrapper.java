@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.SharedString;
 import com.baomidou.mybatisplus.core.conditions.segments.MergeSegments;
 import com.baomidou.mybatisplus.core.conditions.update.Update;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
@@ -67,7 +68,7 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
      * 不建议直接 new 该实例，使用 Wrappers.lambdaUpdate(...)
      */
     private LbuWrapper(T entity, Class<T> entityClass, List<String> sqlSet, AtomicInteger paramNameSeq,
-                       Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments,
+                       Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments, SharedString paramAlias,
                        SharedString lastSql, SharedString sqlComment, SharedString sqlFirst) {
         super.setEntity(entity);
         super.setEntityClass(entityClass);
@@ -75,6 +76,7 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
         this.paramNameSeq = paramNameSeq;
         this.paramNameValuePairs = paramNameValuePairs;
         this.expression = mergeSegments;
+        this.paramAlias = paramAlias;
         this.lastSql = lastSql;
         this.sqlComment = sqlComment;
         this.sqlFirst = sqlFirst;
@@ -92,11 +94,11 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
     }
 
     @Override
-    public LbuWrapper<T> set(boolean condition, SFunction<T, ?> column, Object val) {
-        if (condition) {
-            sqlSet.add(String.format("%s=%s", columnToString(column), formatSql("{0}", val)));
-        }
-        return typedThis;
+    public LbuWrapper<T> set(boolean condition, SFunction<T, ?> column, Object val, String mapping) {
+        return maybeDo(condition, () -> {
+            String sql = formatParam(mapping, val);
+            sqlSet.add(columnToString(column) + Constants.EQUALS + sql);
+        });
     }
 
     @Override
@@ -118,7 +120,7 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
     @Override
     protected LbuWrapper<T> instance() {
         return new LbuWrapper<>(getEntity(), getEntityClass(), null, paramNameSeq, paramNameValuePairs,
-                new MergeSegments(), SharedString.emptyString(), SharedString.emptyString(), SharedString.emptyString());
+                new MergeSegments(), paramAlias, SharedString.emptyString(), SharedString.emptyString(), SharedString.emptyString());
     }
 
     @Override
@@ -132,7 +134,7 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
         final LbuWrapper<T> instance = instance();
         consumer.accept(instance);
         if (!instance.isEmptyOfWhere()) {
-            return doIt(true, APPLY, instance);
+            appendSqlSegments(APPLY, instance);
         }
         return this;
     }
@@ -197,6 +199,4 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
     public LbuWrapper<T> in(SFunction<T, ?> column, Object... values) {
         return super.in(values != null && values.length > 0, column, values);
     }
-
-
 }

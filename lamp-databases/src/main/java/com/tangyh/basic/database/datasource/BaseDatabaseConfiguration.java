@@ -32,7 +32,9 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -55,8 +57,8 @@ import java.util.function.Consumer;
 public abstract class BaseDatabaseConfiguration implements InitializingBean {
 
 
-    protected final MybatisPlusProperties properties;
     protected final DatabaseProperties databaseProperties;
+    protected final MybatisPlusProperties properties;
     protected final Interceptor[] interceptors;
     protected final TypeHandler[] typeHandlers;
     protected final LanguageDriver[] languageDrivers;
@@ -94,9 +96,9 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         if (!CollectionUtils.isEmpty(this.mybatisPlusPropertiesCustomizers)) {
-            this.mybatisPlusPropertiesCustomizers.forEach(i -> i.customize(this.properties));
+            mybatisPlusPropertiesCustomizers.forEach(i -> i.customize(this.properties));
         }
-        this.checkConfigFileExists();
+        checkConfigFileExists();
     }
 
     private void checkConfigFileExists() {
@@ -114,8 +116,8 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
      * @return sqlSession工厂
      * @throws Exception 异常
      */
-    protected SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-        // 使用 MybatisSqlSessionFactoryBean 而不是 SqlSessionFactoryBean
+    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+        // TODO 使用 MybatisSqlSessionFactoryBean 而不是 SqlSessionFactoryBean
         MybatisSqlSessionFactoryBean factory = new MybatisSqlSessionFactoryBean();
         factory.setDataSource(dataSource);
         factory.setVfs(SpringBootVFS.class);
@@ -148,33 +150,39 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
         if (!ObjectUtils.isEmpty(mapperLocations)) {
             factory.setMapperLocations(mapperLocations);
         }
-        //  修改源码支持定义 TransactionFactory
+        // TODO 修改源码支持定义 TransactionFactory
         this.getBeanThen(TransactionFactory.class, factory::setTransactionFactory);
 
-        //  对源码做了一定的修改(因为源码适配了老旧的mybatis版本,但我们不需要适配)
+        // TODO 对源码做了一定的修改(因为源码适配了老旧的mybatis版本,但我们不需要适配)
         Class<? extends LanguageDriver> defaultLanguageDriver = this.properties.getDefaultScriptingLanguageDriver();
         if (!ObjectUtils.isEmpty(this.languageDrivers)) {
             factory.setScriptingLanguageDrivers(this.languageDrivers);
         }
         Optional.ofNullable(defaultLanguageDriver).ifPresent(factory::setDefaultScriptingLanguageDriver);
 
-        //  自定义枚举包
+        // TODO 自定义枚举包
         if (StringUtils.hasLength(this.properties.getTypeEnumsPackage())) {
             factory.setTypeEnumsPackage(this.properties.getTypeEnumsPackage());
         }
-        //  此处必为非 NULL
+        // TODO 此处必为非 NULL
         GlobalConfig globalConfig = this.properties.getGlobalConfig();
-        //  注入填充器
+        // TODO 注入填充器
         this.getBeanThen(MetaObjectHandler.class, globalConfig::setMetaObjectHandler);
-        //  注入主键生成器
-        this.getBeanThen(IKeyGenerator.class, i -> globalConfig.getDbConfig().setKeyGenerator(i));
-        //  注入sql注入器
+        // TODO 注入主键生成器
+        this.getBeansThen(IKeyGenerator.class, i -> globalConfig.getDbConfig().setKeyGenerators(i));
+        // TODO 注入sql注入器
         this.getBeanThen(ISqlInjector.class, globalConfig::setSqlInjector);
-        //  注入ID生成器
+        // TODO 注入ID生成器
         this.getBeanThen(IdentifierGenerator.class, globalConfig::setIdentifierGenerator);
-        //  设置 GlobalConfig 到 MybatisSqlSessionFactoryBean
+        // TODO 设置 GlobalConfig 到 MybatisSqlSessionFactoryBean
         factory.setGlobalConfig(globalConfig);
         return factory.getObject();
+    }
+
+    private <T> void getBeanThen(Class<T> clazz, Consumer<T> consumer) {
+        if (this.applicationContext.getBeanNamesForType(clazz, false, false).length > 0) {
+            consumer.accept(this.applicationContext.getBean(clazz));
+        }
     }
 
     /**
@@ -184,9 +192,12 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
      * @param consumer 消费
      * @param <T>      泛型
      */
-    protected <T> void getBeanThen(Class<T> clazz, Consumer<T> consumer) {
+    private <T> void getBeansThen(Class<T> clazz, Consumer<List<T>> consumer) {
         if (this.applicationContext.getBeanNamesForType(clazz, false, false).length > 0) {
-            consumer.accept(this.applicationContext.getBean(clazz));
+            final Map<String, T> beansOfType = this.applicationContext.getBeansOfType(clazz);
+            List<T> clazzList = new ArrayList<>();
+            beansOfType.forEach((k, v) -> clazzList.add(v));
+            consumer.accept(clazzList);
         }
     }
 
@@ -196,7 +207,7 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
             newConfiguration = new MybatisConfiguration();
         }
 
-        // 改过这里：  这里一定要复制一次， 否则多数据源时，会导致拦截器等执行多次
+        // zuihou 改过这里：  这里一定要复制一次， 否则多数据源时，会导致拦截器等执行多次
         MybatisConfiguration configuration = new MybatisConfiguration();
         BeanUtil.copyProperties(newConfiguration, configuration);
 

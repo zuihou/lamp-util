@@ -6,7 +6,6 @@ import com.baidu.fsg.uid.UidGenerator;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.tangyh.basic.base.entity.Entity;
 import com.tangyh.basic.base.entity.SuperEntity;
 import com.tangyh.basic.context.ContextUtil;
@@ -49,13 +48,16 @@ public class LampMetaObjectHandler implements MetaObjectHandler {
     /**
      * 注意：不支持 复合主键 自动注入！！
      * <p>
-     * 所有的继承了Entity、SuperEntity的实体，在insert时，
-     * id： id为空时， 通过IdGenerate生成唯一ID， 不为空则使用传递进来的id
-     * createdBy, updatedBy: 自动赋予 当前线程上的登录人id
-     * createTime, updateTime: 自动赋予 服务器的当前时间
+     * 1、所有的继承了Entity、SuperEntity的实体，在insert时，
+     * id： id为空时， 通过IdGenerate生成唯一ID。
+     * createdBy, updatedBy: 自动赋予 当前线程上的登录人id。
+     * createTime, updateTime: 自动赋予 服务器的当前时间。
      * <p>
-     * 未继承任何父类的实体，且主键标注了 @TableId(value = "xxx", type = IdType.INPUT) 自动注入 主键
-     * 主键的字段名称任意
+     * 注意：实体中字段为空时才会赋值，若手动传值了，这里不会重新赋值
+     * <p>
+     * 2、未继承任何父类的实体，且主键标注了 @TableId(value = "xxx", type = IdType.INPUT) 也能自动赋值，主键的字段名称任意
+     * <p>
+     * 3、未继承任何父类的实体，但主键名为 id，也能自动赋值
      */
     @Override
     public void insertFill(MetaObject metaObject) {
@@ -66,7 +68,7 @@ public class LampMetaObjectHandler implements MetaObjectHandler {
 
     private void fillId(MetaObject metaObject) {
         if (uidGenerator == null) {
-            // 这里使用SpringUtils的方式"延迟"获取对象，防止启动时，报循环注入的错
+            // 这里使用SpringUtils的方式"异步"获取对象，防止启动时，报循环注入的错
             uidGenerator = SpringUtils.getBean(UidGenerator.class);
         }
         Long id = uidGenerator.getUid();
@@ -95,9 +97,10 @@ public class LampMetaObjectHandler implements MetaObjectHandler {
         }
 
         // 3. 实体没有继承 Entity 和 SuperEntity，且 主键名为其他字段
-        TableInfo tableInfo = metaObject.hasGetter(Constants.MP_OPTLOCK_ET_ORIGINAL) ?
-                TableInfoHelper.getTableInfo(metaObject.getValue(Constants.MP_OPTLOCK_ET_ORIGINAL).getClass())
-                : TableInfoHelper.getTableInfo(metaObject.getOriginalObject().getClass());
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(metaObject.getOriginalObject().getClass());
+//        TableInfo tableInfo = metaObject.hasGetter(Constants.MP_OPTLOCK_ET_ORIGINAL) ?
+//                TableInfoHelper.getTableInfo(metaObject.getValue(Constants.MP_OPTLOCK_ET_ORIGINAL).getClass())
+//                : TableInfoHelper.getTableInfo(metaObject.getOriginalObject().getClass());
         if (tableInfo == null) {
             return;
         }

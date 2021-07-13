@@ -11,13 +11,13 @@ import static cn.hutool.core.text.CharSequenceUtil.EMPTY;
  * 在某个对象的字段上标记该注解，该字段的值将被主动注入
  * <p>
  * 如：
- * \@Echo(api = "dictionaryServiceImpl", method = "findDictionaryItem")
+ * \@Echo(api = "dictionaryServiceImpl")
  * private String nation;
- * \@Echo(api = "dictionaryServiceImpl", method = "findDictionaryItem")
+ * \@Echo(api = "dictionaryServiceImpl")
  * private RemoteData<String,String>  nation;
- * \@Echo(api = "dictionaryApi", method = "findDictionaryItem")
+ * \@Echo(api = "dictionaryApi")
  * private RemoteData<String,String>  nation;
- * \@Echo(api = "userApi", method = "findUserByIds", beanClass = User.class)
+ * \@Echo(api = "xxx.xxx.xxx.UserApi", beanClass = User.class)
  * private RemoteData<String, User>  user;
  *
  * <p>
@@ -47,24 +47,10 @@ public @interface Echo {
      * 如： @Echo(api="userApi") 等价于 @Echo(apiClass=UserApi.class)
      * <p/>
      * 注意： 用 @Echo(api = "xxxServiceImpl")时，要保证当前服务有 xxxServiceImpl 类. 没这个类就要用 xxxApi  (FeignClient)
-     * <p>
-     * 注意：若使用feignClient调用， 则一定要加上 @FeignClient(qualifier = "userApi"), 否则会注入失败
      *
      * @return 查询类的Spring Name
      */
     String api();
-
-    /**
-     * 提供自动注入值的 查询方法
-     * <p>
-     * 若 找不到 api(apiClass) + method，则忽略该字段
-     * <p>
-     * 该方法的入参必须为 Set<Serializable> 类型
-     * 该方法的出参必须为 Map<Serializable, Object> 类型
-     *
-     * @return 查询类中的方法
-     */
-    String method() default "findByIds";
 
     /**
      * 自动注入值的类型， 用于强制转换

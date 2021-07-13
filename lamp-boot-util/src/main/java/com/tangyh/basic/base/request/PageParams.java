@@ -67,8 +67,8 @@ public class PageParams<T> {
         Page<E> page = new Page(params.getCurrent(), params.getSize());
 
         List<OrderItem> orders = new ArrayList<>();
-        String[] sortArr = StrUtil.split(params.getSort(), StrPool.COMMA);
-        String[] orderArr = StrUtil.split(params.getOrder(), StrPool.COMMA);
+        String[] sortArr = StrUtil.splitToArray(params.getSort(), StrPool.COMMA);
+        String[] orderArr = StrUtil.splitToArray(params.getOrder(), StrPool.COMMA);
 
         int len = Math.min(sortArr.length, orderArr.length);
         for (int i = 0; i < len; i++) {

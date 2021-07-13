@@ -142,7 +142,7 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
         final QueryWrap<T> instance = instance();
         consumer.accept(instance);
         if (!instance.isEmptyOfWhere()) {
-            return doIt(true, APPLY, instance);
+            appendSqlSegments(APPLY, instance);
         }
         return this;
     }

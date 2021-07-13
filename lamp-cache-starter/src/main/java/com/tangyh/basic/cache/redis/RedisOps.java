@@ -2,6 +2,7 @@ package com.tangyh.basic.cache.redis;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Lists;
@@ -1460,7 +1461,7 @@ public class RedisOps {
 
     private <K, V> Map<K, V> returnMapVal(Map<K, V> map) {
         Map<K, V> newMap = new HashMap<>(CollHelper.initialCapacity(map.size()));
-        if (CollUtil.isNotEmpty(map)) {
+        if (MapUtil.isNotEmpty(map)) {
             map.forEach((k, v) -> {
                 if (!isNullVal(v)) {
                     newMap.put(k, v);
@@ -1483,13 +1484,13 @@ public class RedisOps {
     public <K, V> Map<K, V> hGetAll(@NonNull CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues) {
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
         Map<K, V> map = (Map<K, V>) hashOps.entries(key.getKey());
-        if (CollUtil.isNotEmpty(map)) {
+        if (MapUtil.isNotEmpty(map)) {
             return returnMapVal(map);
         }
         String lockKey = key.getKey();
         synchronized (KEY_LOCKS.computeIfAbsent(lockKey, v -> new Object())) {
             map = (Map<K, V>) hashOps.entries(key.getKey());
-            if (CollUtil.isNotEmpty(map)) {
+            if (MapUtil.isNotEmpty(map)) {
                 return returnMapVal(map);
             }
             try {
