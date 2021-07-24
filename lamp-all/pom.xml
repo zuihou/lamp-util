@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lamp-util</artifactId>
         <groupId>com.tangyh.basic</groupId>
-        <version>3.2.5</version>
+        <version>3.3.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -85,11 +85,6 @@
         <dependency>
             <groupId>com.tangyh.basic</groupId>
             <artifactId>lamp-xss-starter</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.tangyh.basic</groupId>
-            <artifactId>lamp-zipkin-client-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
 

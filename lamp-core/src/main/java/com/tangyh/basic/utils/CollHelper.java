@@ -4,8 +4,10 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Multimap;
 import com.tangyh.basic.base.BaseEnum;
 
 import java.util.ArrayList;
@@ -86,6 +88,38 @@ public final class CollHelper {
                             + ".若要在键下索引多个值，请使用: Multimaps.index.", duplicateKeys);
         }
     }
+
+    /**
+     * 一个key 对应多个值的map
+     * 结构： key -> [value1, value2, ...]
+     *
+     * @param values        需要转换的集合 可以是任何实现了 Iterable 接口的集合(如List, Set, Collection)
+     * @param keyFunction   转换后Map的键的转换方式
+     * @param valueFunction 转换后Map的值的转换方式
+     * @param <K>           转换后Map的键 类型
+     * @param <V>           转换前Iterable的迭代类型
+     * @param <M>           转换后Map的值 类型
+     * @return 唯一的map
+     */
+    public static <K, V, M> Multimap<K, M> iterableToMultiMap(Iterable<V> values, Function<? super V, K> keyFunction, Function<? super V, M> valueFunction) {
+        Iterator<V> iterator = values.iterator();
+        checkNotNull(keyFunction);
+        checkNotNull(valueFunction);
+
+        Multimap<K, M> builder = ArrayListMultimap.create();
+        while (iterator.hasNext()) {
+            V value = iterator.next();
+            builder.put(keyFunction.apply(value), valueFunction.apply(value));
+        }
+        try {
+            return builder;
+        } catch (IllegalArgumentException duplicateKeys) {
+            throw new IllegalArgumentException(
+                    duplicateKeys.getMessage()
+                            + ".若要在键下索引多个值，请使用: Multimaps.index.", duplicateKeys);
+        }
+    }
+
 
     /**
      * 转换 Map 的 K 和 V

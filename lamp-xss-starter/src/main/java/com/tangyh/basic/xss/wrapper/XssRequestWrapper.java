@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +43,19 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
     }
 
     @Override
+    public String getQueryString() {
+        String queryString = super.getQueryString();
+        try {
+            if (null != queryString) {
+                queryString = URLDecoder.decode(queryString, "UTF-8");
+            }
+        } catch (UnsupportedEncodingException e) {
+            log.warn("getQueryString", e);
+        }
+        return xssClean(queryString, this.ignoreParamValueList);
+    }
+
+    @Override
     public String[] getParameterValues(String paramString) {
         String[] arrayOfString1 = super.getParameterValues(paramString);
         if (arrayOfString1 == null) {
@@ -49,7 +64,7 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
         int i = arrayOfString1.length;
         String[] arrayOfString2 = new String[i];
         for (int j = 0; j < i; j++) {
-            arrayOfString2[j] = xssClean(arrayOfString1[j], this.ignoreParamValueList);
+            arrayOfString2[j] = xssClean(arrayOfString1[j], this.ignoreParamValueList, paramString);
         }
         return arrayOfString2;
     }

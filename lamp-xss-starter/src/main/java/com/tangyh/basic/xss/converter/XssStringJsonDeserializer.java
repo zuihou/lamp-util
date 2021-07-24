@@ -40,6 +40,16 @@ public class XssStringJsonDeserializer extends JsonDeserializer<String> {
         list.add("</frame>");
         list.add("<noframes>");
         list.add("</noframes>");
+        list.add("<embed>");
+        list.add("</embed>");
+        list.add("<object>");
+        list.add("</object>");
+//            list.add("<style>");
+//            list.add("</style>");
+        list.add("<meta>");
+        list.add("</meta>");
+        list.add("<link>");
+        list.add("</link>");
         if (list.stream().anyMatch(value::contains)) {
             return XssUtils.xssClean(value, null);
         }

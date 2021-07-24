@@ -101,5 +101,5 @@ public final class ContextConstants {
     /**
      * 灰度发布版本号
      */
-    public static final String GRAY_VERSION = "grayversion";
+    public static final String GRAY_VERSION = "gray_version";
 }

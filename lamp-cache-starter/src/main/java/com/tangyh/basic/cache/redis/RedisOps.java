@@ -29,7 +29,6 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -303,9 +302,6 @@ public class RedisOps {
             try (Cursor<byte[]> cursor = connection.scan(ScanOptions.scanOptions().count(BATCH_SIZE).match(pattern).build())) {
                 cursor.forEachRemaining(consumer);
                 return null;
-            } catch (IOException e) {
-                log.error("scan 异常", e);
-                throw new RuntimeException(e);
             }
         });
     }

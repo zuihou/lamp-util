@@ -1,6 +1,7 @@
-package com.tangyh.basic.cloud;
+package com.tangyh.basic.cloud.config;
 
 
+import com.alibaba.cloud.sentinel.annotation.SentinelRestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tangyh.basic.cloud.http.InfoFeignLoggerFactory;
 import com.tangyh.basic.cloud.http.RestTemplateHeaderInterceptor;
@@ -51,7 +52,7 @@ public class RestTemplateConfiguration {
     }
 
     @Bean
-    @Profile({"docker", "prod"})
+    @Profile({"docker", "uat", "prod"})
     Logger.Level prodFeignLoggerLevel() {
         return Logger.Level.BASIC;
     }
@@ -96,7 +97,6 @@ public class RestTemplateConfiguration {
 
     /**
      * 解决 RestTemplate 传递Request header
-     *
      */
     @Bean
     public RestTemplateHeaderInterceptor requestHeaderInterceptor() {
@@ -112,6 +112,7 @@ public class RestTemplateConfiguration {
      */
     @Bean("lbRestTemplate")
     @LoadBalanced
+    @SentinelRestTemplate
     @ConditionalOnMissingBean(RestTemplate.class)
     public RestTemplate lbRestTemplate(okhttp3.OkHttpClient httpClient, RestTemplateHeaderInterceptor interceptor) {
         RestTemplate lbRestTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory(httpClient));
@@ -127,6 +128,7 @@ public class RestTemplateConfiguration {
      * @return RestTemplate
      */
     @Bean
+    @SentinelRestTemplate
     public RestTemplate restTemplate(okhttp3.OkHttpClient httpClient) {
         RestTemplate restTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory(httpClient));
         this.configMessageConverters(restTemplate.getMessageConverters());

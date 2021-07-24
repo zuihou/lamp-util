@@ -44,12 +44,12 @@ public class RedisOpsImpl implements CacheOps, CachePlusOps {
 
     @Override
     public Long del(@NonNull CacheKey... keys) {
-        return redisOps.unlink(keys);
+        return redisOps.del(keys);
     }
 
     @Override
     public Long del(String... keys) {
-        return redisOps.unlink(keys);
+        return redisOps.del(keys);
     }
 
     @Override
