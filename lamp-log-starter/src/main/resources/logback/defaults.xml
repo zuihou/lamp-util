@@ -94,7 +94,7 @@
         <appender-ref ref="ROOT_APPENDER"/>
     </appender>
 
-    <!-- 整个项目com.tangyh.basic包下的的所有日志， 不包括第三方包 -->
+    <!-- 整个项目top.tangyh.basic包下的的所有日志， 不包括第三方包 -->
     <appender name="PROJECT_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${log.path}/${spring.application.name}/project.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">

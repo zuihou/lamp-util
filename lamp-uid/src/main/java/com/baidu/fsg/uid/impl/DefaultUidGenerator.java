@@ -21,7 +21,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baidu.fsg.uid.BitsAllocator;
 import com.baidu.fsg.uid.UidGenerator;
 import com.baidu.fsg.uid.exception.UidGenerateException;
-import com.tangyh.basic.uid.service.WorkerIdAssigner;
+import com.baidu.fsg.uid.worker.WorkerIdAssigner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;

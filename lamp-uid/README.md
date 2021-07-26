@@ -2,9 +2,9 @@
 本模块参考 uid-generator， 由于该项目没有发布正式版本，故将该项目源码复制过来方便使用。 若有侵权，联系作者删除 
 
 改动的地方：
-1. WorkerNodeDAO 从 com.baidu.fsg.uid.worker.dao.WorkerNodeDAO 移动到 com.tangyh.basic.uid.dao.WorkerNodeDAO
-2. DisposableWorkerIdAssigner 从 com.baidu.fsg.uid.worker.DisposableWorkerIdAssigner 移动到 com.tangyh.basic.uid.service.DisposableWorkerIdAssigner
-3. WorkerIdAssigner 从 com.baidu.fsg.uid.worker.WorkerIdAssigner 移动到 com.tangyh.basic.uid.service.WorkerIdAssigner
+1. WorkerNodeDAO 从 com.baidu.fsg.uid.worker.dao.WorkerNodeDAO 移动到 top.tangyh.basic.uid.dao.WorkerNodeDAO
+2. DisposableWorkerIdAssigner 从 com.baidu.fsg.uid.worker.DisposableWorkerIdAssigner 移动到 top.tangyh.basic.uid.service.DisposableWorkerIdAssigner
+3. WorkerIdAssigner 从 com.baidu.fsg.uid.worker.WorkerIdAssigner 移动到 top.tangyh.basic.uid.service.WorkerIdAssigner
 4. DisposableWorkerIdAssigner 类的assignWorkerId方法，事务增加了：(rollbackFor = Exception.class)
 
 参考地址： https://github.com/baidu/uid-generator

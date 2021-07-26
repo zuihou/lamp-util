@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.tangyh.basic.echo.EchoAutoConfiguration
+    top.tangyh.basic.echo.EchoAutoConfiguration

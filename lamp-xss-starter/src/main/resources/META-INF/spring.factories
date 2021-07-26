@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.tangyh.basic.xss.XssAuthConfiguration
+    top.tangyh.basic.xss.XssAuthConfiguration

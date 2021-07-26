@@ -3,9 +3,9 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.tangyh.basic</groupId>
+    <groupId>top.tangyh.basic</groupId>
     <artifactId>lamp-util</artifactId>
-    <version>3.3.0</version>
+    <version>3.4.0</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>lamp项目公共模块</description>
@@ -32,7 +32,7 @@
         <module>lamp-all</module>
     </modules>
     <properties>
-        <lamp-dependencies.version>3.3.0</lamp-dependencies.version>
+        <lamp-dependencies.version>3.4.0</lamp-dependencies.version>
         <!-- jdk8 将这里改成 8 -->
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -75,18 +75,18 @@
     <distributionManagement>
         <snapshotRepository>
             <id>oss</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
         <repository>
             <id>oss</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.tangyh.basic</groupId>
+                <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-dependencies</artifactId>
                 <version>${lamp-dependencies.version}</version>
                 <type>pom</type>
@@ -94,42 +94,42 @@
             </dependency>
 
             <dependency>
-                <groupId>com.tangyh.basic</groupId>
+                <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.tangyh.basic</groupId>
+                <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-annotation</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.tangyh.basic</groupId>
+                <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-uid</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.tangyh.basic</groupId>
+                <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-boot-util</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.tangyh.basic</groupId>
+                <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-echo-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.tangyh.basic</groupId>
+                <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-databases</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.tangyh.basic</groupId>
+                <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-cache-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.tangyh.basic</groupId>
+                <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-mq-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -283,4 +283,63 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <!-- 打包的 -P参数 -->
+            <id>release</id>
+            <build>
+                <plugins>
+                    <!-- Source -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven-source-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Javadoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin.version}</version>
+                    </plugin>
+                    <!-- GPG  打包插件-->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <!-- 这里的id和settings.xml中刚才配置的server中的id一致即可 -->
+                    <id>oss</id>
+                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <!-- 这里的id和settings.xml中刚才配置的server中的id一致即可 -->
+                    <id>oss</id>
+                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
 </project>

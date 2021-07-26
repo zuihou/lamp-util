@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.tangyh.basic.dozer.DozerAutoConfiguration
+    top.tangyh.basic.dozer.DozerAutoConfiguration

@@ -6,10 +6,10 @@
         <appender-ref ref="ASYNC_ROOT_APPENDER"/>
         <appender-ref ref="ASYNC_CONSOLE_APPENDER"/>
     </root>
-    <logger name="com.tangyh.basic" additivity="true" level="${log.level.console}">
+    <logger name="top.tangyh.basic" additivity="true" level="${log.level.console}">
         <appender-ref ref="ASYNC_PROJECT_APPENDER"/>
     </logger>
-    <logger name="com.tangyh.basic.boot.handler" additivity="true" level="${log.level.console}">
+    <logger name="top.tangyh.basic.boot.handler" additivity="true" level="${log.level.console}">
         <appender-ref ref="ASYNC_EXCEPTION_APPENDER"/>
     </logger>
 
@@ -24,7 +24,7 @@
     <logger name="com.alibaba.nacos.client.naming" level="${log.level.nacos}" additivity="false">
         <appender-ref ref="ASYNC_THIRD_PARTY_APPENDER"/>
     </logger>
-    <logger name="com.tangyh.basic.log.monitor" level="debug" addtivity="false">
+    <logger name="top.tangyh.basic.log.monitor" level="debug" addtivity="false">
         <appender-ref ref="ASYNC_POINT_LOG_APPENDER"/>
     </logger>
 </included>

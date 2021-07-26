@@ -1,5 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.tangyh.basic.cloud.config.OpenFeignAutoConfiguration , \
-    com.tangyh.basic.cloud.config.RestTemplateConfiguration, \
-    com.tangyh.basic.cloud.config.GrayscaleConfig
+    top.tangyh.basic.cloud.config.OpenFeignAutoConfiguration , \
+    top.tangyh.basic.cloud.config.RestTemplateConfiguration, \
+    top.tangyh.basic.cloud.config.GrayscaleConfig
 

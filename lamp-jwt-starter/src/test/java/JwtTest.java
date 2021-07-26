@@ -1,7 +1,7 @@
-import com.tangyh.basic.jwt.JwtProperties;
-import com.tangyh.basic.jwt.TokenUtil;
-import com.tangyh.basic.jwt.model.AuthInfo;
-import com.tangyh.basic.jwt.model.JwtUserInfo;
+import top.tangyh.basic.jwt.JwtProperties;
+import top.tangyh.basic.jwt.TokenUtil;
+import top.tangyh.basic.jwt.model.AuthInfo;
+import top.tangyh.basic.jwt.model.JwtUserInfo;
 
 public class JwtTest {
 

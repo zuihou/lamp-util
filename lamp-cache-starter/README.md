@@ -18,7 +18,7 @@ CachePlusOps则将caffeine不支持等缓存类型进行了空实现，能保证
 ```
 pom.xml
 <dependency>
-    <groupId>com.tangyh.basic</groupId>
+    <groupId>top.tangyh.basic</groupId>
     <artifactId>lamp-cache-starter</artifactId>
 </dependency>
 
@@ -34,7 +34,7 @@ lamp:
 ```
 pom.xml
 <dependency>
-    <groupId>com.tangyh.basic</groupId>
+    <groupId>top.tangyh.basic</groupId>
     <artifactId>lamp-cache-starter</artifactId>
     <exclusions>
         <exclusion>

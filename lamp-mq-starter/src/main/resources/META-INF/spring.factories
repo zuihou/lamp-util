@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.tangyh.basic.mq.LampRabbitMqConfiguration
+    top.tangyh.basic.mq.LampRabbitMqConfiguration

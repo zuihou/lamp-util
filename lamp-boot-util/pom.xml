@@ -4,28 +4,28 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>lamp-util</artifactId>
-        <groupId>com.tangyh.basic</groupId>
-        <version>3.3.0</version>
+        <groupId>top.tangyh.basic</groupId>
+        <version>3.4.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.tangyh.basic</groupId>
+    <groupId>top.tangyh.basic</groupId>
     <artifactId>lamp-boot-util</artifactId>
     <name>${project.artifactId}</name>
     <description>公共模块</description>
 
     <dependencies>
         <dependency>
-            <groupId>com.tangyh.basic</groupId>
+            <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.tangyh.basic</groupId>
+            <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-databases</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.tangyh.basic</groupId>
+            <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-cache-starter</artifactId>
         </dependency>
 

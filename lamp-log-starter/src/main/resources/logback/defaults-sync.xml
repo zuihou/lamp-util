@@ -7,10 +7,10 @@
         <appender-ref ref="CONSOLE_APPENDER"/>
         <appender-ref ref="ROOT_APPENDER"/>
     </root>
-    <logger name="com.tangyh.basic" additivity="true" level="${log.level.console}">
+    <logger name="top.tangyh.basic" additivity="true" level="${log.level.console}">
         <appender-ref ref="PROJECT_APPENDER"/>
     </logger>
-    <logger name="com.tangyh.basic.boot.handler" additivity="true" level="${log.level.console}">
+    <logger name="top.tangyh.basic.boot.handler" additivity="true" level="${log.level.console}">
         <appender-ref ref="EXCEPTION_APPENDER"/>
     </logger>
 
@@ -30,7 +30,7 @@
         <appender-ref ref="THIRD_PARTY_APPENDER"/>
     </logger>
 
-    <logger name="com.tangyh.basic.log.monitor" level="debug" addtivity="false">
+    <logger name="top.tangyh.basic.log.monitor" level="debug" addtivity="false">
         <appender-ref ref="POINT_LOG_APPENDER"/>
     </logger>
 </included>

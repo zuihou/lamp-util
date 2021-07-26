@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.tangyh.basic.cache.CacheAutoConfigure
+    top.tangyh.basic.cache.CacheAutoConfigure

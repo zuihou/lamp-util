@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.tangyh.basic.jwt.JwtConfiguration
+    top.tangyh.basic.jwt.JwtConfiguration
