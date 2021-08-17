@@ -5,11 +5,11 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import top.tangyh.basic.context.ContextUtil;
-import top.tangyh.basic.utils.BizAssert;
-import top.tangyh.basic.utils.StrPool;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import top.tangyh.basic.context.ContextUtil;
+import top.tangyh.basic.utils.ArgumentAssert;
+import top.tangyh.basic.utils.StrPool;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public interface CacheKeyBuilder {
      */
     default String getPattern(String tenant, Object... suffix) {
         String prefix = this.getPrefix();
-        BizAssert.notEmpty(prefix, "缓存前缀不能为空");
+        ArgumentAssert.notEmpty(prefix, "缓存前缀不能为空");
 
         List<String> regionList = new ArrayList<>();
         tenant = StrUtil.isEmpty(tenant) ? StrPool.STAR : tenant;
@@ -114,8 +114,8 @@ public interface CacheKeyBuilder {
     default CacheHashKey hashFieldKey(@NonNull Object field, Object... suffix) {
         String key = getKey(suffix);
 
-        BizAssert.notEmpty(key, "key 不能为空");
-        BizAssert.notNull(field, "field 不能为空");
+        ArgumentAssert.notEmpty(key, "key 不能为空");
+        ArgumentAssert.notNull(field, "field 不能为空");
         return new CacheHashKey(key, field, getExpire());
     }
 
@@ -128,7 +128,7 @@ public interface CacheKeyBuilder {
     default CacheHashKey hashKey(Object... suffix) {
         String key = getKey(suffix);
 
-        BizAssert.notEmpty(key, "key 不能为空");
+        ArgumentAssert.notEmpty(key, "key 不能为空");
         return new CacheHashKey(key, null, getExpire());
     }
 
@@ -145,7 +145,7 @@ public interface CacheKeyBuilder {
             regionList.add(tenant);
         }
         String prefix = this.getPrefix();
-        BizAssert.notEmpty(prefix, "缓存前缀不能为空");
+        ArgumentAssert.notEmpty(prefix, "缓存前缀不能为空");
         regionList.add(prefix);
 
         for (Object s : suffix) {

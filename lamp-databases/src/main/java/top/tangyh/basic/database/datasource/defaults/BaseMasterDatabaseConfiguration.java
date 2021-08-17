@@ -6,8 +6,6 @@ import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusPropertiesCustomizer;
 import com.p6spy.engine.spy.P6DataSource;
-import top.tangyh.basic.database.datasource.BaseDatabaseConfiguration;
-import top.tangyh.basic.database.properties.DatabaseProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
@@ -23,6 +21,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import top.tangyh.basic.database.datasource.BaseDatabaseConfiguration;
+import top.tangyh.basic.database.properties.DatabaseProperties;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -88,7 +88,10 @@ public abstract class BaseMasterDatabaseConfiguration extends BaseDatabaseConfig
     /**
      * 数据源信息
      *
-     * @return Druid数据源
+     * @return javax.sql.DataSource Druid数据源
+     * @author tangyh
+     * @date 2021/8/15 10:16 下午
+     * @create [2021/8/15 10:16 下午 ] [tangyh] [初始创建]
      */
     @Bean(name = DATABASE_PREFIX + "DruidDataSource", initMethod = "init")
     public DataSource druidDataSource() {

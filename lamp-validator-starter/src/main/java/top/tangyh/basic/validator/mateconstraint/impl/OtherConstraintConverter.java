@@ -1,6 +1,7 @@
 package top.tangyh.basic.validator.mateconstraint.impl;
 
 import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
+import top.tangyh.basic.validator.utils.ValidatorConstants;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -28,6 +29,6 @@ public class OtherConstraintConverter extends BaseConstraintConverter implements
 
     @Override
     protected List<String> getMethods() {
-        return Arrays.asList("message");
+        return Arrays.asList(ValidatorConstants.MESSAGE);
     }
 }

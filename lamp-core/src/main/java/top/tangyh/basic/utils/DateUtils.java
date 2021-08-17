@@ -1,7 +1,9 @@
 package top.tangyh.basic.utils;
 
-import top.tangyh.basic.exception.BizException;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+import top.tangyh.basic.exception.BizException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -829,5 +831,65 @@ public final class DateUtils {
         }
         LocalTime now = LocalTime.now();
         return now.isAfter(from) && now.isBefore(to);
+    }
+
+    /**
+     * 转换日期
+     * <p>
+     * 0: 今天结束的日期
+     * 1m: 1分钟后的日期
+     * 1h: 1小时后的日期
+     * 4d: 4天后的日期
+     * 2w: 2周后的日期
+     * 3M: 3个月后的日期
+     * 5y: 5年后的日期
+     *
+     * @param time 0 1h 2w 3m 4d
+     * @return 日期
+     */
+    public static LocalDateTime conversionDateTime(String time) {
+        if (StrUtil.isEmpty(time)) {
+            return LocalDateTime.MAX;
+        }
+        // 今天的23:59:59
+        if (StrPool.ZERO.equals(time)) {
+            return LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+        }
+
+        char unit = Character.toLowerCase(time.charAt(time.length() - 1));
+        if (time.length() == 1) {
+            unit = 'd';
+        }
+        Long lastTime = Convert.toLong(time.substring(0, time.length() - 1));
+
+        LocalDateTime dateTime;
+        switch (unit) {
+            //分
+            case 'm':
+                dateTime = LocalDateTime.now().plusMinutes(lastTime);
+                break;
+            //时
+            case 'h' | 'H':
+                dateTime = LocalDateTime.now().plusHours(lastTime);
+                break;
+            //周
+            case 'w':
+                dateTime = LocalDateTime.now().plusWeeks(lastTime);
+                break;
+            //月
+            case 'M':
+                dateTime = LocalDateTime.now().plusMonths(lastTime);
+                break;
+            //年
+            case 'y':
+                dateTime = LocalDateTime.now().plusYears(lastTime);
+                break;
+            //天
+            case 'd':
+            default:
+                dateTime = LocalDateTime.now().plusDays(lastTime);
+                break;
+        }
+        return dateTime;
     }
 }

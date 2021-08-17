@@ -109,7 +109,13 @@ public @interface NotEmptyPattern {
          */
         CANON_EQ(java.util.regex.Pattern.CANON_EQ);
 
-        //JDK flag value
+        /**
+         * JDK flag value
+         *
+         * @author tangyh
+         * @date 2021/8/15 10:18 下午
+         * @create [2021/8/15 10:18 下午 ] [tangyh] [初始创建]
+         */
         private final int value;
 
         private Flag(int value) {

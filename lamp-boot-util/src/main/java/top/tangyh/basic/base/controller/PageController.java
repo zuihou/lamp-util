@@ -38,7 +38,7 @@ public interface PageController<Entity, PageQuery> extends BaseController<Entity
     default IPage<Entity> query(PageParams<PageQuery> params) {
         handlerQueryParams(params);
 
-        IPage<Entity> page = params.buildPage();
+        IPage<Entity> page = params.buildPage(getEntityClass());
         Entity model = BeanUtil.toBean(params.getModel(), getEntityClass());
 
         QueryWrap<Entity> wrapper = handlerWrapper(model, params);

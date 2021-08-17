@@ -1,5 +1,8 @@
 package top.tangyh.basic.exception;
 
+import cn.hutool.core.util.StrUtil;
+import top.tangyh.basic.utils.StrPool;
+
 /**
  * 非运行期异常基类，所有自定义非运行时异常继承该类
  *
@@ -44,9 +47,9 @@ public class BaseUncheckedException extends RuntimeException implements BaseExce
     }
 
     public BaseUncheckedException(final int code, final String format, Object... args) {
-        super(String.format(format, args));
+        super(StrUtil.contains(format, StrPool.BRACE) ? StrUtil.format(format, args) : String.format(format, args));
         this.code = code;
-        this.message = String.format(format, args);
+        this.message = StrUtil.contains(format, StrPool.BRACE) ? StrUtil.format(format, args) : String.format(format, args);
     }
 
 

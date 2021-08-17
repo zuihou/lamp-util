@@ -1,6 +1,7 @@
 package top.tangyh.basic.validator.mateconstraint.impl;
 
 import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
+import top.tangyh.basic.validator.utils.ValidatorConstants;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -21,7 +22,7 @@ public class NotNullConstraintConverter extends BaseConstraintConverter implemen
 
     @Override
     protected String getType(Class<? extends Annotation> type) {
-        return "NotNull";
+        return ValidatorConstants.NOT_NULL;
     }
 
     @Override
@@ -31,6 +32,6 @@ public class NotNullConstraintConverter extends BaseConstraintConverter implemen
 
     @Override
     protected List<String> getMethods() {
-        return Arrays.asList("message");
+        return Arrays.asList(ValidatorConstants.MESSAGE);
     }
 }

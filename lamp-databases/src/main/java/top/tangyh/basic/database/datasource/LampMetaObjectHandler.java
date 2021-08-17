@@ -6,13 +6,13 @@ import com.baidu.fsg.uid.UidGenerator;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.reflection.MetaObject;
 import top.tangyh.basic.base.entity.Entity;
 import top.tangyh.basic.base.entity.SuperEntity;
 import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.utils.SpringUtils;
 import top.tangyh.basic.utils.StrPool;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.reflection.MetaObject;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
@@ -98,9 +98,6 @@ public class LampMetaObjectHandler implements MetaObjectHandler {
 
         // 3. 实体没有继承 Entity 和 SuperEntity，且 主键名为其他字段
         TableInfo tableInfo = TableInfoHelper.getTableInfo(metaObject.getOriginalObject().getClass());
-//        TableInfo tableInfo = metaObject.hasGetter(Constants.MP_OPTLOCK_ET_ORIGINAL) ?
-//                TableInfoHelper.getTableInfo(metaObject.getValue(Constants.MP_OPTLOCK_ET_ORIGINAL).getClass())
-//                : TableInfoHelper.getTableInfo(metaObject.getOriginalObject().getClass());
         if (tableInfo == null) {
             return;
         }

@@ -28,7 +28,7 @@ public class AuthInfo {
     @ApiModelProperty(value = "账号名")
     private String account;
     @ApiModelProperty(value = "头像")
-    private String avatar;
+    private Long avatarId;
     @ApiModelProperty(value = "工作描述")
     private String workDescribe;
     @ApiModelProperty(value = "用户id")

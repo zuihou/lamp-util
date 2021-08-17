@@ -1,10 +1,10 @@
 package top.tangyh.basic.model;
 
 import cn.hutool.core.util.ObjectUtil;
-import top.tangyh.basic.base.validation.IValidatable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import top.tangyh.basic.base.validation.IValidatable;
 
 import java.io.Serializable;
 
@@ -15,6 +15,7 @@ import java.io.Serializable;
  * @param <D> 根据key 远程查询出的数据
  * @author zuihou
  * @date 2020年02月02日21:16:22
+ * @see EchoVO
  */
 @Data
 @Deprecated

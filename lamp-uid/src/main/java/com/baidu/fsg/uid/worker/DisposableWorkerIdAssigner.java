@@ -19,11 +19,11 @@ import cn.hutool.core.util.RandomUtil;
 import com.baidu.fsg.uid.utils.DockerUtils;
 import com.baidu.fsg.uid.utils.NetUtils;
 import com.baidu.fsg.uid.worker.entity.WorkerNodeEntity;
-import top.tangyh.basic.uid.dao.WorkerNodeDao;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import top.tangyh.basic.uid.dao.WorkerNodeDao;
 
 /**
  * Represents an implementation of {@link WorkerIdAssigner},

@@ -1,9 +1,10 @@
 package top.tangyh.basic.validator.mateconstraint.impl;
 
 
-import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
+import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
+import top.tangyh.basic.validator.utils.ValidatorConstants;
 
 import javax.validation.constraints.Size;
 import java.lang.annotation.Annotation;
@@ -20,7 +21,7 @@ public class RangeConstraintConverter extends BaseConstraintConverter implements
 
     @Override
     protected List<String> getMethods() {
-        return Arrays.asList("min", "max", "message");
+        return Arrays.asList("min", "max", ValidatorConstants.MESSAGE);
     }
 
     @Override

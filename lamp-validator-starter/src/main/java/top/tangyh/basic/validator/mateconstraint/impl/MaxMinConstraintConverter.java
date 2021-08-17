@@ -2,6 +2,7 @@ package top.tangyh.basic.validator.mateconstraint.impl;
 
 
 import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
+import top.tangyh.basic.validator.utils.ValidatorConstants;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
@@ -21,7 +22,7 @@ public class MaxMinConstraintConverter extends BaseConstraintConverter implement
 
     @Override
     protected List<String> getMethods() {
-        return Arrays.asList("value", "message");
+        return Arrays.asList("value", ValidatorConstants.MESSAGE);
     }
 
     @Override

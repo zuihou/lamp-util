@@ -6,10 +6,13 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import top.tangyh.basic.database.mybatis.conditions.query.LbqWrapper;
 import top.tangyh.basic.database.mybatis.conditions.query.QueryWrap;
 import top.tangyh.basic.database.mybatis.conditions.update.LbuWrapper;
+import top.tangyh.basic.exception.BizException;
 import top.tangyh.basic.model.RemoteData;
+import top.tangyh.basic.utils.ArgumentAssert;
 import top.tangyh.basic.utils.DateUtils;
 import top.tangyh.basic.utils.StrHelper;
 
@@ -132,15 +135,20 @@ public final class Wraps {
      * @return 数据库字段名
      */
     public static String getDbField(String beanField, Class<?> clazz) {
+        ArgumentAssert.notNull(clazz, "实体类不能为空");
+        ArgumentAssert.notEmpty(beanField, "字段名不能为空");
         Field field = ReflectUtil.getField(clazz, beanField);
-        if (field == null) {
-            return StrUtil.EMPTY;
-        }
+        ArgumentAssert.notNull(field, "在类：{}中找不到属性：{}", clazz.getSimpleName(), beanField);
+
         TableField tf = field.getAnnotation(TableField.class);
         if (tf != null && StrUtil.isNotEmpty(tf.value())) {
             return tf.value();
         }
-        return StrUtil.EMPTY;
+        TableId ti = field.getAnnotation(TableId.class);
+        if (ti != null && StrUtil.isNotEmpty(ti.value())) {
+            return ti.value();
+        }
+        throw BizException.wrap("{}.{} 未标记 @TableField 或 @TableId", clazz.getSimpleName(), beanField);
     }
 
 

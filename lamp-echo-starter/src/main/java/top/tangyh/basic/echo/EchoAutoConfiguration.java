@@ -1,10 +1,5 @@
 package top.tangyh.basic.echo;
 
-import top.tangyh.basic.echo.aspect.EchoResultAspect;
-import top.tangyh.basic.echo.core.EchoService;
-import top.tangyh.basic.echo.properties.EchoProperties;
-import top.tangyh.basic.echo.typehandler.RemoteDataTypeHandler;
-import top.tangyh.basic.model.LoadService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -12,6 +7,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import top.tangyh.basic.echo.aspect.EchoResultAspect;
+import top.tangyh.basic.echo.core.EchoService;
+import top.tangyh.basic.echo.properties.EchoProperties;
+import top.tangyh.basic.echo.typehandler.RemoteDataTypeHandler;
+import top.tangyh.basic.model.LoadService;
 
 import java.util.Map;
 
@@ -35,9 +35,17 @@ public class EchoAutoConfiguration {
         return new EchoResultAspect(echoService);
     }
 
+    /**
+     * 回显服务
+     *
+     * @param strategyMap 回显查询实例
+     * @return top.tangyh.basic.echo.core.EchoService
+     * @author tangyh
+     * @date 2021/8/15 10:17 下午
+     * @create [2021/8/15 10:17 下午 ] [tangyh] [初始创建]
+     */
     @Bean
     @ConditionalOnMissingBean
-//    @ConditionalOnProperty(prefix = EchoProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
     public EchoService getEchoService(Map<String, LoadService> strategyMap) {
         return new EchoService(remoteProperties, strategyMap);
     }

@@ -82,12 +82,9 @@ public class XssUtils {
                 final CleanResults cr = antiSamy.scan(paramValue, policy);
                 cr.getErrorMessages().forEach(log::debug);
                 String str = cr.getCleanHTML();
-                str = stripXSSAndSql(str);
+                str = stripXssAndSql(str);
                 str = str.replaceAll("&quot;", "\"");
                 str = str.replaceAll("&amp;", "&");
-//                str = str.replaceAll("'", "'");
-//                str = str.replaceAll("'", "＇");
-//                str = str.replaceAll(" ", "*");
                 str = str.replaceAll("&lt;", "<");
                 str = str.replaceAll("&gt;", ">");
                 log.debug("xss filter value after xssClean" + str);
@@ -113,7 +110,7 @@ public class XssUtils {
     public static String xssClean(String paramValue, List<String> ignoreParamValueList, String param) {
         if (isIgnoreParamValue(param, ignoreParamValueList)) {
             //虽然过滤固定字段 允许标签 但是关键函数必须处理 不允许出现
-            return stripXSSAndSql(paramValue);
+            return stripXssAndSql(paramValue);
         } else {
             return xssClean(paramValue, ignoreParamValueList);
         }
@@ -126,7 +123,7 @@ public class XssUtils {
      * @return
      * @author 杨慕义
      */
-    public static String stripXSSAndSql(String value) {
+    public static String stripXssAndSql(String value) {
         if (StrUtil.isBlank(value)) {
             return value;
         }

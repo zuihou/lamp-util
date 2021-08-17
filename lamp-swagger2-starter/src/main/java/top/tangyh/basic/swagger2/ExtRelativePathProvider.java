@@ -1,4 +1,4 @@
-package top.tangyh.basic.swagger2;//package top.tangyh.basic.swagger2;
+//package top.tangyh.basic.swagger2;
 //
 //import springfox.documentation.spring.web.paths.RelativePathProvider;
 //

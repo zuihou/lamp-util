@@ -1,12 +1,6 @@
 package top.tangyh.basic.base.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import top.tangyh.basic.annotation.log.SysLog;
-import top.tangyh.basic.annotation.security.PreAuth;
-import top.tangyh.basic.base.R;
-import top.tangyh.basic.base.request.PageParams;
-import top.tangyh.basic.database.mybatis.conditions.Wraps;
-import top.tangyh.basic.database.mybatis.conditions.query.QueryWrap;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import top.tangyh.basic.annotation.log.SysLog;
+import top.tangyh.basic.annotation.security.PreAuth;
+import top.tangyh.basic.base.R;
+import top.tangyh.basic.base.request.PageParams;
+import top.tangyh.basic.database.mybatis.conditions.Wraps;
+import top.tangyh.basic.database.mybatis.conditions.query.QueryWrap;
 
 import java.io.Serializable;
 import java.util.List;
@@ -37,7 +37,7 @@ public interface QueryController<Entity, Id extends Serializable, PageQuery> ext
      * @return 查询结果
      */
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "主键", dataType = "long", paramType = "query"),
+            @ApiImplicitParam(name = "id", value = "主键", dataType = "long", paramType = "path"),
     })
     @ApiOperation(value = "单体查询", notes = "单体查询")
     @GetMapping("/{id}")

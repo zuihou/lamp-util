@@ -1,7 +1,14 @@
 package top.tangyh.basic.validator.extract;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.CharUtil;
 import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.internal.engine.ValidatorImpl;
+import org.hibernate.validator.internal.metadata.BeanMetaDataManager;
+import org.hibernate.validator.internal.metadata.aggregated.BeanMetaData;
+import org.hibernate.validator.internal.metadata.core.MetaConstraint;
+import org.hibernate.validator.internal.metadata.location.ConstraintLocation;
 import top.tangyh.basic.utils.StrPool;
 import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
 import top.tangyh.basic.validator.mateconstraint.impl.MaxMinConstraintConverter;
@@ -12,12 +19,6 @@ import top.tangyh.basic.validator.mateconstraint.impl.RegExConstraintConverter;
 import top.tangyh.basic.validator.model.ConstraintInfo;
 import top.tangyh.basic.validator.model.FieldValidatorDesc;
 import top.tangyh.basic.validator.model.ValidConstraint;
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.internal.engine.ValidatorImpl;
-import org.hibernate.validator.internal.metadata.BeanMetaDataManager;
-import org.hibernate.validator.internal.metadata.aggregated.BeanMetaData;
-import org.hibernate.validator.internal.metadata.core.MetaConstraint;
-import org.hibernate.validator.internal.metadata.location.ConstraintLocation;
 
 import javax.validation.Validator;
 import java.lang.annotation.Annotation;
@@ -32,11 +33,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static top.tangyh.basic.utils.StrPool.ARRAY;
+import static top.tangyh.basic.utils.StrPool.BOOLEAN;
 import static top.tangyh.basic.utils.StrPool.BOOLEAN_TYPE_NAME;
 import static top.tangyh.basic.utils.StrPool.COLLECTION_TYPE_NAME;
+import static top.tangyh.basic.utils.StrPool.DATE;
+import static top.tangyh.basic.utils.StrPool.DATETIME;
 import static top.tangyh.basic.utils.StrPool.DATE_TYPE_NAME;
 import static top.tangyh.basic.utils.StrPool.DOUBLE_TYPE_NAME;
+import static top.tangyh.basic.utils.StrPool.FLOAT;
 import static top.tangyh.basic.utils.StrPool.FLOAT_TYPE_NAME;
+import static top.tangyh.basic.utils.StrPool.INTEGER;
 import static top.tangyh.basic.utils.StrPool.INTEGER_TYPE_NAME;
 import static top.tangyh.basic.utils.StrPool.LIST_TYPE_NAME;
 import static top.tangyh.basic.utils.StrPool.LOCAL_DATE_TIME_TYPE_NAME;
@@ -45,6 +52,10 @@ import static top.tangyh.basic.utils.StrPool.LOCAL_TIME_TYPE_NAME;
 import static top.tangyh.basic.utils.StrPool.LONG_TYPE_NAME;
 import static top.tangyh.basic.utils.StrPool.SET_TYPE_NAME;
 import static top.tangyh.basic.utils.StrPool.SHORT_TYPE_NAME;
+import static top.tangyh.basic.utils.StrPool.TIME;
+import static top.tangyh.basic.validator.utils.ValidatorConstants.MESSAGE;
+import static top.tangyh.basic.validator.utils.ValidatorConstants.NOT_NULL;
+import static top.tangyh.basic.validator.utils.ValidatorConstants.PATTERN;
 
 /**
  * 缺省的约束提取器
@@ -159,11 +170,11 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
         ConstraintInfo constraint = builderConstraint(metaConstraint.getDescriptor().getAnnotation());
         desc.getConstraints().add(constraint);
 
-        if ("Pattern".equals(metaConstraint.getDescriptor().getAnnotationType().getSimpleName())) {
+        if (PATTERN.equals(metaConstraint.getDescriptor().getAnnotationType().getSimpleName())) {
             ConstraintInfo notNull = new ConstraintInfo();
-            notNull.setType("NotNull");
-            Map<String, Object> attrs = new HashMap<>();
-            attrs.put("message", "不能为空");
+            notNull.setType(NOT_NULL);
+            Map<String, Object> attrs = MapUtil.newHashMap();
+            attrs.put(MESSAGE, "不能为空");
             notNull.setAttrs(attrs);
             desc.getConstraints().add(notNull);
         }
@@ -172,19 +183,19 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
 
     private String getType(String typeName) {
         if (StrUtil.startWithAny(typeName, SET_TYPE_NAME, LIST_TYPE_NAME, COLLECTION_TYPE_NAME)) {
-            return "Array";
+            return ARRAY;
         } else if (StrUtil.equalsAny(typeName, LONG_TYPE_NAME, INTEGER_TYPE_NAME, SHORT_TYPE_NAME)) {
-            return "Integer";
+            return INTEGER;
         } else if (StrUtil.equalsAny(typeName, DOUBLE_TYPE_NAME, FLOAT_TYPE_NAME)) {
-            return "Float";
+            return FLOAT;
         } else if (StrUtil.equalsAny(typeName, LOCAL_DATE_TIME_TYPE_NAME, DATE_TYPE_NAME)) {
-            return "DateTime";
+            return DATETIME;
         } else if (StrUtil.equalsAny(typeName, LOCAL_DATE_TYPE_NAME)) {
-            return "Date";
+            return DATE;
         } else if (StrUtil.equalsAny(typeName, LOCAL_TIME_TYPE_NAME)) {
-            return "Time";
+            return TIME;
         } else if (StrUtil.equalsAny(typeName, BOOLEAN_TYPE_NAME)) {
-            return "Boolean";
+            return BOOLEAN;
         }
         return StrUtil.subAfter(typeName, CharUtil.DOT, true);
     }

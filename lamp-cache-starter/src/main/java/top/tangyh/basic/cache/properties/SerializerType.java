@@ -12,6 +12,10 @@ public enum SerializerType {
      */
     JACK_SON,
     /**
+     * 默认:ProtoStuff 序列化
+     */
+    ProtoStuff,
+    /**
      * jdk 序列化
      */
     JDK

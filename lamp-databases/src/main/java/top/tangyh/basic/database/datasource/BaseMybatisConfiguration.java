@@ -10,6 +10,7 @@ import com.baidu.fsg.uid.buffer.RejectedTakeBufferHandler;
 import com.baidu.fsg.uid.impl.CachedUidGenerator;
 import com.baidu.fsg.uid.impl.DefaultUidGenerator;
 import com.baidu.fsg.uid.impl.HuToolUidGenerator;
+import com.baidu.fsg.uid.worker.DisposableWorkerIdAssigner;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
@@ -18,6 +19,14 @@ import com.baomidou.mybatisplus.extension.plugins.inner.IllegalSQLInnerIntercept
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
+import lombok.extern.slf4j.Slf4j;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.StringValue;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.database.injector.LampSqlInjector;
 import top.tangyh.basic.database.mybatis.WriteInterceptor;
@@ -28,15 +37,6 @@ import top.tangyh.basic.database.plugins.SchemaInterceptor;
 import top.tangyh.basic.database.properties.DatabaseProperties;
 import top.tangyh.basic.database.properties.MultiTenantType;
 import top.tangyh.basic.uid.dao.WorkerNodeDao;
-import com.baidu.fsg.uid.worker.DisposableWorkerIdAssigner;
-import lombok.extern.slf4j.Slf4j;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.StringValue;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.annotation.Order;
 
 import java.util.Collections;
 import java.util.List;
@@ -91,19 +91,14 @@ public abstract class BaseMybatisConfiguration {
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         log.info("检测到 lamp.database.multiTenantType={}，已启用 {} 模式", databaseProperties.getMultiTenantType().name(), databaseProperties.getMultiTenantType().getDescribe());
-//        if (MultiTenantType.SCHEMA.eq(this.databaseProperties.getMultiTenantType())
-//                || MultiTenantType.SCHEMA_COLUMN.eq(this.databaseProperties.getMultiTenantType())) {
         if (StrUtil.equalsAny(databaseProperties.getMultiTenantType().name(),
                 MultiTenantType.SCHEMA.name(), MultiTenantType.SCHEMA_COLUMN.name())) {
             // SCHEMA 动态表名插件
             SchemaInterceptor schemaInterceptor = new SchemaInterceptor(databaseProperties.getTenantDatabasePrefix());
             interceptor.addInnerInterceptor(schemaInterceptor);
         }
-
-//        if (MultiTenantType.COLUMN.eq(this.databaseProperties.getMultiTenantType())
-//                || MultiTenantType.SCHEMA_COLUMN.eq(this.databaseProperties.getMultiTenantType())) {
         if (StrUtil.equalsAny(databaseProperties.getMultiTenantType().name(),
-                MultiTenantType.COLUMN.name(), MultiTenantType.SCHEMA_COLUMN.name())) {
+                MultiTenantType.COLUMN.name(), MultiTenantType.SCHEMA_COLUMN.name(), MultiTenantType.DATASOURCE_COLUMN.name())) {
             // COLUMN 模式 多租户插件
             TenantLineInnerInterceptor tli = new TenantLineInnerInterceptor();
             tli.setTenantLineHandler(new TenantLineHandler() {

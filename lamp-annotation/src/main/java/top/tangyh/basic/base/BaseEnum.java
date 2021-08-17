@@ -26,7 +26,11 @@ public interface BaseEnum extends IEnum<String> {
      */
     String getDesc();
 
-    /** 扩展参数 */
+    /**
+     * 扩展参数
+     *
+     * @return 扩展参数
+     */
     default String getExtra() {
         return "";
     }

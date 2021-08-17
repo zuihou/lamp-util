@@ -1,3 +1,4 @@
+import top.tangyh.basic.context.ContextConstants;
 import top.tangyh.basic.jwt.JwtProperties;
 import top.tangyh.basic.jwt.TokenUtil;
 import top.tangyh.basic.jwt.model.AuthInfo;
@@ -37,8 +38,10 @@ public class JwtTest {
     }
 
     private static void parse(JwtProperties properties, String token) {
-        AuthInfo authInfo = new TokenUtil(properties).parseRefreshToken(token);
-
+        AuthInfo authInfo = new TokenUtil(properties).getAuthInfo(ContextConstants.BEARER_HEADER_PREFIX + token);
+//        AuthInfo authInfo = new TokenUtil(properties).parseRefreshToken(token);
+        System.out.println();
+        System.out.println("解析成功");
         System.out.println(authInfo);
     }
 

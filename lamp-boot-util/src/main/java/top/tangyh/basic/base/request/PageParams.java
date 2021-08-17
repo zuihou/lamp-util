@@ -5,13 +5,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import top.tangyh.basic.base.entity.Entity;
-import top.tangyh.basic.base.entity.SuperEntity;
-import top.tangyh.basic.utils.AntiSqlFilterUtils;
-import top.tangyh.basic.utils.StrPool;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import top.tangyh.basic.base.entity.SuperEntity;
+import top.tangyh.basic.database.mybatis.conditions.Wraps;
+import top.tangyh.basic.utils.StrPool;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ import java.util.Map;
  * @date 2020年02月14日16:19:36
  */
 @Data
+@NoArgsConstructor
 @ApiModel(value = "PageParams", description = "分页参数")
 public class PageParams<T> {
 
@@ -48,16 +49,37 @@ public class PageParams<T> {
     @ApiModelProperty("扩展参数")
     private Map<String, Object> extra = new HashMap<>(16);
 
+
+    public PageParams(long current, long size) {
+        this.size = size;
+        this.current = current;
+    }
+
     /**
-     * 支持多个字段排序，用法：
-     * eg.1, 参数：{order:"name,id", order:"descending,ascending" }。 排序： name desc, id asc
-     * eg.2, 参数：{order:"name", order:"descending,ascending" }。 排序： name desc
-     * eg.3, 参数：{order:"name,id", order:"descending" }。 排序： name desc
+     * 构建分页对象
      *
      * @return 分页对象
      */
     @JsonIgnore
     public <E> IPage<E> buildPage() {
+        PageParams params = this;
+        return new Page(params.getCurrent(), params.getSize());
+    }
+
+    /**
+     * 构建分页对象
+     * <p>
+     * 支持多个字段排序，用法：
+     * eg.1, 参数：{order:"name,id", order:"descending,ascending" }。 排序： name desc, id asc
+     * eg.2, 参数：{order:"name", order:"descending,ascending" }。 排序： name desc
+     * eg.3, 参数：{order:"name,id", order:"descending" }。 排序： name desc
+     *
+     * @param entityClazz 字段中标注了@TableName 或 @TableId 注解的实体类。
+     * @return 分页对象
+     * @since 3.5.0
+     */
+    @JsonIgnore
+    public <E> IPage<E> buildPage(Class<?> entityClazz) {
         PageParams params = this;
         //没有排序参数
         if (StrUtil.isEmpty(params.getSort())) {
@@ -74,13 +96,7 @@ public class PageParams<T> {
         for (int i = 0; i < len; i++) {
             String humpSort = sortArr[i];
             // 简单的 驼峰 转 下划线
-            String underlineSort = StrUtil.toUnderlineCase(humpSort);
-
-            // 除了 create_time 和 updateTime 都过滤sql关键字
-            if (!StrUtil.equalsAny(humpSort, SuperEntity.CREATE_TIME, Entity.UPDATE_TIME)) {
-                underlineSort = AntiSqlFilterUtils.getSafeValue(underlineSort);
-            }
-
+            String underlineSort = Wraps.getDbField(humpSort, entityClazz);
             orders.add(StrUtil.equalsAny(orderArr[i], "ascending", "ascend") ? OrderItem.asc(underlineSort) : OrderItem.desc(underlineSort));
         }
 

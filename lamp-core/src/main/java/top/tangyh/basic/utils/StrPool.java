@@ -88,7 +88,22 @@ public interface StrPool {
     String LOCAL_DATE_TIME_TYPE_NAME = "java.time.LocalDateTime";
     String LOCAL_DATE_TYPE_NAME = "java.time.LocalDate";
     String LOCAL_TIME_TYPE_NAME = "java.time.LocalTime";
+
+    String ARRAY = "Array";
+    String INTEGER = "Integer";
+    String FLOAT = "Float";
+    String DATETIME = "DateTime";
+    String DATE = "Date";
+    String TIME = "Time";
+    String BOOLEAN = "Boolean";
+
+
+    String HTTPS_PREFIX = "https://";
+    String HTTP_PREFIX = "http://";
+    String HTTPS = "https";
+    String HTTP = "http";
     /**
+     * ¬
      * 编码
      */
     String UTF8 = "UTF-8";

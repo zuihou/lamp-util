@@ -6,12 +6,6 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Lists;
-import top.tangyh.basic.cache.model.CacheHashKey;
-import top.tangyh.basic.cache.model.CacheKey;
-import top.tangyh.basic.exception.BizException;
-import top.tangyh.basic.utils.BizAssert;
-import top.tangyh.basic.utils.CollHelper;
-import top.tangyh.basic.utils.StrPool;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.DataType;
@@ -28,6 +22,12 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import top.tangyh.basic.cache.model.CacheHashKey;
+import top.tangyh.basic.cache.model.CacheKey;
+import top.tangyh.basic.exception.BizException;
+import top.tangyh.basic.utils.ArgumentAssert;
+import top.tangyh.basic.utils.CollHelper;
+import top.tangyh.basic.utils.StrPool;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class RedisOps {
 
     public RedisOps(RedisTemplate<String, Object> redisTemplate, StringRedisTemplate stringRedisTemplate, boolean defaultCacheNullVal) {
         this.redisTemplate = redisTemplate;
-        BizAssert.notNull(redisTemplate, "redisTemplate 为空");
+        ArgumentAssert.notNull(redisTemplate, "redisTemplate 为空");
         valueOps = redisTemplate.opsForValue();
         hashOps = redisTemplate.opsForHash();
         listOps = redisTemplate.opsForList();
@@ -406,7 +406,7 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/expire">Redis Documentation: EXPIRE</a>
      */
     public Boolean expire(@NonNull String key, long seconds) {
-        BizAssert.notEmpty(key, KEY_NOT_NULL);
+        ArgumentAssert.notEmpty(key, KEY_NOT_NULL);
         return redisTemplate.expire(key, seconds, TimeUnit.SECONDS);
     }
 
@@ -529,7 +529,7 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/set">Redis Documentation: SET</a>
      */
     public void set(@NonNull String key, Object value, boolean... cacheNullValues) {
-        BizAssert.notNull(key, KEY_NOT_NULL);
+        ArgumentAssert.notNull(key, KEY_NOT_NULL);
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
         if (!cacheNullVal && value == null) {
             return;
@@ -547,7 +547,7 @@ public class RedisOps {
      */
     public void set(@NonNull CacheKey cacheKey, Object value, boolean... cacheNullValues) {
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
-        BizAssert.notNull(cacheKey, CACHE_KEY_NOT_NULL);
+        ArgumentAssert.notNull(cacheKey, CACHE_KEY_NOT_NULL);
         String key = cacheKey.getKey();
         Duration expire = cacheKey.getExpire();
         if (expire == null) {
@@ -575,7 +575,7 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/setex">Redis Documentation: SETEX</a>
      */
     public void setEx(@NonNull String key, Object value, Duration timeout, boolean... cacheNullValues) {
-        BizAssert.notNull(key, KEY_NOT_NULL);
+        ArgumentAssert.notNull(key, KEY_NOT_NULL);
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
         if (!cacheNullVal && value == null) {
             return;
@@ -741,7 +741,7 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/getset">Redis Documentation: GETSET</a>
      */
     public <T> T getSet(@NonNull String key, Object value) {
-        BizAssert.notNull(key, CACHE_KEY_NOT_NULL);
+        ArgumentAssert.notNull(key, CACHE_KEY_NOT_NULL);
         T val = (T) valueOps.getAndSet(key, value == null ? newNullVal() : value);
         return returnVal(val);
     }
@@ -759,8 +759,8 @@ public class RedisOps {
     @Nullable
     public <T> T get(@NonNull CacheKey key, boolean... cacheNullValues) {
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
-        BizAssert.notNull(key, CACHE_KEY_NOT_NULL);
-        BizAssert.notNull(key.getKey(), KEY_NOT_NULL);
+        ArgumentAssert.notNull(key, CACHE_KEY_NOT_NULL);
+        ArgumentAssert.notNull(key.getKey(), KEY_NOT_NULL);
         T value = (T) valueOps.get(key.getKey());
         if (value == null && cacheNullVal) {
             set(key, newNullVal(), true);
@@ -782,8 +782,8 @@ public class RedisOps {
      */
     @Nullable
     public <T> T get(@NonNull CacheKey key, Function<CacheKey, T> loader, boolean... cacheNullValues) {
-        BizAssert.notNull(key, CACHE_KEY_NOT_NULL);
-        BizAssert.notNull(key.getKey(), KEY_NOT_NULL);
+        ArgumentAssert.notNull(key, CACHE_KEY_NOT_NULL);
+        ArgumentAssert.notNull(key.getKey(), KEY_NOT_NULL);
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
         T value = (T) valueOps.get(key.getKey());
 
@@ -1118,8 +1118,8 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/hset">Redis Documentation: HSET</a>
      */
     public void hSet(@NonNull String key, @NonNull Object field, Object value, boolean... cacheNullValues) {
-        BizAssert.notEmpty(key, KEY_NOT_NULL);
-        BizAssert.notNull(field, "field不能为空");
+        ArgumentAssert.notEmpty(key, KEY_NOT_NULL);
+        ArgumentAssert.notNull(field, "field不能为空");
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
 
         if (!cacheNullVal && value == null) {
@@ -1139,7 +1139,7 @@ public class RedisOps {
      * @see <a href="https://redis.io/commands/hset">Redis Documentation: HSET</a>
      */
     public void hSet(@NonNull CacheHashKey key, Object value, boolean... cacheNullValues) {
-        BizAssert.notNull(key, "CacheHashKey不能为空");
+        ArgumentAssert.notNull(key, "CacheHashKey不能为空");
 
         this.hSet(key.getKey(), key.getField(), value, cacheNullValues);
         setExpire(key);
@@ -1211,9 +1211,9 @@ public class RedisOps {
     @Nullable
     public <T> T hGet(@NonNull CacheHashKey key, boolean... cacheNullValues) {
         boolean cacheNullVal = cacheNullValues.length > 0 ? cacheNullValues[0] : defaultCacheNullVal;
-        BizAssert.notNull(key, "CacheHashKey不能为空");
-        BizAssert.notEmpty(key.getKey(), KEY_NOT_NULL);
-        BizAssert.notNull(key.getField(), "field不能为空");
+        ArgumentAssert.notNull(key, "CacheHashKey不能为空");
+        ArgumentAssert.notEmpty(key.getKey(), KEY_NOT_NULL);
+        ArgumentAssert.notNull(key.getField(), "field不能为空");
 
         T value = (T) hashOps.get(key.getKey(), key.getField());
         if (value == null && cacheNullVal) {

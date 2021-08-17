@@ -19,7 +19,9 @@ import static top.tangyh.basic.exception.BaseException.BASE_VALID_PARAM;
  * @date 2019-07-22 14:44
  * @see BizException
  * @since 4.0
+ * @see top.tangyh.basic.utils.ArgumentAssert
  */
+@Deprecated
 public final class BizAssert {
     private BizAssert() {
     }

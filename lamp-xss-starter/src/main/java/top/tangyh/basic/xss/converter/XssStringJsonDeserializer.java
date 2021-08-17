@@ -44,8 +44,6 @@ public class XssStringJsonDeserializer extends JsonDeserializer<String> {
         list.add("</embed>");
         list.add("<object>");
         list.add("</object>");
-//            list.add("<style>");
-//            list.add("</style>");
         list.add("<meta>");
         list.add("</meta>");
         list.add("<link>");

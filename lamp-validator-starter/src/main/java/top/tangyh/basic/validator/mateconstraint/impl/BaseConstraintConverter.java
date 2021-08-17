@@ -1,11 +1,11 @@
 package top.tangyh.basic.validator.mateconstraint.impl;
 
+import cn.hutool.core.map.MapUtil;
 import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
 import top.tangyh.basic.validator.model.ConstraintInfo;
 
 import java.lang.annotation.Annotation;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,14 +43,10 @@ public abstract class BaseConstraintConverter implements IConstraintConverter {
     @Override
     public ConstraintInfo converter(Annotation ano) throws Exception {
         Class<? extends Annotation> clazz = ano.getClass();
-        Map<String, Object> attr = new HashMap<>();
+        Map<String, Object> attr = MapUtil.newHashMap();
         for (String method : getMethods()) {
             Object value = clazz.getMethod(method).invoke(ano);
-//            if (value instanceof String && ((String) value).contains("{")) {
-//                attr.put(method, "");
-//            } else {
             attr.put(method, value);
-//            }
         }
         return new ConstraintInfo().setType(getType(ano.annotationType())).setAttrs(attr);
     }

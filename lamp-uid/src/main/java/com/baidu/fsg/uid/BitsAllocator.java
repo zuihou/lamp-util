@@ -29,7 +29,6 @@ import org.springframework.util.Assert;
  */
 public class BitsAllocator {
     /**
-     *
      * Total 64 bits
      */
     public static final int TOTAL_BITS = 1 << 6;

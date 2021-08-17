@@ -25,24 +25,18 @@ import org.slf4j.LoggerFactory;
  * @author yutianbao
  */
 public final class DockerUtils {
-    private DockerUtils() {
-    }
-
     private static final Logger LOGGER = LoggerFactory.getLogger(DockerUtils.class);
-
     /**
      * Environment param keys
      */
     private static final String ENV_KEY_HOST = "JPAAS_HOST";
     private static final String ENV_KEY_PORT = "JPAAS_HTTP_PORT";
     private static final String ENV_KEY_PORT_ORIGINAL = "JPAAS_HOST_PORT_8080";
-
     /**
      * Docker host & port
      */
     private static String DOCKER_HOST = "";
     private static String DOCKER_PORT = "";
-
     /**
      * Whether is docker
      */
@@ -50,6 +44,9 @@ public final class DockerUtils {
 
     static {
         retrieveFromEnv();
+    }
+
+    private DockerUtils() {
     }
 
     /**

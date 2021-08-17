@@ -105,8 +105,7 @@ public final class JwtUtil {
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         //添加构成JWT的类
-        JwtBuilder builder = Jwts.builder().setHeaderParam("typ", "JsonWebToken")
-                .signWith(signingKey, signatureAlgorithm);
+        JwtBuilder builder = Jwts.builder().setHeaderParam("typ", "JsonWebToken");
 
         //设置JWT参数
         user.forEach(builder::claim);
@@ -121,7 +120,9 @@ public final class JwtUtil {
                 // token从时间什么开始生效
                 .setNotBefore(now)
                 // token从什么时间截止生效
-                .setExpiration(exp);
+                .setExpiration(exp)
+                // 签名
+                .signWith(signingKey, signatureAlgorithm);
 
         // 组装Token信息
         Token tokenInfo = new Token();

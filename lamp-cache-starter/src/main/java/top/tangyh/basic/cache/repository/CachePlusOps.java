@@ -1,8 +1,8 @@
 package top.tangyh.basic.cache.repository;
 
+import org.springframework.lang.NonNull;
 import top.tangyh.basic.cache.model.CacheHashKey;
 import top.tangyh.basic.cache.model.CacheKey;
-import org.springframework.lang.NonNull;
 
 import java.util.List;
 import java.util.Map;
@@ -210,6 +210,15 @@ public interface CachePlusOps extends CacheOps {
      */
     <K, V> Map<K, V> hGetAll(@NonNull CacheHashKey key);
 
+    /**
+     * 返回哈希表 key 中，所有的域和值。
+     * 在返回值里，紧跟每个域名(field name)之后是域的值(value)，所以返回值的长度是哈希表大小的两倍。
+     *
+     * @param key             一定不能为 {@literal null}.
+     * @param loader          加载回调
+     * @param cacheNullValues 缓存空值
+     * @return 以列表形式返回哈希表的域和域的值
+     */
     <K, V> Map<K, V> hGetAll(@NonNull CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues);
 
     /**

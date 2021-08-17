@@ -1,9 +1,10 @@
 package top.tangyh.basic.validator.mateconstraint.impl;
 
 
+import org.hibernate.validator.constraints.URL;
 import top.tangyh.basic.annotation.constraints.NotEmptyPattern;
 import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
-import org.hibernate.validator.constraints.URL;
+import top.tangyh.basic.validator.utils.ValidatorConstants;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
@@ -29,6 +30,6 @@ public class RegExConstraintConverter extends BaseConstraintConverter implements
 
     @Override
     protected List<String> getMethods() {
-        return Arrays.asList("regexp", "message");
+        return Arrays.asList("regexp", ValidatorConstants.MESSAGE);
     }
 }

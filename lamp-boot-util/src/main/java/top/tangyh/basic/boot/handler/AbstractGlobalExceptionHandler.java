@@ -1,12 +1,6 @@
 package top.tangyh.basic.boot.handler;
 
 import cn.hutool.core.util.StrUtil;
-import top.tangyh.basic.base.R;
-import top.tangyh.basic.exception.BizException;
-import top.tangyh.basic.exception.ForbiddenException;
-import top.tangyh.basic.exception.UnauthorizedException;
-import top.tangyh.basic.exception.code.ExceptionCode;
-import top.tangyh.basic.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.mybatis.spring.MyBatisSystemException;
@@ -28,6 +22,13 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
+import top.tangyh.basic.base.R;
+import top.tangyh.basic.exception.ArgumentException;
+import top.tangyh.basic.exception.BizException;
+import top.tangyh.basic.exception.ForbiddenException;
+import top.tangyh.basic.exception.UnauthorizedException;
+import top.tangyh.basic.exception.code.ExceptionCode;
+import top.tangyh.basic.utils.StrPool;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -56,6 +57,13 @@ public abstract class AbstractGlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public R<?> bizException(BizException ex) {
         log.warn("BizException:", ex);
+        return R.result(ex.getCode(), null, ex.getMessage(), ex.getLocalizedMessage()).setPath(getPath());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ArgumentException.class)
+    public R bizException(ArgumentException ex) {
+        log.warn("ArgumentException:", ex);
         return R.result(ex.getCode(), null, ex.getMessage(), ex.getLocalizedMessage()).setPath(getPath());
     }
 

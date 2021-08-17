@@ -6,7 +6,6 @@ import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
-import top.tangyh.basic.swagger2.properties.SwaggerProperties;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -39,6 +38,7 @@ import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import top.tangyh.basic.swagger2.properties.SwaggerProperties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -162,7 +162,6 @@ public class SwaggerAutoConfiguration implements BeanFactoryAware {
                     .globalResponseMessage(RequestMethod.PUT, getResponseMessages())
                     .globalResponseMessage(RequestMethod.DELETE, getResponseMessages())
                     .extensions(openApiExtensionResolver.buildExtensions(docketInfo.getGroup()));
-//                    .pathProvider(new ExtRelativePathProvider(servletContext, docketInfo.getBasePath().isEmpty() ? swaggerProperties.getBasePath() : docketInfo.getBasePath()));
 
             configurableBeanFactory.registerSingleton(groupName, docket);
             docketList.add(docket);
