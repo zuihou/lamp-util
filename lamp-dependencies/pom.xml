@@ -60,7 +60,7 @@
         <apache.xmlgraphics.version>1.7</apache.xmlgraphics.version>
         <lombok.version>1.18.20</lombok.version>
         <javassist.version>3.25.0-GA</javassist.version>
-        <antisamy.version>1.5.10</antisamy.version>
+        <antisamy.version>1.6.4</antisamy.version>
         <caffeine.version>2.9.2</caffeine.version>
         <protostuff.version>1.7.4</protostuff.version>
         <ip2region.version>1.7.2</ip2region.version>
