@@ -109,7 +109,7 @@ public abstract class BaseMybatisConfiguration {
 
                 @Override
                 public boolean ignoreTable(String tableName) {
-                    return false;
+                    return databaseProperties.getIgnoreTables() != null && databaseProperties.getIgnoreTables().contains(tableName);
                 }
 
                 @Override
@@ -130,11 +130,13 @@ public abstract class BaseMybatisConfiguration {
         // 分页插件
         PaginationInnerInterceptor paginationInterceptor = new PaginationInnerInterceptor();
         // 单页分页条数限制
-        paginationInterceptor.setMaxLimit(databaseProperties.getLimit());
+        paginationInterceptor.setMaxLimit(databaseProperties.getMaxLimit());
         // 数据库类型
         paginationInterceptor.setDbType(databaseProperties.getDbType());
         // 溢出总页数后是否进行处理
-        paginationInterceptor.setOverflow(true);
+        paginationInterceptor.setOverflow(databaseProperties.getOverflow());
+        // 生成 countSql 优化掉 join 现在只支持 left join
+        paginationInterceptor.setOptimizeJoin(databaseProperties.getOptimizeJoin());
         interceptor.addInnerInterceptor(paginationInterceptor);
 
 

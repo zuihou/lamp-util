@@ -1,9 +1,10 @@
 package top.tangyh.basic.exception;
 
 import top.tangyh.basic.exception.code.BaseExceptionCode;
+import top.tangyh.basic.exception.code.ExceptionCode;
 
 /**
- * 无权限异常
+ * 403  禁止访问
  *
  * @author zuihou
  * @version 1.0
@@ -15,9 +16,12 @@ public class ForbiddenException extends BaseUncheckedException {
     public ForbiddenException(int code, String message) {
         super(code, message);
     }
-
     public static ForbiddenException wrap(BaseExceptionCode ex) {
         return new ForbiddenException(ex.getCode(), ex.getMsg());
+    }
+
+    public static ForbiddenException wrap(String msg) {
+        return new ForbiddenException(ExceptionCode.FORBIDDEN.getCode(), msg);
     }
 
     @Override

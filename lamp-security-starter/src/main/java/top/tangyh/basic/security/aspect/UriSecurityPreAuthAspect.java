@@ -126,7 +126,7 @@ public class UriSecurityPreAuthAspect implements ApplicationContextAware {
         }
         Boolean hasPermit = invokePermit(point, method, condition);
         if (!hasPermit) {
-            throw ForbiddenException.wrap(ExceptionCode.UNAUTHORIZED.build("执行方法[%s]需要[%s]权限", methodName, condition));
+            throw ForbiddenException.wrap(ExceptionCode.FORBIDDEN.build("执行方法[%s]需要[%s]权限", methodName, condition));
         }
     }
 

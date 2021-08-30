@@ -29,12 +29,14 @@ public enum ExceptionCode implements BaseExceptionCode {
     OK(200, "OK"),
     BAD_REQUEST(400, "错误的请求"),
     /**
-     * {@code 401 Unauthorized}.
+     * {@code 401 Unauthorized}. 需要重新登录。
+     * 该HTTP状态码表示认证错误，它是为了认证设计的，而不是为了授权设计的。收到401响应，表示请求没有被认证—压根没有认证或者认证不正确—但是请重新认证和重试。（一般在响应头部包含一个WWW-Authenticate来描述如何认证）。通常由web服务器返回，而不是web应用。从性质上来说是临时的东西。（服务器要求客户端重试）
      *
      * @see <a href="http://tools.ietf.org/html/rfc7235#section-3.1">HTTP/1.1: Authentication, section 3.1</a>
      */
-    UNAUTHORIZED(401, "未认证的"),
-    FORBIDDEN(403, "被禁止的"),
+    UNAUTHORIZED(401, "未认证"),
+    /** 该HTTP状态码是关于授权方面的。从性质上来说是永久的东西，和应用的业务逻辑相关联。它比401更具体，更实际。收到403响应表示服务器完成认证过程，但是客户端请求没有权限去访问要求的资源。 */
+    FORBIDDEN(403, "禁止访问"),
     /**
      * {@code 404 Not Found}.
      *

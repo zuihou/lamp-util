@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lamp-util</artifactId>
         <groupId>top.tangyh.basic</groupId>
-        <version>3.5.0</version>
+        <version>3.5.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

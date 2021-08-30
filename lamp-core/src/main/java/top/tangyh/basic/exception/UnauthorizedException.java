@@ -4,7 +4,7 @@ package top.tangyh.basic.exception;
 import top.tangyh.basic.exception.code.ExceptionCode;
 
 /**
- * 无权限异常
+ * 401 未认证 未登录
  *
  * @author zuihou
  * @version 1.0
@@ -17,8 +17,12 @@ public class UnauthorizedException extends BaseUncheckedException {
         super(code, message);
     }
 
+    public UnauthorizedException(int code, String message, Throwable cause) {
+        super(code, message, cause);
+    }
+
     public static UnauthorizedException wrap(String msg) {
-        return new UnauthorizedException(ExceptionCode.FORBIDDEN.getCode(), msg);
+        return new UnauthorizedException(ExceptionCode.UNAUTHORIZED.getCode(), msg);
     }
 
     @Override

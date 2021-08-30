@@ -4,14 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>top.tangyh.basic</groupId>
     <artifactId>lamp-dependencies</artifactId>
-    <version>3.5.0</version>
+    <version>3.5.1</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>Spring Boot 2.x项目依赖管理</description>
     <url>https://github.com/zuihou/lamp-cloud</url>
 
     <properties>
-        <spring.boot.version>2.5.3</spring.boot.version>
+        <spring.boot.version>2.5.4</spring.boot.version>
         <spring.cloud.version>2020.0.3</spring.cloud.version>
         <spring-cloud-alibaba-dependencies.version>2021.1</spring-cloud-alibaba-dependencies.version>
         <seata.version>1.4.2</seata.version>
@@ -21,13 +21,13 @@
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
 
-        <hutool.version>5.7.8</hutool.version>
+        <hutool.version>5.7.10</hutool.version>
         <druid.version>1.2.6</druid.version>
         <mysql.version>8.0.22</mysql.version>
         <mybatis.version>3.5.7</mybatis.version>
         <mybatis-spring.version>2.0.6</mybatis-spring.version>
         <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
-        <mybatisplus.version>3.4.3.1</mybatisplus.version>
+        <mybatisplus.version>3.4.3.2</mybatisplus.version>
         <jasypt.version>2.1.0</jasypt.version>
         <p6spy.version>3.9.1</p6spy.version>
         <fastjson.version>1.2.78</fastjson.version>

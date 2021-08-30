@@ -2,6 +2,7 @@ package top.tangyh.basic.base.request;
 
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ObjectUtil;
+import top.tangyh.basic.database.mybatis.conditions.Wraps;
 import top.tangyh.basic.utils.DateUtils;
 
 import java.util.Map;
@@ -35,10 +36,9 @@ public class PageUtil {
             if (ObjectUtil.isEmpty(value)) {
                 continue;
             }
-            if (key.endsWith("_st")) {
+            if (key.endsWith(Wraps.ST)) {
                 extra.put(key, DateUtils.getStartTime(value.toString()));
-            }
-            if (key.endsWith("_ed")) {
+            } else if (key.endsWith(Wraps.ED)) {
                 extra.put(key, DateUtils.getEndTime(value.toString()));
             }
         }

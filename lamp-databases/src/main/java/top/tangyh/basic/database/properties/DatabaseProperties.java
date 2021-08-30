@@ -9,6 +9,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static top.tangyh.basic.database.properties.DatabaseProperties.PREFIX;
 import static top.tangyh.basic.database.properties.MultiTenantType.SCHEMA;
 
@@ -43,9 +46,13 @@ public class DatabaseProperties {
     /**
      * 分页大小限制
      */
-    private long limit = -1;
+    private long maxLimit = -1;
 
     private DbType dbType = DbType.MYSQL;
+    /** 溢出总页数后是否进行处理 */
+    protected Boolean overflow = true;
+    /** 生成 countSql 优化掉 join 现在只支持 left join */
+    protected Boolean optimizeJoin = true;
     /**
      * 是否禁止写入
      */
@@ -71,6 +78,11 @@ public class DatabaseProperties {
      * 使用于 COLUMN 模式
      */
     private String tenantIdColumn = "tenant_code";
+    /**
+     * 在执行sql时，忽略 租户插件自动拼接租户编码的表
+     * 仅 COLUMN 模式有效
+     */
+    private List<String> ignoreTables = new ArrayList<>();
     /**
      * id 类型
      */

@@ -30,6 +30,28 @@ import static top.tangyh.basic.utils.StrPool.UNDERSCORE;
  * @date 2019/06/14
  */
 public final class Wraps {
+    /** 开始时间 */
+    public static final String ST = "_st";
+    /** 结束时间 */
+    public static final String ED = "_ed";
+    /** 等于 */
+    public static final String EQ = "_eq";
+    /** 不等于 */
+    public static final String NE = "_ne";
+    /** 大于等于 */
+    public static final String GE = "_ge";
+    /** 大于 */
+    public static final String GT = "_gt";
+    /** 小于 */
+    public static final String LT = "_lt";
+    /** 小于等于 */
+    public static final String LE = "_le";
+    /** 模糊 */
+    public static final String LIKE = "_like";
+    /** 左模糊 */
+    public static final String LIKE_LEFT = "_likeLeft";
+    /** 右模糊 */
+    public static final String LIKE_RIGHT = "_likeRight";
 
     private Wraps() {
         // ignore
@@ -103,6 +125,19 @@ public final class Wraps {
         return q(model, extra, modelClazz).lambda();
     }
 
+    /**
+     * 构建查询条件
+     * 1. 若model不为空，则将model中不为空的参数拼接到sql中；
+     * 2. 若extra中有 _st、_ed、_ge、_gt、_le、_lt、_eq、_ne、_like、_likeLeft、_likeRigth 等结尾的参数，在sql中拼接为相应的查询条件
+     *
+     * @param model      model 条件对象实例
+     * @param extra      extra 扩展参数
+     * @param modelClazz modelClazz 条件对象类型
+     * @return top.tangyh.basic.database.mybatis.conditions.query.QueryWrap<Entity>
+     * @author zuihou
+     * @date 2021/8/26 8:47 下午
+     * @create [2021/8/26 8:47 下午 ] [tangyh] [初始创建]
+     */
     public static <Entity> QueryWrap<Entity> q(Entity model, Map<String, Object> extra, Class<Entity> modelClazz) {
         QueryWrap<Entity> wrapper = model != null ? Wraps.q(model) : Wraps.q();
 
@@ -114,13 +149,39 @@ public final class Wraps {
                 if (ObjectUtil.isEmpty(value)) {
                     continue;
                 }
-                if (key.endsWith("_st")) {
-                    String beanField = StrUtil.subBefore(key, "_st", true);
+                if (key.endsWith(ST)) {
+                    String beanField = StrUtil.subBefore(key, ST, true);
                     wrapper.ge(getDbField(beanField, modelClazz), DateUtils.getStartTime(value.toString()));
-                }
-                if (key.endsWith("_ed")) {
-                    String beanField = StrUtil.subBefore(key, "_ed", true);
+                } else if (key.endsWith(ED)) {
+                    String beanField = StrUtil.subBefore(key, ED, true);
                     wrapper.le(getDbField(beanField, modelClazz), DateUtils.getEndTime(value.toString()));
+                } else if (key.endsWith(GE)) {
+                    String beanField = StrUtil.subBefore(key, GE, true);
+                    wrapper.ge(getDbField(beanField, modelClazz), value);
+                } else if (key.endsWith(GT)) {
+                    String beanField = StrUtil.subBefore(key, GT, true);
+                    wrapper.gt(getDbField(beanField, modelClazz), value);
+                } else if (key.endsWith(LT)) {
+                    String beanField = StrUtil.subBefore(key, LT, true);
+                    wrapper.lt(getDbField(beanField, modelClazz), value);
+                } else if (key.endsWith(LE)) {
+                    String beanField = StrUtil.subBefore(key, LE, true);
+                    wrapper.le(getDbField(beanField, modelClazz), value);
+                } else if (key.endsWith(NE)) {
+                    String beanField = StrUtil.subBefore(key, NE, true);
+                    wrapper.ne(getDbField(beanField, modelClazz), value);
+                } else if (key.endsWith(EQ)) {
+                    String beanField = StrUtil.subBefore(key, EQ, true);
+                    wrapper.eq(getDbField(beanField, modelClazz), value);
+                } else if (key.endsWith(LIKE)) {
+                    String beanField = StrUtil.subBefore(key, LIKE, true);
+                    wrapper.like(getDbField(beanField, modelClazz), value);
+                } else if (key.endsWith(LIKE_LEFT)) {
+                    String beanField = StrUtil.subBefore(key, LIKE_LEFT, true);
+                    wrapper.likeLeft(getDbField(beanField, modelClazz), value);
+                } else if (key.endsWith(LIKE_RIGHT)) {
+                    String beanField = StrUtil.subBefore(key, LIKE_RIGHT, true);
+                    wrapper.likeRight(getDbField(beanField, modelClazz), value);
                 }
             }
         }

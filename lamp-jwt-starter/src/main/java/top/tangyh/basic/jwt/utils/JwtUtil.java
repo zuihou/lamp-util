@@ -3,6 +3,8 @@ package top.tangyh.basic.jwt.utils;
 import cn.hutool.core.util.StrUtil;
 import top.tangyh.basic.context.ContextConstants;
 import top.tangyh.basic.exception.BizException;
+import top.tangyh.basic.exception.ForbiddenException;
+import top.tangyh.basic.exception.UnauthorizedException;
 import top.tangyh.basic.exception.code.ExceptionCode;
 import top.tangyh.basic.jwt.model.Token;
 import top.tangyh.basic.utils.DateUtils;
@@ -150,18 +152,18 @@ public final class JwtUtil {
         } catch (ExpiredJwtException ex) {
             log.error("token=[{}], 过期", jsonWebToken, ex);
             //过期
-            throw new BizException(ExceptionCode.JWT_TOKEN_EXPIRED.getCode(), ExceptionCode.JWT_TOKEN_EXPIRED.getMsg(), ex);
+            throw new UnauthorizedException(ExceptionCode.JWT_TOKEN_EXPIRED.getCode(), ExceptionCode.JWT_TOKEN_EXPIRED.getMsg(), ex);
         } catch (SignatureException ex) {
             log.error("token=[{}] 签名错误", jsonWebToken, ex);
             //签名错误
-            throw new BizException(ExceptionCode.JWT_SIGNATURE.getCode(), ExceptionCode.JWT_SIGNATURE.getMsg(), ex);
+            throw new UnauthorizedException(ExceptionCode.JWT_SIGNATURE.getCode(), ExceptionCode.JWT_SIGNATURE.getMsg(), ex);
         } catch (IllegalArgumentException ex) {
             log.error("token=[{}] 为空", jsonWebToken, ex);
             //token 为空
-            throw new BizException(ExceptionCode.JWT_ILLEGAL_ARGUMENT.getCode(), ExceptionCode.JWT_ILLEGAL_ARGUMENT.getMsg(), ex);
+            throw new UnauthorizedException(ExceptionCode.JWT_ILLEGAL_ARGUMENT.getCode(), ExceptionCode.JWT_ILLEGAL_ARGUMENT.getMsg(), ex);
         } catch (Exception e) {
             log.error("token=[{}] errCode:{}, message:{}", jsonWebToken, JWT_PARSER_TOKEN_FAIL.getCode(), e.getMessage(), e);
-            throw new BizException(JWT_PARSER_TOKEN_FAIL.getCode(), JWT_PARSER_TOKEN_FAIL.getMsg(), e);
+            throw new UnauthorizedException(JWT_PARSER_TOKEN_FAIL.getCode(), JWT_PARSER_TOKEN_FAIL.getMsg(), e);
         }
     }
 
@@ -184,14 +186,14 @@ public final class JwtUtil {
      */
     public static Claims getClaims(String token, long allowedClockSkewSeconds) {
         if (token == null) {
-            throw BizException.wrap(JWT_PARSER_TOKEN_FAIL);
+            throw UnauthorizedException.wrap(JWT_PARSER_TOKEN_FAIL.getMsg());
         }
         if (token.startsWith(ContextConstants.BEARER_HEADER_PREFIX)) {
             String headStr = StrUtil.subAfter(token, ContextConstants.BEARER_HEADER_PREFIX, false);
             return parseJwt(headStr, allowedClockSkewSeconds);
         }
         log.info("jsonWebToken={}", token);
-        throw BizException.wrap(JWT_PARSER_TOKEN_FAIL);
+        throw UnauthorizedException.wrap(JWT_PARSER_TOKEN_FAIL.getMsg());
     }
 
 }

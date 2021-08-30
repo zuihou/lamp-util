@@ -7,7 +7,7 @@ import top.tangyh.basic.database.mybatis.conditions.Wraps;
 import top.tangyh.basic.database.mybatis.conditions.query.QueryWrap;
 
 /**
- * 分页Controller
+ * 分页控制器
  *
  * @param <Entity>    实体
  * @param <PageQuery> 分页参数
@@ -36,14 +36,20 @@ public interface PageController<Entity, PageQuery> extends BaseController<Entity
      * @return 分页信息
      */
     default IPage<Entity> query(PageParams<PageQuery> params) {
+        // 处理查询参数，如：覆盖前端传递的 current、size、sort 等参数 以及 model 中的参数 【提供给之类重写】【无默认实现】
         handlerQueryParams(params);
 
+        // 构建分页参数(current、size)和排序字段等
         IPage<Entity> page = params.buildPage(getEntityClass());
         Entity model = BeanUtil.toBean(params.getModel(), getEntityClass());
 
+        // 根据前端传递的参数，构建查询条件【提供给之类重写】【有默认实现】
         QueryWrap<Entity> wrapper = handlerWrapper(model, params);
+
+        // 执行单表分页查询
         getBaseService().page(page, wrapper);
-        // 处理结果
+
+        // 处理查询后的分页结果， 如：调用EchoService回显字典、关联表数据等 【提供给之类重写】【无默认实现】
         handlerResult(page);
         return page;
     }

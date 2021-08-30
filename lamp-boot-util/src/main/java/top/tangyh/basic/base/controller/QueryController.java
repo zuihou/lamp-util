@@ -61,7 +61,6 @@ public interface QueryController<Entity, Id extends Serializable, PageQuery> ext
         return success(query(params));
     }
 
-
     /**
      * 批量查询
      *
