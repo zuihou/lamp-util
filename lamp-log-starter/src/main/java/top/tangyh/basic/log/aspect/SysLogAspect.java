@@ -281,7 +281,7 @@ public class SysLogAspect {
      *
      * @param joinPoint 端点
      * @param sysLog    操作日志
-     * @return true 表示需要记录日志
+     * @return true 表示不需要记录日志
      */
     private boolean check(JoinPoint joinPoint, SysLog sysLog) {
         if (sysLog == null || !sysLog.enabled()) {
