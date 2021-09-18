@@ -21,13 +21,13 @@
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
 
-        <hutool.version>5.7.10</hutool.version>
+        <hutool.version>5.7.13</hutool.version>
         <druid.version>1.2.6</druid.version>
         <mysql.version>8.0.22</mysql.version>
         <mybatis.version>3.5.7</mybatis.version>
         <mybatis-spring.version>2.0.6</mybatis-spring.version>
         <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
-        <mybatisplus.version>3.4.3.2</mybatisplus.version>
+        <mybatisplus.version>3.4.3.3</mybatisplus.version>
         <jasypt.version>2.1.0</jasypt.version>
         <p6spy.version>3.9.1</p6spy.version>
         <fastjson.version>1.2.78</fastjson.version>
