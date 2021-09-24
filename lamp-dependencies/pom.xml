@@ -11,8 +11,8 @@
     <url>https://github.com/zuihou/lamp-cloud</url>
 
     <properties>
-        <spring.boot.version>2.5.4</spring.boot.version>
-        <spring.cloud.version>2020.0.3</spring.cloud.version>
+        <spring.boot.version>2.5.5</spring.boot.version>
+        <spring.cloud.version>2020.0.4</spring.cloud.version>
         <spring-cloud-alibaba-dependencies.version>2021.1</spring-cloud-alibaba-dependencies.version>
         <seata.version>1.4.2</seata.version>
         <nacos.version>2.0.3</nacos.version>
@@ -27,7 +27,7 @@
         <mybatis.version>3.5.7</mybatis.version>
         <mybatis-spring.version>2.0.6</mybatis-spring.version>
         <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
-        <mybatisplus.version>3.4.3.3</mybatisplus.version>
+        <mybatisplus.version>3.4.3.4</mybatisplus.version>
         <jasypt.version>2.1.0</jasypt.version>
         <p6spy.version>3.9.1</p6spy.version>
         <fastjson.version>1.2.78</fastjson.version>
