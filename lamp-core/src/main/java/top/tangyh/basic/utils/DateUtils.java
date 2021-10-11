@@ -1,6 +1,7 @@
 package top.tangyh.basic.utils;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import top.tangyh.basic.exception.BizException;
@@ -786,7 +787,7 @@ public final class DateUtils {
         } else if (time.matches("^\\d{4}-\\d{1,2}-\\d{1,2}T{1}\\d{1,2}:\\d{1,2}:\\d{1,2}.\\d{3}Z$")) {
             startTime = time.replace("T", " ").substring(0, time.indexOf('.'));
         }
-        return LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT));
+        return LocalDateTimeUtil.beginOfDay(LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)));
     }
 
     /**
@@ -807,12 +808,9 @@ public final class DateUtils {
             startTime = time + ":59";
         } else if (time.matches("^\\d{4}-\\d{1,2}-\\d{1,2}T{1}\\d{1,2}:\\d{1,2}:\\d{1,2}.\\d{3}Z$")) {
             time = time.replace("T", " ").substring(0, time.indexOf('.'));
-            if (time.endsWith("00:00:00")) {
-                time = time.replace("00:00:00", "23:59:59");
-            }
             startTime = time;
         }
-        return LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT));
+        return LocalDateTimeUtil.endOfDay(LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)));
     }
 
     /**

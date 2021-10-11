@@ -1,6 +1,5 @@
 package top.tangyh.basic.utils;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -14,79 +13,125 @@ public final class ValidatorUtil {
     }
 
     /**
-     * 正则表达式:验证用户名(不包含中文和特殊字符)如果用户名使用手机号码或邮箱 则结合手机号验证和邮箱验证
+     * 正则表达式:验证用户名(不包含中文和特殊字符)
      */
-    public static final String REGEX_USERNAME = "^[a-zA-Z]\\w{5,17}$";
+    public static final String REGEX_USERNAME = "^[a-zA-Z0-9_]\\w{5,254}$";
+    public static final Pattern PATTERN_USERNAME = Pattern.compile(REGEX_USERNAME);
     /**
      * 正则表达式:验证密码(不包含特殊字符)
      */
-    public static final String REGEX_PASSWORD = "^[a-zA-Z0-9]{6,16}$";
+    public static final String REGEX_PASSWORD = "^[a-zA-Z0-9]{5,15}$";
+    public static final Pattern PATTERN_PASSWORD = Pattern.compile(REGEX_PASSWORD);
     /**
      * 正则表达式:验证邮箱
      */
     public static final String REGEX_EMAIL = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+    public static final Pattern PATTERN_EMAIL = Pattern.compile(REGEX_EMAIL);
     /**
-     * 正则表达式:验证汉字(1-9个汉字)  {1,9} 自定义区间
+     * 正则表达式:验证汉字
      */
-    public static final String REGEX_CHINESE = "^[\u4e00-\u9fa5]{1,9}$";
+    public static final String REGEX_CHINESE = "^[\u4e00-\u9fa5]$";
+    public static final Pattern PATTERN_CHINESE = Pattern.compile(REGEX_CHINESE);
+
     /**
      * 正则表达式:验证身份证
      */
     public static final String REGEX_ID_CARD = "(\\d{14}[0-9a-zA-Z])|(\\d{17}[0-9a-zA-Z])";
+    public static final Pattern PATTERN_ID_CARD = Pattern.compile(REGEX_ID_CARD);
     /**
      * 正则表达式:验证URL
      */
     public static final String REGEX_URL = "http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?";
+    public static final Pattern PATTERN_URL = Pattern.compile(REGEX_URL);
     /**
      * 正则表达式:验证IP地址
      */
-    public static final String REGEX_IP_ADDR = "(2[5][0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})";
+    public static final String REGEX_IP_ADDRESS = "(2[5][0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})";
+    public static final Pattern PATTERN_IP_ADDRESS = Pattern.compile(REGEX_IP_ADDRESS);
     /**
-     * 说明：移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
-     * 联通：130、131、132、152、155、156、185、186
-     * 电信：133、153、180、189
-     * 虚拟运营商  170
-     * 总结起来就是第一位必定为1，第二位必定为3或4或5或7或8，其他位置的可以为0-9
-     * 验证号码 手机号 固话均可
-     * 正则表达式:验证手机号
+     * 1开头 总共11位
      */
-    private static final String REGEX_MOBILE = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17[013678])|(18[0,5-9]))\\d{8}$";
-    private static final Pattern PATTERN = Pattern.compile(REGEX_MOBILE);
+    public static final String REGEX_MOBILE = "^(1)\\d{10}$";
+    public static final Pattern PATTERN_MOBILE = Pattern.compile(REGEX_MOBILE);
 
     /**
      * 校验用户名
      *
-     * @param username 用户名
+     * @param value 用户名
      * @return 校验通过返回true，否则返回false
      */
-    public static boolean isUserName(String username) {
-        return Pattern.matches(REGEX_USERNAME, username);
+    public static boolean isUserName(String value) {
+        return PATTERN_USERNAME.matcher(value).matches();
+    }
+
+    /**
+     * 校验邮箱
+     *
+     * @param value 邮箱
+     * @return 校验通过返回true，否则返回false
+     */
+    public static boolean isEmail(String value) {
+        return PATTERN_EMAIL.matcher(value).matches();
+    }
+
+    /**
+     * 校验身份证号
+     *
+     * @param value 身份证号
+     * @return 校验通过返回true，否则返回false
+     */
+    public static boolean isIdCard(String value) {
+        return PATTERN_ID_CARD.matcher(value).matches();
     }
 
     /**
      * 校验密码
      *
-     * @param password 密码
+     * @param value 密码
      * @return 校验通过返回true，否则返回false
      */
-    public static boolean isPassword(String password) {
-        return Pattern.matches(REGEX_PASSWORD, password);
+    public static boolean isPassword(String value) {
+        return PATTERN_PASSWORD.matcher(value).matches();
     }
 
     /**
      * 校验手机号
      *
-     * @param phone 手机号
+     * @param value 手机号
      * @return 是否校验成功
      */
-    public static boolean checkPhone(String phone) {
-        //noinspection AlibabaUndefineMagicConstant
-        if (phone == null || phone.length() != 11) {
-            return Boolean.FALSE;
-        }
-
-        Matcher m = PATTERN.matcher(phone);
-        return m.matches();
+    public static boolean isMobile(String value) {
+        return PATTERN_MOBILE.matcher(value).matches();
     }
 
+
+    /**
+     * 校验ip 地址
+     *
+     * @param value ip 地址
+     * @return 是否校验成功
+     */
+    public static boolean isIpAddress(String value) {
+        return PATTERN_IP_ADDRESS.matcher(value).matches();
+    }
+
+    /**
+     * 校验 url 地址
+     *
+     * @param value url 地址
+     * @return 是否校验成功
+     */
+    public static boolean isUrl(String value) {
+        return PATTERN_URL.matcher(value).matches();
+    }
+
+    /**
+     * 校验 汉字
+     *
+     * @param value 汉字
+     * @return 是否校验成功
+     */
+    public static boolean isChinese(String value) {
+        return PATTERN_CHINESE.matcher(value).matches();
+    }
 }
