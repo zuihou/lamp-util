@@ -21,7 +21,7 @@
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
 
-        <hutool.version>5.7.14</hutool.version>
+        <hutool.version>5.7.15</hutool.version>
         <druid.version>1.2.8</druid.version>
         <mysql.version>8.0.22</mysql.version>
         <mybatis.version>3.5.7</mybatis.version>
