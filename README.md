@@ -73,16 +73,12 @@
 - 快去看源码和文档发现 [更多功能](https://www.kancloud.cn/zuihou/zuihou-admin-cloud) 吧
 
 # 会员版演示地址
-- 4.0：后端使用lamp-cloud-pro， 前端使用lamp-web-pro。演示地址： https://tangyh.top
-- 3.x：后端使用lamp-boot-plus， 前端使用lamp-web-plus。演示地址：  https://boot.tangyh.top
-- 3.x：后端使用lamp-boot-plus， 前端使用lamp-web。演示地址：  https://boot.tangyh.top/lamp-web
+- 4.0版本：后端使用lamp-cloud-pro， 前端使用lamp-web-pro。演示地址：   https://tangyh.top
+- 3.x版本：后端使用lamp-boot-plus， 前端使用lamp-web-plus。演示地址：  https://boot.tangyh.top
+- 3.x版本：后端使用lamp-boot-plus， 前端使用lamp-web。演示地址：     https://boot.tangyh.top/lamp-web
 
-# 演示账号
-- 以下内置账号仅限于内置的0000租户
-- 平台管理员： lamp_pt/lamp (内置给公司内部运营人员使用)
-- 超级管理员： lamp/lamp
-- 普通管理员： general/lamp
-- 普通账号： normal/lamp
+> 4.0 企业版源码已经发布，开源版和个人版(4.0功能可能有所不同)发布暂缓，详情咨询作者
+
 
 # 会员版
 
