@@ -2,6 +2,7 @@ package top.tangyh.basic.cloud.interceptor;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.URLUtil;
 import top.tangyh.basic.context.ContextConstants;
 import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.utils.StrPool;
@@ -47,7 +48,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
-            HEADER_NAME_LIST.forEach((headerName) -> template.header(headerName, ContextUtil.get(headerName)));
+            HEADER_NAME_LIST.forEach(headerName -> template.header(headerName, URLUtil.encode(ContextUtil.get(headerName))));
             return;
         }
 
@@ -58,7 +59,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
         }
         HEADER_NAME_LIST.forEach((headerName) -> {
             String header = request.getHeader(headerName);
-            template.header(headerName, ObjectUtil.isEmpty(header) ? ContextUtil.get(headerName) : header);
+            template.header(headerName, ObjectUtil.isEmpty(header) ? URLUtil.encode(ContextUtil.get(headerName)) : header);
         });
     }
 }
