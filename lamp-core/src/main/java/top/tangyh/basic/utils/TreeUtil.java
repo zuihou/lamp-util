@@ -18,7 +18,9 @@ import java.util.stream.Collectors;
 public final class TreeUtil {
     private TreeUtil() {
     }
-
+    public static String getTreePath(String parentTreePath, Long parentId) {
+        return StrPool.SLASH + parentId + parentTreePath;
+    }
     /**
      * 构建Tree结构
      *
