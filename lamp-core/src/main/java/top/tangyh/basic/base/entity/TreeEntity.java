@@ -1,6 +1,7 @@
 package top.tangyh.basic.base.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,9 +60,16 @@ public class TreeEntity<E, T extends Serializable> extends Entity<T> {
     /**
      * 初始化子类
      */
+    @JsonIgnore
     public void initChildren() {
         if (getChildren() == null) {
             this.setChildren(new ArrayList<>());
         }
+    }
+
+    @JsonIgnore
+    public void addChildren(E child) {
+        initChildren();
+        children.add(child);
     }
 }
