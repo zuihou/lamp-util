@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>top.tangyh.basic</groupId>
     <artifactId>lamp-util</artifactId>
-    <version>3.5.4</version>
+    <version>3.5.5</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>lamp项目公共模块</description>
@@ -32,7 +32,7 @@
         <module>lamp-all</module>
     </modules>
     <properties>
-        <lamp-dependencies.version>3.5.4</lamp-dependencies.version>
+        <lamp-dependencies.version>3.5.5</lamp-dependencies.version>
         <!-- jdk8 将这里改成 8 -->
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
