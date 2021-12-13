@@ -21,7 +21,7 @@
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
 
-        <hutool.version>5.7.16</hutool.version>
+        <hutool.version>5.7.17</hutool.version>
         <druid.version>1.2.8</druid.version>
         <mysql.version>8.0.27</mysql.version>
         <mybatis.version>3.5.7</mybatis.version>
@@ -54,12 +54,12 @@
         <asm.version>5.0.4</asm.version>
         <tobato-fastdfs-client.version>1.27.2</tobato-fastdfs-client.version>
         <qcloudsms.version>1.0.6</qcloudsms.version>
-        <aliyun-java-sdk-core.version>4.5.25</aliyun-java-sdk-core.version>
+        <aliyun-java-sdk-core.version>4.5.30</aliyun-java-sdk-core.version>
         <aliyun-java-sdk-dysmsapi.version>2.1.0</aliyun-java-sdk-dysmsapi.version>
         <aliyun-sdk-oss.version>3.13.0</aliyun-sdk-oss.version>
         <bce-java-sdk.version>0.10.21</bce-java-sdk.version>
         <esdk-obs-java.version>3.21.4.1</esdk-obs-java.version>
-        <qiniu-java-sdk.version>7.8.0</qiniu-java-sdk.version>
+        <qiniu-java-sdk.version>7.9.0</qiniu-java-sdk.version>
         <minio.version>8.2.2</minio.version>
         <apache.xmlgraphics.version>1.7</apache.xmlgraphics.version>
         <javassist.version>3.25.0-GA</javassist.version>
