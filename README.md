@@ -16,9 +16,12 @@
 [点我了解项目详细介绍](简介.md)
 
 # 推广
+- 超品周津贴: [点我进入](https://www.aliyun.com/minisite/goods?taskPkg=1212cpz&pkgSid=183200&userCode=uk5ga6sq)
 - 阿里云服务器双11折扣：[点我进入](https://www.aliyun.com/activity/1111?userCode=uk5ga6sq)
 - 阿里云服务器折扣场：[点我进入](https://www.aliyun.com/minisite/goods?userCode=uk5ga6sq)
 - 阿里云服务器优惠券：[点我领取](https://www.aliyun.com/daily-act/ecs/activity_selection?userCode=uk5ga6sq)
+- 通过以上链接任意购买金额大于等于50元的商品，联系作者可赠送 [看云文档](https://www.kancloud.cn/zuihou/zuihou-admin-cloud) 一份。
+
 
 ## 工具集
 
