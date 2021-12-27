@@ -11,17 +11,17 @@
     <url>https://github.com/zuihou/lamp-cloud</url>
 
     <properties>
-        <spring.boot.version>2.5.7</spring.boot.version>
+        <spring.boot.version>2.5.8</spring.boot.version>
         <spring.cloud.version>2020.0.4</spring.cloud.version>
         <spring-cloud-alibaba-dependencies.version>2021.1</spring-cloud-alibaba-dependencies.version>
         <seata.version>1.4.2</seata.version>
         <nacos.version>2.0.3</nacos.version>
         <sentinel.version>1.8.2</sentinel.version>
-        <spring-boot-admin.version>2.5.4</spring-boot-admin.version>
+        <spring-boot-admin.version>2.5.5</spring-boot-admin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
 
-        <hutool.version>5.7.17</hutool.version>
+        <hutool.version>5.7.18</hutool.version>
         <druid.version>1.2.8</druid.version>
         <mysql.version>8.0.27</mysql.version>
         <mybatis.version>3.5.7</mybatis.version>
