@@ -13,7 +13,7 @@
 # lamp 项目名字由来
 `灯灯`(简称灯， 英文名：lamp)，他是一个项目的统称，由"工具集"、"后端"、"前端"组成，包含以下几个子项目
 
-[点我了解项目详细介绍](简介.md)
+[点我了解项目详细介绍](https://tangyh.top)
 
 # 推广
 - 超品周津贴: [点我进入](https://www.aliyun.com/minisite/goods?taskPkg=1212cpz&pkgSid=183200&userCode=uk5ga6sq)
@@ -22,6 +22,8 @@
 - 阿里云服务器优惠券：[点我领取](https://www.aliyun.com/daily-act/ecs/activity_selection?userCode=uk5ga6sq)
 - 通过以上链接任意购买金额大于等于50元的商品，联系作者可赠送 [看云文档](https://www.kancloud.cn/zuihou/zuihou-admin-cloud) 一份。
 
+# 官网
+[https://tangyh.top](https://tangyh.top)
 
 ## 工具集
 
@@ -43,8 +45,8 @@
 
 | 项目 | gitee | github | 备注 | 演示地址 |
 | --- | --- | --- | --- | --- |
-| lamp-web-plus(强烈推荐！👏👏👏) | [lamp-web-plus](https://gitee.com/zuihou111/lamp-web-plus) | [lamp-web-plus](https://github.com/zuihou/lamp-web-plus) | 基于 vue-vben-admin （vue 3 + ant design vue 2） | https://tangyh.top |
-| lamp-web | [lamp-web](https://gitee.com/zuihou111/lamp-web) | [lamp-web](https://github.com/zuihou/lamp-web) | 基于 vue-admin-element (element-ui) | https://tangyh.top/lamp-web |
+| lamp-web-plus(强烈推荐！👏👏👏) | [lamp-web-plus](https://gitee.com/zuihou111/lamp-web-plus) | [lamp-web-plus](https://github.com/zuihou/lamp-web-plus) | 基于 vue-vben-admin （vue 3 + ant design vue 2） | https://pro.tangyh.top |
+| lamp-web | [lamp-web](https://gitee.com/zuihou111/lamp-web) | [lamp-web](https://github.com/zuihou/lamp-web) | 基于 vue-admin-element (element-ui) | https://pro.tangyh.top/lamp-web |
 
 # lamp-util 简介
 
@@ -76,7 +78,7 @@
 - 快去看源码和文档发现 [更多功能](https://www.kancloud.cn/zuihou/zuihou-admin-cloud) 吧
 
 # 会员版演示地址
-- 4.0版本：后端使用lamp-cloud-pro， 前端使用lamp-web-pro。演示地址：   https://tangyh.top
+- 4.0版本：后端使用lamp-cloud-pro， 前端使用lamp-web-pro。演示地址：   https://pro.tangyh.top
 - 3.x版本：后端使用lamp-boot-plus， 前端使用lamp-web-plus。演示地址：  https://boot.tangyh.top
 - 3.x版本：后端使用lamp-boot-plus， 前端使用lamp-web。演示地址：     https://boot.tangyh.top/lamp-web
 
