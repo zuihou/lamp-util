@@ -81,9 +81,9 @@ public interface StrPool {
     String DOUBLE_TYPE_NAME = "java.lang.Double";
     String FLOAT_TYPE_NAME = "java.lang.Float";
     String BOOLEAN_TYPE_NAME = "java.lang.Boolean";
-    String SET_TYPE_NAME = "java.lang.Set";
-    String LIST_TYPE_NAME = "java.lang.List";
-    String COLLECTION_TYPE_NAME = "java.lang.Collection";
+    String SET_TYPE_NAME = "java.util.Set";
+    String LIST_TYPE_NAME = "java.util.List";
+    String COLLECTION_TYPE_NAME = "java.util.Collection";
     String DATE_TYPE_NAME = "java.util.Date";
     String LOCAL_DATE_TIME_TYPE_NAME = "java.time.LocalDateTime";
     String LOCAL_DATE_TYPE_NAME = "java.time.LocalDate";
