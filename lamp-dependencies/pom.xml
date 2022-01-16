@@ -17,11 +17,11 @@
         <seata.version>1.4.2</seata.version>
         <nacos.version>2.0.3</nacos.version>
         <sentinel.version>1.8.2</sentinel.version>
-        <spring-boot-admin.version>2.5.5</spring-boot-admin.version>
+        <spring-boot-admin.version>2.6.0</spring-boot-admin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
 
-        <hutool.version>5.7.18</hutool.version>
+        <hutool.version>5.7.19</hutool.version>
         <druid.version>1.2.8</druid.version>
         <mysql.version>8.0.27</mysql.version>
         <mybatis.version>3.5.7</mybatis.version>
@@ -30,18 +30,18 @@
         <mybatisplus.version>3.4.3.4</mybatisplus.version>
         <jasypt.version>2.1.0</jasypt.version>
         <p6spy.version>3.9.1</p6spy.version>
-        <fastjson.version>1.2.78</fastjson.version>
+        <fastjson.version>1.2.79</fastjson.version>
         <transmittable-thread-local.version>2.12.2</transmittable-thread-local.version>
         <knife4j.version>2.0.9</knife4j.version>
         <springfox.version>2.10.5</springfox.version>
         <swagger-models.version>1.5.22</swagger-models.version>
         <guava.version>30.1.1-jre</guava.version>
         <jjwt.version>0.11.2</jjwt.version>
-        <lombok.version>1.18.20</lombok.version>
+        <lombok.version>1.18.22</lombok.version>
         <dozer.version>6.5.0</dozer.version>
         <easy-captcha.version>1.6.2</easy-captcha.version>
         <easypoi.version>4.2.0</easypoi.version>
-        <caffeine.version>2.9.2</caffeine.version>
+        <caffeine.version>2.9.3</caffeine.version>
         <protostuff.version>1.7.4</protostuff.version>
         <ip2region.version>1.7.2</ip2region.version>
         <commons-exec.version>1.3</commons-exec.version>
