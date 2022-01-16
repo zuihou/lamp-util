@@ -2,6 +2,7 @@ package top.tangyh.basic.utils;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ArrayListMultimap;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -32,6 +36,29 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class CollHelper {
     private CollHelper() {
+    }
+
+
+    public static Map<String, Set<String>> putAll(Map<String, Set<String>>... items) {
+        if (ArrayUtil.isEmpty(items)) {
+            return Collections.emptyMap();
+        }
+        Map<String, Set<String>> map = new HashMap<>();
+        for (Map<String, Set<String>> item : items) {
+            item.forEach((k, v) -> {
+                if (map.containsKey(k)) {
+                    Set<String> list = map.get(k);
+
+                    if (list == null) {
+                        list = new HashSet<>();
+                    }
+                    list.addAll(v);
+                } else {
+                    map.put(k, new HashSet<>(v));
+                }
+            });
+        }
+        return map;
     }
 
     /**
@@ -213,4 +240,48 @@ public final class CollHelper {
         return (int) Math.min(5L + arraySize + (arraySize / 10), Integer.MAX_VALUE);
     }
 
+
+    /**
+     * 添加 多个List
+     *
+     * @param values 集合
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T> addAll(List<T>... values) {
+        return Stream.of(values).flatMap(List::stream).collect(Collectors.toList());
+    }
+
+    /**
+     * 添加 多个List 并去重
+     *
+     * @param values 集合
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T> addAllUnique(List<T>... values) {
+        return Stream.of(values).flatMap(List::stream).distinct().collect(Collectors.toList());
+    }
+
+    /**
+     * 添加 多个Set
+     *
+     * @param values 集合
+     * @param <T>
+     * @return
+     */
+    public static <T> Set<T> addAll(Set<T>... values) {
+        return Stream.of(values).flatMap(Set::stream).collect(Collectors.toSet());
+    }
+
+    /**
+     * 添加 多个List 并返回Set
+     *
+     * @param values 集合
+     * @param <T>
+     * @return
+     */
+    public static <T> Set<T> addAllListToSet(List<T>... values) {
+        return Stream.of(values).flatMap(List::stream).collect(Collectors.toSet());
+    }
 }

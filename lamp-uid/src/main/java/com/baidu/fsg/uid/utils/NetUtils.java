@@ -71,7 +71,8 @@ public final class NetUtils {
             }
         }
 
-        throw new RuntimeException("No validated local address!");
+//        throw new RuntimeException("No validated local address!");
+        return null;
     }
 
     /**
@@ -80,7 +81,7 @@ public final class NetUtils {
      * @return the string local address
      */
     public static String getLocalAddress() {
-        return localAddress.getHostAddress();
+        return localAddress != null ? localAddress.getHostAddress() : "127.0.0.1";
     }
 
 }

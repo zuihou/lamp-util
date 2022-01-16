@@ -117,7 +117,7 @@ public class WildcardPermission implements Serializable {
         StringBuilder buffer = new StringBuilder();
         for (Set<String> part : parts) {
             if (buffer.length() > 0) {
-                buffer.append(":");
+                buffer.append(PART_DIVIDER_TOKEN);
             }
             buffer.append(part);
         }
