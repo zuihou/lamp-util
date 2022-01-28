@@ -18,9 +18,23 @@ import java.util.stream.Collectors;
 public final class TreeUtil {
     private TreeUtil() {
     }
+
+
+    /**
+     * 判断id是否为根节点
+     *
+     * @param id
+     * @return
+     */
+    public static boolean isRoot(Long id) {
+        return id == null || Long.valueOf(StrPool.DEF_PARENT_ID).equals(id);
+    }
+
+
     public static String getTreePath(String parentTreePath, Long parentId) {
         return StrPool.SLASH + parentId + parentTreePath;
     }
+
     /**
      * 构建Tree结构
      *
