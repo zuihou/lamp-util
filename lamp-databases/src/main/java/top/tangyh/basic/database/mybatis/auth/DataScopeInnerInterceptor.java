@@ -21,13 +21,8 @@ import java.util.function.Function;
 
 /**
  * mybatis 数据权限拦截器
+ * 联系作者购买企业版后，获取完整功能源码
  * <p>
- * <p>
- * 1，全部：没有createdBy权限
- * 2，本级：当前用户的orgId
- * 3，本级以及子级
- * 4，自定义：
- * 5，个人：createdBy = 1
  *
  * @author zuihou
  * @date 2020/9/27 10:00 上午
@@ -66,7 +61,7 @@ public class DataScopeInnerInterceptor implements InnerInterceptor {
         if (dataScope == null) {
             return;
         }
-
+        // 联系作者购买企业版后，获取完整功能源码
         String originalSql = boundSql.getSql();
 
         String scopeName = dataScope.getScopeName();

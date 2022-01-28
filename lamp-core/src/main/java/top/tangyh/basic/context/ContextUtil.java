@@ -18,7 +18,6 @@ public final class ContextUtil {
     private ContextUtil() {
     }
 
-//    private static final ThreadLocal<Map<String, String>> THREAD_LOCAL = new ThreadLocal<>();
     /**
      * 支持多线程传递参数
      *
@@ -187,6 +186,22 @@ public final class ContextUtil {
     }
 
     /**
+     * 地址栏路径
+     */
+    public static String getPath() {
+        return get(ContextConstants.PATH_HEADER, String.class, StrPool.EMPTY);
+    }
+
+    /**
+     * 地址栏路径
+     *
+     * @param path 地址栏路径
+     */
+    public static void setPath(Object path) {
+        set(ContextConstants.PATH_HEADER, path == null ? StrPool.EMPTY : path);
+    }
+
+    /**
      * 获取灰度版本号
      *
      * @return 灰度版本号
@@ -199,8 +214,23 @@ public final class ContextUtil {
         set(ContextConstants.GRAY_VERSION, val);
     }
 
+    public static boolean isEmptyTenant() {
+        return isEmptyStr(ContextConstants.JWT_KEY_TENANT);
+    }
+
+    private static boolean isEmptyLong(String key) {
+        String val = getLocalMap().get(key);
+        return val == null || StrPool.NULL.equals(val) || StrPool.ZERO.equals(val);
+    }
+
+    private static boolean isEmptyStr(String key) {
+        String val = getLocalMap().get(key);
+        return val == null || StrPool.NULL.equals(val);
+    }
+
     public static void remove() {
         THREAD_LOCAL.remove();
     }
+
 
 }

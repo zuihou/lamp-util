@@ -35,6 +35,8 @@ public class SuperEntity<T> implements Serializable {
     public static final String CREATE_TIME_COLUMN = "create_time";
     public static final String CREATED_BY = "createdBy";
     public static final String CREATED_BY_COLUMN = "created_by";
+    public static final String CREATED_ORG_ID = "orgId";
+    public static final String CREATED_ORG_ID_FIELD = "org_id";
 
     private static final long serialVersionUID = -4603650115461757622L;
 

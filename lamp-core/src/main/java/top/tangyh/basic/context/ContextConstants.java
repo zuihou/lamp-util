@@ -65,7 +65,10 @@ public final class ContextConstants {
      * User信息 认证请求头前缀
      */
     public static final String BEARER_HEADER_PREFIX_EXT = "Bearer%20";
-
+    /**
+     * 请求头和线程变量中的 前端页面地址栏#号后的路径
+     */
+    public static final String PATH_HEADER = "Path";
     /**
      * Client信息认证请求头
      */
