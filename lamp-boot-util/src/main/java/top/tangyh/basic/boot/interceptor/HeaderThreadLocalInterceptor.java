@@ -33,7 +33,7 @@ public class HeaderThreadLocalInterceptor implements AsyncHandlerInterceptor {
         }
 
         if (!ContextUtil.getBoot()) {
-//            ContextUtil.setP(getHeader(request, ContextConstants.JWT_KEY_USER_ID));
+            ContextUtil.setPath(getHeader(request, ContextConstants.PATH_HEADER));
             ContextUtil.setUserId(getHeader(request, ContextConstants.JWT_KEY_USER_ID));
             ContextUtil.setAccount(getHeader(request, ContextConstants.JWT_KEY_ACCOUNT));
             ContextUtil.setName(getHeader(request, ContextConstants.JWT_KEY_NAME));
