@@ -59,14 +59,9 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
             return;
         }
         // 传递请求头
-        Enumeration<String> headerNames = request.getHeaderNames();
-        if (headerNames != null) {
-            while (headerNames.hasMoreElements()) {
-                String key = headerNames.nextElement();
-                String values = request.getHeader(key);
-                values = ObjectUtil.isEmpty(values) ? URLUtil.encode(ContextUtil.get(key)) : values;
-                template.header(key, values);
-            }
-        }
+        HEADER_NAME_LIST.forEach(headerName -> {
+            String header = request.getHeader(headerName);
+            template.header(headerName, ObjectUtil.isEmpty(header) ? URLUtil.encode(ContextUtil.get(headerName)) : header);
+        });
     }
 }
