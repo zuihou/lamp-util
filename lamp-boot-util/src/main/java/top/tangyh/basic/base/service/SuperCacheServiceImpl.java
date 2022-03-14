@@ -133,7 +133,7 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean removeByIds(Collection<? extends Serializable> idList) {
+    public boolean removeByIds(Collection<?> idList) {
         if (CollUtil.isEmpty(idList)) {
             return true;
         }
@@ -246,7 +246,7 @@ public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends
         delCache(Arrays.asList(ids));
     }
 
-    protected void delCache(Collection<? extends Serializable> idList) {
+    protected void delCache(Collection<?> idList) {
         CacheKey[] keys = idList.stream().map(id -> cacheKeyBuilder().key(id)).toArray(CacheKey[]::new);
         cacheOps.del(keys);
     }
