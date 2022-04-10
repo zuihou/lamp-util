@@ -29,7 +29,7 @@ import static top.tangyh.basic.utils.DateUtils.*;
 public class LampJacksonModule extends SimpleModule {
 
     public LampJacksonModule() {
-        super(PackageVersion.VERSION);
+        super();
         this.addDeserializer(LocalDateTime.class, LampLocalDateTimeDeserializer.INSTANCE);
         this.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT)));
         this.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT)));
