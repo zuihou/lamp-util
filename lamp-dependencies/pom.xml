@@ -11,7 +11,7 @@
     <url>https://github.com/zuihou/lamp-cloud</url>
 
     <properties>
-        <spring.boot.version>2.6.6</spring.boot.version>
+        <spring.boot.version>2.6.7</spring.boot.version>
         <spring.cloud.version>2021.0.1</spring.cloud.version>
         <!--        <gateway.version>3.0.7</gateway.version>-->
         <spring-cloud-alibaba-dependencies.version>2021.0.1.0</spring-cloud-alibaba-dependencies.version>
