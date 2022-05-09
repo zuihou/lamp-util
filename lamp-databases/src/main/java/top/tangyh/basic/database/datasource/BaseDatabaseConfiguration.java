@@ -1,7 +1,6 @@
 package top.tangyh.basic.database.datasource;
 
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusPropertiesCustomizer;
@@ -95,8 +94,8 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() {
-        if (!CollectionUtils.isEmpty(this.mybatisPlusPropertiesCustomizers)) {
-            mybatisPlusPropertiesCustomizers.forEach(i -> i.customize(this.properties));
+        if (!CollectionUtils.isEmpty(mybatisPlusPropertiesCustomizers)) {
+            mybatisPlusPropertiesCustomizers.forEach(i -> i.customize(properties));
         }
         checkConfigFileExists();
     }
@@ -178,7 +177,13 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
         factory.setGlobalConfig(globalConfig);
         return factory.getObject();
     }
-
+    /**
+     * 检查spring容器里是否有对应的bean,有则进行消费
+     *
+     * @param clazz    class
+     * @param consumer 消费
+     * @param <T>      泛型
+     */
     private <T> void getBeanThen(Class<T> clazz, Consumer<T> consumer) {
         if (this.applicationContext.getBeanNamesForType(clazz, false, false).length > 0) {
             consumer.accept(this.applicationContext.getBean(clazz));
@@ -202,14 +207,29 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
     }
 
     protected void applyConfiguration(MybatisSqlSessionFactoryBean factory) {
+        MybatisConfiguration configuration = this.properties.getConfiguration();
+        if (configuration == null && !StringUtils.hasText(this.properties.getConfigLocation())) {
+            configuration = new MybatisConfiguration();
+        }
+        if (configuration != null && !CollectionUtils.isEmpty(this.configurationCustomizers)) {
+            for (ConfigurationCustomizer customizer : this.configurationCustomizers) {
+                customizer.customize(configuration);
+            }
+        }
+        factory.setConfiguration(configuration);
+
+
+//        BeanUtil.copyProperties 无法复制生成对象
+/*
         MybatisConfiguration newConfiguration = this.properties.getConfiguration();
         if (newConfiguration == null && !StringUtils.hasText(this.properties.getConfigLocation())) {
             newConfiguration = new MybatisConfiguration();
         }
 
-        // zuihou 改过这里：  这里一定要复制一次， 否则多数据源时，会导致拦截器等执行多次
+//         zuihou 改过这里：  这里一定要复制一次， 否则多数据源时，会导致拦截器等执行多次
         MybatisConfiguration configuration = new MybatisConfiguration();
-        BeanUtil.copyProperties(newConfiguration, configuration);
+//        BeanUtil.copyProperties(newConfiguration, configuration);
+        BeanUtils.copyProperties(newConfiguration, configuration);
 
         if (!CollectionUtils.isEmpty(this.configurationCustomizers)) {
             for (ConfigurationCustomizer customizer : this.configurationCustomizers) {
@@ -217,6 +237,7 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
             }
         }
         factory.setConfiguration(configuration);
+        */
     }
 
 
