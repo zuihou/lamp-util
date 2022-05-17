@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>top.tangyh.basic</groupId>
     <artifactId>lamp-util</artifactId>
-    <version>3.6.2</version>
+    <version>3.7.0</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>lamp项目公共模块</description>
