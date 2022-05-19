@@ -4,7 +4,8 @@ import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import top.tangyh.basic.base.BaseEnum;
+import top.tangyh.basic.interfaces.BaseEnum;
+
 
 import java.io.IOException;
 

@@ -9,7 +9,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
-import top.tangyh.basic.base.BaseEnum;
+import top.tangyh.basic.interfaces.BaseEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;

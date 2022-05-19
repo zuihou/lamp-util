@@ -1,7 +1,7 @@
 package top.tangyh.basic.log.event;
 
 
-import top.tangyh.basic.log.entity.OptLogDTO;
+import top.tangyh.basic.model.log.OptLogDTO;
 import org.springframework.context.ApplicationEvent;
 
 /**

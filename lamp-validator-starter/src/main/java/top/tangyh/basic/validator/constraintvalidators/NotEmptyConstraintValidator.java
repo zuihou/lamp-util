@@ -1,8 +1,8 @@
 package top.tangyh.basic.validator.constraintvalidators;
 
 
-import top.tangyh.basic.base.validation.IValidatable;
 import org.hibernate.validator.internal.constraintvalidators.bv.notempty.NotEmptyValidatorForCharSequence;
+import top.tangyh.basic.interfaces.validator.IValidatable;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

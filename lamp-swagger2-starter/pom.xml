@@ -16,6 +16,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>top.tangyh.basic</groupId>
+            <artifactId>lamp-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>

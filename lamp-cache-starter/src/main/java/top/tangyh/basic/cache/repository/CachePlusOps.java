@@ -1,8 +1,8 @@
 package top.tangyh.basic.cache.repository;
 
 import org.springframework.lang.NonNull;
-import top.tangyh.basic.cache.model.CacheHashKey;
-import top.tangyh.basic.cache.model.CacheKey;
+import top.tangyh.basic.model.cache.CacheHashKey;
+import top.tangyh.basic.model.cache.CacheKey;
 
 import java.util.List;
 import java.util.Map;

@@ -27,6 +27,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
+import top.tangyh.basic.constant.Constants;
 import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.database.injector.LampSqlInjector;
 import top.tangyh.basic.database.mybatis.WriteInterceptor;
@@ -190,7 +191,7 @@ public abstract class BaseMybatisConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnExpression("'DEFAULT'.equals('${lamp.database.id-type:DEFAULT}') || 'CACHE'.equals('${lamp.database.id-type:DEFAULT}')")
+    @ConditionalOnExpression("'DEFAULT'.equals('${" + Constants.PROJECT_PREFIX + ".database.id-type:DEFAULT}') || 'CACHE'.equals('${" + Constants.PROJECT_PREFIX + ".database.id-type:DEFAULT}')")
     public DisposableWorkerIdAssigner disposableWorkerIdAssigner(WorkerNodeDao workerNodeDao) {
         return new DisposableWorkerIdAssigner(workerNodeDao);
     }

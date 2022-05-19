@@ -1,7 +1,7 @@
 package top.tangyh.basic.cache.repository.impl;
 
-import top.tangyh.basic.cache.model.CacheHashKey;
-import top.tangyh.basic.cache.model.CacheKey;
+import top.tangyh.basic.model.cache.CacheHashKey;
+import top.tangyh.basic.model.cache.CacheKey;
 import top.tangyh.basic.cache.redis.RedisOps;
 import top.tangyh.basic.cache.repository.CacheOps;
 import top.tangyh.basic.cache.repository.CachePlusOps;

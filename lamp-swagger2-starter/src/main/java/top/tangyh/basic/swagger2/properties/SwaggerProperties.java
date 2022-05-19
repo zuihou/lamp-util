@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import top.tangyh.basic.constant.Constants;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -24,7 +25,7 @@ import static top.tangyh.basic.swagger2.properties.SwaggerProperties.PREFIX;
 @Data
 @ConfigurationProperties(prefix = PREFIX)
 public class SwaggerProperties {
-    public static final String PREFIX = "lamp.swagger";
+    public static final String PREFIX = Constants.PROJECT_PREFIX + ".swagger";
 
     /**
      * 标题

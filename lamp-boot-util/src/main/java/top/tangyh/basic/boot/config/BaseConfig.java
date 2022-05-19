@@ -5,16 +5,6 @@ import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import top.tangyh.basic.boot.undertow.UndertowServerFactoryCustomizer;
-import top.tangyh.basic.converter.RemoteDataDeserializer;
-import top.tangyh.basic.converter.String2DateConverter;
-import top.tangyh.basic.converter.String2LocalDateConverter;
-import top.tangyh.basic.converter.String2LocalDateTimeConverter;
-import top.tangyh.basic.converter.String2LocalTimeConverter;
-import top.tangyh.basic.jackson.LampJacksonModule;
-import top.tangyh.basic.model.RemoteData;
-import top.tangyh.basic.utils.SpringUtils;
 import io.undertow.Undertow;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -26,6 +16,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import top.tangyh.basic.boot.undertow.UndertowServerFactoryCustomizer;
+import top.tangyh.basic.constant.Constants;
+import top.tangyh.basic.converter.String2DateConverter;
+import top.tangyh.basic.converter.String2LocalDateConverter;
+import top.tangyh.basic.converter.String2LocalDateTimeConverter;
+import top.tangyh.basic.converter.String2LocalTimeConverter;
+import top.tangyh.basic.jackson.LampJacksonModule;
+import top.tangyh.basic.utils.SpringUtils;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -96,7 +94,6 @@ public abstract class BaseConfig {
                 .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
         // 注册自定义模块
         objectMapper.registerModule(new LampJacksonModule())
-                .registerModule(new SimpleModule().addDeserializer(RemoteData.class, RemoteDataDeserializer.INSTANCE))
                 .findAndRegisterModules();
 
         return objectMapper;
@@ -154,7 +151,7 @@ public abstract class BaseConfig {
     /**
      * gateway 网关模块需要禁用 spring-webmvc 相关配置，必须通过在类上面加限制条件方式来实现， 不能直接Bean上面加
      */
-    @ConditionalOnProperty(prefix = "lamp.webmvc", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = Constants.PROJECT_PREFIX + ".webmvc", name = "enabled", havingValue = "true", matchIfMissing = true)
     public static final class WebMvcConfig {
         @Bean
         @ConditionalOnClass(Undertow.class)

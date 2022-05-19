@@ -2,6 +2,7 @@ package top.tangyh.basic.security.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import top.tangyh.basic.constant.Constants;
 
 /**
  * 属性
@@ -12,7 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = SecurityProperties.PREFIX)
 public class SecurityProperties {
-    public static final String PREFIX = "lamp.security";
+    public static final String PREFIX = Constants.PROJECT_PREFIX + ".security";
     /**
      * 是否启用uri权限
      */

@@ -1,4 +1,4 @@
-package top.tangyh.basic.database.mybatis.auth;
+package top.tangyh.basic.model.database;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

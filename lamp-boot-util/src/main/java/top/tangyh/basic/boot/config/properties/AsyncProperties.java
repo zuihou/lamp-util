@@ -3,6 +3,7 @@ package top.tangyh.basic.boot.config.properties;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import top.tangyh.basic.constant.Constants;
 
 import static top.tangyh.basic.boot.config.properties.AsyncProperties.PREFIX;
 
@@ -17,7 +18,7 @@ import static top.tangyh.basic.boot.config.properties.AsyncProperties.PREFIX;
 @Setter
 @ConfigurationProperties(PREFIX)
 public class AsyncProperties {
-    public static final String PREFIX = "lamp.async";
+    public static final String PREFIX = Constants.PROJECT_PREFIX + ".async";
     private boolean enabled = true;
     /**
      * 异步核心线程数，默认：2
@@ -36,5 +37,5 @@ public class AsyncProperties {
      */
     private int keepAliveSeconds = 300;
     /** 线程名前缀 */
-    private String threadNamePrefix = "lamp-async-executor-";
+    private String threadNamePrefix = Constants.PROJECT_PREFIX + "-async-executor-";
 }

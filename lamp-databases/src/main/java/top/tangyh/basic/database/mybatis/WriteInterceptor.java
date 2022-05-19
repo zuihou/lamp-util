@@ -3,6 +3,7 @@ package top.tangyh.basic.database.mybatis;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
+import top.tangyh.basic.constant.Constants;
 import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.exception.BizException;
 import top.tangyh.basic.utils.SpringUtils;
@@ -51,7 +52,7 @@ public class WriteInterceptor implements Interceptor {
         if (SpringUtils.getApplicationContext() == null) {
             return invocation.proceed();
         }
-        if (!SpringUtils.getApplicationContext().getEnvironment().getProperty("lamp.database.isNotWrite", Boolean.class, false)) {
+        if (!SpringUtils.getApplicationContext().getEnvironment().getProperty(Constants.PROJECT_PREFIX + ".database.isNotWrite", Boolean.class, false)) {
             return invocation.proceed();
         }
 

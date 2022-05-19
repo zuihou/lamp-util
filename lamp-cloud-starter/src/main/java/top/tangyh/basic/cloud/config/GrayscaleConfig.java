@@ -2,6 +2,7 @@ package top.tangyh.basic.cloud.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClients;
+import top.tangyh.basic.constant.Constants;
 
 /**
  * 灰度配置
@@ -10,7 +11,7 @@ import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClients;
  * @author zuihou
  * @date 2021年07月13日11:44:09
  */
-@ConditionalOnProperty(value = "lamp.grayscale.enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(value = Constants.PROJECT_PREFIX + ".grayscale.enabled", havingValue = "true", matchIfMissing = true)
 @LoadBalancerClients(defaultConfiguration = GrayscaleLbConfig.class)
 public class GrayscaleConfig {
 

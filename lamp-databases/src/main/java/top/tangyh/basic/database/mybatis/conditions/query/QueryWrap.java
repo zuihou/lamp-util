@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import top.tangyh.basic.model.RemoteData;
 import top.tangyh.basic.utils.StrHelper;
 
 import java.time.LocalDate;
@@ -270,10 +269,6 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
         }
         if (val instanceof Collection && this.skipEmpty) {
             return !((Collection) val).isEmpty();
-        }
-        if (val instanceof RemoteData && this.skipEmpty) {
-            RemoteData value = (RemoteData) val;
-            return ObjectUtil.isNotEmpty(value.getKey());
         }
         return val != null;
     }

@@ -3,6 +3,7 @@ package top.tangyh.basic.mq.properties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import top.tangyh.basic.constant.Constants;
 
 
 /**
@@ -15,7 +16,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @NoArgsConstructor
 @ConfigurationProperties(prefix = MqProperties.PREFIX)
 public class MqProperties {
-    public static final String PREFIX = "lamp.rabbitmq";
+    public static final String PREFIX = Constants.PROJECT_PREFIX + ".rabbitmq";
 
     /**
      * 是否启用

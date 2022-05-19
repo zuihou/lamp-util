@@ -3,6 +3,7 @@ package top.tangyh.basic.jwt;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import top.tangyh.basic.constant.Constants;
 
 import static top.tangyh.basic.jwt.JwtProperties.PREFIX;
 
@@ -16,7 +17,7 @@ import static top.tangyh.basic.jwt.JwtProperties.PREFIX;
 @NoArgsConstructor
 @ConfigurationProperties(prefix = PREFIX)
 public class JwtProperties {
-    public static final String PREFIX = "lamp.authentication";
+    public static final String PREFIX = Constants.PROJECT_PREFIX + ".authentication";
 
     /**
      * 过期时间 2h

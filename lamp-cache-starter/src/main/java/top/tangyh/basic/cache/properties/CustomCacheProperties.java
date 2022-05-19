@@ -2,6 +2,7 @@ package top.tangyh.basic.cache.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import top.tangyh.basic.constant.Constants;
 
 import java.time.Duration;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Map;
 @Data
 @ConfigurationProperties(prefix = CustomCacheProperties.PREFIX)
 public class CustomCacheProperties {
-    public static final String PREFIX = "lamp.cache";
+    public static final String PREFIX = Constants.PROJECT_PREFIX + ".cache";
     /**
      * 目前只支持 REDIS 和 CAFFEINE ！
      * CAFFEINE 只用于项目的开发环境或者演示环境使用，  生产环境请用redis！！！

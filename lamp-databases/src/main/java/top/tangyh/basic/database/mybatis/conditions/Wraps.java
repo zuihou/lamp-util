@@ -11,7 +11,6 @@ import top.tangyh.basic.database.mybatis.conditions.query.LbqWrapper;
 import top.tangyh.basic.database.mybatis.conditions.query.QueryWrap;
 import top.tangyh.basic.database.mybatis.conditions.update.LbuWrapper;
 import top.tangyh.basic.exception.BizException;
-import top.tangyh.basic.model.RemoteData;
 import top.tangyh.basic.utils.ArgumentAssert;
 import top.tangyh.basic.utils.DateUtils;
 import top.tangyh.basic.utils.StrHelper;
@@ -237,10 +236,6 @@ public final class Wraps {
                 continue;
             }
 
-            if (replaceByRemoteData(target, field, classValue)) {
-                continue;
-            }
-
             if (!(classValue instanceof String)) {
                 continue;
             }
@@ -252,28 +247,5 @@ public final class Wraps {
         }
         return (T) target;
     }
-
-    private static boolean replaceByRemoteData(Object target, Field field, Object classValue) {
-        if (classValue instanceof RemoteData) {
-            RemoteData rd = (RemoteData) classValue;
-            Object key = rd.getKey();
-            if (ObjectUtil.isEmpty(key)) {
-                ReflectUtil.setFieldValue(target, field, null);
-                return true;
-            }
-            if (!(key instanceof String)) {
-                return true;
-            }
-            String strKey = (String) key;
-            if (strKey.contains(PERCENT) || strKey.contains(UNDERSCORE)) {
-                String tarValue = StrHelper.keywordConvert(strKey);
-                rd.setKey(tarValue);
-                ReflectUtil.setFieldValue(target, field, rd);
-            }
-            return true;
-        }
-        return false;
-    }
-
 
 }

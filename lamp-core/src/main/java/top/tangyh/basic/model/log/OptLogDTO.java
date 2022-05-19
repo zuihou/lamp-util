@@ -1,4 +1,4 @@
-package top.tangyh.basic.log.entity;
+package top.tangyh.basic.model.log;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

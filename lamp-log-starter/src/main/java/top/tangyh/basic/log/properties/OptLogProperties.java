@@ -3,6 +3,7 @@ package top.tangyh.basic.log.properties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import top.tangyh.basic.constant.Constants;
 
 import static top.tangyh.basic.log.properties.OptLogProperties.PREFIX;
 
@@ -16,7 +17,7 @@ import static top.tangyh.basic.log.properties.OptLogProperties.PREFIX;
 @Data
 @NoArgsConstructor
 public class OptLogProperties {
-    public static final String PREFIX = "lamp.log";
+    public static final String PREFIX = Constants.PROJECT_PREFIX + ".log";
 
     /**
      * 是否启用

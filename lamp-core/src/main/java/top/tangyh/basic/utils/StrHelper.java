@@ -4,7 +4,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.enums.SqlLike;
 import com.baomidou.mybatisplus.core.toolkit.sql.SqlUtils;
-import top.tangyh.basic.model.RemoteData;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.stream.Stream;
@@ -66,14 +65,6 @@ public final class StrHelper {
         if (value instanceof String) {
             return keywordConvert(String.valueOf(value));
         }
-        if (value instanceof RemoteData) {
-            RemoteData temp = (RemoteData) value;
-            if (temp.getKey() instanceof String && ObjectUtil.isNotEmpty(temp.getKey())) {
-                temp.setKey(keywordConvert(String.valueOf(temp.getKey())));
-                return temp;
-            }
-            return value;
-        }
         return value;
     }
 
@@ -86,15 +77,6 @@ public final class StrHelper {
      */
     public static String like(Object value, SqlLike sqlType) {
         return SqlUtils.concatLike(keywordConvert(String.valueOf(value)), sqlType);
-    }
-
-    public static RemoteData<String, ?> like(RemoteData<String, ?> temp, SqlLike sqlType) {
-        if (StrUtil.isEmpty(temp.getKey())) {
-            return temp;
-        }
-        String oldValue = keywordConvert(temp.getKey());
-        temp.setKey(SqlUtils.concatLike(oldValue, sqlType));
-        return temp;
     }
 
     /**

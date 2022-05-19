@@ -2,6 +2,7 @@ package top.tangyh.basic.security.aspect;
 
 import cn.hutool.core.util.StrUtil;
 import top.tangyh.basic.annotation.security.PreAuth;
+import top.tangyh.basic.constant.Constants;
 import top.tangyh.basic.context.ContextConstants;
 import top.tangyh.basic.exception.ForbiddenException;
 import top.tangyh.basic.exception.code.ExceptionCode;
@@ -78,7 +79,7 @@ public class UriSecurityPreAuthAspect implements ApplicationContextAware {
      */
     private void handleAuth(ProceedingJoinPoint point) {
         Environment env = ac.getEnvironment();
-        Boolean property = env.getProperty("lamp.security.enabled", Boolean.class, false);
+        Boolean property = env.getProperty(Constants.PROJECT_PREFIX + ".security.enabled", Boolean.class, false);
         if (!property) {
             log.debug("全局校验权限已经关闭");
             return;

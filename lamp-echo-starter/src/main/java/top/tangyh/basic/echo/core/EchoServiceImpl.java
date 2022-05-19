@@ -19,6 +19,7 @@ import top.tangyh.basic.echo.manager.FieldParam;
 import top.tangyh.basic.echo.manager.LoadKey;
 import top.tangyh.basic.echo.properties.EchoProperties;
 import top.tangyh.basic.interfaces.BaseEnum;
+import top.tangyh.basic.interfaces.echo.EchoService;
 import top.tangyh.basic.interfaces.echo.EchoVO;
 import top.tangyh.basic.interfaces.echo.LoadService;
 import top.tangyh.basic.jackson.JsonUtil;

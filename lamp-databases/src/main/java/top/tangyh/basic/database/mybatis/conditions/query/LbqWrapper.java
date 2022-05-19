@@ -26,7 +26,6 @@ import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
-import top.tangyh.basic.model.RemoteData;
 import top.tangyh.basic.utils.StrHelper;
 
 import java.time.LocalDate;
@@ -48,7 +47,6 @@ import static top.tangyh.basic.database.mybatis.conditions.Wraps.replace;
  * <p>
  * 相比 LambdaQueryWrapper 的增强如下：
  * 1，new QueryWrapper(T entity)时， 对entity 中的string字段 %和_ 符号进行转义，便于模糊查询
- * 2，new QueryWrapper(T entity)时， 对entity 中 RemoteData 类型的字段 值为null或者 key为null或者""时，忽略拼接成查询条件
  * 3，对nested、eq、ne、gt、ge、lt、le、in、*like*、 等方法 进行条件判断，null 或 "" 字段不加入查询
  * 4，对*like*相关方法的参数 %和_ 符号进行转义，便于模糊查询
  * 5，增加 leFooter 方法， 将日期参数值，强制转换成当天 23：59：59
@@ -297,10 +295,6 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
         }
         if (val instanceof Collection && this.skipEmpty) {
             return !((Collection) val).isEmpty();
-        }
-        if (val instanceof RemoteData && this.skipEmpty) {
-            RemoteData value = (RemoteData) val;
-            return ObjectUtil.isNotEmpty(value.getKey());
         }
         return val != null;
     }

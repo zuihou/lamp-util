@@ -48,6 +48,8 @@ public final class DateUtils {
     public static final String DEFAULT_DATE_FORMAT = NORM_DATE_PATTERN;
     public static final String DEFAULT_DATE_FORMAT_EN = CHINESE_DATE_PATTERN;
     public static final String DEFAULT_DATE_TIME_FORMAT = NORM_DATETIME_PATTERN;
+    public static final String DEFAULT_DATE_TIME_START_FORMAT = "yyyy-MM-dd 00:00:00";
+    public static final String DEFAULT_DATE_TIME_END_FORMAT = "yyyy-MM-dd 23:59:59";
     public static final String DEFAULT_DATE_TIME_FORMAT_EN = CHINESE_DATE_TIME_PATTERN;
     public static final String DEFAULT_TIME_FORMAT = NORM_TIME_PATTERN;
     public static final String DAY = "DAY";
@@ -76,18 +78,16 @@ public final class DateUtils {
      * 一年平均天数
      */
     public static final long MAX_YEAR_DAY = 365;
-
-
-    private DateUtils() {
-    }
-//--格式化日期start-----------------------------------------
-
     protected static final Map<String, String> DATE_FORMAT = new LinkedHashMap(5);
+//--格式化日期start-----------------------------------------
 
     static {
         DATE_FORMAT.put(DEFAULT_DATE_FORMAT, DEFAULT_DATE_FORMAT_MATCHES);
         DATE_FORMAT.put(SLASH_DATE_FORMAT, SLASH_DATE_FORMAT_MATCHES);
         DATE_FORMAT.put(DEFAULT_DATE_FORMAT_EN, DEFAULT_DATE_FORMAT_EN_MATCHES);
+    }
+
+    private DateUtils() {
     }
 
     /**
@@ -794,7 +794,7 @@ public final class DateUtils {
      * 计算结束时间
      *
      * @param time 日期
-     * @return 结束时间
+     * @return 结束时间 精确到毫秒
      */
     public static LocalDateTime getEndTime(String time) {
         String startTime = time;
@@ -810,7 +810,12 @@ public final class DateUtils {
             time = time.replace("T", " ").substring(0, time.indexOf('.'));
             startTime = time;
         }
-        return LocalDateTimeUtil.endOfDay(LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)));
+
+        return endOfDay(LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)));
+    }
+
+    public static LocalDateTime endOfDay(LocalDateTime time) {
+        return time.with(LocalTime.of(23, 59, 59, 999_999_000));
     }
 
     /**

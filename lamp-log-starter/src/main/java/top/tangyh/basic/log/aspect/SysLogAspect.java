@@ -14,7 +14,7 @@ import top.tangyh.basic.context.ContextConstants;
 import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.context.ThreadLocalParam;
 import top.tangyh.basic.jackson.JsonUtil;
-import top.tangyh.basic.log.entity.OptLogDTO;
+import top.tangyh.basic.model.log.OptLogDTO;
 import top.tangyh.basic.log.event.SysLogEvent;
 import top.tangyh.basic.log.util.LogUtil;
 import top.tangyh.basic.utils.SpringUtils;

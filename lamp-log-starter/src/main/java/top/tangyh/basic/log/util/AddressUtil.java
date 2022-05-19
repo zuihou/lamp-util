@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 
+import static top.tangyh.basic.utils.StrPool.JAVA_TEMP_DIR;
+
 /**
  * 根据ip查询地址
  *
@@ -24,7 +26,6 @@ public final class AddressUtil {
 
     private static DbConfig config = null;
 
-    private static final String JAVA_TEMP_DIR = "java.io.tmpdir";
     private static DbSearcher searcher = null;
 
     static {

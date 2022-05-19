@@ -3,7 +3,7 @@ package top.tangyh.basic.log.event;
 
 import cn.hutool.core.util.StrUtil;
 import top.tangyh.basic.context.ContextUtil;
-import top.tangyh.basic.log.entity.OptLogDTO;
+import top.tangyh.basic.model.log.OptLogDTO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

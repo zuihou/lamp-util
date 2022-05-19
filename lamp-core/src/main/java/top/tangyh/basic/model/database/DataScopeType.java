@@ -1,10 +1,10 @@
-package top.tangyh.basic.database.mybatis.auth;
+package top.tangyh.basic.model.database;
 
-import top.tangyh.basic.base.BaseEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import top.tangyh.basic.interfaces.BaseEnum;
 
 import java.util.stream.Stream;
 

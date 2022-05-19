@@ -1,4 +1,4 @@
-package top.tangyh.basic.cache.model;
+package top.tangyh.basic.model.cache;
 
 
 import cn.hutool.core.collection.CollUtil;

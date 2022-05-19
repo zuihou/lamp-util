@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import top.tangyh.basic.constant.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import static top.tangyh.basic.database.properties.MultiTenantType.SCHEMA;
 @NoArgsConstructor
 @ConfigurationProperties(prefix = PREFIX)
 public class DatabaseProperties {
-    public static final String PREFIX = "lamp.database";
+    public static final String PREFIX = Constants.PROJECT_PREFIX + ".database";
     /**
      * 是否启用 防止全表更新与删除插件
      */

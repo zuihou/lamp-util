@@ -1,7 +1,7 @@
 package top.tangyh.basic.validator.constraintvalidators;
 
 
-import top.tangyh.basic.base.validation.IValidatable;
+import top.tangyh.basic.interfaces.validator.IValidatable;
 import org.hibernate.validator.internal.constraintvalidators.bv.NotNullValidator;
 
 import javax.validation.ConstraintValidator;

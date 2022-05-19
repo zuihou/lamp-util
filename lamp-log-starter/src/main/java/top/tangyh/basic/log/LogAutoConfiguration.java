@@ -1,11 +1,6 @@
 package top.tangyh.basic.log;
 
 
-import top.tangyh.basic.jackson.JsonUtil;
-import top.tangyh.basic.log.aspect.SysLogAspect;
-import top.tangyh.basic.log.event.SysLogListener;
-import top.tangyh.basic.log.monitor.PointUtil;
-import top.tangyh.basic.log.properties.OptLogProperties;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -14,6 +9,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
+import top.tangyh.basic.constant.Constants;
+import top.tangyh.basic.jackson.JsonUtil;
+import top.tangyh.basic.log.aspect.SysLogAspect;
+import top.tangyh.basic.log.event.SysLogListener;
+import top.tangyh.basic.log.monitor.PointUtil;
+import top.tangyh.basic.log.properties.OptLogProperties;
 
 /**
  * 日志自动配置
@@ -40,7 +41,7 @@ public class LogAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnExpression("${lamp.log.enabled:true} && 'LOGGER'.equals('${lamp.log.type:LOGGER}')")
+    @ConditionalOnExpression("${" + Constants.PROJECT_PREFIX + ".log.enabled:true} && 'LOGGER'.equals('${" + Constants.PROJECT_PREFIX + ".log.type:LOGGER}')")
     public SysLogListener sysLogListener() {
         return new SysLogListener(log -> PointUtil.debug("0", "OPT_LOG", JsonUtil.toJson(log)));
     }

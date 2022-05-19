@@ -1,11 +1,5 @@
 package top.tangyh.basic.security.config;
 
-import top.tangyh.basic.base.R;
-import top.tangyh.basic.security.feign.UserQuery;
-import top.tangyh.basic.security.feign.UserResolverService;
-import top.tangyh.basic.security.model.SysUser;
-import top.tangyh.basic.security.properties.SecurityProperties;
-import top.tangyh.basic.utils.SpringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -17,6 +11,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import top.tangyh.basic.base.R;
+import top.tangyh.basic.constant.Constants;
+import top.tangyh.basic.security.feign.UserQuery;
+import top.tangyh.basic.security.feign.UserResolverService;
+import top.tangyh.basic.security.model.SysUser;
+import top.tangyh.basic.security.properties.SecurityProperties;
+import top.tangyh.basic.utils.SpringUtils;
 
 /**
  * 类型为Feign时，使用的的实现类
@@ -43,7 +44,7 @@ public class UserResolveFeignConfiguration {
         return instance;
     }
 
-    @FeignClient(name = "${lamp.feign.oauth-server:lamp-oauth-server}", path = "/user",
+    @FeignClient(name = "${" + Constants.PROJECT_PREFIX + ".feign.oauth-server:lamp-oauth-server}", path = "/user",
             fallback = UserResolveApiFallback.class)
     public interface UserResolveApi {
 
