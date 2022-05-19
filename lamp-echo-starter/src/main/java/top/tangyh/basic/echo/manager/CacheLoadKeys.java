@@ -1,13 +1,13 @@
 package top.tangyh.basic.echo.manager;
 
 import com.google.common.base.Objects;
-import top.tangyh.basic.annotation.echo.Echo;
-import top.tangyh.basic.context.ContextUtil;
-import top.tangyh.basic.model.LoadService;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import top.tangyh.basic.annotation.echo.Echo;
+import top.tangyh.basic.context.ContextUtil;
+import top.tangyh.basic.interfaces.echo.LoadService;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -41,7 +41,7 @@ public class CacheLoadKeys {
      * 动态查询值
      */
     private Set<Serializable> keys = new HashSet<>();
-    private String tenant;
+    private Long tenantId;
     private LoadService loadService;
 
     public CacheLoadKeys(Echo rf) {
@@ -50,7 +50,7 @@ public class CacheLoadKeys {
 
     public CacheLoadKeys(LoadKey lk, LoadService loadService, Set<Serializable> keys) {
         this.api = lk.getApi();
-        this.tenant = ContextUtil.getTenant();
+        this.tenantId = ContextUtil.getTenantId();
         this.loadService = loadService;
         this.keys = keys;
     }

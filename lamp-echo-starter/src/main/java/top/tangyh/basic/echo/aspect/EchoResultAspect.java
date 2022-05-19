@@ -1,13 +1,13 @@
 package top.tangyh.basic.echo.aspect;
 
-import top.tangyh.basic.annotation.echo.EchoResult;
-import top.tangyh.basic.echo.core.EchoService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import top.tangyh.basic.annotation.echo.EchoResult;
+import top.tangyh.basic.interfaces.echo.EchoService;
 
 /**
  * InjectionResult 注解的 AOP 工具

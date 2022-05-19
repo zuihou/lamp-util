@@ -1,4 +1,4 @@
-package top.tangyh.basic.base;
+package top.tangyh.basic.interfaces;
 
 import com.baomidou.mybatisplus.annotation.IEnum;
 
@@ -11,16 +11,16 @@ import com.baomidou.mybatisplus.annotation.IEnum;
 public interface BaseEnum extends IEnum<String> {
 
     /**
-     * 编码
+     * 枚举的 name
      *
-     * @return 编码
+     * @return 枚举的 name
      */
     default String getCode() {
         return toString();
     }
 
     /**
-     * 描述
+     * 前端显示的值
      *
      * @return 描述
      */

@@ -23,6 +23,7 @@
         <module>lamp-annotation</module>
         <module>lamp-core</module>
         <module>lamp-boot-util</module>
+        <module>lamp-mvc</module>
         <module>lamp-databases</module>
         <module>lamp-log-starter</module>
         <module>lamp-swagger2-starter</module>
@@ -96,6 +97,11 @@
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-boot-util</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.tangyh.basic</groupId>
+                <artifactId>lamp-mvc</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

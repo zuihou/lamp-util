@@ -2,6 +2,7 @@ package top.tangyh.basic.echo.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import top.tangyh.basic.constant.Constants;
 
 /**
  * 配置类
@@ -12,7 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(EchoProperties.PREFIX)
 public class EchoProperties {
-    public static final String PREFIX = "lamp.echo";
+    public static final String PREFIX = Constants.PROJECT_PREFIX + ".echo";
     /**
      * 是否启用远程查询
      */
@@ -38,6 +39,7 @@ public class EchoProperties {
 
     /**
      * 本地缓存配置信息
+     * 生产慎用
      */
     private GuavaCache guavaCache = new GuavaCache();
 

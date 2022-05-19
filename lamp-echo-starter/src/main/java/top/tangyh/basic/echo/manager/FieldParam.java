@@ -1,10 +1,10 @@
 package top.tangyh.basic.echo.manager;
 
-import top.tangyh.basic.annotation.echo.Echo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import top.tangyh.basic.annotation.echo.Echo;
 
 import java.io.Serializable;
 

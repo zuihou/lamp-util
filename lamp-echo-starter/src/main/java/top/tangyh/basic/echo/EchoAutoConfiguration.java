@@ -8,10 +8,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import top.tangyh.basic.echo.aspect.EchoResultAspect;
-import top.tangyh.basic.echo.core.EchoService;
+import top.tangyh.basic.echo.core.EchoServiceImpl;
 import top.tangyh.basic.echo.properties.EchoProperties;
-import top.tangyh.basic.echo.typehandler.RemoteDataTypeHandler;
-import top.tangyh.basic.model.LoadService;
+import top.tangyh.basic.interfaces.echo.EchoService;
+import top.tangyh.basic.interfaces.echo.LoadService;
 
 import java.util.Map;
 
@@ -26,7 +26,7 @@ import java.util.Map;
 @AllArgsConstructor
 @EnableConfigurationProperties(EchoProperties.class)
 public class EchoAutoConfiguration {
-    private final EchoProperties remoteProperties;
+    private final EchoProperties echoProperties;
 
     @Bean
     @ConditionalOnMissingBean
@@ -38,6 +38,11 @@ public class EchoAutoConfiguration {
     /**
      * 回显服务
      *
+     *
+     * 在项目启动时，Spring会自动将实现了 LoadService 且被 Spring 扫描到容器中的实现类装载到strategyMap中。
+     *
+     * 不理解的 strategyMap 为啥会自动装载的，自行百度：Spring 策略模式 和 Spring 自动注入的几种方式(@Autowired、set方法、构造器注入等)
+     *
      * @param strategyMap 回显查询实例
      * @return top.tangyh.basic.echo.core.EchoService
      * @author tangyh
@@ -47,16 +52,7 @@ public class EchoAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public EchoService getEchoService(Map<String, LoadService> strategyMap) {
-        return new EchoService(remoteProperties, strategyMap);
-    }
-
-    /**
-     * Mybatis 类型处理器： 处理 RemoteData 类型的字段
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public RemoteDataTypeHandler getRemoteDataTypeHandler() {
-        return new RemoteDataTypeHandler();
+        return new EchoServiceImpl(echoProperties, strategyMap);
     }
 }
 

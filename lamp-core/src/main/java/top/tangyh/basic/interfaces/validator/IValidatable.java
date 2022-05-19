@@ -1,4 +1,4 @@
-package top.tangyh.basic.base.validation;
+package top.tangyh.basic.interfaces.validator;
 
 /**
  * 实现了此接口，表示此类将会支持验证框架。

@@ -29,6 +29,11 @@
         </dependency>
         <dependency>
             <groupId>top.tangyh.basic</groupId>
+            <artifactId>lamp-mvc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-cache-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
