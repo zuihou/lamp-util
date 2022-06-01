@@ -2,6 +2,7 @@ package top.tangyh.basic.context;
 
 import cn.hutool.core.convert.Convert;
 import com.alibaba.ttl.TransmittableThreadLocal;
+import lombok.val;
 import top.tangyh.basic.utils.StrPool;
 
 import java.util.Map;
@@ -169,6 +170,20 @@ public final class ContextUtil {
         set(ContextConstants.JWT_KEY_TENANT, val);
         setTenantBasePoolName(val);
         setTenantExtendPoolName(val);
+    }
+
+    public static void clearDatabase() {
+        set(ContextConstants.DATABASE, StrPool.EMPTY);
+    }
+    public static String getDatabase() {
+        return get(ContextConstants.DATABASE, String.class, StrPool.EMPTY);
+    }
+    public static void setDatabaseBase() {
+        set(ContextConstants.DATABASE, ContextConstants.TENANT_BASE_POOL_NAME_HEADER);
+    }
+
+    public static void setDatabaseExtend() {
+        set(ContextConstants.DATABASE, ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER);
     }
 
 

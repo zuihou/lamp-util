@@ -4,8 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
-import top.tangyh.basic.context.ContextUtil;
-import top.tangyh.basic.database.parsers.ReplaceSql;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.statement.StatementHandler;
@@ -14,6 +12,8 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
+import top.tangyh.basic.context.ContextUtil;
+import top.tangyh.basic.database.parsers.ReplaceSql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -36,11 +36,12 @@ public class SchemaInterceptor implements InnerInterceptor {
     protected String changeTable(String sql) {
         // 想要 执行sql时， 不切换到 lamp_base_{TENANT} 库, 请直接返回null
         String tenantCode = ContextUtil.getTenant();
+        String database = ContextUtil.getDatabase();
         if (StrUtil.isEmpty(tenantCode)) {
             return sql;
         }
 
-        String schemaName = StrUtil.format("{}_{}", tenantDatabasePrefix, tenantCode);
+        String schemaName = StrUtil.format("{}_{}", StrUtil.isEmpty(database) ? tenantDatabasePrefix : database, tenantCode);
         // 想要 执行sql时， 切换到 切换到自己指定的库， 直接修改 setSchemaName
         return ReplaceSql.replaceSql(schemaName, sql);
     }
@@ -64,5 +65,6 @@ public class SchemaInterceptor implements InnerInterceptor {
             log.debug("未替换前的sql: {}", mpBs.sql());
             mpBs.sql(this.changeTable(mpBs.sql()));
         }
+        ContextUtil.clearDatabase();
     }
 }

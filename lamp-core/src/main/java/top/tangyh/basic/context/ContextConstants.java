@@ -45,6 +45,7 @@ public final class ContextConstants {
      * JWT中封装的 租户编码
      */
     public static final String JWT_KEY_TENANT = "tenant";
+    public static final String DATABASE = "database";
     /**
      * JWT中封装的 子租户编码
      */
