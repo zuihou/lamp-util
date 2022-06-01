@@ -1,9 +1,9 @@
 package top.tangyh.basic.validator.constraintvalidators;
 
 
+import top.tangyh.basic.interfaces.validator.IValidatable;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.internal.constraintvalidators.hv.LengthValidator;
-import top.tangyh.basic.interfaces.validator.IValidatable;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

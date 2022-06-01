@@ -3,7 +3,6 @@ package top.tangyh.basic.xss.properties;
 import cn.hutool.core.collection.CollUtil;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import top.tangyh.basic.constant.Constants;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
 @Data
 @ConfigurationProperties(prefix = XssProperties.PREFIX)
 public class XssProperties {
-    public static final String PREFIX = Constants.PROJECT_PREFIX + ".xss";
+    public static final String PREFIX = "lamp.xss";
     private Boolean enabled = true;
     /**
      * 是否启用 RequestBody 注解标记的参数 反序列化时过滤XSS

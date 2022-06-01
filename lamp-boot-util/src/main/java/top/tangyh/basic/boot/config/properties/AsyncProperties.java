@@ -37,5 +37,5 @@ public class AsyncProperties {
      */
     private int keepAliveSeconds = 300;
     /** 线程名前缀 */
-    private String threadNamePrefix = Constants.PROJECT_PREFIX + "-async-executor-";
+    private String threadNamePrefix = "lamp-async-executor-";
 }

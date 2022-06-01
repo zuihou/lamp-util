@@ -30,6 +30,7 @@ import static cn.hutool.core.text.CharSequenceUtil.EMPTY;
 @Target(value = {ElementType.METHOD, ElementType.TYPE, ElementType.FIELD})
 public @interface Echo {
     String ENUM_API = "_DEF_ENUM_API";
+
     /**
      * 回显到那个字段
      *

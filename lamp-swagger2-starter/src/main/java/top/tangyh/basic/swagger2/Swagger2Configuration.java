@@ -41,7 +41,6 @@ public class Swagger2Configuration {
     }
 
 
-
     /**
      * 升级springboot2.6.6后临时处理，防止swagger报错
      *

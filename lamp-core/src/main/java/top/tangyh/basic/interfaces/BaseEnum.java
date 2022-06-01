@@ -11,16 +11,16 @@ import com.baomidou.mybatisplus.annotation.IEnum;
 public interface BaseEnum extends IEnum<String> {
 
     /**
-     * 枚举的 name
+     * 编码
      *
-     * @return 枚举的 name
+     * @return 编码
      */
     default String getCode() {
         return toString();
     }
 
     /**
-     * 前端显示的值
+     * 描述
      *
      * @return 描述
      */

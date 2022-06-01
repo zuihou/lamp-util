@@ -167,7 +167,50 @@ public final class ContextUtil {
 
     public static void setTenant(String val) {
         set(ContextConstants.JWT_KEY_TENANT, val);
+        setTenantBasePoolName(val);
+        setTenantExtendPoolName(val);
     }
+
+
+    /**
+     * 切换base库
+     *
+     * @param tenant
+     */
+    public static void setTenantBasePoolName(Object tenant) {
+        set(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, tenant);
+    }
+
+    /**
+     * 切换extend库
+     *
+     * @param tenant
+     */
+    public static void setTenantExtendPoolName(Object tenant) {
+        set(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, tenant);
+    }
+
+
+    /**
+     * 设置默认库
+     */
+    public static void setDefTenant() {
+        set(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, ContextConstants.DEF_TENANT);
+        set(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, ContextConstants.DEF_TENANT);
+    }
+
+    public static boolean isDefTenantId() {
+        String base = get(ContextConstants.TENANT_BASE_POOL_NAME_HEADER);
+        if (ContextConstants.DEF_TENANT.equals(base)) {
+            return true;
+        }
+        String extend = get(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER);
+        if (ContextConstants.DEF_TENANT.equals(extend)) {
+            return true;
+        }
+        return false;
+    }
+
 
     public static String getSubTenant() {
         return get(ContextConstants.JWT_KEY_SUB_TENANT, String.class, StrPool.EMPTY);

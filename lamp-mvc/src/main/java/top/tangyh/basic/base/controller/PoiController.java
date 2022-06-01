@@ -74,6 +74,7 @@ public interface PoiController<Entity, PageQuery> extends PageController<Entity,
         map.put(NormalExcelConstants.PARAMS, exportParams);
         Object fileName = params.getExtra().getOrDefault(NormalExcelConstants.FILE_NAME, "临时文件");
         map.put(NormalExcelConstants.FILE_NAME, fileName);
+        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         PoiBaseView.render(map, request, response, NormalExcelConstants.EASYPOI_EXCEL_VIEW);
     }
 
@@ -112,7 +113,7 @@ public interface PoiController<Entity, PageQuery> extends PageController<Entity,
     }
 
     /**
-     * 使用自动生成的实体+注解方式导入 对RemoteData 类型的字段不支持，
+     * 使用自动生成的实体+注解方式导入
      * 建议自建实体使用
      *
      * @param simpleFile 上传文件

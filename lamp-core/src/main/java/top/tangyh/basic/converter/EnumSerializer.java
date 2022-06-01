@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import top.tangyh.basic.interfaces.BaseEnum;
 
-
 import java.io.IOException;
 
 /**

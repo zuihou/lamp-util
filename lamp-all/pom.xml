@@ -74,11 +74,6 @@
         </dependency>
         <dependency>
             <groupId>top.tangyh.basic</groupId>
-            <artifactId>lamp-security-starter</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-swagger2-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
