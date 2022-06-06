@@ -32,7 +32,7 @@ public final class TreeUtil {
 
 
     public static String getTreePath(String parentTreePath, Long parentId) {
-        return StrPool.SLASH + parentId + parentTreePath;
+        return StrPool.COMMA + parentId + parentTreePath;
     }
 
     /**
