@@ -850,13 +850,13 @@ public final class DateUtils {
      * @param time 0 1h 2w 3m 4d
      * @return 日期
      */
-    public static LocalDateTime conversionDateTime(String time) {
+    public static LocalDateTime conversionDateTime(LocalDateTime passwordErrorLastTime, String time) {
         if (StrUtil.isEmpty(time)) {
             return LocalDateTime.MAX;
         }
         // 今天的23:59:59
         if (StrPool.ZERO.equals(time)) {
-            return LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+            return endOfDay(passwordErrorLastTime);
         }
 
         char unit = Character.toLowerCase(time.charAt(time.length() - 1));
@@ -869,28 +869,28 @@ public final class DateUtils {
         switch (unit) {
             //分
             case 'm':
-                dateTime = LocalDateTime.now().plusMinutes(lastTime);
+                dateTime = passwordErrorLastTime.plusMinutes(lastTime);
                 break;
             //时
             case 'h' | 'H':
-                dateTime = LocalDateTime.now().plusHours(lastTime);
+                dateTime = passwordErrorLastTime.plusHours(lastTime);
                 break;
             //周
             case 'w':
-                dateTime = LocalDateTime.now().plusWeeks(lastTime);
+                dateTime = passwordErrorLastTime.plusWeeks(lastTime);
                 break;
             //月
             case 'M':
-                dateTime = LocalDateTime.now().plusMonths(lastTime);
+                dateTime = passwordErrorLastTime.plusMonths(lastTime);
                 break;
             //年
             case 'y':
-                dateTime = LocalDateTime.now().plusYears(lastTime);
+                dateTime = passwordErrorLastTime.plusYears(lastTime);
                 break;
             //天
             case 'd':
             default:
-                dateTime = LocalDateTime.now().plusDays(lastTime);
+                dateTime = passwordErrorLastTime.plusDays(lastTime);
                 break;
         }
         return dateTime;
