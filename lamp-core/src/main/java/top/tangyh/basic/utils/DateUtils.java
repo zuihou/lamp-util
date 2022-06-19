@@ -78,7 +78,7 @@ public final class DateUtils {
      * 一年平均天数
      */
     public static final long MAX_YEAR_DAY = 365;
-    protected static final Map<String, String> DATE_FORMAT = new LinkedHashMap(5);
+    private static final Map<String, String> DATE_FORMAT = new LinkedHashMap(5);
 //--格式化日期start-----------------------------------------
 
     static {
@@ -91,10 +91,14 @@ public final class DateUtils {
     }
 
     /**
-     * 解析日期
+     * 将字符串解析LocalDate
      *
-     * @param source
-     * @return
+     * @param source 源参数
+     *               支持以下格式：
+     *               yyyy-MM-dd
+     *               yyyy/MM/dd
+     *               yyyy年MM月dd日
+     * @return 日期
      */
     public static LocalDate parse(String source) {
         String sourceTrim = source.trim();
@@ -109,7 +113,7 @@ public final class DateUtils {
 
 
     /**
-     * 转换 Date 为 cron , eg.  "0 07 10 15 1 ? 2016"
+     * 转换 Date 为 cron , eg：  "0 07 10 15 1 ? 2016"
      *
      * @param date 时间点
      * @return cron 表达式
@@ -782,9 +786,9 @@ public final class DateUtils {
             startTime = time + "-01 00:00:00";
         } else if (time.matches("^\\d{4}-\\d{1,2}-\\d{1,2}$")) {
             startTime = time + " 00:00:00";
-        } else if (time.matches("^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}:\\d{1,2}$")) {
+        } else if (time.matches("^\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}$")) {
             startTime = time + ":00";
-        } else if (time.matches("^\\d{4}-\\d{1,2}-\\d{1,2}T{1}\\d{1,2}:\\d{1,2}:\\d{1,2}.\\d{3}Z$")) {
+        } else if (time.matches("^\\d{4}-\\d{1,2}-\\d{1,2}T\\d{1,2}:\\d{1,2}:\\d{1,2}.\\d{3}Z$")) {
             startTime = time.replace("T", " ").substring(0, time.indexOf('.'));
         }
         return LocalDateTimeUtil.beginOfDay(LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT)));
@@ -804,9 +808,9 @@ public final class DateUtils {
             startTime = DateUtils.formatAsDate(date) + " 23:59:59";
         } else if (time.matches("^\\d{4}-\\d{1,2}-\\d{1,2}$")) {
             startTime = time + " 23:59:59";
-        } else if (time.matches("^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}:\\d{1,2}$")) {
+        } else if (time.matches("^\\d{4}-\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{1,2}$")) {
             startTime = time + ":59";
-        } else if (time.matches("^\\d{4}-\\d{1,2}-\\d{1,2}T{1}\\d{1,2}:\\d{1,2}:\\d{1,2}.\\d{3}Z$")) {
+        } else if (time.matches("^\\d{4}-\\d{1,2}-\\d{1,2}T\\d{1,2}:\\d{1,2}:\\d{1,2}.\\d{3}Z$")) {
             time = time.replace("T", " ").substring(0, time.indexOf('.'));
             startTime = time;
         }
@@ -847,16 +851,31 @@ public final class DateUtils {
      * 3M: 3个月后的日期
      * 5y: 5年后的日期
      *
-     * @param time 0 1h 2w 3m 4d
+     * @param dateTime 待转换日期
+     * @param time     转换格式 如：
+     *                 0 当天23:59:59
+     *                 1s 1秒后
+     *                 3m 3分钟后
+     *                 2w 2周后
+     *                 1h 1小时后
+     *                 2H 2小时后
+     *                 4d 4天后
+     *                 5M 5月后
+     *                 6y 6年后
      * @return 日期
      */
-    public static LocalDateTime conversionDateTime(LocalDateTime passwordErrorLastTime, String time) {
+    public static LocalDateTime conversionDateTime(LocalDateTime dateTime, String time) {
         if (StrUtil.isEmpty(time)) {
             return LocalDateTime.MAX;
         }
+
+        if (dateTime == null) {
+            return endOfDay(LocalDateTime.now());
+        }
+
         // 今天的23:59:59
         if (StrPool.ZERO.equals(time)) {
-            return endOfDay(passwordErrorLastTime);
+            return endOfDay(dateTime);
         }
 
         char unit = Character.toLowerCase(time.charAt(time.length() - 1));
@@ -865,34 +884,29 @@ public final class DateUtils {
         }
         Long lastTime = Convert.toLong(time.substring(0, time.length() - 1));
 
-        LocalDateTime dateTime;
         switch (unit) {
+            //秒
+            case 's':
+                return dateTime.plusSeconds(lastTime);
             //分
             case 'm':
-                dateTime = passwordErrorLastTime.plusMinutes(lastTime);
-                break;
+                return dateTime.plusMinutes(lastTime);
             //时
             case 'h' | 'H':
-                dateTime = passwordErrorLastTime.plusHours(lastTime);
-                break;
+                return dateTime.plusHours(lastTime);
             //周
             case 'w':
-                dateTime = passwordErrorLastTime.plusWeeks(lastTime);
-                break;
+                return dateTime.plusWeeks(lastTime);
             //月
             case 'M':
-                dateTime = passwordErrorLastTime.plusMonths(lastTime);
-                break;
+                return dateTime.plusMonths(lastTime);
             //年
             case 'y':
-                dateTime = passwordErrorLastTime.plusYears(lastTime);
-                break;
+                return dateTime.plusYears(lastTime);
             //天
             case 'd':
             default:
-                dateTime = passwordErrorLastTime.plusDays(lastTime);
-                break;
+                return dateTime.plusDays(lastTime);
         }
-        return dateTime;
     }
 }
