@@ -49,7 +49,7 @@ public class DatabaseProperties {
      */
     private long maxLimit = -1;
 
-    private DbType dbType = DbType.MYSQL;
+    private DbType dbType;
     /** 溢出总页数后是否进行处理 */
     protected Boolean overflow = true;
     /** 生成 countSql 优化掉 join 现在只支持 left join */

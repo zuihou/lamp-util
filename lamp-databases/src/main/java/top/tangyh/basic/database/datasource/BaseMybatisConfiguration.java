@@ -11,6 +11,7 @@ import com.baidu.fsg.uid.impl.CachedUidGenerator;
 import com.baidu.fsg.uid.impl.DefaultUidGenerator;
 import com.baidu.fsg.uid.impl.HuToolUidGenerator;
 import com.baidu.fsg.uid.worker.DisposableWorkerIdAssigner;
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
@@ -22,6 +23,8 @@ import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerIntercept
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.StringValue;
+import org.apache.ibatis.mapping.DatabaseIdProvider;
+import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -39,8 +42,10 @@ import top.tangyh.basic.database.properties.DatabaseProperties;
 import top.tangyh.basic.database.properties.MultiTenantType;
 import top.tangyh.basic.uid.dao.WorkerNodeDao;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Mybatis 常用重用拦截器，lamp.database.multiTenantType=任意模式 都需要实例出来
@@ -133,7 +138,9 @@ public abstract class BaseMybatisConfiguration {
         // 单页分页条数限制
         paginationInterceptor.setMaxLimit(databaseProperties.getMaxLimit());
         // 数据库类型
-        paginationInterceptor.setDbType(databaseProperties.getDbType());
+        if (databaseProperties.getDbType() != null) {
+            paginationInterceptor.setDbType(databaseProperties.getDbType());
+        }
         // 溢出总页数后是否进行处理
         paginationInterceptor.setOverflow(databaseProperties.getOverflow());
         // 生成 countSql 优化掉 join 现在只支持 left join
@@ -160,12 +167,29 @@ public abstract class BaseMybatisConfiguration {
 
 
     /**
+     * 数据库配置
+     *
+     * @return 配置
+     */
+    @Bean
+    public DatabaseIdProvider getDatabaseIdProvider() {
+        DatabaseIdProvider databaseIdProvider = new VendorDatabaseIdProvider();
+        Properties properties = new Properties();
+        properties.setProperty("Oracle", DbType.ORACLE.getDb());
+        properties.setProperty("MySQL", DbType.MYSQL.getDb());
+        properties.setProperty("Microsoft SQL Server", DbType.SQL_SERVER.getDb());
+        databaseIdProvider.setProperties(properties);
+        return databaseIdProvider;
+    }
+
+
+    /**
      * 分页拦截器之后的插件
      *
      * @return 分页拦截器之后的插件
      */
     protected List<InnerInterceptor> getPaginationAfterInnerInterceptor() {
-        return Collections.emptyList();
+        return new ArrayList<>();
     }
 
     /**
@@ -174,7 +198,7 @@ public abstract class BaseMybatisConfiguration {
      * @return 分页拦截器之前的插件
      */
     protected List<InnerInterceptor> getPaginationBeforeInnerInterceptor() {
-        return Collections.emptyList();
+        return new ArrayList<>();
     }
 
     /**

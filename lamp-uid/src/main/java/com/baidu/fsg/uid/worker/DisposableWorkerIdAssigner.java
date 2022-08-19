@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import top.tangyh.basic.uid.dao.WorkerNodeDao;
 
+import java.util.Date;
+
 /**
  * Represents an implementation of {@link WorkerIdAssigner},
  * the worker id will be discarded after assigned to the UidGenerator
@@ -78,6 +80,8 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
             workerNodeEntity.setHostName(NetUtils.getLocalAddress());
             workerNodeEntity.setPort(System.currentTimeMillis() + "-" + RandomUtil.randomInt(100000));
         }
+        workerNodeEntity.setCreated(new Date());
+        workerNodeEntity.setModified(new Date());
         return workerNodeEntity;
     }
 

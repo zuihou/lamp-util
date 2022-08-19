@@ -18,6 +18,7 @@ package top.tangyh.basic.uid.dao;
 import com.baidu.fsg.uid.worker.entity.WorkerNodeEntity;
 import com.baomidou.mybatisplus.annotation.InterceptorIgnore;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.SelectKey;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -30,22 +31,17 @@ import org.springframework.stereotype.Repository;
 public interface WorkerNodeDao {
 
     /**
-     * Get {@link WorkerNodeEntity} by node host
-     *
-     * @param host
-     * @param port
-     * @return
-     */
-//    @Select("SELECT id, host_name, port, type,launch_date, modified, created FROM worker_node WHERE host_name = #{host} AND port = #{port}")
-//    WorkerNodeEntity getWorkerNodeByHostPort(@Param("host") String host, @Param("port") String port);
-
-    /**
      * Add {@link WorkerNodeEntity}
      *
      * @param workerNodeEntity
      */
-    @Insert("INSERT INTO worker_node(host_name,port, type, launch_date,modified,created) " +
-            "VALUES (#{hostName},#{port},#{type},#{launchDate},NOW(),NOW())")
+    @Insert("INSERT INTO worker_node( host_name,port, type, launch_date,modified,created) " +
+            "VALUES (#{hostName},#{port},#{type},#{launchDate},#{modified}, #{created})")
+    // oracle 用下面2个注解！ mysql sql server 用上面1个注解！
+    @Insert(databaseId = "oracle", value = "INSERT INTO worker_node(id, host_name,port, type, launch_date,modified,created) " +
+            "VALUES (#{id}, #{hostName},#{port},#{type},#{launchDate},#{modified}, #{created})")
+    @SelectKey(databaseId = "oracle", statement = "SELECT WORKER_NODE_SEQ.NEXTVAL as id FROM DUAL", keyColumn = "id",
+            keyProperty = "id", resultType = long.class, before = true)
     void addWorkerNode(WorkerNodeEntity workerNodeEntity);
 
 }
