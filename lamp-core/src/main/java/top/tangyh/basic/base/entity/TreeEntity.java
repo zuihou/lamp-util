@@ -14,7 +14,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static top.tangyh.lamp.model.constant.Condition.LIKE;
 
 /**
  * 包括id、create_time、created_by、updated_by、update_time、label、parent_id、sort_value 字段的表继承的树形实体
@@ -34,7 +33,7 @@ public class TreeEntity<E, T extends Serializable> extends Entity<T> {
     @ApiModelProperty(value = "名称")
     @NotEmpty(message = "名称不能为空")
     @Size(max = 255, message = "名称长度不能超过255")
-    @TableField(value = "label", condition = LIKE)
+    @TableField(value = "label")
     protected String label;
 
     /**

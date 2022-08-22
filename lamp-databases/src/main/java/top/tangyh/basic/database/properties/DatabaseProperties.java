@@ -11,8 +11,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import top.tangyh.basic.constant.Constants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static top.tangyh.basic.context.ContextConstants.TENANT_BASE_POOL_NAME_HEADER;
 import static top.tangyh.basic.database.properties.DatabaseProperties.PREFIX;
 import static top.tangyh.basic.database.properties.MultiTenantType.SCHEMA;
 
@@ -63,12 +65,31 @@ public class DatabaseProperties {
      */
     private Boolean isDataScope = true;
 
-
     /**
-     * 租户库 前缀
+     * 初始化脚本时的数据库分割符
+     * mysql 是 ;
+     * sql server 是 GO
+     */
+    private String delimiter = ";";
+    /**
+     * 当前服务的租户库前缀
+     * <p>
+     * 仅SCHEMA模式使用
      */
     private String tenantDatabasePrefix = "lamp_base";
 
+    /**
+     * DATASOURCE模式：当前服务的租户库前缀
+     * <p>
+     * SCHEMA模式：tenant服务，创建租户时，需要初始化的租户库。
+     * 如： authority服务的租户库是 lamp_base， msg 服务的租户库是 lamp_extend，则该参数配置为： lamp_base、lamp_extend。
+     * 如： 若所有服务的租户库都是 lamp_base， 则该参数配置为： lamp_base。
+     *
+     * @author tangyh
+     * @date 2022/8/22 9:05 PM
+     * @create [2022/8/22 9:05 PM ] [tangyh] [初始创建]
+     */
+    private List<String> initDatabasePrefix = Arrays.asList(TENANT_BASE_POOL_NAME_HEADER);
     /**
      * 多租户模式
      */

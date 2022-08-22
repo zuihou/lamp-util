@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.toolkit.JdbcUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -156,6 +155,7 @@ public class DbPlusUtil {
     }
 
     private static final Map<String, DbType> JDBC_DB_TYPE_CACHE = new ConcurrentHashMap<>();
+    private static final Map<String, String> JDBC_DATABASE_CACHE = new ConcurrentHashMap<>();
 
     /**
      * 不关闭 Connection,因为是从事务里获取的,sqlSession会负责关闭
@@ -166,7 +166,25 @@ public class DbPlusUtil {
     public static DbType getDbType(DataSource executor) {
         try {
             Connection conn = executor.getConnection();
-            return JDBC_DB_TYPE_CACHE.computeIfAbsent(conn.getMetaData().getURL(), JdbcUtils::getDbType);
+            return JDBC_DB_TYPE_CACHE.computeIfAbsent(conn.getMetaData().getURL(), DbPlusUtil::getDbType);
+        } catch (SQLException e) {
+            throw ExceptionUtils.mpe(e);
+        }
+    }
+
+    /**
+     * 从数据源中获取数据库名
+     *
+     * @param executor executor
+     * @return java.lang.String
+     * @author tangyh
+     * @date 2022/8/22 9:01 PM
+     * @create [2022/8/22 9:01 PM ] [tangyh] [初始创建]
+     */
+    public static String getDatabase(DataSource executor) {
+        try {
+            Connection conn = executor.getConnection();
+            return JDBC_DATABASE_CACHE.computeIfAbsent(conn.getMetaData().getURL(), DbPlusUtil::getDataBaseNameByUrl);
         } catch (SQLException e) {
             throw ExceptionUtils.mpe(e);
         }
