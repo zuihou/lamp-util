@@ -77,6 +77,8 @@ public class DatabaseProperties {
      * 仅SCHEMA模式使用
      */
     private String tenantDatabasePrefix = "lamp_base";
+    /** SCHEMA 模式专用 */
+    private String owner = "";
 
     /**
      * DATASOURCE模式：当前服务的租户库前缀

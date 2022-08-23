@@ -27,10 +27,12 @@ import java.sql.SQLException;
 @Slf4j
 public class SchemaInterceptor implements InnerInterceptor {
 
+    private final String owner;
     private final String tenantDatabasePrefix;
 
-    public SchemaInterceptor(String tenantDatabasePrefix) {
+    public SchemaInterceptor(String tenantDatabasePrefix, String owner) {
         this.tenantDatabasePrefix = tenantDatabasePrefix;
+        this.owner = owner;
     }
 
     protected String changeTable(String sql) {
@@ -42,6 +44,9 @@ public class SchemaInterceptor implements InnerInterceptor {
         }
 
         String schemaName = StrUtil.format("{}_{}", StrUtil.isEmpty(database) ? tenantDatabasePrefix : database, tenantCode);
+        if (StrUtil.isNotEmpty(owner)) {
+            schemaName += "." + owner;
+        }
         // 想要 执行sql时， 切换到 切换到自己指定的库， 直接修改 setSchemaName
         return ReplaceSql.replaceSql(schemaName, sql);
     }

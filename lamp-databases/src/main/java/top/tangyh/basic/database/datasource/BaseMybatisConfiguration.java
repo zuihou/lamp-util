@@ -100,7 +100,7 @@ public abstract class BaseMybatisConfiguration {
         if (StrUtil.equalsAny(databaseProperties.getMultiTenantType().name(),
                 MultiTenantType.SCHEMA.name(), MultiTenantType.SCHEMA_COLUMN.name())) {
             // SCHEMA 动态表名插件
-            SchemaInterceptor schemaInterceptor = new SchemaInterceptor(databaseProperties.getTenantDatabasePrefix());
+            SchemaInterceptor schemaInterceptor = new SchemaInterceptor(databaseProperties.getTenantDatabasePrefix(), databaseProperties.getOwner());
             interceptor.addInnerInterceptor(schemaInterceptor);
         }
         if (StrUtil.equalsAny(databaseProperties.getMultiTenantType().name(),
