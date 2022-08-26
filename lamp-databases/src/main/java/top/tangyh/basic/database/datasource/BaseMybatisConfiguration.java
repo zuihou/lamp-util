@@ -41,9 +41,9 @@ import top.tangyh.basic.database.plugins.SchemaInterceptor;
 import top.tangyh.basic.database.properties.DatabaseProperties;
 import top.tangyh.basic.database.properties.MultiTenantType;
 import top.tangyh.basic.uid.dao.WorkerNodeDao;
+import top.tangyh.basic.utils.ArgumentAssert;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -99,8 +99,10 @@ public abstract class BaseMybatisConfiguration {
         log.info("检测到 lamp.database.multiTenantType={}，已启用 {} 模式", databaseProperties.getMultiTenantType().name(), databaseProperties.getMultiTenantType().getDescribe());
         if (StrUtil.equalsAny(databaseProperties.getMultiTenantType().name(),
                 MultiTenantType.SCHEMA.name(), MultiTenantType.SCHEMA_COLUMN.name())) {
+            ArgumentAssert.notNull(databaseProperties.getDbType(), "SCHEMA 模式请填写: {}.dbType", DatabaseProperties.PREFIX);
+
             // SCHEMA 动态表名插件
-            SchemaInterceptor schemaInterceptor = new SchemaInterceptor(databaseProperties.getTenantDatabasePrefix(), databaseProperties.getOwner());
+            SchemaInterceptor schemaInterceptor = new SchemaInterceptor(databaseProperties.getTenantDatabasePrefix(), databaseProperties.getOwner(), databaseProperties.getDbType());
             interceptor.addInnerInterceptor(schemaInterceptor);
         }
         if (StrUtil.equalsAny(databaseProperties.getMultiTenantType().name(),

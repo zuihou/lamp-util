@@ -29,9 +29,10 @@ import com.alibaba.druid.sql.ast.statement.SQLTableSource;
 import com.alibaba.druid.sql.ast.statement.SQLUnionQuery;
 import com.alibaba.druid.sql.ast.statement.SQLUnionQueryTableSource;
 import com.alibaba.druid.sql.ast.statement.SQLUpdateStatement;
-import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlDeleteStatement;
-import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlInsertStatement;
 import com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser;
+import com.alibaba.druid.sql.dialect.sqlserver.parser.SQLServerStatementParser;
+import com.alibaba.druid.sql.parser.SQLStatementParser;
+import com.baomidou.mybatisplus.annotation.DbType;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -47,8 +48,18 @@ public final class ReplaceSql {
     private ReplaceSql() {
     }
 
-    public static String replaceSql(String schemaName, String sql) {
-        MySqlStatementParser parser = new MySqlStatementParser(sql);
+    public static String replaceSql(DbType dbType, String schemaName, String sql) {
+        SQLStatementParser parser;
+        switch (dbType) {
+            case SQL_SERVER:
+            case SQL_SERVER2005:
+                parser = new SQLServerStatementParser(sql);
+                break;
+            default:
+                parser = new MySqlStatementParser(sql);
+                break;
+        }
+
         SQLStatement sqlStatement = parser.parseStatement();
         if (sqlStatement instanceof SQLSelectStatement) {
             SQLSelectStatement sqlSelectStatement = (SQLSelectStatement) sqlStatement;
@@ -119,14 +130,15 @@ public final class ReplaceSql {
         if (sqlTableSource instanceof SQLExprTableSource) {
             SQLExprTableSource sqlExprTableSource = (SQLExprTableSource) sqlTableSource;
             SQLObject sqlObject = sqlExprTableSource.getParent();
-            if (sqlObject instanceof MySqlDeleteStatement) {
-                MySqlDeleteStatement mySqlDeleteStatement = (MySqlDeleteStatement) sqlObject;
-                SQLExpr sqlExpr = mySqlDeleteStatement.getWhere();
+
+            if (sqlObject instanceof SQLDeleteStatement) {
+                SQLDeleteStatement deleteStatement = (SQLDeleteStatement) sqlObject;
+                SQLExpr sqlExpr = deleteStatement.getWhere();
                 setSqlSchemaBySqlExpr(schemaName, sqlExpr);
             }
-            if (sqlObject instanceof MySqlInsertStatement) {
-                MySqlInsertStatement mySqlInsertStatement = (MySqlInsertStatement) sqlObject;
-                SQLSelect sqlSelect = mySqlInsertStatement.getQuery();
+            if (sqlObject instanceof SQLInsertStatement) {
+                SQLInsertStatement insertStatement = (SQLInsertStatement) sqlObject;
+                SQLSelect sqlSelect = insertStatement.getQuery();
                 if (sqlSelect != null) {
                     SQLSelectQuery sqlSelectQuery = sqlSelect.getQuery();
                     setSqlSchemaBySelectQuery(schemaName, sqlSelectQuery);

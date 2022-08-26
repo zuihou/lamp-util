@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 public class DbPlusUtil {
-    private static final Pattern SQL_SERVER_PATTERN = Pattern.compile("jdbc(:p6spy)?:(?<db>\\w+):.*((//)|@)(?<host>.+):(?<port>\\d+)(/|(;databasename=)|:)(?<dbName>\\w+)\\??.*");
+    private static final Pattern SQL_SERVER_PATTERN = Pattern.compile("jdbc(:p6spy)?:(?<db>\\w+):.*((//)|@)(?<host>.+):(?<port>\\d+)(;[\\w-]+=[\\w-]+)*(/|(;databasename=)|:)(?<dbName>\\w+)\\??.*");
 
     @SneakyThrows
     public static String getSqlServerDbName(String url) {
@@ -101,7 +101,7 @@ public class DbPlusUtil {
         }
 
         if (StrUtil.isBlank(database)) {
-            throw new IllegalArgumentException("Invalid JDBC url.");
+            throw new IllegalArgumentException("Invalid JDBC url." + jdbcUrl);
         }
         return database;
     }

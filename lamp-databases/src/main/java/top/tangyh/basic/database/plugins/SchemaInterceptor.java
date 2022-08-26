@@ -1,6 +1,7 @@
 package top.tangyh.basic.database.plugins;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
@@ -29,10 +30,12 @@ public class SchemaInterceptor implements InnerInterceptor {
 
     private final String owner;
     private final String tenantDatabasePrefix;
+    private final DbType dbType;
 
-    public SchemaInterceptor(String tenantDatabasePrefix, String owner) {
+    public SchemaInterceptor(String tenantDatabasePrefix, String owner, DbType dbType) {
         this.tenantDatabasePrefix = tenantDatabasePrefix;
         this.owner = owner;
+        this.dbType = dbType;
     }
 
     protected String changeTable(String sql) {
@@ -48,7 +51,7 @@ public class SchemaInterceptor implements InnerInterceptor {
             schemaName += "." + owner;
         }
         // 想要 执行sql时， 切换到 切换到自己指定的库， 直接修改 setSchemaName
-        return ReplaceSql.replaceSql(schemaName, sql);
+        return ReplaceSql.replaceSql(dbType, schemaName, sql);
     }
 
     @Override
