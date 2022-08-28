@@ -66,12 +66,6 @@ public class DatabaseProperties {
     private Boolean isDataScope = true;
 
     /**
-     * 初始化脚本时的数据库分割符
-     * mysql 是 ;
-     * sql server 是 GO
-     */
-    private String delimiter = ";";
-    /**
      * 当前服务的租户库前缀
      * <p>
      * 仅SCHEMA模式使用
