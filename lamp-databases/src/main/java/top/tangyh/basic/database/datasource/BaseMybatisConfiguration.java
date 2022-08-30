@@ -99,7 +99,7 @@ public abstract class BaseMybatisConfiguration {
         log.info("检测到 lamp.database.multiTenantType={}，已启用 {} 模式", databaseProperties.getMultiTenantType().name(), databaseProperties.getMultiTenantType().getDescribe());
         if (StrUtil.equalsAny(databaseProperties.getMultiTenantType().name(),
                 MultiTenantType.SCHEMA.name(), MultiTenantType.SCHEMA_COLUMN.name())) {
-            ArgumentAssert.notNull(databaseProperties.getDbType(), "SCHEMA 模式请填写: {}.dbType", DatabaseProperties.PREFIX);
+            ArgumentAssert.notNull(databaseProperties.getDbType(), "SCHEMA 模式请在database.yml中配置: {}.dbType", DatabaseProperties.PREFIX);
 
             // SCHEMA 动态表名插件
             SchemaInterceptor schemaInterceptor = new SchemaInterceptor(databaseProperties.getTenantDatabasePrefix(), databaseProperties.getOwner(), databaseProperties.getDbType());
