@@ -3,6 +3,7 @@ package top.tangyh.basic.base.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 @Setter
 @Accessors(chain = true)
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class Entity<T> extends SuperEntity<T> {
 
     public static final String UPDATE_TIME = "updateTime";

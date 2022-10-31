@@ -3,6 +3,7 @@ package top.tangyh.basic.base.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -24,6 +25,7 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class TreeEntity<E, T extends Serializable> extends Entity<T> {
 
