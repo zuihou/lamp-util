@@ -4,31 +4,31 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.8</version>
+        <version>2.6.13</version>
         <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>top.tangyh.basic</groupId>
     <artifactId>lamp-parent</artifactId>
-    <version>3.8.1</version>
+    <version>3.8.2</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>Spring Boot 2.x项目依赖管理</description>
     <url>https://github.com/zuihou/lamp-cloud</url>
 
     <properties>
-        <spring-cloud-dependencies.version>2021.0.2</spring-cloud-dependencies.version>
-        <spring-cloud-alibaba-dependencies.version>2021.0.1.0</spring-cloud-alibaba-dependencies.version>
+        <spring-cloud-dependencies.version>2021.0.5</spring-cloud-dependencies.version>
+        <spring-cloud-alibaba-dependencies.version>2021.0.4.0</spring-cloud-alibaba-dependencies.version>
         <seata.version>1.4.2</seata.version>
-        <nacos.version>2.0.4</nacos.version>
+        <nacos.version>2.1.1</nacos.version>
         <sentinel.version>1.8.2</sentinel.version>
-        <spring-boot-admin.version>2.6.7</spring-boot-admin.version>
+        <spring-boot-admin.version>2.6.9</spring-boot-admin.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <hutool.version>5.8.1</hutool.version>
+        <hutool.version>5.8.10</hutool.version>
         <druid.version>1.2.8</druid.version>
         <mysql.version>8.0.28</mysql.version>
         <mybatis.version>3.5.9</mybatis.version>
@@ -635,7 +635,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
             </plugin>
-            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
@@ -644,7 +643,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
             </plugin>
-            -->
             <!-- 一键更新子模块版本号 -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -655,7 +653,6 @@
             </plugin>
         </plugins>
     </build>
-   <!--
     <profiles>
         <profile>
             <id>release</id>
@@ -709,5 +706,4 @@
             </activation>
         </profile>
     </profiles>
-     -->
 </project>
