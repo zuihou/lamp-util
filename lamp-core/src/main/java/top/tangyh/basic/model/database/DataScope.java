@@ -17,7 +17,7 @@ public class DataScope extends HashMap {
     /**
      * 限制范围的字段名称 （除个人外）
      */
-    private String scopeName = "org_id";
+    private String scopeName = "created_org_id";
     /**
      * 限制范围为个人时的字段名称
      */
