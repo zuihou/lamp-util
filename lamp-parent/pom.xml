@@ -14,7 +14,7 @@
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>Spring Boot 2.x项目依赖管理</description>
-    <url>https://github.com/zuihou/lamp-cloud</url>
+    <url>https://github.com/dromara/lamp-cloud</url>
 
     <properties>
         <spring-cloud-dependencies.version>2021.0.5</spring-cloud-dependencies.version>
