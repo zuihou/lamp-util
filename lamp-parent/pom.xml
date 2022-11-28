@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>top.tangyh.basic</groupId>
     <artifactId>lamp-parent</artifactId>
-    <version>3.8.2</version>
+    <version>3.9.0-java17</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>Spring Boot 2.x项目依赖管理</description>
