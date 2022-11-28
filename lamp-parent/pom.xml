@@ -16,6 +16,15 @@
     <description>Spring Boot 2.x项目依赖管理</description>
     <url>https://github.com/dromara/lamp-cloud</url>
 
+    <!--
+    ${basedir} 项目根目录
+    ${project.build.directory} 构建目录，缺省为target
+    ${project.build.outputDirectory} 构建过程输出目录，缺省为target/classes
+    ${project.build.finalName} 产出物名称，缺省为${project.artifactId}-${project.version}
+    ${project.packaging} 打包类型，缺省为jar
+    ${project.xxx} 当前pom文件的任意节点的内容 如project.artifactId
+    -->
+
     <properties>
         <spring-cloud-dependencies.version>2022.0.0-RC2</spring-cloud-dependencies.version>
         <spring-cloud-alibaba-dependencies.version>2021.0.4.0</spring-cloud-alibaba-dependencies.version>
@@ -563,6 +572,11 @@
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven-resources-plugin.version}</version>
                     <configuration>
+                        <propertiesEncoding>${project.build.sourceEncoding}</propertiesEncoding>
+                        <delimiters>
+                            <delimiter>${resource.delimiter}</delimiter>
+                        </delimiters>
+                        <useDefaultDelimiters>false</useDefaultDelimiters>
                         <!-- 后缀为pem、pfx的证书文件 -->
                         <nonFilteredFileExtensions>
                             <nonFilteredFileExtension>pem</nonFilteredFileExtension>
