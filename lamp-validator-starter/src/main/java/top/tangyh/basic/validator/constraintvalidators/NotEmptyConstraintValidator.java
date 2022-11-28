@@ -4,9 +4,9 @@ package top.tangyh.basic.validator.constraintvalidators;
 import top.tangyh.basic.interfaces.validator.IValidatable;
 import org.hibernate.validator.internal.constraintvalidators.bv.notempty.NotEmptyValidatorForCharSequence;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * 自定义一个验证 NotEmpty 的校验器。自定义类需要实现IValidatable接口

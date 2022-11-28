@@ -7,8 +7,8 @@ import org.hibernate.validator.internal.engine.messageinterpolation.util.Interpo
 import org.hibernate.validator.internal.util.logging.Log;
 import org.hibernate.validator.internal.util.logging.LoggerFactory;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.lang.invoke.MethodHandles;
 import java.util.regex.Matcher;
 import java.util.regex.PatternSyntaxException;

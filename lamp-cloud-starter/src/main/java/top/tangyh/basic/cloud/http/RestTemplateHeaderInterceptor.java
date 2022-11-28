@@ -13,7 +13,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 import static top.tangyh.basic.cloud.interceptor.FeignAddHeaderRequestInterceptor.HEADER_NAME_LIST;

@@ -2,9 +2,11 @@ package org.slf4j;
 
 import ch.qos.logback.classic.util.LogbackMDCAdapter;
 import com.alibaba.ttl.TransmittableThreadLocal;
+import org.slf4j.helpers.ThreadLocalMapOfStacks;
 import org.slf4j.spi.MDCAdapter;
 
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +29,7 @@ public class LampMdcAdapter implements MDCAdapter {
         MDC.mdcAdapter = mtcMDCAdapter;
     }
 
+    private final ThreadLocalMapOfStacks threadLocalMapOfDeques = new ThreadLocalMapOfStacks();
     private final ThreadLocal<Map<String, String>> copyOnInheritThreadLocal = new TransmittableThreadLocal<>();
     /**
      * keeps track of the last operation performed
@@ -138,6 +141,7 @@ public class LampMdcAdapter implements MDCAdapter {
         }
     }
 
+
     /**
      * Get the current thread's MDC as a map. This method is intended to be used
      * internally.
@@ -184,5 +188,24 @@ public class LampMdcAdapter implements MDCAdapter {
 
         // the newMap replaces the old one for serialisation's sake
         copyOnInheritThreadLocal.set(newMap);
+    }
+
+    @Override
+    public void pushByKey(String key, String value) {
+        threadLocalMapOfDeques.pushByKey(key, value);
+    }
+
+    @Override
+    public String popByKey(String key) {
+        return threadLocalMapOfDeques.popByKey(key);
+    }
+
+    @Override
+    public Deque<String> getCopyOfDequeByKey(String key) {
+        return threadLocalMapOfDeques.getCopyOfDequeByKey(key);
+    }
+    @Override
+    public void clearDequeByKey(String key) {
+        threadLocalMapOfDeques.clearDequeByKey(key);
     }
 }

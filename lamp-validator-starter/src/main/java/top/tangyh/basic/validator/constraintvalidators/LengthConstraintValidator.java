@@ -5,8 +5,8 @@ import top.tangyh.basic.interfaces.validator.IValidatable;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.internal.constraintvalidators.hv.LengthValidator;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 /**
  * 自定义一个验证length的校验器。自定义类需要实现IValidatable接口

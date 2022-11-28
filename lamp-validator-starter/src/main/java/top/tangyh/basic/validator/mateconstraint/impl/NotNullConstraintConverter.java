@@ -3,9 +3,9 @@ package top.tangyh.basic.validator.mateconstraint.impl;
 import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
 import top.tangyh.basic.validator.utils.ValidatorConstants;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;

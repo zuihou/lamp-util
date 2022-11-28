@@ -1,6 +1,6 @@
 package top.tangyh.basic.validator.model;
 
-import javax.validation.groups.Default;
+import jakarta.validation.groups.Default;
 
 /**
  * 验证约束

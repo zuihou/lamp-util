@@ -20,7 +20,7 @@ import top.tangyh.basic.validator.model.ConstraintInfo;
 import top.tangyh.basic.validator.model.FieldValidatorDesc;
 import top.tangyh.basic.validator.model.ValidConstraint;
 
-import javax.validation.Validator;
+import jakarta.validation.Validator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;

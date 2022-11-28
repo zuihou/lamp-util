@@ -13,7 +13,7 @@ import top.tangyh.basic.base.entity.SuperEntity;
 import top.tangyh.basic.database.mybatis.conditions.Wraps;
 import top.tangyh.basic.utils.StrPool;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

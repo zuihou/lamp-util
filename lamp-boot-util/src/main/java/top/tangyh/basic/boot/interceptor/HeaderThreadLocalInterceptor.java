@@ -8,8 +8,8 @@ import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import top.tangyh.basic.context.ContextConstants;
 import top.tangyh.basic.context.ContextUtil;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import static top.tangyh.basic.boot.utils.WebUtils.getHeader;
 

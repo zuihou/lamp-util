@@ -1,7 +1,7 @@
 package top.tangyh.basic.annotation.constraints;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * 表单字段验证：正则表达式
  * <p>
- * 跟 javax.validation.constraints.Pattern 的区别在于： 本类校验时，传递过来的参数为null或者""时，不会校验正则表达式
+ * 跟 jakarta.validation.constraints.Pattern 的区别在于： 本类校验时，传递过来的参数为null或者""时，不会校验正则表达式
  *
  * @author zuihou
  * @date 2021/3/30 7:47 下午
@@ -43,7 +43,7 @@ public @interface NotEmptyPattern {
     /**
      * @return the error message template
      */
-    String message() default "{javax.validation.constraints.Pattern.message}";
+    String message() default "{jakarta.validation.constraints.Pattern.message}";
 
     /**
      * @return the groups the constraint belongs to

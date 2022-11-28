@@ -14,7 +14,7 @@ import top.tangyh.basic.context.ContextConstants;
 import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.utils.StrPool;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;

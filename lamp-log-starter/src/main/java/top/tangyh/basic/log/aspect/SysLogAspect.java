@@ -7,7 +7,7 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
-import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import top.tangyh.basic.annotation.log.SysLog;
 import top.tangyh.basic.base.R;
 import top.tangyh.basic.context.ContextConstants;
@@ -38,9 +38,9 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -188,7 +188,7 @@ public class SysLogAspect {
         optLogDTO.setActionMethod(joinPoint.getSignature().getName());
 
         HttpServletRequest request = setParams(joinPoint, sysLog, optLogDTO);
-        optLogDTO.setRequestIp(ServletUtil.getClientIP(request));
+        optLogDTO.setRequestIp(JakartaServletUtil.getClientIP(request));
         optLogDTO.setRequestUri(URLUtil.getPath(request.getRequestURI()));
         optLogDTO.setHttpMethod(request.getMethod());
         optLogDTO.setUa(StrUtil.sub(request.getHeader("user-agent"), 0, 500));

@@ -30,10 +30,10 @@ import top.tangyh.basic.exception.UnauthorizedException;
 import top.tangyh.basic.exception.code.ExceptionCode;
 import top.tangyh.basic.utils.StrPool;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;

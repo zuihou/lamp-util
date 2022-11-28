@@ -10,8 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.commons.httpclient.OkHttpClientConnectionPoolFactory;
-import org.springframework.cloud.commons.httpclient.OkHttpClientFactory;
+//import org.springframework.cloud.commons.httpclient.OkHttpClientConnectionPoolFactory;
+//import org.springframework.cloud.commons.httpclient.OkHttpClientFactory;
 import org.springframework.cloud.openfeign.FeignLoggerFactory;
 import org.springframework.cloud.openfeign.support.FeignHttpClientProperties;
 import org.springframework.context.annotation.Bean;
@@ -65,20 +65,22 @@ public class RestTemplateConfiguration {
      * @param httpClientProperties httpClient配置
      * @return OkHttpClient
      */
-    @Bean
-    @ConditionalOnMissingBean(okhttp3.OkHttpClient.class)
-    public okhttp3.OkHttpClient okHttp3Client(
-            OkHttpClientFactory httpClientFactory,
-            okhttp3.ConnectionPool connectionPool,
-            FeignHttpClientProperties httpClientProperties) {
-        return httpClientFactory.createBuilder(httpClientProperties.isDisableSslValidation())
-                .followRedirects(httpClientProperties.isFollowRedirects())
-                .writeTimeout(Duration.ofSeconds(30))
-                .readTimeout(Duration.ofSeconds(30))
-                .connectTimeout(Duration.ofMillis(httpClientProperties.getConnectionTimeout()))
-                .connectionPool(connectionPool)
-                .build();
-    }
+
+//    TODO java17
+//    @Bean
+//    @ConditionalOnMissingBean(okhttp3.OkHttpClient.class)
+//    public okhttp3.OkHttpClient okHttp3Client(
+//            OkHttpClientFactory httpClientFactory,
+//            okhttp3.ConnectionPool connectionPool,
+//            FeignHttpClientProperties httpClientProperties) {
+//        return httpClientFactory.createBuilder(httpClientProperties.isDisableSslValidation())
+//                .followRedirects(httpClientProperties.isFollowRedirects())
+//                .writeTimeout(Duration.ofSeconds(30))
+//                .readTimeout(Duration.ofSeconds(30))
+//                .connectTimeout(Duration.ofMillis(httpClientProperties.getConnectionTimeout()))
+//                .connectionPool(connectionPool)
+//                .build();
+//    }
 
     /**
      * okhttp3 链接池配置
@@ -87,12 +89,12 @@ public class RestTemplateConfiguration {
      * @param hcp                   httpClient配置
      * @return okhttp3.ConnectionPool
      */
-    @Bean
-    @ConditionalOnMissingBean(okhttp3.ConnectionPool.class)
-    public okhttp3.ConnectionPool okHttp3ConnectionPool(FeignHttpClientProperties hcp,
-                                                        OkHttpClientConnectionPoolFactory connectionPoolFactory) {
-        return connectionPoolFactory.create(hcp.getMaxConnections(), hcp.getTimeToLive(), hcp.getTimeToLiveUnit());
-    }
+//    @Bean
+//    @ConditionalOnMissingBean(okhttp3.ConnectionPool.class)
+//    public okhttp3.ConnectionPool okHttp3ConnectionPool(FeignHttpClientProperties hcp,
+//                                                        OkHttpClientConnectionPoolFactory connectionPoolFactory) {
+//        return connectionPoolFactory.create(hcp.getMaxConnections(), hcp.getTimeToLive(), hcp.getTimeToLiveUnit());
+//    }
 
 
     /**

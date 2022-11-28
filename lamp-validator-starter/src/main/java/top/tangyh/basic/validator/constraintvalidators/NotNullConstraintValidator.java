@@ -4,9 +4,9 @@ package top.tangyh.basic.validator.constraintvalidators;
 import top.tangyh.basic.interfaces.validator.IValidatable;
 import org.hibernate.validator.internal.constraintvalidators.bv.NotNullValidator;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * 自定义一个验证 NotNull 的校验器。自定义类需要实现IValidatable接口

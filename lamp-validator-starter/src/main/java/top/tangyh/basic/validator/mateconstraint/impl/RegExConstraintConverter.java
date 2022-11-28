@@ -6,8 +6,8 @@ import top.tangyh.basic.annotation.constraints.NotEmptyPattern;
 import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
 import top.tangyh.basic.validator.utils.ValidatorConstants;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;

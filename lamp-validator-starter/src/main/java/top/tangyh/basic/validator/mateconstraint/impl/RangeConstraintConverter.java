@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.Range;
 import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
 import top.tangyh.basic.validator.utils.ValidatorConstants;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
