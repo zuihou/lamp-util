@@ -37,10 +37,10 @@ public class EchoAutoConfiguration {
 
     /**
      * 回显服务
-     *
-     *
+     * <p>
+     * <p>
      * 在项目启动时，Spring会自动将实现了 LoadService 且被 Spring 扫描到容器中的实现类装载到strategyMap中。
-     *
+     * <p>
      * 不理解的 strategyMap 为啥会自动装载的，自行百度：Spring 策略模式 和 Spring 自动注入的几种方式(@Autowired、set方法、构造器注入等)
      *
      * @param strategyMap 回显查询实例
