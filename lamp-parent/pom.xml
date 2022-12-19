@@ -26,10 +26,10 @@
     -->
 
     <properties>
-        <spring-cloud-dependencies.version>2022.0.0-RC2</spring-cloud-dependencies.version>
+        <spring-cloud-dependencies.version>2022.0.0</spring-cloud-dependencies.version>
         <spring-cloud-alibaba-dependencies.version>2021.0.4.0</spring-cloud-alibaba-dependencies.version>
         <seata.version>1.4.2</seata.version>
-        <nacos.version>2.1.1</nacos.version>
+        <nacos.version>2.2.0</nacos.version>
         <sentinel.version>1.8.2</sentinel.version>
         <spring-boot-admin.version>3.0.0-M5</spring-boot-admin.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
@@ -40,10 +40,10 @@
         <hutool.version>5.8.10</hutool.version>
         <druid.version>1.2.8</druid.version>
         <mysql.version>8.0.28</mysql.version>
-        <mybatis.version>3.5.9</mybatis.version>
-        <mybatis-spring.version>2.0.6</mybatis-spring.version>
+        <mybatis.version>3.5.10</mybatis.version>
+        <mybatis-spring.version>2.0.7</mybatis-spring.version>
         <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
-        <mybatis-plus.version>3.5.2</mybatis-plus.version>
+        <mybatis-plus.version>3.5.2.7-SNAPSHOT</mybatis-plus.version>
         <mybatis-plus-generator.version>3.5.2</mybatis-plus-generator.version>
         <jasypt.version>3.0.4</jasypt.version>
         <p6spy.version>3.9.1</p6spy.version>
@@ -331,6 +331,11 @@
                 <version>${springfox.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-spi</artifactId>
+                <version>${springfox.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-annotations</artifactId>
                 <version>${swagger-models.version}</version>
@@ -526,6 +531,11 @@
     </dependencyManagement>
 
     <repositories>
+        <repository>
+            <id>nexus-maven</id>
+            <name>nexus-maven</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
         <repository>
             <id>aliyun</id>
             <name>aliyun</name>
