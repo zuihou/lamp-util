@@ -52,6 +52,7 @@ public class ClassManager implements Serializable {
             }
             fieldList.add(field);
         }
+        log.debug("已扫描到{}中存在{}个@Echo字段", clazz.getName(), fieldList.size());
         CACHE.put(clazz.getName(), fieldList);
         return fieldList;
     }

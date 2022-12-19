@@ -1,4 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    top.tangyh.basic.log.LogAutoConfiguration
 org.springframework.context.ApplicationContextInitializer=\
     top.tangyh.basic.log.LampMdcAdapterInitializer

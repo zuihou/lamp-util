@@ -10,8 +10,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-//import org.springframework.cloud.commons.httpclient.OkHttpClientConnectionPoolFactory;
-//import org.springframework.cloud.commons.httpclient.OkHttpClientFactory;
+import org.springframework.cloud.commons.httpclient.OkHttpClientConnectionPoolFactory;
+import org.springframework.cloud.commons.httpclient.OkHttpClientFactory;
+import org.springframework.cloud.openfeign.FeignClientProperties;
 import org.springframework.cloud.openfeign.FeignLoggerFactory;
 import org.springframework.cloud.openfeign.support.FeignHttpClientProperties;
 import org.springframework.context.annotation.Bean;
@@ -21,12 +22,15 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import top.tangyh.basic.cloud.http.InfoFeignLoggerFactory;
+import top.tangyh.basic.cloud.http.RestTemplateHeaderInterceptor;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * RestTemplate 相关的配置
@@ -65,22 +69,22 @@ public class RestTemplateConfiguration {
      * @param httpClientProperties httpClient配置
      * @return OkHttpClient
      */
-
-//    TODO java17
-//    @Bean
-//    @ConditionalOnMissingBean(okhttp3.OkHttpClient.class)
-//    public okhttp3.OkHttpClient okHttp3Client(
-//            OkHttpClientFactory httpClientFactory,
-//            okhttp3.ConnectionPool connectionPool,
-//            FeignHttpClientProperties httpClientProperties) {
-//        return httpClientFactory.createBuilder(httpClientProperties.isDisableSslValidation())
-//                .followRedirects(httpClientProperties.isFollowRedirects())
-//                .writeTimeout(Duration.ofSeconds(30))
-//                .readTimeout(Duration.ofSeconds(30))
-//                .connectTimeout(Duration.ofMillis(httpClientProperties.getConnectionTimeout()))
-//                .connectionPool(connectionPool)
-//                .build();
-//    }
+    @Bean
+    @ConditionalOnMissingBean(okhttp3.OkHttpClient.class)
+    public okhttp3.OkHttpClient okHttp3Client(
+            OkHttpClientFactory httpClientFactory,
+            okhttp3.ConnectionPool connectionPool,
+            FeignClientProperties feignClientProperties,
+            FeignHttpClientProperties httpClientProperties) {
+        FeignClientProperties.FeignClientConfiguration defaultConfig = feignClientProperties.getConfig().get("default");
+        return httpClientFactory.createBuilder(httpClientProperties.isDisableSslValidation())
+                .followRedirects(httpClientProperties.isFollowRedirects())
+                .writeTimeout(defaultConfig.getReadTimeout(), TimeUnit.MILLISECONDS)
+                .readTimeout(defaultConfig.getReadTimeout(), TimeUnit.MILLISECONDS)
+                .connectTimeout(httpClientProperties.getConnectionTimeout(), TimeUnit.MILLISECONDS)
+                .connectionPool(connectionPool)
+                .build();
+    }
 
     /**
      * okhttp3 链接池配置
@@ -89,12 +93,12 @@ public class RestTemplateConfiguration {
      * @param hcp                   httpClient配置
      * @return okhttp3.ConnectionPool
      */
-//    @Bean
-//    @ConditionalOnMissingBean(okhttp3.ConnectionPool.class)
-//    public okhttp3.ConnectionPool okHttp3ConnectionPool(FeignHttpClientProperties hcp,
-//                                                        OkHttpClientConnectionPoolFactory connectionPoolFactory) {
-//        return connectionPoolFactory.create(hcp.getMaxConnections(), hcp.getTimeToLive(), hcp.getTimeToLiveUnit());
-//    }
+    @Bean
+    @ConditionalOnMissingBean(okhttp3.ConnectionPool.class)
+    public okhttp3.ConnectionPool okHttp3ConnectionPool(FeignHttpClientProperties hcp,
+                                                        OkHttpClientConnectionPoolFactory connectionPoolFactory) {
+        return connectionPoolFactory.create(hcp.getMaxConnections(), hcp.getTimeToLive(), hcp.getTimeToLiveUnit());
+    }
 
 
     /**

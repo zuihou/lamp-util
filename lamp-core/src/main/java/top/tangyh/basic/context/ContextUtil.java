@@ -26,7 +26,7 @@ public final class ContextUtil {
      * @date 2021/6/23 9:26 下午
      * @create [2021/6/23 9:26 下午 ] [tangyh] [初始创建]
      */
-    private static final ThreadLocal<Map<String, String>> THREAD_LOCAL = new TransmittableThreadLocal<>();
+    private static final ThreadLocal<Map<String, String>> THREAD_LOCAL = new ThreadLocal<>();
 
     public static void putAll(Map<String, String> map) {
         map.forEach((k, v) -> {

@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import top.tangyh.basic.constant.Constants;
 
+import java.util.List;
+
 /**
  * 配置类
  *
@@ -18,6 +20,8 @@ public class EchoProperties {
      * 是否启用远程查询
      */
     private Boolean enabled = true;
+    /** 启动时扫描的包 */
+    private List<String> basePackages;
     /**
      * 是否启用aop注解方式
      */

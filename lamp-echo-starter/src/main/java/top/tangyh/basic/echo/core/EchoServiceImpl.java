@@ -1,5 +1,6 @@
 package top.tangyh.basic.echo.core;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.EnumUtil;
@@ -10,8 +11,20 @@ import cn.hutool.core.util.TypeUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.LoadingCache;
+import io.swagger.annotations.ApiModel;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.EnvironmentCapable;
+import org.springframework.core.env.StandardEnvironment;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.core.type.classreading.MetadataReader;
+import org.springframework.core.type.classreading.MetadataReaderFactory;
+import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
+import org.springframework.util.ClassUtils;
 import top.tangyh.basic.annotation.echo.Echo;
 import top.tangyh.basic.echo.manager.CacheLoadKeys;
 import top.tangyh.basic.echo.manager.ClassManager;
@@ -53,7 +66,8 @@ import static top.tangyh.basic.utils.StrPool.EMPTY;
  * @date 2019/11/13
  */
 @Slf4j
-public class EchoServiceImpl implements EchoService {
+public class EchoServiceImpl implements EchoService, EnvironmentCapable, InitializingBean {
+    private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
     private static final int DEF_MAP_SIZE = 20;
     private static final String[] BASE_TYPES = {StrPool.INTEGER_TYPE_NAME, StrPool.BYTE_TYPE_NAME, StrPool.LONG_TYPE_NAME,
             StrPool.DOUBLE_TYPE_NAME, StrPool.FLOAT_TYPE_NAME, StrPool.CHARACTER_TYPE_NAME, StrPool.SHORT_TYPE_NAME,
@@ -69,6 +83,7 @@ public class EchoServiceImpl implements EchoService {
      * 内存缓存
      */
     private LoadingCache<CacheLoadKeys, Map<Serializable, Object>> caches;
+    private Environment environment;
 
     public EchoServiceImpl(EchoProperties ips, Map<String, LoadService> strategyMap) {
         this.strategyMap.putAll(strategyMap);
@@ -79,6 +94,53 @@ public class EchoServiceImpl implements EchoService {
         }
 
     }
+
+    protected String resolveBasePackage(String basePackage) {
+        return ClassUtils.convertClassNameToResourcePath(getEnvironment().resolveRequiredPlaceholders(basePackage));
+    }
+
+    @Override
+    public final Environment getEnvironment() {
+        if (this.environment == null) {
+            this.environment = new StandardEnvironment();
+        }
+        return this.environment;
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        List<String> basePackages = ips.getBasePackages();
+        if (CollUtil.isEmpty(basePackages)) {
+            return;
+        }
+
+        try {
+            Class<?> clazz;
+            ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+            MetadataReaderFactory metadata = new SimpleMetadataReaderFactory();
+            for (String basePackage : basePackages) {
+                String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + resolveBasePackage(basePackage) + '/' + DEFAULT_RESOURCE_PATTERN;
+                Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
+                for (Resource resource : resources) {
+                    MetadataReader metadataReader = metadata.getMetadataReader(resource);
+                    String className = metadataReader.getClassMetadata().getClassName();
+                    clazz = Class.forName(className);
+                    if (clazz == null) {
+                        continue;
+                    }
+                    ApiModel apiModel = clazz.getAnnotation(ApiModel.class);
+                    if (apiModel == null) {
+                        continue;
+                    }
+                    ClassManager.getFields(clazz);
+                }
+            }
+        } catch (Exception e) {
+            log.error("======================注意：扫描【{}】报错", basePackages, e);
+        }
+
+    }
+
 
     @Override
     public void action(Object obj, String... ignoreFields) {
@@ -177,7 +239,13 @@ public class EchoServiceImpl implements EchoService {
 
             LoadKey type = fieldParam.getLoadKey();
             Map<Serializable, Object> valueMap = typeMap.getOrDefault(type, new ConcurrentHashMap<>(DEF_MAP_SIZE));
-            valueMap.put(fieldParam.getActualValue(), Collections.emptyMap());
+            if (fieldParam.getActualValue() instanceof Collection) {
+                ((Collection<Serializable>) fieldParam.getActualValue()).forEach(item -> {
+                    valueMap.put(item, Collections.emptyMap());
+                });
+            } else {
+                valueMap.put(fieldParam.getActualValue(), Collections.emptyMap());
+            }
             typeMap.put(type, valueMap);
         }
     }
@@ -480,9 +548,7 @@ public class EchoServiceImpl implements EchoService {
         if (ArrayUtil.contains(COLL_TYPES, typeName)) {
             Type type = TypeUtil.getTypeArgument(field.getGenericType());
             if (type != null) {
-                if (ArrayUtil.contains(BASE_TYPES, type.getTypeName())) {
-                    return true;
-                }
+                return ArrayUtil.contains(BASE_TYPES, type.getTypeName());
             }
         }
 
