@@ -1,6 +1,7 @@
 package top.tangyh.basic.cloud.http;
 
 import cn.hutool.core.util.ObjectUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import top.tangyh.basic.context.ContextUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 import static top.tangyh.basic.cloud.interceptor.FeignAddHeaderRequestInterceptor.HEADER_NAME_LIST;

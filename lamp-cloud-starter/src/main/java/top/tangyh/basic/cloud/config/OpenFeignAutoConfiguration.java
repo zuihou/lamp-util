@@ -12,8 +12,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.LampFeignClientsRegistrar;
 import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,6 +27,7 @@ import java.util.List;
  * @author zuihou
  * @date 2019/07/25
  */
+@Import(LampFeignClientsRegistrar.class)
 @ConditionalOnClass(Feign.class)
 @AutoConfigureAfter(EnableFeignClients.class)
 public class OpenFeignAutoConfiguration {

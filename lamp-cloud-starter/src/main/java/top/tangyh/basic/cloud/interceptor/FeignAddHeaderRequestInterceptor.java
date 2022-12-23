@@ -6,6 +6,7 @@ import cn.hutool.core.util.URLUtil;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import io.seata.core.context.RootContext;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -14,9 +15,7 @@ import top.tangyh.basic.context.ContextConstants;
 import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.utils.StrPool;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +32,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
             ContextConstants.JWT_KEY_ACCOUNT, ContextConstants.JWT_KEY_NAME, ContextConstants.GRAY_VERSION,
             ContextConstants.TRACE_ID_HEADER, "X-Real-IP", "x-forwarded-for"
     );
+
     public FeignAddHeaderRequestInterceptor() {
         super();
     }
