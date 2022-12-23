@@ -35,6 +35,7 @@
         <module>lamp-cache-starter</module>
         <module>lamp-mq-starter</module>
         <module>lamp-echo-starter</module>
+        <module>lamp-captcha-starter</module>
         <module>lamp-uid</module>
         <module>lamp-all</module>
     </modules>
