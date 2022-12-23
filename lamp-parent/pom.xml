@@ -27,19 +27,25 @@
 
     <properties>
         <spring-cloud-dependencies.version>2022.0.0</spring-cloud-dependencies.version>
-        <spring-cloud-alibaba-dependencies.version>2021.0.4.0</spring-cloud-alibaba-dependencies.version>
+        <spring-cloud-alibaba-dependencies.version>2022.0.0.0-RC1</spring-cloud-alibaba-dependencies.version>
         <seata.version>1.4.2</seata.version>
         <nacos.version>2.2.0</nacos.version>
-        <sentinel.version>1.8.2</sentinel.version>
+        <sentinel.version>1.8.6</sentinel.version>
         <spring-boot-admin.version>3.0.0-M5</spring-boot-admin.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <!--
+             <mysql.version>8.0.28</mysql.version>
+             <mssql-jdbc-8.version>9.4.1.jre8</mssql-jdbc-8.version>
+             <mssql-jdbc-11.version>9.4.1.jre11</mssql-jdbc-11.version>
+             <mssql-jdbc-17.version>9.4.1.jre17</mssql-jdbc-17.version>
+             -->
         <hutool.version>5.8.10</hutool.version>
+        <oshi.version>6.3.2</oshi.version>
         <druid.version>1.2.8</druid.version>
-        <mysql.version>8.0.28</mysql.version>
         <mybatis.version>3.5.10</mybatis.version>
         <mybatis-spring.version>2.0.7</mybatis-spring.version>
         <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
@@ -67,25 +73,29 @@
         <jjwt.version>0.11.2</jjwt.version>
         <tobato-fastdfs-client.version>1.27.2</tobato-fastdfs-client.version>
         <qcloudsms.version>1.0.6</qcloudsms.version>
-        <aliyun-java-sdk-core.version>4.6.2</aliyun-java-sdk-core.version>
+        <tencentcloud-sdk-java.version>3.1.548</tencentcloud-sdk-java.version>
         <aliyun-java-sdk-dysmsapi.version>2.1.0</aliyun-java-sdk-dysmsapi.version>
+        <aliyun-dysmsapi.version>2.0.22</aliyun-dysmsapi.version>
         <aliyun-sdk-oss.version>3.13.0</aliyun-sdk-oss.version>
-        <bce-java-sdk.version>0.10.21</bce-java-sdk.version>
-        <esdk-obs-java.version>3.21.4.1</esdk-obs-java.version>
+        <bce-java-sdk.version>0.10.217</bce-java-sdk.version>
+        <esdk-obs-java.version>3.22.3.1</esdk-obs-java.version>
         <qiniu-java-sdk.version>7.12.0</qiniu-java-sdk.version>
         <minio.version>8.2.2</minio.version>
         <apache.xmlgraphics.version>1.7</apache.xmlgraphics.version>
-        <lombok.version>1.18.22</lombok.version>
+        <lombok.version>1.18.24</lombok.version>
         <javassist.version>3.25.0-GA</javassist.version>
         <antisamy.version>1.6.7</antisamy.version>
         <caffeine.version>2.9.3</caffeine.version>
         <protostuff.version>1.7.4</protostuff.version>
-        <ip2region.version>1.7.2</ip2region.version>
+        <ip2region.version>2.6.5</ip2region.version>
         <bitwalker.version>1.21</bitwalker.version>
         <gson.version>2.8.9</gson.version>
         <jsoup.version>1.15.3</jsoup.version>
         <JustAuth.version>1.16.5</JustAuth.version>
         <sun-jaxb.version>2.3.0.1</sun-jaxb.version>
+
+        <okio.version>2.10.0</okio.version>
+        <okhttp3.version>4.10.0</okhttp3.version>
     </properties>
     <licenses>
         <license>
@@ -172,6 +182,7 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+
             <dependency>
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-dependencies</artifactId>
@@ -184,12 +195,6 @@
                 <groupId>org.lionsoul</groupId>
                 <artifactId>ip2region</artifactId>
                 <version>${ip2region.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/eu.bitwalker/UserAgentUtils -->
-            <dependency>
-                <groupId>eu.bitwalker</groupId>
-                <artifactId>UserAgentUtils</artifactId>
-                <version>${bitwalker.version}</version>
             </dependency>
 
             <dependency>
@@ -257,19 +262,20 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
+            <!-- 默认适配 jdk8，其他jdk版本请更换对应的jar版本 -->
+            <dependency>
+                <groupId>com.microsoft.sqlserver</groupId>
+                <artifactId>mssql-jdbc</artifactId>
+                <version>${mssql-jdbc.version}</version>
+            </dependency>
 
-            <!-- 阿里云 -->
+            <!-- 阿里云短信 -->
             <dependency>
                 <groupId>com.aliyun</groupId>
-                <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
-                <version>${aliyun-java-sdk-dysmsapi.version}</version>
+                <artifactId>dysmsapi20170525</artifactId>
+                <version>${aliyun-dysmsapi.version}</version>
             </dependency>
-            <!-- 阿里云 -->
-            <dependency>
-                <groupId>com.aliyun</groupId>
-                <artifactId>aliyun-java-sdk-core</artifactId>
-                <version>${aliyun-java-sdk-core.version}</version>
-            </dependency>
+
             <!-- 阿里云OSS -->
             <dependency>
                 <groupId>com.aliyun.oss</groupId>
@@ -300,12 +306,13 @@
                 <artifactId>minio</artifactId>
                 <version>${minio.version}</version>
             </dependency>
-            <!-- 腾讯云短信  -->
+
             <dependency>
-                <groupId>com.github.qcloudsms</groupId>
-                <artifactId>qcloudsms</artifactId>
-                <version>${qcloudsms.version}</version>
+                <groupId>com.tencentcloudapi</groupId>
+                <artifactId>tencentcloud-sdk-java</artifactId>
+                <version>${tencentcloud-sdk-java.version}</version>
             </dependency>
+
             <!-- 百度短信 -->
             <dependency>
                 <groupId>com.baidubce</groupId>
@@ -392,6 +399,18 @@
                 <version>${caffeine.version}</version>
             </dependency>
 
+            <!-- protostuff -->
+            <dependency>
+                <groupId>io.protostuff</groupId>
+                <artifactId>protostuff-core</artifactId>
+                <version>${protostuff.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.protostuff</groupId>
+                <artifactId>protostuff-runtime</artifactId>
+                <version>${protostuff.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
@@ -439,7 +458,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
             <dependency>
                 <groupId>cn.afterturn</groupId>
                 <artifactId>easypoi-web</artifactId>
@@ -502,6 +520,11 @@
                 <version>${hutool.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>${oshi.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
@@ -516,6 +539,7 @@
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
@@ -526,6 +550,24 @@
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
                 <version>${javassist.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.squareup.okio/okio -->
+            <dependency>
+                <groupId>com.squareup.okio</groupId>
+                <artifactId>okio</artifactId>
+                <version>${okio.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp3.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/logging-interceptor -->
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>logging-interceptor</artifactId>
+                <version>${okhttp3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -540,6 +582,11 @@
             <id>aliyun</id>
             <name>aliyun</name>
             <url>https://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>nexus-maven</id>
+            <name>nexus-maven</name>
+            <url>https://oss.sonatype.org/content/repositories/public</url>
         </repository>
         <repository>
             <id>spring-milestones</id>
@@ -595,6 +642,7 @@
                             <nonFilteredFileExtension>p12</nonFilteredFileExtension>
                             <nonFilteredFileExtension>key</nonFilteredFileExtension>
                             <nonFilteredFileExtension>db</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>xdb</nonFilteredFileExtension>
                             <nonFilteredFileExtension>eot</nonFilteredFileExtension>
                             <nonFilteredFileExtension>otf</nonFilteredFileExtension>
                             <nonFilteredFileExtension>svg</nonFilteredFileExtension>
