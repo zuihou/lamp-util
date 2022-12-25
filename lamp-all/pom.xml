@@ -49,11 +49,6 @@
         </dependency>
         <dependency>
             <groupId>top.tangyh.basic</groupId>
-            <artifactId>lamp-dozer-starter</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-echo-starter</artifactId>
             <version>${project.version}</version>
         </dependency>

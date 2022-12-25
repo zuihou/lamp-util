@@ -55,8 +55,9 @@
         <p6spy.version>3.9.1</p6spy.version>
         <fastjson.version>1.2.83</fastjson.version>
         <transmittable-thread-local.version>2.12.2</transmittable-thread-local.version>
-        <knife4j.version>2.0.9</knife4j.version>
-        <springfox.version>2.10.5</springfox.version>
+        <knife4j.version>4.0.0</knife4j.version>
+        <springfox.version>3.0.0</springfox.version>
+        <knife4j-swagger-models-v3.version>2.2.7</knife4j-swagger-models-v3.version>
         <swagger-models.version>1.5.22</swagger-models.version>
         <dozer.version>6.5.0</dozer.version>
         <easy-captcha.version>1.6.2</easy-captcha.version>
@@ -348,6 +349,16 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-spi</artifactId>
                 <version>${springfox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations-jakarta</artifactId>
+                <version>${knife4j-swagger-models-v3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-models-jakarta</artifactId>
+                <version>${knife4j-swagger-models-v3.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.swagger</groupId>
