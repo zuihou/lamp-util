@@ -2,7 +2,6 @@ package top.tangyh.basic.base.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -60,9 +59,6 @@ public interface QueryController<Entity, Id extends Serializable, PageQuery> ext
     @PostMapping(value = "/page")
     @SysLog(value = "'分页列表查询:第' + #params?.current + '页, 显示' + #params?.size + '行'", response = false)
     @PreAuth("hasAnyPermission('{}view')")
-    @Parameters({
-            @Parameter(name = "params", required = true, description = "分页参数"),
-    })
     default R<IPage<Entity>> page(@RequestBody @Validated PageParams<PageQuery> params) {
         return success(query(params));
     }
