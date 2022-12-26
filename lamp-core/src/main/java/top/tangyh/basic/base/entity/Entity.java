@@ -2,7 +2,7 @@ package top.tangyh.basic.base.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,11 +30,11 @@ public class Entity<T> extends SuperEntity<T> {
     public static final String UPDATED_BY_COLUMN = "updated_by";
     private static final long serialVersionUID = 5169873634279173683L;
 
-    @ApiModelProperty(value = "最后修改时间")
+    @Schema(description = "最后修改时间")
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     protected LocalDateTime updateTime;
 
-    @ApiModelProperty(value = "最后修改人ID")
+    @Schema(description = "最后修改人ID")
     @TableField(value = "updated_by", fill = FieldFill.INSERT_UPDATE)
     protected T updatedBy;
 

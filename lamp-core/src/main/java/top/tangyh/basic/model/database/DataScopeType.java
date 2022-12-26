@@ -1,7 +1,6 @@
 package top.tangyh.basic.model.database;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import top.tangyh.basic.interfaces.BaseEnum;
@@ -19,7 +18,7 @@ import java.util.stream.Stream;
  */
 @Getter
 @AllArgsConstructor
-@ApiModel(value = "DataScopeType", description = "数据权限类型-枚举")
+@Schema(description="数据权限类型-枚举")
 public enum DataScopeType implements BaseEnum {
 
     /**
@@ -44,7 +43,7 @@ public enum DataScopeType implements BaseEnum {
     SELF(1, "个人"),
     ;
 
-    @ApiModelProperty(value = "描述")
+    @Schema(description="描述")
     private final int val;
 
     private final String desc;
@@ -71,7 +70,7 @@ public enum DataScopeType implements BaseEnum {
     }
 
     @Override
-    @ApiModelProperty(value = "编码", allowableValues = "ALL,THIS_LEVEL,THIS_LEVEL_CHILDREN,CUSTOMIZE,SELF", example = "ALL")
+    @Schema(description="编码", allowableValues = "ALL,THIS_LEVEL,THIS_LEVEL_CHILDREN,CUSTOMIZE,SELF", example = "ALL")
     public String getCode() {
         return this.name();
     }

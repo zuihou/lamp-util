@@ -1,9 +1,12 @@
 package top.tangyh.basic.base.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,10 +39,10 @@ public interface QueryController<Entity, Id extends Serializable, PageQuery> ext
      * @param id 主键id
      * @return 查询结果
      */
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "主键", dataType = "long", paramType = "path"),
+    @Parameters({
+            @Parameter(name = "id", description = "主键", schema = @Schema(type = "long"), in = ParameterIn.PATH),
     })
-    @ApiOperation(value = "单体查询", notes = "单体查询")
+    @Operation(summary = "单体查询", description = "单体查询")
     @GetMapping("/{id}")
     @SysLog("'查询:' + #id")
     @PreAuth("hasAnyPermission('{}view')")
@@ -53,10 +56,13 @@ public interface QueryController<Entity, Id extends Serializable, PageQuery> ext
      * @param params 分页参数
      * @return 分页数据
      */
-    @ApiOperation(value = "分页列表查询")
+    @Operation(summary = "分页列表查询")
     @PostMapping(value = "/page")
     @SysLog(value = "'分页列表查询:第' + #params?.current + '页, 显示' + #params?.size + '行'", response = false)
     @PreAuth("hasAnyPermission('{}view')")
+    @Parameters({
+            @Parameter(name = "params", required = true, description = "分页参数"),
+    })
     default R<IPage<Entity>> page(@RequestBody @Validated PageParams<PageQuery> params) {
         return success(query(params));
     }
@@ -67,7 +73,7 @@ public interface QueryController<Entity, Id extends Serializable, PageQuery> ext
      * @param data 批量查询
      * @return 查询结果
      */
-    @ApiOperation(value = "批量查询", notes = "批量查询")
+    @Operation(summary = "批量查询", description = "批量查询")
     @PostMapping("/query")
     @SysLog("批量查询")
     @PreAuth("hasAnyPermission('{}view')")

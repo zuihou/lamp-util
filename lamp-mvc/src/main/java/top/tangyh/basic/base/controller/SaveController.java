@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import top.tangyh.basic.annotation.log.SysLog;
 import top.tangyh.basic.annotation.security.PreAuth;
 import top.tangyh.basic.base.R;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +25,7 @@ public interface SaveController<Entity, SaveDTO> extends BaseController<Entity> 
      * @param saveDTO 保存参数
      * @return 实体
      */
-    @ApiOperation(value = "新增")
+    @Operation(summary = "新增")
     @PostMapping
     @SysLog(value = "新增", request = false)
     @PreAuth("hasAnyPermission('{}add')")

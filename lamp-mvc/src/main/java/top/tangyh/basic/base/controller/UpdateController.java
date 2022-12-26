@@ -1,11 +1,12 @@
 package top.tangyh.basic.base.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import top.tangyh.basic.annotation.log.SysLog;
 import top.tangyh.basic.annotation.security.PreAuth;
 import top.tangyh.basic.base.R;
 import top.tangyh.basic.base.entity.SuperEntity;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,7 @@ public interface UpdateController<Entity, UpdateDTO> extends BaseController<Enti
      * @param updateDTO 修改DTO
      * @return 修改后的实体数据
      */
-    @ApiOperation(value = "修改", notes = "修改UpdateDTO中不为空的字段")
+    @Operation(summary = "修改", description = "修改UpdateDTO中不为空的字段")
     @PutMapping
     @SysLog(value = "'修改:' + #updateDTO?.id", request = false)
     @PreAuth("hasAnyPermission('{}edit')")
@@ -46,7 +47,7 @@ public interface UpdateController<Entity, UpdateDTO> extends BaseController<Enti
      * @param entity 实体
      * @return
      */
-    @ApiOperation(value = "修改所有字段", notes = "修改所有字段，没有传递的字段会被置空")
+    @Operation(summary = "修改所有字段", description = "修改所有字段，没有传递的字段会被置空")
     @PutMapping("/all")
     @SysLog(value = "'修改所有字段:' + #entity?.id", request = false)
     @PreAuth("hasAnyPermission('{}edit')")

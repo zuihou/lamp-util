@@ -5,15 +5,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import top.tangyh.basic.base.entity.SuperEntity;
 import top.tangyh.basic.database.mybatis.conditions.Wraps;
 import top.tangyh.basic.utils.StrPool;
 
-import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,26 +26,26 @@ import java.util.Map;
  */
 @Data
 @NoArgsConstructor
-@ApiModel(value = "PageParams", description = "分页参数")
+@Schema(description="分页参数")
 public class PageParams<T> {
 
     @NotNull(message = "查询对象model不能为空")
-    @ApiModelProperty(value = "查询参数", required = true)
+    @Schema(description = "查询参数", required = true)
     private T model;
 
-    @ApiModelProperty(value = "页面大小", example = "10")
+    @Schema(description = "页面大小", example = "10")
     private long size = 10;
 
-    @ApiModelProperty(value = "当前页", example = "1")
+    @Schema(description = "当前页", example = "1")
     private long current = 1;
 
-    @ApiModelProperty(value = "排序,默认createTime", allowableValues = "id,createTime,updateTime", example = "id")
+    @Schema(description = "排序,默认createTime", allowableValues = "id,createTime,updateTime", example = "id")
     private String sort = SuperEntity.FIELD_ID;
 
-    @ApiModelProperty(value = "排序规则, 默认descending", allowableValues = "descending,ascending", example = "descending")
+    @Schema(description = "排序规则, 默认descending", allowableValues = "descending,ascending", example = "descending")
     private String order = "descending";
 
-    @ApiModelProperty("扩展参数")
+    @Schema(description = "扩展参数")
     private Map<String, Object> extra = new HashMap<>(16);
 
 

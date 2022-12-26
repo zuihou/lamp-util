@@ -1,6 +1,6 @@
 package top.tangyh.basic.jwt.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,16 +20,16 @@ public class Token implements Serializable {
     /**
      * token
      */
-    @ApiModelProperty(value = "token")
+    @Schema(description = "token")
     private String token;
     /**
      * 有效时间：单位：秒
      */
-    @ApiModelProperty(value = "有效期")
+    @Schema(description = "有效期")
     private Long expire;
 
 
-    @ApiModelProperty(value = "到期时间")
+    @Schema(description = "到期时间")
     private LocalDateTime expiration;
 
 }

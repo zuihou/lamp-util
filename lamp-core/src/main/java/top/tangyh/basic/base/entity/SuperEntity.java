@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.groups.Default;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,8 +15,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.groups.Default;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -43,15 +43,15 @@ public class SuperEntity<T> implements Serializable {
     private static final long serialVersionUID = -4603650115461757622L;
 
     @TableId(value = "id", type = IdType.INPUT)
-    @ApiModelProperty(value = "主键")
+    @Schema(description = "主键")
     @NotNull(message = "id不能为空", groups = SuperEntity.Update.class)
     protected T id;
 
-    @ApiModelProperty(value = "创建时间")
+    @Schema(description = "创建时间")
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     protected LocalDateTime createTime;
 
-    @ApiModelProperty(value = "创建人ID")
+    @Schema(description = "创建人ID")
     @TableField(value = "created_by", fill = FieldFill.INSERT)
     protected T createdBy;
 

@@ -1,13 +1,13 @@
 package top.tangyh.basic.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import top.tangyh.basic.exception.BizException;
-import top.tangyh.basic.exception.code.BaseExceptionCode;
-import top.tangyh.basic.jackson.JsonUtil;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import top.tangyh.basic.exception.BizException;
+import top.tangyh.basic.exception.code.BaseExceptionCode;
+import top.tangyh.basic.jackson.JsonUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +35,7 @@ public class R<T> {
     /**
      * 调用是否成功标识，0：成功，-1:系统繁忙，此时请开发者稍候再试 详情见[ExceptionCode]
      */
-    @ApiModelProperty(value = "响应编码:0/200-请求处理成功")
+    @Schema(description = "响应编码:0/200-请求处理成功")
     private int code;
 
     /**
@@ -47,33 +47,33 @@ public class R<T> {
     /**
      * 调用结果
      */
-    @ApiModelProperty(value = "响应数据")
+    @Schema(description = "响应数据")
     private T data;
 
     /**
      * 结果消息，如果调用成功，消息通常为空T
      */
-    @ApiModelProperty(value = "提示消息")
+    @Schema(description = "提示消息")
     private String msg = "ok";
 
-    @ApiModelProperty(value = "请求路径")
+    @Schema(description = "请求路径")
     private String path;
     /**
      * 附加数据
      */
-    @ApiModelProperty(value = "附加数据")
+    @Schema(description = "附加数据")
     private Map<Object, Object> extra;
 
     /**
      * 响应时间
      */
-    @ApiModelProperty(value = "响应时间戳")
+    @Schema(description = "响应时间戳")
     private long timestamp = System.currentTimeMillis();
 
     /**
      * 系统报错时，抛出的原生信息
      */
-    @ApiModelProperty(value = "异常消息")
+    @Schema(description = "异常消息")
     private String errorMsg = "";
 
     private R() {

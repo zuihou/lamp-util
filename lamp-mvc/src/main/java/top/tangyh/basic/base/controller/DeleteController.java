@@ -1,14 +1,12 @@
 package top.tangyh.basic.base.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import top.tangyh.basic.annotation.log.SysLog;
 import top.tangyh.basic.annotation.security.PreAuth;
 import top.tangyh.basic.base.R;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,7 +28,7 @@ public interface DeleteController<Entity, Id extends Serializable> extends BaseC
      * @param ids id
      * @return 是否成功
      */
-    @ApiOperation(value = "删除")
+    @Operation(summary = "删除")
     @DeleteMapping
     @SysLog("'删除:' + #ids")
     @PreAuth("hasAnyPermission('{}delete')")

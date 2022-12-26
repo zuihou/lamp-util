@@ -4,22 +4,13 @@ package top.tangyh.basic.log.aspect;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
-import top.tangyh.basic.annotation.log.SysLog;
-import top.tangyh.basic.base.R;
-import top.tangyh.basic.context.ContextConstants;
-import top.tangyh.basic.context.ContextUtil;
-import top.tangyh.basic.context.ThreadLocalParam;
-import top.tangyh.basic.jackson.JsonUtil;
-import top.tangyh.basic.model.log.OptLogDTO;
-import top.tangyh.basic.log.event.SysLogEvent;
-import top.tangyh.basic.log.util.LogUtil;
-import top.tangyh.basic.utils.SpringUtils;
-import top.tangyh.basic.utils.StrPool;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -37,10 +28,18 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.lang.NonNull;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import top.tangyh.basic.annotation.log.SysLog;
+import top.tangyh.basic.base.R;
+import top.tangyh.basic.context.ContextConstants;
+import top.tangyh.basic.context.ContextUtil;
+import top.tangyh.basic.context.ThreadLocalParam;
+import top.tangyh.basic.jackson.JsonUtil;
+import top.tangyh.basic.log.event.SysLogEvent;
+import top.tangyh.basic.log.util.LogUtil;
+import top.tangyh.basic.model.log.OptLogDTO;
+import top.tangyh.basic.utils.SpringUtils;
+import top.tangyh.basic.utils.StrPool;
 
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -222,12 +221,9 @@ public class SysLogAspect {
 
     private void setDescription(JoinPoint joinPoint, SysLog sysLog, OptLogDTO optLogDTO) {
         String controllerDescription = "";
-        Api api = joinPoint.getTarget().getClass().getAnnotation(Api.class);
+        Tag api = joinPoint.getTarget().getClass().getAnnotation(Tag.class);
         if (api != null) {
-            String[] tags = api.tags();
-            if (ArrayUtil.isNotEmpty(tags)) {
-                controllerDescription = tags[0];
-            }
+            controllerDescription = api.name();
         }
 
         String controllerMethodDescription = LogUtil.getDescribe(sysLog);

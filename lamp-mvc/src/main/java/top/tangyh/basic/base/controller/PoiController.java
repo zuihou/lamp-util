@@ -17,7 +17,7 @@ import top.tangyh.basic.annotation.security.PreAuth;
 import top.tangyh.basic.base.R;
 import top.tangyh.basic.base.request.PageParams;
 import top.tangyh.basic.utils.BeanPlusUtil;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,7 +59,7 @@ public interface PoiController<Entity, PageQuery> extends PageController<Entity,
      * @param request  请求
      * @param response 响应
      */
-    @ApiOperation(value = "导出Excel")
+    @Operation(summary = "导出Excel")
     @RequestMapping(value = "/export", method = RequestMethod.POST, produces = "application/octet-stream")
     @SysLog("'导出Excel:'.concat(#params.extra[" + NormalExcelConstants.FILE_NAME + "]?:'')")
     @PreAuth("hasAnyPermission('{}export')")
@@ -103,7 +103,7 @@ public interface PoiController<Entity, PageQuery> extends PageController<Entity,
      * @param params 预览参数
      * @return 预览html
      */
-    @ApiOperation(value = "预览Excel")
+    @Operation(summary = "预览Excel")
     @SysLog("'预览Excel:' + (#params.extra[" + NormalExcelConstants.FILE_NAME + "]?:'')")
     @RequestMapping(value = "/preview", method = RequestMethod.POST)
     @PreAuth("hasAnyPermission('{}export')")
@@ -124,7 +124,7 @@ public interface PoiController<Entity, PageQuery> extends PageController<Entity,
      * @return 是否导入成功
      * @throws Exception 异常
      */
-    @ApiOperation(value = "导入Excel")
+    @Operation(summary = "导入Excel")
     @PostMapping(value = "/import")
     @SysLog(value = "'导入Excel:' + #simpleFile?.originalFilename", request = false)
     @PreAuth("hasAnyPermission('{}import')")

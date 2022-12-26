@@ -1,10 +1,11 @@
 package top.tangyh.basic.base.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import top.tangyh.basic.annotation.log.SysLog;
 import top.tangyh.basic.annotation.security.PreAuth;
 import top.tangyh.basic.base.R;
 import top.tangyh.basic.base.service.SuperCacheService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -41,7 +42,7 @@ public abstract class SuperCacheController<S extends SuperCacheService<Entity>, 
      *
      * @return 是否成功
      */
-    @ApiOperation(value = "刷新缓存", notes = "刷新缓存")
+    @Operation(summary = "刷新缓存", description = "刷新缓存")
     @PostMapping("refreshCache")
     @SysLog("'刷新缓存'")
     @PreAuth("hasAnyPermission('{}add')")
@@ -55,7 +56,7 @@ public abstract class SuperCacheController<S extends SuperCacheService<Entity>, 
      *
      * @return 是否成功
      */
-    @ApiOperation(value = "清理缓存", notes = "清理缓存")
+    @Operation(summary = "清理缓存", description = "清理缓存")
     @PostMapping("clearCache")
     @SysLog("'清理缓存'")
     @PreAuth("hasAnyPermission('{}add')")
