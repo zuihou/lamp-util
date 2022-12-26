@@ -38,12 +38,13 @@ public class Quant {
     /* defs for freq and bias */
     protected static final int intbiasshift = 16; /* bias for fractions */
     protected static final int intbias = (((int) 1) << intbiasshift);
-    protected static final int beta = (intbias >> betashift); /* beta = 1/1024 */
-    protected static final int betagamma =
-            (intbias << (gammashift - betashift));
     protected static final int gammashift = 10; /* gamma = 1024 */
     protected static final int gamma = (((int) 1) << gammashift);
     protected static final int betashift = 10;
+    protected static final int beta = (intbias >> betashift); /* beta = 1/1024 */
+    protected static final int betagamma =
+            (intbias << (gammashift - betashift));
+
     /* defs for decreasing radius factor */
     protected static final int initrad = (netsize >> 3); /* for 256 cols, radius starts */
     protected static final int radiusbiasshift = 6; /* at 32.0 biased by 6 bits */
@@ -54,15 +55,18 @@ public class Quant {
     /* defs for decreasing alpha factor */
     protected static final int alphabiasshift = 10; /* alpha starts at 1.0 */
     protected static final int initalpha = (((int) 1) << alphabiasshift);
+
+    protected int alphadec; /* biased by 10 bits */
+
     /* radbias and alpharadbias used for radpower calculation */
     protected static final int radbiasshift = 8;
     protected static final int radbias = (((int) 1) << radbiasshift);
     protected static final int alpharadbshift = (alphabiasshift + radbiasshift);
     protected static final int alpharadbias = (((int) 1) << alpharadbshift);
-    protected int alphadec; /* biased by 10 bits */
 
 	/* Types and Global Variables
 	-------------------------- */
+
     protected byte[] thepicture; /* the input image itself */
     protected int lengthcount; /* lengthcount = H*W*3 */
 
