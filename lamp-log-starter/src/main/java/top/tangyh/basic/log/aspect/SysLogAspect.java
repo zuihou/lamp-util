@@ -63,6 +63,10 @@ public class SysLogAspect {
      * 用于SpEL表达式解析.
      */
     private final SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
+    /**
+     * 用于获取方法参数定义名字.
+     */
+    private final DefaultParameterNameDiscoverer nameDiscoverer = new DefaultParameterNameDiscoverer();
 
     /***
      * 定义controller切入点拦截规则：拦截标记SysLog注解和指定包下的方法
@@ -81,11 +85,6 @@ public class SysLogAspect {
     public void sysLogAspect() {
 
     }
-
-    /**
-     * 用于获取方法参数定义名字.
-     */
-    private final DefaultParameterNameDiscoverer nameDiscoverer = new DefaultParameterNameDiscoverer();
 
     /**
      * 返回通知

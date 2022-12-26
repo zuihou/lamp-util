@@ -360,16 +360,16 @@
                 <artifactId>swagger-models-jakarta</artifactId>
                 <version>${knife4j-swagger-models-v3.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>io.swagger</groupId>-->
-<!--                <artifactId>swagger-annotations</artifactId>-->
-<!--                <version>${swagger-models.version}</version>-->
-<!--            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>io.swagger</groupId>-->
-<!--                <artifactId>swagger-models</artifactId>-->
-<!--                <version>${swagger-models.version}</version>-->
-<!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>io.swagger</groupId>-->
+            <!--                <artifactId>swagger-annotations</artifactId>-->
+            <!--                <version>${swagger-models.version}</version>-->
+            <!--            </dependency>-->
+            <!--            <dependency>-->
+            <!--                <groupId>io.swagger</groupId>-->
+            <!--                <artifactId>swagger-models</artifactId>-->
+            <!--                <version>${swagger-models.version}</version>-->
+            <!--            </dependency>-->
 
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>

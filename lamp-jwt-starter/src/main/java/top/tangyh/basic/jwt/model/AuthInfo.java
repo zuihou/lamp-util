@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Accessors(chain = true)
-@Schema(description="认证信息")
+@Schema(description = "认证信息")
 public class AuthInfo {
     @Schema(description = "令牌")
     private String token;

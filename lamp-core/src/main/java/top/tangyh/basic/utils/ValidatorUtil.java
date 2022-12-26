@@ -9,9 +9,6 @@ import java.util.regex.Pattern;
  * @date 2019-07-31 10:17
  */
 public final class ValidatorUtil {
-    private ValidatorUtil() {
-    }
-
     /**
      * 正则表达式:验证用户名(不包含中文和特殊字符)
      */
@@ -32,7 +29,6 @@ public final class ValidatorUtil {
      */
     public static final String REGEX_CHINESE = "^[\u4e00-\u9fa5]$";
     public static final Pattern PATTERN_CHINESE = Pattern.compile(REGEX_CHINESE);
-
     /**
      * 正则表达式:验证身份证
      */
@@ -53,6 +49,8 @@ public final class ValidatorUtil {
      */
     public static final String REGEX_MOBILE = "^(1)\\d{10}$";
     public static final Pattern PATTERN_MOBILE = Pattern.compile(REGEX_MOBILE);
+    private ValidatorUtil() {
+    }
 
     /**
      * 校验用户名

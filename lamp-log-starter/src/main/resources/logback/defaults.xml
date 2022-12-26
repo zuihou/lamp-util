@@ -56,7 +56,7 @@
     <!-- 控制台实时输出，采用高亮语法，用于开发环境 -->
     <appender name="CONSOLE_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-<!--            <level>${log.level.console}</level>-->
+            <!--            <level>${log.level.console}</level>-->
         </filter>
         <encoder>
             <pattern>${common-pattern-color}</pattern>

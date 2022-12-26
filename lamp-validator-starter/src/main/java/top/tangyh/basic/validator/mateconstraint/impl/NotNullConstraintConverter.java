@@ -1,11 +1,11 @@
 package top.tangyh.basic.validator.mateconstraint.impl;
 
-import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
-import top.tangyh.basic.validator.utils.ValidatorConstants;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
+import top.tangyh.basic.validator.utils.ValidatorConstants;
+
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;

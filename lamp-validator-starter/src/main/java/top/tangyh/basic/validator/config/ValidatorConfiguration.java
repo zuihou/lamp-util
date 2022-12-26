@@ -1,13 +1,11 @@
 package top.tangyh.basic.validator.config;
 
-import top.tangyh.basic.annotation.constraints.NotEmptyPattern;
-import top.tangyh.basic.validator.constraintvalidators.LengthConstraintValidator;
-import top.tangyh.basic.validator.constraintvalidators.NotEmptyConstraintValidator;
-import top.tangyh.basic.validator.constraintvalidators.NotEmptyPatternConstraintValidator;
-import top.tangyh.basic.validator.constraintvalidators.NotNullConstraintValidator;
-import top.tangyh.basic.validator.controller.FormValidatorController;
-import top.tangyh.basic.validator.extract.DefaultConstraintExtractImpl;
-import top.tangyh.basic.validator.extract.IConstraintExtract;
+import jakarta.validation.Configuration;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.HibernateValidatorConfiguration;
 import org.hibernate.validator.cfg.ConstraintMapping;
@@ -22,13 +20,14 @@ import org.hibernate.validator.spi.properties.GetterPropertySelectionStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-
-import jakarta.validation.Configuration;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import top.tangyh.basic.annotation.constraints.NotEmptyPattern;
+import top.tangyh.basic.validator.constraintvalidators.LengthConstraintValidator;
+import top.tangyh.basic.validator.constraintvalidators.NotEmptyConstraintValidator;
+import top.tangyh.basic.validator.constraintvalidators.NotEmptyPatternConstraintValidator;
+import top.tangyh.basic.validator.constraintvalidators.NotNullConstraintValidator;
+import top.tangyh.basic.validator.controller.FormValidatorController;
+import top.tangyh.basic.validator.extract.DefaultConstraintExtractImpl;
+import top.tangyh.basic.validator.extract.IConstraintExtract;
 
 /**
  * 验证器配置

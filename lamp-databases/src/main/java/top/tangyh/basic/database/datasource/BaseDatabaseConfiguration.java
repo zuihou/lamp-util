@@ -12,7 +12,6 @@ import com.baomidou.mybatisplus.core.incrementer.IKeyGenerator;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
-import top.tangyh.basic.database.properties.DatabaseProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
@@ -29,6 +28,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import top.tangyh.basic.database.properties.DatabaseProperties;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -177,6 +177,7 @@ public abstract class BaseDatabaseConfiguration implements InitializingBean {
         factory.setGlobalConfig(globalConfig);
         return factory.getObject();
     }
+
     /**
      * 检查spring容器里是否有对应的bean,有则进行消费
      *

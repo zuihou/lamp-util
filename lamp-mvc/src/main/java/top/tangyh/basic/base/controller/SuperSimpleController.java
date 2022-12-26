@@ -1,7 +1,7 @@
 package top.tangyh.basic.base.controller;
 
-import top.tangyh.basic.base.service.SuperService;
 import org.springframework.beans.factory.annotation.Autowired;
+import top.tangyh.basic.base.service.SuperService;
 
 import java.lang.reflect.ParameterizedType;
 
@@ -18,9 +18,9 @@ import java.lang.reflect.ParameterizedType;
  */
 public abstract class SuperSimpleController<S extends SuperService<Entity>, Entity> implements BaseController<Entity> {
 
-    Class<Entity> entityClass = null;
     @Autowired
     protected S baseService;
+    Class<Entity> entityClass = null;
 
     @Override
     public Class<Entity> getEntityClass() {

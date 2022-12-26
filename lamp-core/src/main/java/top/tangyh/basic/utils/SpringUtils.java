@@ -12,6 +12,9 @@ import java.util.Map;
  * @date 2017-12-25 16:27
  */
 public final class SpringUtils {
+    private static ApplicationContext applicationContext;
+    private static ApplicationContext parentApplicationContext;
+
     private SpringUtils() {
     }
 
@@ -23,9 +26,6 @@ public final class SpringUtils {
     public static SpringUtils getInstance() {
         return SpringUtilsHolder.INSTANCE;
     }
-
-    private static ApplicationContext applicationContext;
-    private static ApplicationContext parentApplicationContext;
 
     public static ApplicationContext getApplicationContext() {
         return applicationContext;

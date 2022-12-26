@@ -7,33 +7,25 @@ import java.io.OutputStream;
  *
  */
 public class Encoder {
-    private static final int EOF = -1;
-    // 图片的宽高
-    private int imgW, imgH;
-    private byte[] pixAry;
-    private int initCodeSize;  // 验证码位数
-    private int remaining;  // 剩余数量
-    private int curPixel;  // 像素
-
     static final int BITS = 12;
-
     static final int HSIZE = 5003; // 80% 占用率
-
+    private static final int EOF = -1;
     int n_bits; // number of bits/code
     int maxbits = BITS; // user settable max # bits/code
     int maxcode; // maximum code, given n_bits
     int maxmaxcode = 1 << BITS; // should NEVER generate this code
-
     int[] htab = new int[HSIZE];
     int[] codetab = new int[HSIZE];
-
     int hsize = HSIZE; // for dynamic table sizing
-
     int free_ent = 0; // first unused entry
-
     // block compression parameters -- after all codes are used up,
     // and compression rate changes, start over.
     boolean clear_flg = false;
+    int g_init_bits;
+    int ClearCode;
+    int EOFCode;
+    int cur_accum = 0;
+    int cur_bits = 0;
 
     // Algorithm:  use open addressing double hashing (no chaining) on the
     // prefix code / next character combination.  We do a variant of Knuth's
@@ -46,30 +38,6 @@ public class Encoder {
     // for the decompressor.  Late addition:  construct the table according to
     // file size for noticeable speed improvement on small files.  Please direct
     // questions about this implementation to ames!jaw.
-
-    int g_init_bits;
-
-    int ClearCode;
-    int EOFCode;
-
-    // output
-    //
-    // Output the given code.
-    // Inputs:
-    //      code:   A n_bits-bit integer.  If == -1, then EOF.  This assumes
-    //              that n_bits =< wordsize - 1.
-    // Outputs:
-    //      Outputs code to the file.
-    // Assumptions:
-    //      Chars are 8 bits long.
-    // Algorithm:
-    //      Maintain a BITS character long buffer (so that 8 codes will
-    // fit in it exactly).  Use the VAX insv instruction to insert each
-    // code in turn.  When the buffer fills up empty it and start over.
-
-    int cur_accum = 0;
-    int cur_bits = 0;
-
     int masks[] =
             {
                     0x0000,
@@ -89,12 +57,31 @@ public class Encoder {
                     0x3FFF,
                     0x7FFF,
                     0xFFFF};
-
     // Number of characters so far in this 'packet'
     int a_count;
-
     // Define the storage for the packet accumulator
     byte[] accum = new byte[256];
+
+    // output
+    //
+    // Output the given code.
+    // Inputs:
+    //      code:   A n_bits-bit integer.  If == -1, then EOF.  This assumes
+    //              that n_bits =< wordsize - 1.
+    // Outputs:
+    //      Outputs code to the file.
+    // Assumptions:
+    //      Chars are 8 bits long.
+    // Algorithm:
+    //      Maintain a BITS character long buffer (so that 8 codes will
+    // fit in it exactly).  Use the VAX insv instruction to insert each
+    // code in turn.  When the buffer fills up empty it and start over.
+    // 图片的宽高
+    private int imgW, imgH;
+    private byte[] pixAry;
+    private int initCodeSize;  // 验证码位数
+    private int remaining;  // 剩余数量
+    private int curPixel;  // 像素
 
     //----------------------------------------------------------------------------
 

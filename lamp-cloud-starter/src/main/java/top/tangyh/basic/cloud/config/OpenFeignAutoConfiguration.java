@@ -1,7 +1,5 @@
 package top.tangyh.basic.cloud.config;
 
-import top.tangyh.basic.cloud.feign.DateFormatRegister;
-import top.tangyh.basic.cloud.interceptor.FeignAddHeaderRequestInterceptor;
 import feign.Feign;
 import feign.RequestInterceptor;
 import feign.codec.Encoder;
@@ -18,6 +16,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import top.tangyh.basic.cloud.feign.DateFormatRegister;
+import top.tangyh.basic.cloud.interceptor.FeignAddHeaderRequestInterceptor;
 
 import java.util.List;
 

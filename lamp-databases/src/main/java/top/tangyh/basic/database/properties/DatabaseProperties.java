@@ -30,6 +30,10 @@ import static top.tangyh.basic.database.properties.MultiTenantType.SCHEMA;
 @ConfigurationProperties(prefix = PREFIX)
 public class DatabaseProperties {
     public static final String PREFIX = Constants.PROJECT_PREFIX + ".database";
+    /** 溢出总页数后是否进行处理 */
+    protected Boolean overflow = true;
+    /** 生成 countSql 优化掉 join 现在只支持 left join */
+    protected Boolean optimizeJoin = true;
     /**
      * 是否启用 防止全表更新与删除插件
      */
@@ -50,12 +54,7 @@ public class DatabaseProperties {
      * 分页大小限制
      */
     private long maxLimit = -1;
-
     private DbType dbType;
-    /** 溢出总页数后是否进行处理 */
-    protected Boolean overflow = true;
-    /** 生成 countSql 优化掉 join 现在只支持 left join */
-    protected Boolean optimizeJoin = true;
     /**
      * 是否禁止写入
      */

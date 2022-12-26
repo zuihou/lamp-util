@@ -2,12 +2,12 @@ package top.tangyh.basic.jwt;
 
 
 import cn.hutool.core.convert.Convert;
+import io.jsonwebtoken.Claims;
+import lombok.AllArgsConstructor;
 import top.tangyh.basic.jwt.model.AuthInfo;
 import top.tangyh.basic.jwt.model.JwtUserInfo;
 import top.tangyh.basic.jwt.model.Token;
 import top.tangyh.basic.jwt.utils.JwtUtil;
-import io.jsonwebtoken.Claims;
-import lombok.AllArgsConstructor;
 
 import java.util.Date;
 import java.util.HashMap;

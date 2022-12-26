@@ -2,12 +2,11 @@ package com.wf.captcha;
 
 import com.wf.captcha.base.Captcha;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-
-import javax.imageio.ImageIO;
 
 /**
  * png格式验证码

@@ -1,7 +1,6 @@
 package top.tangyh.basic.base.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import top.tangyh.basic.annotation.log.SysLog;

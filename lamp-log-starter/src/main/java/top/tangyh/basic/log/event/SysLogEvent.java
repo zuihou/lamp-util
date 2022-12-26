@@ -1,8 +1,8 @@
 package top.tangyh.basic.log.event;
 
 
-import top.tangyh.basic.model.log.OptLogDTO;
 import org.springframework.context.ApplicationEvent;
+import top.tangyh.basic.model.log.OptLogDTO;
 
 /**
  * 系统日志事件

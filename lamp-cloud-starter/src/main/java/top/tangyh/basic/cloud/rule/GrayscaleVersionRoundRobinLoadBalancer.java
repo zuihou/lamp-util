@@ -3,8 +3,6 @@ package top.tangyh.basic.cloud.rule;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.cloud.nacos.NacosServiceInstance;
-import top.tangyh.basic.context.ContextConstants;
-import top.tangyh.basic.context.ContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.cloud.client.ServiceInstance;
@@ -16,6 +14,8 @@ import org.springframework.cloud.loadbalancer.core.NoopServiceInstanceListSuppli
 import org.springframework.cloud.loadbalancer.core.RoundRobinLoadBalancer;
 import org.springframework.cloud.loadbalancer.core.ServiceInstanceListSupplier;
 import reactor.core.publisher.Mono;
+import top.tangyh.basic.context.ContextConstants;
+import top.tangyh.basic.context.ContextUtil;
 
 import java.util.List;
 import java.util.Map;

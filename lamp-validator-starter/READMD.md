@@ -1,8 +1,11 @@
 # 说明
+
 ## 测试代码请查看： lamp-authortiy-controller -> test/*ValidateController
 
 ## 官方对一下3种 入参类型 的请求都支持校验
+
 - 1、普通参数类型 （详见：ParamValidateController）
+
 ```
 @Validated
 public class ParamValidateController {
@@ -13,14 +16,18 @@ public class ParamValidateController {
     }
 }
 ```
+
 - 2、对象参数 （详见：ObjValidateController）
+
 ```
     @GetMapping("/obj/get3")
     public String objGet3(@Validated InnerDTO data) {
         return "只有参数上有@Validated 可以验证";
     }
 ```
+
 - 3、@RequestBody 格式的对象参数 （详见：BodyValidateController）
+
 ```
     @PostMapping("/post6")
     public String bodyPost6(@Validated @RequestBody HiberDTO data) {

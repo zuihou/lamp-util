@@ -204,6 +204,7 @@ public class LampMdcAdapter implements MDCAdapter {
     public Deque<String> getCopyOfDequeByKey(String key) {
         return threadLocalMapOfDeques.getCopyOfDequeByKey(key);
     }
+
     @Override
     public void clearDequeByKey(String key) {
         threadLocalMapOfDeques.clearDequeByKey(key);

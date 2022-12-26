@@ -56,7 +56,7 @@ public class DozerUtils {
     /**
      * Performs mapping between source and destination objects
      *
-     * @param source 源对象
+     * @param source      源对象
      * @param destination 目标对象
      */
     public void map(Object source, Object destination) {
@@ -69,9 +69,9 @@ public class DozerUtils {
     /**
      * Constructs new instance of destinationClass and performs mapping between from source
      *
-     * @param source 源对象
+     * @param source           源对象
      * @param destinationClass 目标类型
-     * @param mapId 转换id
+     * @param mapId            转换id
      * @return 目标对象
      */
     public <T> T map(Object source, Class<T> destinationClass, String mapId) {
@@ -84,9 +84,9 @@ public class DozerUtils {
     /**
      * Performs mapping between source and destination objects
      *
-     * @param source 源对象
+     * @param source      源对象
      * @param destination 目标类型
-     * @param mapId 转换id
+     * @param mapId       转换id
      */
     public void map(Object source, Object destination, String mapId) {
         if (source == null) {

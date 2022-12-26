@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @Data
 @NoArgsConstructor
-@Schema(description="分页参数")
+@Schema(description = "分页参数")
 public class PageParams<T> {
 
     @NotNull(message = "查询对象model不能为空")

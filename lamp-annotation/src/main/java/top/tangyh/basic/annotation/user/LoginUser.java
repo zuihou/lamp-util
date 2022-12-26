@@ -34,7 +34,6 @@ public @interface LoginUser {
 
     /**
      * 是否只查询 资源 信息，true则通过rpc接口查询
-     *
      */
     boolean isResource() default false;
 

@@ -26,7 +26,7 @@ import java.lang.reflect.ParameterizedType;
  * @param <S>         Service
  * @param <Id>        主键
  * @param <Entity>    实体
- * @param <PageQuery>   分页参数
+ * @param <PageQuery> 分页参数
  * @param <SaveDTO>   保存参数
  * @param <UpdateDTO> 修改参数
  * @author zuihou

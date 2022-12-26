@@ -1,14 +1,6 @@
 package top.tangyh.basic.jwt.utils;
 
 import cn.hutool.core.util.StrUtil;
-import top.tangyh.basic.context.ContextConstants;
-import top.tangyh.basic.exception.BizException;
-import top.tangyh.basic.exception.ForbiddenException;
-import top.tangyh.basic.exception.UnauthorizedException;
-import top.tangyh.basic.exception.code.ExceptionCode;
-import top.tangyh.basic.jwt.model.Token;
-import top.tangyh.basic.utils.DateUtils;
-import top.tangyh.basic.utils.StrPool;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtBuilder;
@@ -17,6 +9,13 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import top.tangyh.basic.context.ContextConstants;
+import top.tangyh.basic.exception.BizException;
+import top.tangyh.basic.exception.UnauthorizedException;
+import top.tangyh.basic.exception.code.ExceptionCode;
+import top.tangyh.basic.jwt.model.Token;
+import top.tangyh.basic.utils.DateUtils;
+import top.tangyh.basic.utils.StrPool;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -36,14 +35,13 @@ import static top.tangyh.basic.exception.code.ExceptionCode.JWT_PARSER_TOKEN_FAI
  */
 @Slf4j
 public final class JwtUtil {
-    private JwtUtil() {
-    }
-
     /**
      * 将 签名（JWT_SIGN_KEY） 编译成BASE64编码
      */
     private static final String BASE64_SECURITY = Base64.getEncoder().encodeToString(ContextConstants.JWT_SIGN_KEY.getBytes(StandardCharsets.UTF_8));
 
+    private JwtUtil() {
+    }
 
     /**
      * authorization: Basic clientId:clientSec

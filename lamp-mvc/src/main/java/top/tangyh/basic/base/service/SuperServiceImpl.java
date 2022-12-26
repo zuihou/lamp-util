@@ -2,10 +2,10 @@ package top.tangyh.basic.base.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import org.springframework.transaction.annotation.Transactional;
 import top.tangyh.basic.base.R;
 import top.tangyh.basic.base.mapper.SuperMapper;
 import top.tangyh.basic.exception.BizException;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.ParameterizedType;
 

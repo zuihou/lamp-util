@@ -1,7 +1,7 @@
 package top.tangyh.basic.base.service;
 
-import top.tangyh.basic.model.cache.CacheKey;
 import org.springframework.lang.NonNull;
+import top.tangyh.basic.model.cache.CacheKey;
 
 import java.io.Serializable;
 import java.util.Collection;

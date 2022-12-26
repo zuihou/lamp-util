@@ -1,13 +1,13 @@
 package top.tangyh.basic.cloud.config;
 
-import top.tangyh.basic.cloud.rule.GrayscaleVersionRoundRobinLoadBalancer;
-import top.tangyh.basic.utils.StrPool;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.loadbalancer.core.ReactorLoadBalancer;
 import org.springframework.cloud.loadbalancer.core.ServiceInstanceListSupplier;
 import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import top.tangyh.basic.cloud.rule.GrayscaleVersionRoundRobinLoadBalancer;
+import top.tangyh.basic.utils.StrPool;
 
 /**
  * 灰度配置

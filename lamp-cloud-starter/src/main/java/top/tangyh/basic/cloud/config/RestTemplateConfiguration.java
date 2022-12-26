@@ -152,35 +152,6 @@ public class RestTemplateConfiguration {
     }
 
     /**
-     * A {@link X509TrustManager} that does not validate SSL certificates.
-     */
-    class DisableValidationTrustManager implements X509TrustManager {
-
-        @Override
-        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
-        }
-
-        @Override
-        public void checkServerTrusted(X509Certificate[] x509Certificates, String s) {
-        }
-
-        @Override
-        public X509Certificate[] getAcceptedIssuers() {
-            return new X509Certificate[0];
-        }
-
-    }
-
-    class TrustAllHostnames implements HostnameVerifier {
-
-        @Override
-        public boolean verify(String s, SSLSession sslSession) {
-            return true;
-        }
-
-    }
-
-    /**
      * 解决 RestTemplate 传递Request header
      */
     @Bean
@@ -224,5 +195,34 @@ public class RestTemplateConfiguration {
         converters.removeIf(c -> c instanceof StringHttpMessageConverter || c instanceof MappingJackson2HttpMessageConverter);
         converters.add(new StringHttpMessageConverter(UTF_8));
         converters.add(new MappingJackson2HttpMessageConverter(this.objectMapper));
+    }
+
+    /**
+     * A {@link X509TrustManager} that does not validate SSL certificates.
+     */
+    class DisableValidationTrustManager implements X509TrustManager {
+
+        @Override
+        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] x509Certificates, String s) {
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+        }
+
+    }
+
+    class TrustAllHostnames implements HostnameVerifier {
+
+        @Override
+        public boolean verify(String s, SSLSession sslSession) {
+            return true;
+        }
+
     }
 }

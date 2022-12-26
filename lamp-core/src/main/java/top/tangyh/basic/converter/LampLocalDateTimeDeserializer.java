@@ -59,11 +59,6 @@ public class LampLocalDateTimeDeserializer extends JSR310DateTimeDeserializerBas
     private static final DateTimeFormatter DEFAULT_DATE_TIME_FORMAT_EN_DTF = DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT_EN);
     private static final DateTimeFormatter SLASH_DATE_TIME_FORMAT_DTF = DateTimeFormatter.ofPattern(SLASH_DATE_TIME_FORMAT);
 
-    @Override
-    protected JSR310DateTimeDeserializerBase<LocalDateTime> withShape(JsonFormat.Shape shape) {
-        return this;
-    }
-
     private LampLocalDateTimeDeserializer() {
         this(DEFAULT_FORMATTER);
     }
@@ -74,6 +69,11 @@ public class LampLocalDateTimeDeserializer extends JSR310DateTimeDeserializerBas
 
     protected LampLocalDateTimeDeserializer(LampLocalDateTimeDeserializer base, Boolean leniency) {
         super(base, leniency);
+    }
+
+    @Override
+    protected JSR310DateTimeDeserializerBase<LocalDateTime> withShape(JsonFormat.Shape shape) {
+        return this;
     }
 
     @Override

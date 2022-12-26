@@ -1,8 +1,6 @@
 package top.tangyh.basic.context;
 
 import cn.hutool.core.convert.Convert;
-import com.alibaba.ttl.TransmittableThreadLocal;
-import lombok.val;
 import top.tangyh.basic.utils.StrPool;
 
 import java.util.Map;
@@ -16,9 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2017-12-13 16:52
  */
 public final class ContextUtil {
-    private ContextUtil() {
-    }
-
     /**
      * 支持多线程传递参数
      *
@@ -27,6 +22,9 @@ public final class ContextUtil {
      * @create [2021/6/23 9:26 下午 ] [tangyh] [初始创建]
      */
     private static final ThreadLocal<Map<String, String>> THREAD_LOCAL = new ThreadLocal<>();
+
+    private ContextUtil() {
+    }
 
     public static void putAll(Map<String, String> map) {
         map.forEach((k, v) -> {
@@ -90,10 +88,6 @@ public final class ContextUtil {
         return get(ContextConstants.JWT_KEY_USER_ID, Long.class, 0L);
     }
 
-    public static String getUserIdStr() {
-        return String.valueOf(getUserId());
-    }
-
     /**
      * 用户ID
      *
@@ -105,6 +99,10 @@ public final class ContextUtil {
 
     public static void setUserId(String userId) {
         set(ContextConstants.JWT_KEY_USER_ID, userId);
+    }
+
+    public static String getUserIdStr() {
+        return String.valueOf(getUserId());
     }
 
     /**
@@ -175,9 +173,11 @@ public final class ContextUtil {
     public static void clearDatabase() {
         set(ContextConstants.DATABASE, StrPool.EMPTY);
     }
+
     public static String getDatabase() {
         return get(ContextConstants.DATABASE, String.class, StrPool.EMPTY);
     }
+
     public static void setDatabaseBase() {
         set(ContextConstants.DATABASE, ContextConstants.TENANT_BASE_POOL_NAME_HEADER);
     }

@@ -1,12 +1,6 @@
 package top.tangyh.basic.cache;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
-import top.tangyh.basic.cache.lock.CaffeineDistributedLock;
-import top.tangyh.basic.cache.properties.CustomCacheProperties;
-import top.tangyh.basic.cache.repository.CacheOps;
-import top.tangyh.basic.cache.repository.CachePlusOps;
-import top.tangyh.basic.cache.repository.impl.CaffeineOpsImpl;
-import top.tangyh.basic.lock.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -16,6 +10,12 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import top.tangyh.basic.cache.lock.CaffeineDistributedLock;
+import top.tangyh.basic.cache.properties.CustomCacheProperties;
+import top.tangyh.basic.cache.repository.CacheOps;
+import top.tangyh.basic.cache.repository.CachePlusOps;
+import top.tangyh.basic.cache.repository.impl.CaffeineOpsImpl;
+import top.tangyh.basic.lock.DistributedLock;
 
 
 /**

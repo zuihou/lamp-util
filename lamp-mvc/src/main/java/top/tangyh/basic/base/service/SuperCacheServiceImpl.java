@@ -14,16 +14,16 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import top.tangyh.basic.base.entity.SuperEntity;
-import top.tangyh.basic.base.mapper.SuperMapper;
-import top.tangyh.basic.model.cache.CacheKey;
-import top.tangyh.basic.model.cache.CacheKeyBuilder;
-import top.tangyh.basic.cache.repository.CacheOps;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
+import top.tangyh.basic.base.entity.SuperEntity;
+import top.tangyh.basic.base.mapper.SuperMapper;
+import top.tangyh.basic.cache.repository.CacheOps;
+import top.tangyh.basic.model.cache.CacheKey;
+import top.tangyh.basic.model.cache.CacheKeyBuilder;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -55,10 +55,9 @@ import java.util.stream.Collectors;
  */
 public abstract class SuperCacheServiceImpl<M extends SuperMapper<T>, T> extends SuperServiceImpl<M, T> implements SuperCacheService<T> {
 
+    protected static final int MAX_BATCH_KEY_SIZE = 20;
     @Autowired
     protected CacheOps cacheOps;
-
-    protected static final int MAX_BATCH_KEY_SIZE = 20;
 
     /**
      * 缓存key 构造器

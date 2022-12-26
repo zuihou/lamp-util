@@ -1,12 +1,12 @@
 package top.tangyh.basic.mq;
 
-import top.tangyh.basic.mq.properties.MqProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import top.tangyh.basic.mq.properties.MqProperties;
 
 /**
  * rabbit 禁用配置

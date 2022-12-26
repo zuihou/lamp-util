@@ -1,6 +1,10 @@
 package top.tangyh.basic.boot.handler;
 
 import cn.hutool.core.util.StrUtil;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.mybatis.spring.MyBatisSystemException;
@@ -30,10 +34,6 @@ import top.tangyh.basic.exception.UnauthorizedException;
 import top.tangyh.basic.exception.code.ExceptionCode;
 import top.tangyh.basic.utils.StrPool;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;

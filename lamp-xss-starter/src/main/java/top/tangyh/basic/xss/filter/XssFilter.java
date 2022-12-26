@@ -3,10 +3,6 @@ package top.tangyh.basic.xss.filter;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.CharUtil;
 import cn.hutool.core.util.StrUtil;
-import top.tangyh.basic.xss.wrapper.XssRequestWrapper;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.AntPathMatcher;
-
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -14,6 +10,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.AntPathMatcher;
+import top.tangyh.basic.xss.wrapper.XssRequestWrapper;
+
 import java.io.IOException;
 import java.util.List;
 

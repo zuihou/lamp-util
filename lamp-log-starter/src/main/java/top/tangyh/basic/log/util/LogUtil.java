@@ -1,10 +1,10 @@
 package top.tangyh.basic.log.util;
 
-import top.tangyh.basic.annotation.log.SysLog;
-import top.tangyh.basic.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import top.tangyh.basic.annotation.log.SysLog;
+import top.tangyh.basic.utils.StrPool;
 
 import java.lang.reflect.Method;
 

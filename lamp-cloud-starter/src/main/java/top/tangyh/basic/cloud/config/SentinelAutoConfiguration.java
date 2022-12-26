@@ -1,7 +1,6 @@
 package top.tangyh.basic.cloud.config;
 
 import com.alibaba.cloud.sentinel.feign.SentinelFeignAutoConfiguration;
-import top.tangyh.basic.cloud.feign.SentinelFeignBuilder;
 import feign.Feign;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -9,6 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import top.tangyh.basic.cloud.feign.SentinelFeignBuilder;
 
 
 /**

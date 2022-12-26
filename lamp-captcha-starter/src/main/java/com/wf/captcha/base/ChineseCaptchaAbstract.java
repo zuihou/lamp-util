@@ -16,6 +16,15 @@ public abstract class ChineseCaptchaAbstract extends Captcha {
     }
 
     /**
+     * 返回随机汉字
+     *
+     * @return 随机汉字
+     */
+    public static char alphaHan() {
+        return DELTA.charAt(num(DELTA.length()));
+    }
+
+    /**
      * 生成随机验证码
      *
      * @return 验证码字符数组
@@ -28,15 +37,6 @@ public abstract class ChineseCaptchaAbstract extends Captcha {
         }
         chars = new String(cs);
         return cs;
-    }
-
-    /**
-     * 返回随机汉字
-     *
-     * @return 随机汉字
-     */
-    public static char alphaHan() {
-        return DELTA.charAt(num(DELTA.length()));
     }
 
 }

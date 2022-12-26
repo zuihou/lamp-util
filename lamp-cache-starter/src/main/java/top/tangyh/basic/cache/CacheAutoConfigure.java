@@ -1,11 +1,11 @@
 package top.tangyh.basic.cache;
 
-import top.tangyh.basic.utils.StrPool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import top.tangyh.basic.utils.StrPool;
 
 /**
  * 缓存配置
@@ -22,7 +22,6 @@ public class CacheAutoConfigure {
 
     /**
      * key 的生成
-     *
      */
     @Bean
     public KeyGenerator keyGenerator() {

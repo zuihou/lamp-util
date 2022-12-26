@@ -3,6 +3,7 @@ package top.tangyh.basic.validator.extract;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.CharUtil;
 import cn.hutool.core.util.StrUtil;
+import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.internal.engine.ValidatorImpl;
 import org.hibernate.validator.internal.metadata.BeanMetaDataManager;
@@ -20,7 +21,6 @@ import top.tangyh.basic.validator.model.ConstraintInfo;
 import top.tangyh.basic.validator.model.FieldValidatorDesc;
 import top.tangyh.basic.validator.model.ValidConstraint;
 
-import jakarta.validation.Validator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;

@@ -16,6 +16,7 @@ public class ForbiddenException extends BaseUncheckedException {
     public ForbiddenException(int code, String message) {
         super(code, message);
     }
+
     public static ForbiddenException wrap(BaseExceptionCode ex) {
         return new ForbiddenException(ex.getCode(), ex.getMsg());
     }

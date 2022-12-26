@@ -34,12 +34,12 @@ public abstract class Captcha extends Randoms {
     public static final int FONT_9 = 8;
     public static final int FONT_10 = 9;
     private static final String[] FONT_NAMES = new String[]{"actionj.ttf", "epilog.ttf", "fresnel.ttf", "headache.ttf", "lexo.ttf", "prefix.ttf", "progbot.ttf", "ransom.ttf", "robot.ttf", "scandal.ttf"};
-    private Font font = null; // 验证码的字体
     protected int len = 5; // 验证码随机字符长度
     protected int width = 130; // 验证码显示宽度
     protected int height = 48; // 验证码显示高度
     protected int charType = TYPE_DEFAULT;  // 验证码类型
     protected String chars = null; // 当前验证码
+    private Font font = null; // 验证码的字体
 
     /**
      * 生成随机验证码
@@ -119,6 +119,7 @@ public abstract class Captcha extends Randoms {
 
     /**
      * 获取图片类型
+     *
      * @return 图片格式，MIME类型
      */
     public abstract String getContentType();

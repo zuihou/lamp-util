@@ -1,15 +1,15 @@
 package top.tangyh.basic.xss;
 
 import cn.hutool.core.collection.CollUtil;
-import top.tangyh.basic.xss.converter.XssStringJsonDeserializer;
-import top.tangyh.basic.xss.filter.XssFilter;
-import top.tangyh.basic.xss.properties.XssProperties;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import top.tangyh.basic.xss.converter.XssStringJsonDeserializer;
+import top.tangyh.basic.xss.filter.XssFilter;
+import top.tangyh.basic.xss.properties.XssProperties;
 
 import java.util.HashMap;
 import java.util.Map;

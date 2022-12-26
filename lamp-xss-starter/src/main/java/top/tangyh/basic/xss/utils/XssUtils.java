@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 @Slf4j
 public class XssUtils {
     private static final String ANTISAMY_SLASHDOT_XML = "antisamy-slashdot-1.4.4.xml";
-    private static Policy policy = null;
     private static final Pattern SCRIPT_BETWEEN_PATTERN = Pattern.compile("<[\r\n| | ]*script[\r\n| | ]*>(.*?)</[\r\n| | ]*script[\r\n| | ]*>", Pattern.CASE_INSENSITIVE);
     private static final Pattern SCRIPT_END_PATTERN = Pattern.compile("</[\r\n| | ]*script[\r\n| | ]*>", Pattern.CASE_INSENSITIVE);
     private static final Pattern SCRIPT_START_PATTERN = Pattern.compile("<[\r\n| | ]*script(.*?)>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
@@ -39,6 +38,7 @@ public class XssUtils {
     private static final Pattern ONMOUSEOVER_PATTERN_2 = Pattern.compile("onmouseover(.*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
     private static final Pattern ONMOUSEOVER_PATTERN_3 = Pattern.compile("onmouseover=.*?", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
     private static final Pattern ALERT_PATTERN = Pattern.compile("alert(.*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+    private static Policy policy = null;
     private static String REPLACE_STRING = "";
     private static Pattern script = null;
 

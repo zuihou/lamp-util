@@ -7,9 +7,6 @@ package top.tangyh.basic.context;
  * @date 2018/12/21
  */
 public final class ContextConstants {
-    private ContextConstants() {
-    }
-
     public static final String DEF_TENANT = "master";
     /**
      * JWT中封装的 用户id
@@ -27,20 +24,16 @@ public final class ContextConstants {
      * JWT中封装的 用户账号
      */
     public static final String JWT_KEY_ACCOUNT = "account";
-
     /**
      * JWT中封装的 客户端id
      */
     public static final String JWT_KEY_CLIENT_ID = "client_id";
-
-
     /**
      * JWT token 签名
      * <p>
      * 签名密钥长度至少32位!!!
      */
     public static final String JWT_SIGN_KEY = "lamp-cloud_is_a_fantastic_project";
-
     /**
      * JWT中封装的 租户编码
      */
@@ -62,7 +55,6 @@ public final class ContextConstants {
      * 请求头和线程变量中的 extend库 租户数据源标识
      */
     public static final String TENANT_EXTEND_POOL_NAME_HEADER = "lamp_extend";
-
     /**
      * User信息 认证请求头
      */
@@ -83,17 +75,14 @@ public final class ContextConstants {
      * Client信息认证请求头
      */
     public static final String BASIC_HEADER_KEY = "Authorization";
-
     /**
      * Client信息认证请求头前缀
      */
     public static final String BASIC_HEADER_PREFIX = "Basic ";
-
     /**
      * Client信息认证请求头前缀
      */
     public static final String BASIC_HEADER_PREFIX_EXT = "Basic%20";
-
     /**
      * 是否boot项目
      */
@@ -110,9 +99,11 @@ public final class ContextConstants {
      * 日志链路追踪id日志标志
      */
     public static final String LOG_TRACE_ID = "trace";
-
     /**
      * 灰度发布版本号
      */
     public static final String GRAY_VERSION = "gray_version";
+
+    private ContextConstants() {
+    }
 }

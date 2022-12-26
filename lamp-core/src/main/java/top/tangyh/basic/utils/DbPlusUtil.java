@@ -35,6 +35,8 @@ import java.util.regex.Pattern;
 @Slf4j
 public class DbPlusUtil {
     private static final Pattern SQL_SERVER_PATTERN = Pattern.compile("jdbc(:p6spy)?:(?<db>\\w+):.*((//)|@)(?<host>.+):(?<port>\\d+)(;[\\w-]+=[\\w-]+)*(/|(;databasename=)|:)(?<dbName>\\w+)\\??.*");
+    private static final Map<String, DbType> JDBC_DB_TYPE_CACHE = new ConcurrentHashMap<>();
+    private static final Map<String, String> JDBC_DATABASE_CACHE = new ConcurrentHashMap<>();
 
     @SneakyThrows
     public static String getSqlServerDbName(String url) {
@@ -153,9 +155,6 @@ public class DbPlusUtil {
         }
         return tables;
     }
-
-    private static final Map<String, DbType> JDBC_DB_TYPE_CACHE = new ConcurrentHashMap<>();
-    private static final Map<String, String> JDBC_DATABASE_CACHE = new ConcurrentHashMap<>();
 
     /**
      * 不关闭 Connection,因为是从事务里获取的,sqlSession会负责关闭

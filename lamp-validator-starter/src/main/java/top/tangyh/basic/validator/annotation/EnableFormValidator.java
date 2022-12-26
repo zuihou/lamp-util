@@ -1,7 +1,7 @@
 package top.tangyh.basic.validator.annotation;
 
-import top.tangyh.basic.validator.config.ValidatorConfiguration;
 import org.springframework.context.annotation.Import;
+import top.tangyh.basic.validator.config.ValidatorConfiguration;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

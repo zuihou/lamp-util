@@ -1,12 +1,12 @@
 package top.tangyh.basic.cache.lock;
 
-import top.tangyh.basic.lock.DistributedLock;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.connection.ReturnType;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.types.Expiration;
+import top.tangyh.basic.lock.DistributedLock;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;

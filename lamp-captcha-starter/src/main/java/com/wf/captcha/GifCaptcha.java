@@ -5,8 +5,6 @@ import com.wf.captcha.utils.GifEncoder;
 
 import java.awt.*;
 import java.awt.geom.CubicCurve2D;
-import java.awt.geom.QuadCurve2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;

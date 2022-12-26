@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 /**
  * 权限注解 用于检查请求者是否拥有改URI接口的权限。
- *
+ * <p>
  * 注意事项：
  * 1. 开启URI权限时，必须启动Oauth服务
  * 2. 通过swagger直接通过后台服务(如：lamp-authority-server、lamp-file-server)调试时，必须在请求头中传递 userid 参数。 否则会提示 无权限

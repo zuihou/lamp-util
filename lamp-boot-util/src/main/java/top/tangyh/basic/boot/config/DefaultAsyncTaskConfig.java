@@ -1,6 +1,5 @@
 package top.tangyh.basic.boot.config;
 
-import top.tangyh.basic.boot.config.properties.AsyncProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import top.tangyh.basic.boot.config.properties.AsyncProperties;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;

@@ -1,9 +1,9 @@
 package top.tangyh.basic.database.mybatis.typehandler;
 
 import com.baomidou.mybatisplus.core.enums.SqlLike;
-import top.tangyh.basic.utils.StrHelper;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import top.tangyh.basic.utils.StrHelper;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;

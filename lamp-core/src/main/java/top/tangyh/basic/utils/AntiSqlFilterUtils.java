@@ -13,11 +13,11 @@ import java.util.Map;
  * @version 0.1
  */
 public final class AntiSqlFilterUtils {
-    private AntiSqlFilterUtils() {
-    }
-
     private static final String[] KEY_WORDS = {";", "\"", "'", "/*", "*/", "--", "exec",
             "select", "update", "delete", "insert", "alter", "drop", "create", "shutdown"};
+
+    private AntiSqlFilterUtils() {
+    }
 
     public static Map<String, String[]> getSafeParameterMap(Map<String, String[]> parameterMap) {
         Map<String, String[]> map = new HashMap<>(CollHelper.initialCapacity(parameterMap.size()));
