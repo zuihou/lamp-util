@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.1</version>
         <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -31,7 +31,7 @@
         <seata.version>1.4.2</seata.version>
         <nacos.version>2.2.0</nacos.version>
         <sentinel.version>1.8.6</sentinel.version>
-        <spring-boot-admin.version>3.0.0-M5</spring-boot-admin.version>
+        <spring-boot-admin.version>3.0.0-M8</spring-boot-admin.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -43,13 +43,13 @@
              <mssql-jdbc-11.version>9.4.1.jre11</mssql-jdbc-11.version>
              <mssql-jdbc-17.version>9.4.1.jre17</mssql-jdbc-17.version>
              -->
-        <hutool.version>5.8.10</hutool.version>
+        <hutool.version>5.8.11</hutool.version>
         <oshi.version>6.3.2</oshi.version>
         <druid.version>1.2.8</druid.version>
         <mybatis.version>3.5.10</mybatis.version>
         <mybatis-spring.version>2.0.7</mybatis-spring.version>
         <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
-        <mybatis-plus.version>3.5.2.7-SNAPSHOT</mybatis-plus.version>
+        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <mybatis-plus-generator.version>3.5.2</mybatis-plus-generator.version>
         <jasypt.version>3.0.4</jasypt.version>
         <p6spy.version>3.9.1</p6spy.version>
@@ -59,8 +59,6 @@
         <springfox.version>3.0.0</springfox.version>
         <knife4j-swagger-models-v3.version>2.2.7</knife4j-swagger-models-v3.version>
         <swagger-models.version>1.5.22</swagger-models.version>
-        <dozer.version>6.5.0</dozer.version>
-        <easy-captcha.version>1.6.2</easy-captcha.version>
         <aviator.version>5.1.4</aviator.version>
         <easypoi.version>4.2.0</easypoi.version>
         <guava.version>30.1.1-jre</guava.version>
@@ -328,18 +326,6 @@
                 <version>${bce-java-sdk.version}</version>
             </dependency>
 
-            <!-- 对象转换 -->
-            <dependency>
-                <groupId>com.github.dozermapper</groupId>
-                <artifactId>dozer-core</artifactId>
-                <version>${dozer.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.dozermapper</groupId>
-                <artifactId>dozer-spring4</artifactId>
-                <version>${dozer.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-core</artifactId>
@@ -455,11 +441,6 @@
                 <version>${commons-email.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.github.whvcse</groupId>
-                <artifactId>easy-captcha</artifactId>
-                <version>${easy-captcha.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>cn.afterturn</groupId>
