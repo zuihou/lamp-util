@@ -29,7 +29,6 @@
         <module>lamp-swagger2-starter</module>
         <module>lamp-validator-starter</module>
         <module>lamp-jwt-starter</module>
-        <module>lamp-dozer-starter</module>
         <module>lamp-xss-starter</module>
         <module>lamp-cloud-starter</module>
         <module>lamp-cache-starter</module>
