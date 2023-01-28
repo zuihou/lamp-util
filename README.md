@@ -13,15 +13,21 @@
 # lamp 项目名字由来
 `灯灯`(简称灯， 英文名：lamp)，他是一个项目的统称，由"工具集"、"后端"、"前端"组成，包含以下几个子项目
 
-[点我了解项目详细介绍](https://tangyh.top)
+# 分支说明
 
-# 推广
-- 超品周津贴: [点我进入](https://www.aliyun.com/minisite/goods?taskPkg=1212cpz&pkgSid=183200&userCode=uk5ga6sq)
-- 阿里云服务器双11折扣：[点我进入](https://www.aliyun.com/activity/1111?userCode=uk5ga6sq)
-- 阿里云服务器折扣场：[点我进入](https://www.aliyun.com/minisite/goods?userCode=uk5ga6sq)
-- 阿里云服务器优惠券：[点我领取](https://www.aliyun.com/daily-act/ecs/activity_selection?userCode=uk5ga6sq)
-- 通过以上链接任意购买金额大于等于50元的商品，联系作者可赠送 [看云文档](https://www.kancloud.cn/zuihou/zuihou-admin-cloud) 一份。
-
+- master：稳定版；功能稳定，bug少
+    - jdk 8
+    - spring cloud 2021.0.5
+    - spring cloud alibaba 2021.0.4.0
+    - nacos.version 2.1.2
+    - spring boot 2.7.6
+- java17: 激进版；技术栈最新，可能存在未知bug
+    - jdk 17
+    - spring cloud 2022.0.0
+    - spring cloud alibaba 2022.0.0.0-RC1
+    - nacos.version 2.2.0
+    - spring boot 3.0.0
+    
 # 官网
 [https://tangyh.top](https://tangyh.top)
 
