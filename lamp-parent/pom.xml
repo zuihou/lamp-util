@@ -31,7 +31,7 @@
         <seata.version>1.4.2</seata.version>
         <nacos.version>2.2.0</nacos.version>
         <sentinel.version>1.8.6</sentinel.version>
-        <spring-boot-admin.version>3.0.0-M8</spring-boot-admin.version>
+        <spring-boot-admin.version>3.0.0</spring-boot-admin.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -346,16 +346,6 @@
                 <artifactId>swagger-models-jakarta</artifactId>
                 <version>${knife4j-swagger-models-v3.version}</version>
             </dependency>
-            <!--            <dependency>-->
-            <!--                <groupId>io.swagger</groupId>-->
-            <!--                <artifactId>swagger-annotations</artifactId>-->
-            <!--                <version>${swagger-models.version}</version>-->
-            <!--            </dependency>-->
-            <!--            <dependency>-->
-            <!--                <groupId>io.swagger</groupId>-->
-            <!--                <artifactId>swagger-models</artifactId>-->
-            <!--                <version>${swagger-models.version}</version>-->
-            <!--            </dependency>-->
 
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
