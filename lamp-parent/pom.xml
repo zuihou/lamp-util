@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2</version>
         <relativePath/>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -43,7 +43,7 @@
              <mssql-jdbc-11.version>9.4.1.jre11</mssql-jdbc-11.version>
              <mssql-jdbc-17.version>9.4.1.jre17</mssql-jdbc-17.version>
              -->
-        <hutool.version>5.8.11</hutool.version>
+        <hutool.version>5.8.12</hutool.version>
         <oshi.version>6.3.2</oshi.version>
         <druid.version>1.2.8</druid.version>
         <mybatis.version>3.5.10</mybatis.version>
