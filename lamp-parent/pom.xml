@@ -469,6 +469,10 @@
                 <version>${easypoi.version}</version>
                 <exclusions>
                     <exclusion>
+                        <artifactId>validation-api</artifactId>
+                        <groupId>javax.validation</groupId>
+                    </exclusion>
+                    <exclusion>
                         <artifactId>javassist</artifactId>
                         <groupId>org.javassist</groupId>
                     </exclusion>
