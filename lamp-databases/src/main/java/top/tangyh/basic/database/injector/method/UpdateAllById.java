@@ -17,12 +17,6 @@ import java.util.function.Predicate;
 public class UpdateAllById extends AlwaysUpdateSomeColumnById {
 
     public UpdateAllById(Predicate<TableFieldInfo> predicate) {
-        super(predicate);
-    }
-
-    @Override
-    public String getMethod(SqlMethod sqlMethod) {
-        // 自定义 mapper 方法名
-        return "updateAllById";
+        super("updateAllById", predicate);
     }
 }

@@ -17,12 +17,12 @@
     <url>https://github.com/dromara/lamp-cloud</url>
 
     <properties>
-        <spring-cloud-dependencies.version>2021.0.5</spring-cloud-dependencies.version>
-        <spring-cloud-alibaba-dependencies.version>2021.0.4.0</spring-cloud-alibaba-dependencies.version>
+        <spring-cloud-dependencies.version>2021.0.8</spring-cloud-dependencies.version>
+        <spring-cloud-alibaba-dependencies.version>2021.0.5.0</spring-cloud-alibaba-dependencies.version>
         <seata.version>1.4.2</seata.version>
-        <nacos.version>2.1.2</nacos.version>
+        <nacos.version>2.2.4</nacos.version>
         <sentinel.version>1.8.2</sentinel.version>
-        <spring-boot-admin.version>2.7.7</spring-boot-admin.version>
+        <spring-boot-admin.version>2.7.9</spring-boot-admin.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -34,13 +34,14 @@
         <mssql-jdbc-11.version>9.4.1.jre11</mssql-jdbc-11.version>
         <mssql-jdbc-17.version>9.4.1.jre17</mssql-jdbc-17.version>
         -->
-        <hutool.version>5.8.10</hutool.version>
+        <hutool.version>5.8.20</hutool.version>
         <oshi.version>6.3.2</oshi.version>
         <druid.version>1.2.8</druid.version>
         <mybatis.version>3.5.10</mybatis.version>
         <mybatis-spring.version>2.0.7</mybatis-spring.version>
         <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
-        <mybatis-plus.version>3.5.2</mybatis-plus.version>
+        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
+        <dynamic.datasource.version>3.6.1</dynamic.datasource.version>
         <mybatis-plus-generator.version>3.5.2</mybatis-plus-generator.version>
         <jasypt.version>3.0.4</jasypt.version>
         <p6spy.version>3.9.1</p6spy.version>
