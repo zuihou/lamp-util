@@ -87,7 +87,7 @@
         <JustAuth.version>1.16.5</JustAuth.version>
         <sun-jaxb.version>2.3.0.1</sun-jaxb.version>
 
-        <okio.version>2.10.0</okio.version>
+        <okio.version>3.4.0</okio.version>
         <okhttp3.version>4.10.0</okhttp3.version>
     </properties>
     <licenses>
