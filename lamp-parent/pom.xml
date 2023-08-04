@@ -26,12 +26,12 @@
     -->
 
     <properties>
-        <spring-cloud-dependencies.version>2022.0.1</spring-cloud-dependencies.version>
-        <spring-cloud-alibaba-dependencies.version>2022.0.0.0-RC1</spring-cloud-alibaba-dependencies.version>
+        <spring-cloud-dependencies.version>2022.0.3</spring-cloud-dependencies.version>
+        <spring-cloud-alibaba-dependencies.version>2022.0.0.0</spring-cloud-alibaba-dependencies.version>
         <seata.version>1.4.2</seata.version>
-        <nacos.version>2.2.0</nacos.version>
+        <nacos.version>2.2.4</nacos.version>
         <sentinel.version>1.8.6</sentinel.version>
-        <spring-boot-admin.version>3.0.0</spring-boot-admin.version>
+        <spring-boot-admin.version>3.1.3</spring-boot-admin.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
