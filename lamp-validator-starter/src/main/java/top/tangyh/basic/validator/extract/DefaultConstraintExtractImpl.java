@@ -4,6 +4,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.CharUtil;
 import cn.hutool.core.util.StrUtil;
 import jakarta.validation.Validator;
+import jakarta.validation.metadata.PropertyDescriptor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.internal.engine.ValidatorImpl;
 import org.hibernate.validator.internal.metadata.BeanMetaDataManager;
@@ -12,50 +13,18 @@ import org.hibernate.validator.internal.metadata.core.MetaConstraint;
 import org.hibernate.validator.internal.metadata.location.ConstraintLocation;
 import top.tangyh.basic.utils.StrPool;
 import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
-import top.tangyh.basic.validator.mateconstraint.impl.MaxMinConstraintConverter;
-import top.tangyh.basic.validator.mateconstraint.impl.NotNullConstraintConverter;
-import top.tangyh.basic.validator.mateconstraint.impl.OtherConstraintConverter;
-import top.tangyh.basic.validator.mateconstraint.impl.RangeConstraintConverter;
-import top.tangyh.basic.validator.mateconstraint.impl.RegExConstraintConverter;
+import top.tangyh.basic.validator.mateconstraint.impl.*;
 import top.tangyh.basic.validator.model.ConstraintInfo;
 import top.tangyh.basic.validator.model.FieldValidatorDesc;
 import top.tangyh.basic.validator.model.ValidConstraint;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static top.tangyh.basic.utils.StrPool.ARRAY;
-import static top.tangyh.basic.utils.StrPool.BOOLEAN;
-import static top.tangyh.basic.utils.StrPool.BOOLEAN_TYPE_NAME;
-import static top.tangyh.basic.utils.StrPool.COLLECTION_TYPE_NAME;
-import static top.tangyh.basic.utils.StrPool.DATE;
-import static top.tangyh.basic.utils.StrPool.DATETIME;
-import static top.tangyh.basic.utils.StrPool.DATE_TYPE_NAME;
-import static top.tangyh.basic.utils.StrPool.DOUBLE_TYPE_NAME;
-import static top.tangyh.basic.utils.StrPool.FLOAT;
-import static top.tangyh.basic.utils.StrPool.FLOAT_TYPE_NAME;
-import static top.tangyh.basic.utils.StrPool.INTEGER;
-import static top.tangyh.basic.utils.StrPool.INTEGER_TYPE_NAME;
-import static top.tangyh.basic.utils.StrPool.LIST_TYPE_NAME;
-import static top.tangyh.basic.utils.StrPool.LOCAL_DATE_TIME_TYPE_NAME;
-import static top.tangyh.basic.utils.StrPool.LOCAL_DATE_TYPE_NAME;
-import static top.tangyh.basic.utils.StrPool.LOCAL_TIME_TYPE_NAME;
-import static top.tangyh.basic.utils.StrPool.LONG_TYPE_NAME;
-import static top.tangyh.basic.utils.StrPool.SET_TYPE_NAME;
-import static top.tangyh.basic.utils.StrPool.SHORT_TYPE_NAME;
-import static top.tangyh.basic.utils.StrPool.TIME;
-import static top.tangyh.basic.validator.utils.ValidatorConstants.MESSAGE;
-import static top.tangyh.basic.validator.utils.ValidatorConstants.NOT_NULL;
-import static top.tangyh.basic.validator.utils.ValidatorConstants.PATTERN;
+import static top.tangyh.basic.utils.StrPool.*;
+import static top.tangyh.basic.validator.utils.ValidatorConstants.*;
 
 /**
  * 缺省的约束提取器
@@ -123,15 +92,18 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
 
         BeanMetaData<?> res = beanMetaDataManager.getBeanMetaData(targetClazz);
         Set<MetaConstraint<?>> r = res.getMetaConstraints();
+        Set<PropertyDescriptor> constrainedProperties = res.getBeanDescriptor().getConstrainedProperties();
         for (MetaConstraint<?> metaConstraint : r) {
-            builderFieldValidatorDesc(metaConstraint, groups, fieldValidatorDesc);
+            builderFieldValidatorDesc(metaConstraint, constrainedProperties, groups, fieldValidatorDesc);
         }
 
         CACHE.put(key, fieldValidatorDesc);
     }
 
 
-    private void builderFieldValidatorDesc(MetaConstraint<?> metaConstraint, Class<?>[] groups,
+    private void builderFieldValidatorDesc(MetaConstraint<?> metaConstraint,
+                                           Set<PropertyDescriptor> constraintDescriptors,
+                                           Class<?>[] groups,
                                            Map<String, FieldValidatorDesc> fieldValidatorDesc) throws Exception {
         //字段上的组
         Set<Class<?>> groupsMeta = metaConstraint.getGroupList();
@@ -159,6 +131,16 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
         String fieldName = con.getConstrainable().getName();
         String key = domainName + fieldName;
 
+        boolean flag = false;
+        for (PropertyDescriptor constraintDescriptor : constraintDescriptors) {
+            if (constraintDescriptor.getPropertyName().equals(fieldName)) {
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            return;
+        }
         FieldValidatorDesc desc = fieldValidatorDesc.get(key);
         if (desc == null) {
             desc = new FieldValidatorDesc();
