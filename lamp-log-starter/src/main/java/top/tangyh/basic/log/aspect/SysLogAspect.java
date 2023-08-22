@@ -186,7 +186,7 @@ public class SysLogAspect {
         optLogDTO.setActionMethod(joinPoint.getSignature().getName());
 
         HttpServletRequest request = setParams(joinPoint, sysLog, optLogDTO);
-        optLogDTO.setRequestIp(JakartaServletUtil.getClientIPByHeader(request));
+        optLogDTO.setRequestIp(JakartaServletUtil.getClientIP(request));
         optLogDTO.setRequestUri(URLUtil.getPath(request.getRequestURI()));
         optLogDTO.setHttpMethod(request.getMethod());
         optLogDTO.setUa(StrUtil.sub(request.getHeader("user-agent"), 0, 500));
