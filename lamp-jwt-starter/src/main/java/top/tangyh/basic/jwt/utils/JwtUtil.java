@@ -42,7 +42,7 @@ public final class JwtUtil {
     /**
      * 将 签名（JWT_SIGN_KEY） 编译成BASE64编码
      */
-    private static final String BASE64_SECURITY = Base64.getEncoder().encodeToString(ContextConstants.JWT_SIGN_KEY.getBytes(StandardCharsets.UTF_8));
+    public static String BASE64_SECURITY;
 
 
     /**
