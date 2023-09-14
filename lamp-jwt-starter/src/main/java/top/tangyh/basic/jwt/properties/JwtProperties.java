@@ -1,11 +1,11 @@
-package top.tangyh.basic.jwt;
+package top.tangyh.basic.jwt.properties;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import top.tangyh.basic.constant.Constants;
 
-import static top.tangyh.basic.jwt.JwtProperties.PREFIX;
+import static top.tangyh.basic.jwt.properties.JwtProperties.PREFIX;
 
 /**
  * 认证服务端 属性
@@ -36,5 +36,10 @@ public class JwtProperties {
      * 使用场景2：？
      */
     private Long allowedClockSkewSeconds = 60L;
-
+    /**
+     * jwt 签名，长度至少32位。
+     * 建议每个公司都修改一下这个字符串！
+     * 必须在 lamp-oauth-server.yml 和 lamp-gateway-server.yml 中同时配置，且配置值必须一致
+     */
+    private String jwtSignKey;
 }

@@ -1,5 +1,5 @@
 import top.tangyh.basic.context.ContextConstants;
-import top.tangyh.basic.jwt.JwtProperties;
+import top.tangyh.basic.jwt.properties.JwtProperties;
 import top.tangyh.basic.jwt.TokenUtil;
 import top.tangyh.basic.jwt.model.AuthInfo;
 import top.tangyh.basic.jwt.model.JwtUserInfo;

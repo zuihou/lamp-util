@@ -2,13 +2,18 @@ package top.tangyh.basic.jwt;
 
 
 import cn.hutool.core.convert.Convert;
-import io.jsonwebtoken.Claims;
-import lombok.AllArgsConstructor;
+import cn.hutool.core.util.StrUtil;
+import top.tangyh.basic.exception.BizException;
 import top.tangyh.basic.jwt.model.AuthInfo;
 import top.tangyh.basic.jwt.model.JwtUserInfo;
 import top.tangyh.basic.jwt.model.Token;
+import top.tangyh.basic.jwt.properties.JwtProperties;
 import top.tangyh.basic.jwt.utils.JwtUtil;
+import io.jsonwebtoken.Claims;
+import lombok.AllArgsConstructor;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,14 +31,20 @@ import static top.tangyh.basic.context.ContextConstants.REFRESH_TOKEN_KEY;
  * @author zuihou
  * @date 2020年03月31日19:03:47
  */
-@AllArgsConstructor
 public class TokenUtil {
     /**
      * 认证服务端使用，如 authority-server
      * 生成和 解析token
      */
     private final JwtProperties jwtProperties;
+    public TokenUtil(JwtProperties jwtProperties) {
+        this.jwtProperties = jwtProperties;
 
+        if (StrUtil.isEmpty(jwtProperties.getJwtSignKey())) {
+            throw BizException.wrap("请配置 {}.jwtSignKey 参数", JwtProperties.PREFIX);
+        }
+        JwtUtil.BASE64_SECURITY = Base64.getEncoder().encodeToString(jwtProperties.getJwtSignKey().getBytes(StandardCharsets.UTF_8));
+    }
 
     /**
      * 创建认证token
