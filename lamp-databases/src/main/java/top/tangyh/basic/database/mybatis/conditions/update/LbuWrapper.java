@@ -68,8 +68,8 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
      * 不建议直接 new 该实例，使用 Wrappers.lambdaUpdate(...)
      */
     private LbuWrapper(T entity, Class<T> entityClass, List<String> sqlSet, AtomicInteger paramNameSeq,
-                       Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments, SharedString paramAlias,
-                       SharedString lastSql, SharedString sqlComment, SharedString sqlFirst) {
+                         Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments, SharedString paramAlias,
+                         SharedString lastSql, SharedString sqlComment, SharedString sqlFirst) {
         super.setEntity(entity);
         super.setEntityClass(entityClass);
         this.sqlSet = sqlSet;
@@ -102,9 +102,9 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
     }
 
     @Override
-    public LbuWrapper<T> setSql(boolean condition, String sql) {
-        if (condition && StringUtils.isNotBlank(sql)) {
-            sqlSet.add(sql);
+    public LbuWrapper<T> setSql(boolean condition, String setSql, Object... params) {
+        if (condition && StringUtils.isNotBlank(setSql)) {
+            sqlSet.add(formatSqlMaybeWithParam(setSql, params));
         }
         return typedThis;
     }
@@ -122,6 +122,7 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
         return new LbuWrapper<>(getEntity(), getEntityClass(), null, paramNameSeq, paramNameValuePairs,
                 new MergeSegments(), paramAlias, SharedString.emptyString(), SharedString.emptyString(), SharedString.emptyString());
     }
+
 
     @Override
     public void clear() {
@@ -200,3 +201,4 @@ public class LbuWrapper<T> extends AbstractLambdaWrapper<T, LbuWrapper<T>>
         return super.in(values != null && values.length > 0, column, values);
     }
 }
+

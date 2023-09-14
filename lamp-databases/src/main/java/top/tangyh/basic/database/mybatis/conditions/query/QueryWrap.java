@@ -6,16 +6,19 @@ import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.core.conditions.SharedString;
 import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.segments.MergeSegments;
+import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.core.toolkit.sql.SqlInjectionUtils;
 import top.tangyh.basic.utils.StrHelper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
@@ -30,11 +33,10 @@ import static top.tangyh.basic.database.mybatis.conditions.Wraps.replace;
  * <p>
  * 相比 QueryWrapper 的增强如下：
  * 1，new QueryWrapper(T entity)时， 对entity 中的string字段 %和_ 符号进行转义，便于模糊查询
- * 2，new QueryWrapper(T entity)时， 对entity 中 RemoteData 类型的字段 值为null或者 key为null或者""时，忽略拼接成查询条件
- * 3，对nested、eq、ne、gt、ge、lt、le、in、*like*、 等方法 进行条件判断，null 或 "" 字段不加入查询
- * 4，对*like*相关方法的参数 %和_ 符号进行转义，便于模糊查询
- * 5，增加 leFooter 方法， 将日期参数值，强制转换成当天 23：59：59
- * 6，增加 geHeader 方法， 将日期参数值，强制转换成当天 00：00：00
+ * 2，对like方法的参数 %和_ 符号进行转义，便于模糊查询
+ * 3，对nested、eq、ne、gt、ge、lt、le、in、like 等方法 进行条件判断，null 或 "" 字段不加入查询
+ * 4，增加 leFooter 方法， 将日期参数值，强制转换成当天 23：59：59
+ * 5，增加 geHeader 方法， 将日期参数值，强制转换成当天 00：00：00
  *
  * @author hubin miemie HCL
  * @since 2018-05-25
@@ -48,9 +50,10 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
      */
     private SharedString sqlSelect = new SharedString();
 
-    public QueryWrap() {
-        this(null);
-    }
+    /**
+     * 检查 SQL 注入过滤
+     */
+    private boolean checkSqlInjection;
 
     public QueryWrap(T entity) {
         super.setEntity(entity);
@@ -59,6 +62,10 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
         if (entity != null) {
             super.setEntity(replace(BeanUtil.toBean(entity, getEntityClass())));
         }
+    }
+
+    public QueryWrap() {
+        this((T) null);
     }
 
     public QueryWrap(T entity, String... columns) {
@@ -71,27 +78,49 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
         }
     }
 
+    public QueryWrap(Class<T> entityClass) {
+        super.setEntityClass(entityClass);
+        super.initNeed();
+    }
+
     /**
      * 非对外公开的构造方法,只用于生产嵌套 sql
      *
      * @param entityClass 本不应该需要的
      */
     private QueryWrap(T entity, Class<T> entityClass, AtomicInteger paramNameSeq,
-                      Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments,
+                      Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments, SharedString paramAlias,
                       SharedString lastSql, SharedString sqlComment, SharedString sqlFirst) {
         super.setEntity(entity);
         super.setEntityClass(entityClass);
         this.paramNameSeq = paramNameSeq;
         this.paramNameValuePairs = paramNameValuePairs;
         this.expression = mergeSegments;
+        this.paramAlias = paramAlias;
         this.lastSql = lastSql;
         this.sqlComment = sqlComment;
         this.sqlFirst = sqlFirst;
     }
 
+    /**
+     * 开启检查 SQL 注入
+     */
+    public QueryWrap<T> checkSqlInjection() {
+        this.checkSqlInjection = true;
+        return this;
+    }
+
     @Override
-    public QueryWrap<T> select(String... columns) {
-        if (ArrayUtils.isNotEmpty(columns)) {
+    protected String columnToString(String column) {
+        if (checkSqlInjection && SqlInjectionUtils.check(column)) {
+            throw new MybatisPlusException("Discovering SQL injection column: " + column);
+        }
+        return column;
+    }
+
+    @Override
+    public QueryWrap<T> select(boolean condition, List<String> columns) {
+        if (condition && CollectionUtils.isNotEmpty(columns)) {
             this.sqlSelect.setStringValue(String.join(StringPool.COMMA, columns));
         }
         return typedThis;
@@ -114,7 +143,7 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
      */
     public LbqWrapper<T> lambda() {
         return new LbqWrapper<>(getEntity(), getEntityClass(), sqlSelect, paramNameSeq, paramNameValuePairs,
-                expression, lastSql, sqlComment, sqlFirst);
+                expression, paramAlias, lastSql, sqlComment, sqlFirst);
     }
 
     /**
@@ -126,7 +155,7 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
     @Override
     protected QueryWrap<T> instance() {
         return new QueryWrap<>(getEntity(), getEntityClass(), paramNameSeq, paramNameValuePairs, new MergeSegments(),
-                SharedString.emptyString(), SharedString.emptyString(), SharedString.emptyString());
+                paramAlias, SharedString.emptyString(), SharedString.emptyString(), SharedString.emptyString());
     }
 
     @Override
@@ -279,7 +308,7 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
      * @param setColumn 这个是传入的待忽略字段的set方法
      * @return 自己
      */
-    public <A extends Object> QueryWrap<T> ignore(BiFunction<T, A, ?> setColumn) {
+    public <A> QueryWrap<T> ignore(BiFunction<T, A, ?> setColumn) {
         setColumn.apply(this.getEntity(), null);
         return this;
     }

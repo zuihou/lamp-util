@@ -23,7 +23,8 @@ import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.segments.MergeSegments;
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
+import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import top.tangyh.basic.utils.StrHelper;
 
@@ -31,6 +32,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
@@ -99,7 +101,7 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
      * 不建议直接 new 该实例，使用 Wrappers.lambdaQuery(...)
      */
     LbqWrapper(T entity, Class<T> entityClass, SharedString sqlSelect, AtomicInteger paramNameSeq,
-               Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments,
+               Map<String, Object> paramNameValuePairs, MergeSegments mergeSegments, SharedString paramAlias,
                SharedString lastSql, SharedString sqlComment, SharedString sqlFirst) {
         super.setEntity(entity);
         super.setEntityClass(entityClass);
@@ -107,6 +109,7 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
         this.paramNameValuePairs = paramNameValuePairs;
         this.expression = mergeSegments;
         this.sqlSelect = sqlSelect;
+        this.paramAlias = paramAlias;
         this.lastSql = lastSql;
         this.sqlComment = sqlComment;
         this.sqlFirst = sqlFirst;
@@ -118,10 +121,9 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
      *
      * @param columns 查询字段
      */
-    @SafeVarargs
     @Override
-    public final LbqWrapper<T> select(SFunction<T, ?>... columns) {
-        if (ArrayUtils.isNotEmpty(columns)) {
+    public final LbqWrapper<T> select(boolean condition, List<SFunction<T, ?>> columns) {
+        if (condition && CollectionUtils.isNotEmpty(columns)) {
             this.sqlSelect.setStringValue(columnsToString(false, columns));
         }
         return typedThis;
@@ -140,8 +142,13 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
      */
     @Override
     public LbqWrapper<T> select(Class<T> entityClass, Predicate<TableFieldInfo> predicate) {
-        super.setEntityClass(entityClass);
-        this.sqlSelect.setStringValue(TableInfoHelper.getTableInfo(getEntityClass()).chooseSelect(predicate));
+        if (entityClass == null) {
+            entityClass = getEntityClass();
+        } else {
+            setEntityClass(entityClass);
+        }
+        Assert.notNull(entityClass, "entityClass can not be null");
+        this.sqlSelect.setStringValue(TableInfoHelper.getTableInfo(entityClass).chooseSelect(predicate));
         return typedThis;
     }
 
@@ -158,7 +165,7 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
     @Override
     protected LbqWrapper<T> instance() {
         return new LbqWrapper<>(getEntity(), getEntityClass(), null, paramNameSeq, paramNameValuePairs,
-                new MergeSegments(), SharedString.emptyString(), SharedString.emptyString(), SharedString.emptyString());
+                new MergeSegments(), paramAlias, SharedString.emptyString(), SharedString.emptyString(), SharedString.emptyString());
     }
 
     @Override
@@ -304,7 +311,7 @@ public class LbqWrapper<T> extends AbstractLambdaWrapper<T, LbqWrapper<T>>
      *
      * @param setColumn 这个是传入的待忽略字段的set方法
      */
-    public <A extends Object> LbqWrapper<T> ignore(BiFunction<T, A, ?> setColumn) {
+    public <A> LbqWrapper<T> ignore(BiFunction<T, A, ?> setColumn) {
         setColumn.apply(this.getEntity(), null);
         return this;
     }

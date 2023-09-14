@@ -27,7 +27,7 @@ public final class TreeUtil {
      * @return
      */
     public static boolean isRoot(Long id) {
-        return id == null || Long.valueOf(StrPool.DEF_PARENT_ID).equals(id);
+        return id == null || StrPool.DEF_PARENT_ID.equals(id);
     }
 
 
@@ -65,7 +65,7 @@ public final class TreeUtil {
         // 找出根节点集合
         List<E> trees = new ArrayList<>();
 
-        List<? extends Serializable> allIds = treeList.stream().map(node -> node.getId()).collect(Collectors.toList());
+        List<? extends Serializable> allIds = treeList.stream().map(node -> node.getId()).toList();
         for (E baseNode : treeList) {
             if (!allIds.contains(baseNode.getParentId()) || selfIdEqSelfParent.contains(baseNode.getParentId())) {
                 trees.add(baseNode);
