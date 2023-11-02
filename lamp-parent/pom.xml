@@ -53,7 +53,7 @@
         <dozer.version>6.5.0</dozer.version>
         <easy-captcha.version>1.6.2</easy-captcha.version>
         <easypoi.version>4.2.0</easypoi.version>
-        <guava.version>30.1.1-jre</guava.version>
+        <guava.version>32.0.0-jre</guava.version>
         <commons-exec.version>1.3</commons-exec.version>
         <commons-email.version>1.5</commons-email.version>
         <commons.collections4.version>4.4</commons.collections4.version>
