@@ -96,9 +96,9 @@ public class ValidatorConfiguration {
         return new DefaultConstraintExtractImpl(validator);
     }
 
-    @Bean
-    public FormValidatorController getFormValidatorController(IConstraintExtract constraintExtract, RequestMappingHandlerMapping requestMappingHandlerMapping) {
-        return new FormValidatorController(constraintExtract, requestMappingHandlerMapping);
-    }
+//    @Bean
+//    public FormValidatorController getFormValidatorController(IConstraintExtract constraintExtract, RequestMappingHandlerMapping requestMappingHandlerMapping) {
+//        return new FormValidatorController(constraintExtract, requestMappingHandlerMapping);
+//    }
 
 }

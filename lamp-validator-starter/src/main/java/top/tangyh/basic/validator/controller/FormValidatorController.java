@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 
 
 /**
@@ -79,6 +81,7 @@ import java.util.List;
  * @date 2019-07-12 14:30
  */
 @RequestMapping
+@RestController
 public class FormValidatorController {
 
     private static final String FORM_VALIDATOR_URL = "/form/validator";
@@ -200,4 +203,3 @@ public class FormValidatorController {
         return validatorStandard;
     }
 }
-
