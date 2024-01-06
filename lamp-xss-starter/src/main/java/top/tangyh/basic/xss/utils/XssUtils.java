@@ -40,7 +40,7 @@ public class XssUtils {
     private static final Pattern ALERT_PATTERN = Pattern.compile("alert(.*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
     private static Policy policy = null;
     private static String REPLACE_STRING = "";
-    private static Pattern script = null;
+    private static Pattern script;
 
     static {
         script = Pattern.compile("<[\r\n| | ]*script[\r\n| | ]*>(.*?)</[\r\n| | ]*script[\r\n| | ]*>", Pattern.CASE_INSENSITIVE);
@@ -154,18 +154,6 @@ public class XssUtils {
 
         return value;
     }
-
-    public static void main(String[] args) {
-
-//        System.out.println(stripXSSAndSql("<span style=\"background&#45;color&#58; &#35;e67e23\">减肥啦</span>"));
-//        try {
-//            String url = URLDecoder.decode("<img src=\"http://112.30.98.118:9025/file/1/image/public/202012/20201204160811_mxsroqyxdk.jpg\">", "UTF-8");
-//            System.out.println(url);
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-    }
-
 
     private static boolean isIgnoreParamValue(String paramValue, List<String> ignoreParamValueList) {
         if (StrUtil.isBlank(paramValue)) {

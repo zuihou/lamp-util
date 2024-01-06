@@ -4,7 +4,15 @@ import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.BeanProperty;
+import com.fasterxml.jackson.databind.DeserializationConfig;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.EnumNamingStrategy;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
 import com.fasterxml.jackson.databind.cfg.CoercionAction;
 import com.fasterxml.jackson.databind.cfg.CoercionInputShape;
@@ -47,32 +55,11 @@ public class EnumDeserializer
         extends StdScalarDeserializer<Object>
         implements ContextualDeserializer {
     private static final long serialVersionUID = 1L;
-
-    protected Object[] _enumsByIndex;
-
-    /**
-     * @since 2.8
-     */
-    private final Enum<?> _enumDefaultValue;
-
     /**
      * @since 2.7.3
      */
     protected final CompactStringObjectMap _lookupByName;
-
-    /**
-     * Alternatively, we may need a different lookup object if "use toString"
-     * is defined.
-     *
-     * @since 2.7.3
-     */
-    protected volatile CompactStringObjectMap _lookupByToString;
-
     protected final Boolean _caseInsensitive;
-
-    private Boolean _useDefaultValueForUnknownEnum;
-    private Boolean _useNullForUnknownEnum;
-
     /**
      * Marker flag for cases where we expect actual integral value for Enum,
      * based on {@code @JsonValue} (and equivalent) annotated accessor.
@@ -80,7 +67,6 @@ public class EnumDeserializer
      * @since 2.13
      */
     protected final boolean _isFromIntValue;
-
     /**
      * Look up map with <b>key</b> as <code>Enum.name()</code> converted by
      * {@link EnumNamingStrategy#convertEnumToExternalName(String)}
@@ -89,6 +75,20 @@ public class EnumDeserializer
      * @since 2.15
      */
     protected final CompactStringObjectMap _lookupByEnumNaming;
+    /**
+     * @since 2.8
+     */
+    private final Enum<?> _enumDefaultValue;
+    protected Object[] _enumsByIndex;
+    /**
+     * Alternatively, we may need a different lookup object if "use toString"
+     * is defined.
+     *
+     * @since 2.7.3
+     */
+    protected volatile CompactStringObjectMap _lookupByToString;
+    private Boolean _useDefaultValueForUnknownEnum;
+    private Boolean _useNullForUnknownEnum;
 
     /**
      * @since 2.9
@@ -366,7 +366,8 @@ public class EnumDeserializer
     private final Object _deserializeAltString(JsonParser p, DeserializationContext ctxt,
                                                CompactStringObjectMap lookup, String nameOrig) throws IOException {
         String name = nameOrig.trim();
-        if (name.isEmpty()) { // empty or blank
+        // empty or blank
+        if (name.isEmpty()) {
             // 07-Jun-2021, tatu: [databind#3171] Need to consider Default value first
             //   (alas there's bit of duplication here)
             if (useDefaultValueForUnknownEnum(ctxt)) {

@@ -4,7 +4,8 @@ import java.awt.*;
 
 /**
  * 中文验证码抽象类
- * Created by 王帆 on 2018-07-27 上午 10:08.
+ *
+ * @author Created by 王帆 on 2018-07-27 上午 10:08.
  */
 public abstract class ChineseCaptchaAbstract extends Captcha {
     // 常用汉字

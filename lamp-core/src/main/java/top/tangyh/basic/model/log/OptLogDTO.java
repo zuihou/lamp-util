@@ -36,8 +36,9 @@ public class OptLogDTO {
     /**
      * 租户编码
      */
-    private String tenantCode;
-    private String subTenantCode;
+    private Long tenantId;
+    private Long basePoolNameHeader;
+    private Long extendPoolNameHeader;
 
     /**
      * 日志链路追踪id日志标志
@@ -117,6 +118,7 @@ public class OptLogDTO {
     private String ua;
 
     private Long createdBy;
+    private Long createdOrgId;
 
 
 }

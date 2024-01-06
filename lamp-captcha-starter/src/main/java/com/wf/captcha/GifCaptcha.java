@@ -38,7 +38,7 @@ public class GifCaptcha extends Captcha {
         try {
             char[] strs = textChar();  // 获取验证码数组
             // 随机生成每个文字的颜色
-            Color fontColor[] = new Color[len];
+            Color[] fontColor = new Color[len];
             for (int i = 0; i < len; i++) {
                 fontColor[i] = color();
             }

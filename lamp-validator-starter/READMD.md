@@ -1,8 +1,8 @@
 # 说明
 
-## 测试代码请查看： lamp-authortiy-controller -> test/*ValidateController
+## 测试代码请查看： lamp-authority-controller -> test/*ValidateController
 
-## 官方对一下3种 入参类型 的请求都支持校验
+## hibernate-validator 官方对以下3种 入参类型 的请求都支持校验， 但目前本工具类只支持获取第二和第三种类型的入参校验规则
 
 - 1、普通参数类型 （详见：ParamValidateController）
 
@@ -35,4 +35,7 @@ public class ParamValidateController {
     }
 ```
 
-## 但由于对hibernate-validate的一些机制不熟悉，目前只能获取第二和第三种类型的入参校验规则
+## 如何使用？
+
+参考： https://www.kancloud.cn/zuihou/zuihou-admin-cloud/2074606
+

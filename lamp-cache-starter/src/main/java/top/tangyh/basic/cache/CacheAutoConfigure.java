@@ -33,7 +33,7 @@ public class CacheAutoConfigure {
             for (Object obj : objects) {
                 if (obj != null) {
                     sb.append(StrPool.COLON);
-                    sb.append(obj.toString());
+                    sb.append(obj);
                 }
             }
             return sb.toString();

@@ -1,6 +1,7 @@
 package top.tangyh.basic.utils;
 
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +41,7 @@ public final class AntiSqlFilterUtils {
     }
 
     public static String getSafeValue(String oldValue) {
-        if (oldValue == null || "".equals(oldValue)) {
+        if (StrUtil.isEmpty(oldValue)) {
             return oldValue;
         }
         StringBuilder sb = new StringBuilder(oldValue);

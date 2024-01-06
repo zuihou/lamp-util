@@ -22,6 +22,8 @@ public class JwtProperties {
     /**
      * 过期时间 2h
      * 单位：s
+     * <p>
+     * 在 lamp-oauth-server.yml 配置即可
      */
     private Long expire = 7200L;
     /**
@@ -34,6 +36,8 @@ public class JwtProperties {
      * 单位：s
      * 使用场景1：多台服务器集群部署时，服务器时间戳可能不一致
      * 使用场景2：？
+     * <p>
+     * 在 lamp-gateway-server.yml 配置即可
      */
     private Long allowedClockSkewSeconds = 60L;
     /**

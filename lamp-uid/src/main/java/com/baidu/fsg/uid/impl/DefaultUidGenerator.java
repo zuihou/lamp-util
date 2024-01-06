@@ -17,6 +17,8 @@ package com.baidu.fsg.uid.impl;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baidu.fsg.uid.BitsAllocator;
 import com.baidu.fsg.uid.UidGenerator;
@@ -83,6 +85,13 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
      */
     private long sequence = 0L;
     private long lastSecond = -1L;
+    /**
+     * 当在低频模式下时，序号始终为0，导致生成ID始终为偶数<br>
+     * 此属性用于限定一个随机上限，在不同毫秒下生成序号时，给定一个随机数，避免偶数问题。<br>
+     * 注意次数必须小于bitsAllocator.getMaxSequence()，{@code 0}表示不使用随机数。<br>
+     * 这个上限不包括值本身。
+     */
+    private long randomSequenceLimit;
 
     /**
      * Spring property
@@ -91,14 +100,17 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        // initialize bits allocator
+        // 初始化位分配器
         bitsAllocator = new BitsAllocator(timeBits, workerBits, seqBits);
 
-        // initialize worker id
+        // 初始化工作程序id
         workerId = workerIdAssigner.assignWorkerId();
         if (workerId > bitsAllocator.getMaxWorkerId()) {
             throw new RuntimeException("Worker id " + workerId + " exceeds the max " + bitsAllocator.getMaxWorkerId());
         }
+
+        // 判断是否超过最大值
+        this.randomSequenceLimit = Assert.checkBetween(randomSequenceLimit, 0, bitsAllocator.getMaxSequence());
 
         LOGGER.info("Initialized bits(1, {}, {}, {}) for workerID:{}", timeBits, workerBits, seqBits, workerId);
     }
@@ -144,6 +156,7 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
         long currentSecond = getCurrentSecond();
 
         // Clock moved backwards, refuse to generate uid
+        // 时钟回拨问题待解决
         if (currentSecond < lastSecond) {
             long refusedSeconds = lastSecond - currentSecond;
             throw new UidGenerateException("Clock moved backwards. Refusing for %d seconds", refusedSeconds);
@@ -153,16 +166,20 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
         //同一秒内的，本次发号请求不是本秒的第一次, sequence 加一
         if (currentSecond == lastSecond) {
             sequence = (sequence + 1) & bitsAllocator.getMaxSequence();
-            // Exceed the max sequence, we wait the next second to generate uid
-            // 号发完了，等到下一秒
+            // 同一秒内，超过最大序列(号发完了)，我们等待下一秒生成uid
             if (sequence == 0) {
                 currentSecond = getNextSecond(lastSecond);
             }
 
-            // At the different second, sequence restart from zero
+            // 在不同的秒，序列从零重新启动
         } else {
-            //新的一秒，重新开始发号
-            sequence = 0L;
+            // 新的一秒，重新开始发号
+            // 低频使用时生成的id总是偶数问题 https://gitee.com/dromara/hutool/issues/I51EJY
+            if (randomSequenceLimit > 1) {
+                sequence = RandomUtil.randomLong(randomSequenceLimit);
+            } else {
+                sequence = 0L;
+            }
         }
 
         lastSecond = currentSecond;
@@ -227,4 +244,7 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
         }
     }
 
+    public long getRandomSequenceLimit() {
+        return randomSequenceLimit;
+    }
 }

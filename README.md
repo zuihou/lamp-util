@@ -3,8 +3,7 @@
 [![Language](https://img.shields.io/badge/langs-Java%20%7C%20SpringCloud%20%7C%20Vue3%20%7C%20...-red?style=flat-square&color=42b883)](https://github.com/dromara/lamp-cloud)
 [![License](https://img.shields.io/github/license/dromara/lamp-cloud?color=42b883&style=flat-square)](https://github.com/dromara/lamp-cloud/blob/master/LICENSE)
 [![Author](https://img.shields.io/badge/作者-zuihou-orange.svg)](https://github.com/zuihou)
-[![Version](https://img.shields.io/badge/版本-3.11.0-java17-brightgreen.svg)](https://github.com/dromara/lamp-cloud)
-
+[![Version](https://img.shields.io/badge/版本-4.15.0-java17-brightgreen.svg)](https://github.com/dromara/lamp-cloud)
 [![Star](https://img.shields.io/github/stars/dromara/lamp-cloud?color=42b883&logo=github&style=flat-square)](https://github.com/dromara/lamp-cloud/stargazers)
 [![Fork](https://img.shields.io/github/forks/dromara/lamp-cloud?color=42b883&logo=github&style=flat-square)](https://github.com/dromara/lamp-cloud/network/members)
 [![Star](https://gitee.com/dromara/lamp-cloud/badge/star.svg?theme=gray)](https://gitee.com/dromara/lamp-cloud/stargazers)
@@ -30,6 +29,8 @@
 
 [https://tangyh.top](https://tangyh.top)
 
+# lamp 项目组成
+
 ## 工具集
 
 | 项目             | gitee                                                        | github                                                     | 备注       |
@@ -42,16 +43,16 @@
 
 | 项目         | gitee                                                  | github                                                 | 备注                |
 |------------|--------------------------------------------------------|--------------------------------------------------------|-------------------|
-| lamp-cloud | [lamp-cloud](https://gitee.com/dromara/lamp-cloud)     | [lamp-cloud](https://github.com/dromara/lamp-cloud)    | SpringCloud(微服务)版 |
+| lamp-cloud | [lamp-cloud](https://gitee.com/dromara/lamp-cloud)   | [lamp-cloud](https://github.com/dromara/lamp-cloud)     | SpringCloud(微服务)版 |
 | lamp-boot  | [lamp-boot](https://gitee.com/zuihou111/lamp-boot)     | [lamp-boot](https://github.com/zuihou/lamp-boot)       | SpringBoot(单体)版   |
 | 微服务版示例     | [lamp-samples](https://github.com/zuihou/lamp-samples) | [lamp-samples](https://github.com/zuihou/lamp-samples) | 常用示例              |
 
 ## 前端
 
-| 项目                         | gitee                                                      | github                                                   | 备注                                           | 演示地址                            |
-|----------------------------|------------------------------------------------------------|----------------------------------------------------------|----------------------------------------------|---------------------------------|
-| lamp-web-plus(强烈推荐！👏👏👏) | [lamp-web-plus](https://gitee.com/zuihou111/lamp-web-plus) | [lamp-web-plus](https://github.com/zuihou/lamp-web-plus) | 基于 vue-vben-admin （vue 3 + ant design vue 2） | https://pro.tangyh.top          |
-| lamp-web                   | [lamp-web](https://gitee.com/zuihou111/lamp-web)           | [lamp-web](https://github.com/zuihou/lamp-web)           | 基于 vue-admin-element (element-ui)            | https://pro.tangyh.top/lamp-web |
+| 项目                        | gitee                                                     | github                                                             | 备注                                           | 演示地址                            |
+|---------------------------|-----------------------------------------------------------|--------------------------------------------------------------------|----------------------------------------------|---------------------------------|
+| lamp-web                  | [lamp-web](https://gitee.com/zuihou111/lamp-web)          | [lamp-web](https://github.com/zuihou/lamp-web)                     | 基于 vue-admin-element (element-ui)            | https://pro.tangyh.top          |
+| lamp-web-pro(强烈推荐！👏👏👏) | [lamp-web-plus](https://gitee.com/zuihou111/lamp-web-pro) | [lamp-web-plus](https://github.com/zuihou/lamp-web-plus)           | 基于 vue-vben-admin （vue 3 + ant design vue 2） | https://pro.tangyh.top/lamp-web |
 
 # lamp-util 简介
 

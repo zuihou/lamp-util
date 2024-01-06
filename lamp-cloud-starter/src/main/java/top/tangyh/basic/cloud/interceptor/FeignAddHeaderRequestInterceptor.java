@@ -28,8 +28,20 @@ import java.util.Map;
 @Slf4j
 public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
     public static final List<String> HEADER_NAME_LIST = Arrays.asList(
-            ContextConstants.JWT_KEY_TENANT, ContextConstants.JWT_KEY_SUB_TENANT, ContextConstants.JWT_KEY_USER_ID,
-            ContextConstants.JWT_KEY_ACCOUNT, ContextConstants.JWT_KEY_NAME, ContextConstants.GRAY_VERSION,
+            ContextConstants.APPLICATION_ID_KEY, ContextConstants.TOKEN_KEY,
+            ContextConstants.CLIENT_KEY,
+            ContextConstants.TENANT_ID_KEY, ContextConstants.JWT_KEY_USER_ID,
+            ContextConstants.JWT_KEY_EMPLOYEE_ID, ContextConstants.JWT_KEY_UUID,
+            ContextConstants.TENANT_BASE_POOL_NAME_HEADER, ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER,
+            ContextConstants.PATH_HEADER, ContextConstants.CLIENT_ID_HEADER,
+            ContextConstants.CURRENT_COMPANY_ID_HEADER,
+            ContextConstants.CURRENT_TOP_COMPANY_ID_HEADER,
+            ContextConstants.CURRENT_DEPT_ID_HEADER,
+            ContextConstants.FEIGN,
+            ContextConstants.TRACE_ID_HEADER,
+            ContextConstants.GRAY_VERSION,
+            ContextConstants.STOP,
+            ContextConstants.PROCEED,
             ContextConstants.TRACE_ID_HEADER, "X-Real-IP", "x-forwarded-for"
     );
 

@@ -1,10 +1,13 @@
 package top.tangyh.basic.base.controller;
 
 import top.tangyh.basic.base.R;
+import top.tangyh.basic.base.entity.SuperEntity;
 import top.tangyh.basic.base.service.SuperService;
 import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.exception.BizException;
 import top.tangyh.basic.exception.code.BaseExceptionCode;
+
+import java.io.Serializable;
 
 /**
  * 基础接口
@@ -13,7 +16,14 @@ import top.tangyh.basic.exception.code.BaseExceptionCode;
  * @author zuihou
  * @date 2020年03月07日21:56:32
  */
-public interface BaseController<Entity> {
+public interface BaseController<Id extends Serializable, Entity extends SuperEntity<Id>> {
+
+    /**
+     * 获取Service
+     *
+     * @return Service
+     */
+    SuperService<Id, Entity> getSuperService();
 
     /**
      * 获取实体的类型
@@ -21,14 +31,6 @@ public interface BaseController<Entity> {
      * @return 实体的类型
      */
     Class<Entity> getEntityClass();
-
-    /**
-     * 获取Service
-     *
-     * @return Service
-     */
-    SuperService<Entity> getBaseService();
-
 
     /**
      * 成功返回
@@ -160,26 +162,8 @@ public interface BaseController<Entity> {
      *
      * @return 租户编码
      */
-    default String getTenant() {
-        return ContextUtil.getTenant();
-    }
-
-    /**
-     * 登录人账号
-     *
-     * @return 账号
-     */
-    default String getAccount() {
-        return ContextUtil.getAccount();
-    }
-
-    /**
-     * 登录人姓名
-     *
-     * @return 姓名
-     */
-    default String getName() {
-        return ContextUtil.getName();
+    default Long getTenantId() {
+        return ContextUtil.getTenantId();
     }
 
 }

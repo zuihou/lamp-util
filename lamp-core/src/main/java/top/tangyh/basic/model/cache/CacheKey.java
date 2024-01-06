@@ -30,5 +30,8 @@ public class CacheKey {
         this.key = key;
     }
 
-
+    @Override
+    public String toString() {
+        return "key=" + key + " , expire=" + expire;
+    }
 }

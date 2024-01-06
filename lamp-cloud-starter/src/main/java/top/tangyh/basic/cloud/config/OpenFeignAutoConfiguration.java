@@ -7,7 +7,6 @@ import feign.form.spring.SpringFormEncoder;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.LampFeignClientsRegistrar;
@@ -54,7 +53,6 @@ public class OpenFeignAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public RequestInterceptor requestInterceptor() {
         return new FeignAddHeaderRequestInterceptor();
     }

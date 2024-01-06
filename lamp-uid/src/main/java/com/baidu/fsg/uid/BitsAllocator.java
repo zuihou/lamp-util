@@ -50,23 +50,23 @@ public class BitsAllocator {
     /**
      * Bits for [sign-> second-> workId-> sequence]
      */
-    private int signBits = 1;
+    private final int signBits = 1;
 
     /**
      * Constructor with timestampBits, workerIdBits, sequenceBits<br>
      * The highest bit used for sign, so <code>63</code> bits for timestampBits, workerIdBits, sequenceBits
      */
     public BitsAllocator(final int timestampBits, final int workerIdBits, final int sequenceBits) {
-        // make sure allocated 64 bits
+        // 确保分配了64位
         int allocateTotalBits = signBits + timestampBits + workerIdBits + sequenceBits;
-        Assert.isTrue(allocateTotalBits == TOTAL_BITS, "allocate not enough 64 bits");
+        Assert.isTrue(allocateTotalBits == TOTAL_BITS, "分配的不够64位");
 
-        // initialize bits
+        // 初始化位
         this.timestampBits = timestampBits;
         this.workerIdBits = workerIdBits;
         this.sequenceBits = sequenceBits;
 
-        // initialize max value
+        // 初始化最大值
         // -1 是111111111（64个1）
         // 先将-1左移timestampBits位，得到111111100000（timestampBits个零)
         // 然后取反，得到00000....1111...（timestampBits）个1
@@ -75,7 +75,7 @@ public class BitsAllocator {
         this.maxWorkerId = ~(-1L << workerIdBits);
         this.maxSequence = ~(-1L << sequenceBits);
 
-        // initialize shift
+        // 初始化移位
         this.timestampShift = workerIdBits + sequenceBits;
         this.workerIdShift = sequenceBits;
     }

@@ -1,9 +1,11 @@
 package top.tangyh.basic.base.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import org.springframework.beans.factory.annotation.Autowired;
+import top.tangyh.basic.base.entity.SuperEntity;
 import top.tangyh.basic.base.service.SuperService;
 
-import java.lang.reflect.ParameterizedType;
+import java.io.Serializable;
 
 /**
  * 简单的实现了BaseController，为了获取注入 Service 和 实体类型
@@ -16,22 +18,25 @@ import java.lang.reflect.ParameterizedType;
  * @author zuihou
  * @date 2020年03月07日22:08:27
  */
-public abstract class SuperSimpleController<S extends SuperService<Entity>, Entity> implements BaseController<Entity> {
-
+public abstract class SuperSimpleController<S extends SuperService<Id, Entity>, Id extends Serializable, Entity extends SuperEntity<Id>>
+        implements BaseController<Id, Entity> {
     @Autowired
-    protected S baseService;
-    Class<Entity> entityClass = null;
+    protected S superService;
+    protected Class<Entity> entityClass = currentModelClass();
+
+    protected Class<Entity> currentModelClass() {
+        return (Class<Entity>) ReflectionKit.getSuperClassGenericType(this.getClass(), SuperSimpleController.class, 2);
+    }
 
     @Override
     public Class<Entity> getEntityClass() {
-        if (entityClass == null) {
-            this.entityClass = (Class<Entity>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
-        }
         return this.entityClass;
     }
 
     @Override
-    public SuperService<Entity> getBaseService() {
-        return baseService;
+    public SuperService<Id, Entity> getSuperService() {
+        return superService;
     }
+
+
 }

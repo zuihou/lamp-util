@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import top.tangyh.basic.exception.BizException;
 
+import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -52,12 +53,14 @@ public final class DateUtils {
     public static final String DEFAULT_DATE_TIME_END_FORMAT = "yyyy-MM-dd 23:59:59";
     public static final String DEFAULT_DATE_TIME_FORMAT_EN = CHINESE_DATE_TIME_PATTERN;
     public static final String DEFAULT_TIME_FORMAT = NORM_TIME_PATTERN;
+    public static final String DEFAULT_TIME_EN_FORMAT = "HH时mm分ss秒";
     public static final String DAY = "DAY";
     public static final String MONTH = "MONTH";
     public static final String WEEK = "WEEK";
 
     public static final String DEFAULT_DATE_FORMAT_MATCHES = "^\\d{4}-\\d{1,2}-\\d{1,2}$";
     public static final String DEFAULT_DATE_TIME_FORMAT_MATCHES = "^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}:\\d{1,2}:\\d{1,2}$";
+    public static final String DEFAULT_MONTH_FORMAT_EN_MATCHES = "^\\d{4}年\\d{1,2}月$";
     public static final String DEFAULT_DATE_FORMAT_EN_MATCHES = "^\\d{4}年\\d{1,2}月\\d{1,2}日$";
     public static final String DEFAULT_DATE_TIME_FORMAT_EN_MATCHES = "^\\d{4}年\\d{1,2}月\\d{1,2}日\\d{1,2}时\\d{1,2}分\\d{1,2}秒$";
     public static final String SLASH_DATE_FORMAT_MATCHES = "^\\d{4}/\\d{1,2}/\\d{1,2}$";
@@ -78,7 +81,7 @@ public final class DateUtils {
      * 一年平均天数
      */
     public static final long MAX_YEAR_DAY = 365;
-    private static final Map<String, String> DATE_FORMAT = new LinkedHashMap(5);
+    private static final Map<String, String> DATE_FORMAT = new LinkedHashMap<>(5);
 //--格式化日期start-----------------------------------------
 
     static {
@@ -133,9 +136,20 @@ public final class DateUtils {
     }
 
     /**
-     * 格式化日期,返回格式为 yyyy-MM
+     * 格式化日期,返回格式为 yyyy-MM-mm HH:mm:ss
      *
      * @param date 日期
+     * @return 格式化后的字符串
+     */
+    public static String format(LocalDateTime date) {
+        return format(date, DEFAULT_DATE_TIME_FORMAT);
+    }
+
+    /**
+     * 格式化日期,
+     *
+     * @param date    日期
+     * @param pattern 格式, 默认值为 yyyy-MM-mm HH:mm:ss
      * @return 格式化后的字符串
      */
     public static String format(LocalDateTime date, String pattern) {
@@ -143,10 +157,17 @@ public final class DateUtils {
             date = LocalDateTime.now();
         }
         if (pattern == null) {
-            pattern = DEFAULT_MONTH_FORMAT;
+            pattern = DEFAULT_DATE_TIME_FORMAT;
         }
         return date.format(DateTimeFormatter.ofPattern(pattern));
     }
+
+    /**
+     * 格式化日期,返回格式为 yyyy-MM
+     *
+     * @param date 日期
+     * @return 格式化后的字符串
+     */
 
     public static String format(LocalDate date, String pattern) {
         if (date == null) {
@@ -272,6 +293,28 @@ public final class DateUtils {
     public static String formatAsDateTime(Date date) {
         SimpleDateFormat df = new SimpleDateFormat(DEFAULT_DATE_TIME_FORMAT);
         return df.format(date);
+    }
+
+
+    /**
+     * 计算两个时间差
+     */
+    public static String getDatePoor(Date endDate, Date nowDate) {
+        long nd = 1000 * 24 * 60 * 60;
+        long nh = 1000 * 60 * 60;
+        long nm = 1000 * 60;
+        // long ns = 1000;
+        // 获得两个时间的毫秒时间差异
+        long diff = endDate.getTime() - nowDate.getTime();
+        // 计算差多少天
+        long day = diff / nd;
+        // 计算差多少小时
+        long hour = diff % nd / nh;
+        // 计算差多少分钟
+        long min = diff % nd % nh / nm;
+        // 计算差多少秒//输出结果
+        // long sec = diff % nd % nh % nm / ns;
+        return day + "天" + hour + "小时" + min + "分钟";
     }
 
     /**
@@ -884,29 +927,29 @@ public final class DateUtils {
         }
         Long lastTime = Convert.toLong(time.substring(0, time.length() - 1));
 
-        switch (unit) {
+        return switch (unit) {
             //秒
-            case 's':
-                return dateTime.plusSeconds(lastTime);
+            case 's' -> dateTime.plusSeconds(lastTime);
             //分
-            case 'm':
-                return dateTime.plusMinutes(lastTime);
+            case 'm' -> dateTime.plusMinutes(lastTime);
             //时
-            case 'h' | 'H':
-                return dateTime.plusHours(lastTime);
+            case 'h' | 'H' -> dateTime.plusHours(lastTime);
             //周
-            case 'w':
-                return dateTime.plusWeeks(lastTime);
+            case 'w' -> dateTime.plusWeeks(lastTime);
             //月
-            case 'M':
-                return dateTime.plusMonths(lastTime);
+            case 'M' -> dateTime.plusMonths(lastTime);
             //年
-            case 'y':
-                return dateTime.plusYears(lastTime);
+            case 'y' -> dateTime.plusYears(lastTime);
             //天
-            case 'd':
-            default:
-                return dateTime.plusDays(lastTime);
-        }
+            default -> dateTime.plusDays(lastTime);
+        };
+    }
+
+    /**
+     * 获取服务器启动时间
+     */
+    public static Date getServerStartDate() {
+        long time = ManagementFactory.getRuntimeMXBean().getStartTime();
+        return new Date(time);
     }
 }

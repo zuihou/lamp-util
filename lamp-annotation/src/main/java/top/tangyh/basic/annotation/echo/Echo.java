@@ -25,7 +25,6 @@ import static cn.hutool.core.text.CharSequenceUtil.EMPTY;
  * @author zuihou
  * @date 2020年01月18日17:59:25
  */
-
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = {ElementType.METHOD, ElementType.TYPE, ElementType.FIELD})
 public @interface Echo {
@@ -41,7 +40,7 @@ public @interface Echo {
     /**
      * 提供自动注入值的 查询类
      * <p/>
-     * 注意： 用 @Echo(api = "xxxServiceImpl")时，要保证当前服务有 xxxServiceImpl 类. 没这个类就要用 xxxApi  (FeignClient)
+     * 注意： 用 @Echo(api = "xxxServiceImpl")时，要保证当前服务有 xxxServiceImpl 类.
      *
      * @return 查询类的Spring Name
      */
@@ -51,10 +50,11 @@ public @interface Echo {
      * 自动注入值的类型， 用于强制转换
      * <p>
      * api() 配置了FeignClient时，通过 api 调用的结果会因为序列化的关系丢失类型
-     * 如：实际返回值中 Map<Serializable, Object> 的value值为 User 对象，但由于通过FeignClient调用时，会自动进行序列化和房序列化，
-     * 导致返回值Map中Object类型的value值丢失类型，故通过该参数进行类型强制转换。
+     * <p>
+     * 如：实际返回值中 Map<Serializable, Object> 的value值为 User 对象，但由于通过FeignClient调用时，会自动进行序列化和反序列化，导致返回值Map中Object类型的value值丢失类型，
+     * 可以通过配置该参数，回显接口会对返回的value值类型进行强制转换。
      *
-     * @return 待强壮的类
+     * @return 待转换类
      */
     Class<?> beanClass() default Object.class;
 

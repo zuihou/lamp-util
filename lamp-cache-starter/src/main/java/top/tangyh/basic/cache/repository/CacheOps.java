@@ -1,6 +1,7 @@
 package top.tangyh.basic.cache.repository;
 
 import org.springframework.lang.NonNull;
+import top.tangyh.basic.cache.redis2.CacheResult;
 import top.tangyh.basic.model.cache.CacheKey;
 
 import java.util.Collection;
@@ -22,6 +23,14 @@ public interface CacheOps {
      * @return 删除个数
      */
     Long del(@NonNull CacheKey... keys);
+
+    /**
+     * 删除指定的key
+     *
+     * @param keys 多个key
+     * @return 删除个数
+     */
+    Long del(@NonNull Collection<CacheKey> keys);
 
     /**
      * 删除指定的key
@@ -55,7 +64,7 @@ public interface CacheOps {
      * @param cacheNullValues 是否缓存null对象
      * @return 值 不存在时，返回null
      */
-    <T> T get(@NonNull CacheKey key, boolean... cacheNullValues);
+    <T> CacheResult<T> get(@NonNull CacheKey key, boolean... cacheNullValues);
 
     /**
      * 根据key获取对象
@@ -64,7 +73,7 @@ public interface CacheOps {
      * @param cacheNullValues 是否缓存null对象
      * @return 值 不存在时，返回null
      */
-    <T> T get(@NonNull String key, boolean... cacheNullValues);
+    <T> CacheResult<T> get(@NonNull String key, boolean... cacheNullValues);
 
     /**
      * 根据keys获取对象
@@ -72,7 +81,7 @@ public interface CacheOps {
      * @param keys redis主键
      * @return 值 不存在时，返回空集合
      */
-    <T> List<T> find(@NonNull Collection<CacheKey> keys);
+    <T> List<CacheResult<T>> find(@NonNull Collection<CacheKey> keys);
 
     /**
      * 根据key获取对象
@@ -83,7 +92,7 @@ public interface CacheOps {
      * @param cacheNullValues 是否缓存null对象
      * @return 值
      */
-    <T> T get(@NonNull CacheKey key, Function<CacheKey, ? extends T> loader, boolean... cacheNullValues);
+    <T> CacheResult<T> get(@NonNull CacheKey key, Function<CacheKey, ? extends T> loader, boolean... cacheNullValues);
 
     /**
      * 清空所有存储的数据

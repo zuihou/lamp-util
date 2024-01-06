@@ -25,7 +25,7 @@ public class LampSqlInjector extends DefaultSqlInjector {
         //增加自定义方法
         methodList.add(new InsertBatchSomeColumn(i -> i.getFieldFill() != FieldFill.UPDATE));
         methodList.add(new UpdateAllById(field -> !ArrayUtil.containsAny(new String[]{
-                SuperEntity.CREATE_TIME_COLUMN, SuperEntity.CREATED_BY_COLUMN
+                SuperEntity.CREATED_TIME_FIELD, SuperEntity.CREATED_BY_FIELD
         }, field.getColumn())));
         return methodList;
     }

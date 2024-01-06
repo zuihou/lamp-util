@@ -2,14 +2,13 @@ package top.tangyh.basic.log;
 
 
 import lombok.AllArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
-import top.tangyh.basic.constant.Constants;
 import top.tangyh.basic.jackson.JsonUtil;
 import top.tangyh.basic.log.aspect.SysLogAspect;
 import top.tangyh.basic.log.event.SysLogListener;
@@ -30,6 +29,7 @@ import top.tangyh.basic.log.properties.OptLogProperties;
 @Configuration
 @AllArgsConstructor
 @ConditionalOnWebApplication
+@EnableConfigurationProperties(OptLogProperties.class)
 @ConditionalOnProperty(prefix = OptLogProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 public class LogAutoConfiguration {
 
@@ -41,7 +41,7 @@ public class LogAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnExpression("${" + Constants.PROJECT_PREFIX + ".log.enabled:true} && 'LOGGER'.equals('${" + Constants.PROJECT_PREFIX + ".log.type:LOGGER}')")
+    @ConditionalOnProperty(prefix = OptLogProperties.PREFIX, name = "type", havingValue = "LOGGER", matchIfMissing = true)
     public SysLogListener sysLogListener() {
         return new SysLogListener(log -> PointUtil.debug("0", "OPT_LOG", JsonUtil.toJson(log)));
     }

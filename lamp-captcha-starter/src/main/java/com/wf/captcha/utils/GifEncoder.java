@@ -171,7 +171,9 @@ public class GifEncoder {
      * @return boolean
      */
     public boolean finish() {
-        if (!started) return false;
+        if (!started) {
+            return false;
+        }
         boolean ok = true;
         started = false;
         try {
@@ -206,7 +208,7 @@ public class GifEncoder {
      * @param fps float frame rate (frames per second)
      */
     public void setFrameRate(float fps) {
-        if (fps != 0f) {
+        if (!Float.valueOf(0f).equals(fps)) {
             delay = Math.round(100f / fps);
         }
     }
@@ -222,7 +224,9 @@ public class GifEncoder {
      * @param quality int greater than 0.
      */
     public void setQuality(int quality) {
-        if (quality < 1) quality = 1;
+        if (quality < 1) {
+            quality = 1;
+        }
         sample = quality;
     }
 
@@ -235,11 +239,17 @@ public class GifEncoder {
      * @param h int frame width.
      */
     public void setSize(int w, int h) {
-        if (started && !firstFrame) return;
+        if (started && !firstFrame) {
+            return;
+        }
         width = w;
         height = h;
-        if (width < 1) width = 320;
-        if (height < 1) height = 240;
+        if (width < 1) {
+            width = 320;
+        }
+        if (height < 1) {
+            height = 240;
+        }
         sizeSet = true;
     }
 
@@ -251,7 +261,9 @@ public class GifEncoder {
      * @return false if initial write failed.
      */
     public boolean start(OutputStream os) {
-        if (os == null) return false;
+        if (os == null) {
+            return false;
+        }
         boolean ok = true;
         closeStream = false;
         out = os;
@@ -324,7 +336,9 @@ public class GifEncoder {
      * @return int
      */
     protected int findClosest(Color c) {
-        if (colorTab == null) return -1;
+        if (colorTab == null) {
+            return -1;
+        }
         int r = c.getRed();
         int g = c.getGreen();
         int b = c.getBlue();

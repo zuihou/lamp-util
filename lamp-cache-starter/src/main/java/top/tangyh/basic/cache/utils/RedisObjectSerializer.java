@@ -16,15 +16,15 @@ import top.tangyh.basic.jackson.JsonUtil;
  */
 public class RedisObjectSerializer extends Jackson2JsonRedisSerializer<Object> {
     public RedisObjectSerializer() {
-        super(Object.class);
+        super(buildObjectMapper(), Object.class);
+    }
 
+    private static ObjectMapper buildObjectMapper() {
         ObjectMapper objectMapper = JsonUtil.newInstance();
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,
                 ObjectMapper.DefaultTyping.NON_FINAL,
                 JsonTypeInfo.As.WRAPPER_ARRAY);
-
-        this.setObjectMapper(objectMapper);
+        return objectMapper;
     }
-
 }

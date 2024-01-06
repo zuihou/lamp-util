@@ -17,12 +17,20 @@ public class ForbiddenException extends BaseUncheckedException {
         super(code, message);
     }
 
+    public ForbiddenException(int code, String message, Object... args) {
+        super(code, message, args);
+    }
+
     public static ForbiddenException wrap(BaseExceptionCode ex) {
         return new ForbiddenException(ex.getCode(), ex.getMsg());
     }
 
     public static ForbiddenException wrap(String msg) {
         return new ForbiddenException(ExceptionCode.FORBIDDEN.getCode(), msg);
+    }
+
+    public static ForbiddenException wrap(String msg, Object... args) {
+        return new ForbiddenException(ExceptionCode.FORBIDDEN.getCode(), msg, args);
     }
 
     @Override

@@ -1,32 +1,24 @@
 package top.tangyh.basic.jwt.utils;
 
 import cn.hutool.core.util.StrUtil;
-import top.tangyh.basic.context.ContextConstants;
-import top.tangyh.basic.exception.BizException;
-import top.tangyh.basic.exception.ForbiddenException;
-import top.tangyh.basic.exception.UnauthorizedException;
-import top.tangyh.basic.exception.code.ExceptionCode;
-import top.tangyh.basic.jwt.model.Token;
-import top.tangyh.basic.utils.DateUtils;
-import top.tangyh.basic.utils.StrPool;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.SignatureException;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import top.tangyh.basic.exception.UnauthorizedException;
+import top.tangyh.basic.exception.code.ExceptionCode;
+import top.tangyh.basic.jwt.model.Token;
+import top.tangyh.basic.utils.DateUtils;
 
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
-import static top.tangyh.basic.context.ContextConstants.BASIC_HEADER_PREFIX;
-import static top.tangyh.basic.exception.code.ExceptionCode.JWT_BASIC_INVALID;
 import static top.tangyh.basic.exception.code.ExceptionCode.JWT_PARSER_TOKEN_FAIL;
 
 /**
@@ -36,58 +28,15 @@ import static top.tangyh.basic.exception.code.ExceptionCode.JWT_PARSER_TOKEN_FAI
  */
 @Slf4j
 public final class JwtUtil {
-    private JwtUtil() {
-    }
-
     /**
      * 将 签名（JWT_SIGN_KEY） 编译成BASE64编码
      */
     public static String BASE64_SECURITY;
 
 
-    /**
-     * authorization: Basic clientId:clientSec
-     * 解析请求头中存储的 client 信息
-     * <p>
-     * Basic clientId:clientSec -截取-> clientId:clientSec后调用 extractClient 解码
-     *
-     * @param basicHeader Basic clientId:clientSec
-     * @return clientId:clientSec
-     */
-    public static String[] getClient(String basicHeader) {
-        if (StrUtil.isEmpty(basicHeader) || !basicHeader.startsWith(BASIC_HEADER_PREFIX)) {
-            throw BizException.wrap(JWT_BASIC_INVALID);
-        }
-
-        String decodeBasic = StrUtil.subAfter(basicHeader, BASIC_HEADER_PREFIX, false);
-        return extractClient(decodeBasic);
+    private JwtUtil() {
     }
 
-    /**
-     * 解析请求头中存储的 client 信息
-     * clientId:clientSec 解码
-     */
-    public static String[] extractClient(String client) {
-        String token = base64Decoder(client);
-        int index = token.indexOf(StrPool.COLON);
-        if (index == -1) {
-            throw BizException.wrap(JWT_BASIC_INVALID);
-        } else {
-            return new String[]{token.substring(0, index), token.substring(index + 1)};
-        }
-    }
-
-    /**
-     * 使用 Base64 解码
-     *
-     * @param val 参数
-     * @return 解码后的值
-     */
-    @SneakyThrows
-    public static String base64Decoder(String val) {
-        byte[] decoded = Base64.getDecoder().decode(val.getBytes(StandardCharsets.UTF_8));
-        return new String(decoded, StandardCharsets.UTF_8);
-    }
 
     /**
      * 创建令牌
@@ -167,16 +116,6 @@ public final class JwtUtil {
         }
     }
 
-    public static String getToken(String token) {
-        if (token == null) {
-            throw BizException.wrap(JWT_PARSER_TOKEN_FAIL);
-        }
-        if (token.startsWith(ContextConstants.BEARER_HEADER_PREFIX)) {
-            return StrUtil.subAfter(token, ContextConstants.BEARER_HEADER_PREFIX, false);
-        }
-        log.info("jsonWebToken={}", token);
-        throw BizException.wrap(JWT_PARSER_TOKEN_FAIL);
-    }
 
     /**
      * 获取Claims
@@ -185,15 +124,11 @@ public final class JwtUtil {
      * @param allowedClockSkewSeconds 允许存在的时间差
      */
     public static Claims getClaims(String token, long allowedClockSkewSeconds) {
-        if (token == null) {
+        if (StrUtil.isEmpty(token)) {
             throw UnauthorizedException.wrap(JWT_PARSER_TOKEN_FAIL.getMsg());
         }
-        if (token.startsWith(ContextConstants.BEARER_HEADER_PREFIX)) {
-            String headStr = StrUtil.subAfter(token, ContextConstants.BEARER_HEADER_PREFIX, false);
-            return parseJwt(headStr, allowedClockSkewSeconds);
-        }
-        log.info("jsonWebToken={}", token);
-        throw UnauthorizedException.wrap(JWT_PARSER_TOKEN_FAIL.getMsg());
+
+        return parseJwt(token, allowedClockSkewSeconds);
     }
 
 }

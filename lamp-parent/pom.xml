@@ -4,26 +4,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.3</version>
+        <version>3.1.5</version>
         <relativePath/>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
     <groupId>top.tangyh.basic</groupId>
     <artifactId>lamp-parent</artifactId>
-    <version>3.11.0-java17</version>
+    <version>4.15.0-java17</version>
     <packaging>pom</packaging>
-    <name>${project.artifactId}</name>
-    <description>Spring Boot 2.x项目依赖管理</description>
-    <url>https://github.com/dromara/lamp-cloud</url>
 
-    <!--
-    ${basedir} 项目根目录
-    ${project.build.directory} 构建目录，缺省为target
-    ${project.build.outputDirectory} 构建过程输出目录，缺省为target/classes
-    ${project.build.finalName} 产出物名称，缺省为${project.artifactId}-${project.version}
-    ${project.packaging} 打包类型，缺省为jar
-    ${project.xxx} 当前pom文件的任意节点的内容 如project.artifactId
-    -->
+    <modelVersion>4.0.0</modelVersion>
+    <name>${project.artifactId}</name>
+    <description>Spring Boot 3.x项目依赖管理</description>
+    <url>https://github.com/zuihou/lamp-cloud</url>
 
     <properties>
         <spring-cloud-dependencies.version>2022.0.4</spring-cloud-dependencies.version>
@@ -36,6 +28,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <flowable.version>7.0.0</flowable.version>
 
         <!--
              <mysql.version>8.0.28</mysql.version>
@@ -43,14 +36,14 @@
              <mssql-jdbc-11.version>9.4.1.jre11</mssql-jdbc-11.version>
              <mssql-jdbc-17.version>9.4.1.jre17</mssql-jdbc-17.version>
              -->
-        <hutool.version>5.8.21</hutool.version>
+        <hutool.version>5.8.22</hutool.version>
         <oshi.version>6.3.2</oshi.version>
-        <druid.version>1.2.19</druid.version>
+        <druid.version>1.2.20</druid.version>
         <mybatis.version>3.5.13</mybatis.version>
         <mybatis-spring.version>2.1.1</mybatis-spring.version>
         <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
-        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
-        <mybatis-plus-generator.version>4.1.3</mybatis-plus-generator.version>
+        <mybatis-plus.version>3.5.4.1</mybatis-plus.version>
+        <dynamic.datasource.version>4.2.0</dynamic.datasource.version>
         <jasypt.version>3.0.4</jasypt.version>
         <p6spy.version>3.9.1</p6spy.version>
         <fastjson.version>1.2.83</fastjson.version>
@@ -58,7 +51,7 @@
         <knife4j.version>4.3.0</knife4j.version>
         <knife4j-swagger-models-v3.version>2.2.8</knife4j-swagger-models-v3.version>
         <aviator.version>5.1.4</aviator.version>
-        <easypoi.version>4.2.0</easypoi.version>
+        <groovy.version>4.0.0</groovy.version>
         <guava.version>30.1.1-jre</guava.version>
         <commons-exec.version>1.3</commons-exec.version>
         <commons-email.version>1.5</commons-email.version>
@@ -79,7 +72,6 @@
         <esdk-obs-java.version>3.22.3.1</esdk-obs-java.version>
         <qiniu-java-sdk.version>7.12.0</qiniu-java-sdk.version>
         <minio.version>8.2.2</minio.version>
-        <apache.xmlgraphics.version>1.7</apache.xmlgraphics.version>
         <lombok.version>1.18.24</lombok.version>
         <javassist.version>3.25.0-GA</javassist.version>
         <antisamy.version>1.6.7</antisamy.version>
@@ -95,6 +87,7 @@
         <okio.version>2.10.0</okio.version>
         <okhttp3.version>4.10.0</okhttp3.version>
     </properties>
+
     <licenses>
         <license>
             <name>Apache 2</name>
@@ -124,11 +117,11 @@
     <distributionManagement>
         <snapshotRepository>
             <id>oss</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
         <repository>
             <id>oss</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
@@ -158,6 +151,12 @@
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
                 <version>${commons-logging.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.flowable</groupId>
+                <artifactId>flowable-spring-boot-starter</artifactId>
+                <version>${flowable.version}</version>
             </dependency>
 
             <dependency>
@@ -196,6 +195,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.apache.groovy</groupId>
+                <artifactId>groovy</artifactId>
+                <version>${groovy.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.lionsoul</groupId>
                 <artifactId>ip2region</artifactId>
                 <version>${ip2region.version}</version>
@@ -205,6 +210,11 @@
                 <groupId>com.github.ulisesbocchio</groupId>
                 <artifactId>jasypt-spring-boot-starter</artifactId>
                 <version>${jasypt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot3-starter</artifactId>
+                <version>${dynamic.datasource.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
@@ -232,11 +242,6 @@
                 <version>${mybatis-plus.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-generator</artifactId>
-                <version>${mybatis-plus-generator.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
                 <version>${mybatis.version}</version>
@@ -253,7 +258,7 @@
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
+                <artifactId>druid-spring-boot-3-starter</artifactId>
                 <version>${druid.version}</version>
             </dependency>
             <dependency>
@@ -261,9 +266,10 @@
                 <artifactId>p6spy</artifactId>
                 <version>${p6spy.version}</version>
             </dependency>
+
             <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
             <!-- 默认适配 jdk8，其他jdk版本请更换对应的jar版本 -->
@@ -419,54 +425,6 @@
                 <version>${commons-email.version}</version>
             </dependency>
 
-
-            <dependency>
-                <groupId>cn.afterturn</groupId>
-                <artifactId>easypoi-spring-boot-starter</artifactId>
-                <version>${easypoi.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>validation-api</artifactId>
-                        <groupId>javax.validation</groupId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>cn.afterturn</groupId>
-                <artifactId>easypoi-web</artifactId>
-                <version>${easypoi.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>cn.afterturn</groupId>
-                <artifactId>easypoi-annotation</artifactId>
-                <version>${easypoi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.afterturn</groupId>
-                <artifactId>easypoi-base</artifactId>
-                <version>${easypoi.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>validation-api</artifactId>
-                        <groupId>javax.validation</groupId>
-                    </exclusion>
-                    <exclusion>
-                        <artifactId>javassist</artifactId>
-                        <groupId>org.javassist</groupId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
             <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
@@ -532,6 +490,7 @@
                 <artifactId>javassist</artifactId>
                 <version>${javassist.version}</version>
             </dependency>
+
             <!-- https://mvnrepository.com/artifact/com.squareup.okio/okio -->
             <dependency>
                 <groupId>com.squareup.okio</groupId>
@@ -550,24 +509,15 @@
                 <artifactId>logging-interceptor</artifactId>
                 <version>${okhttp3.version}</version>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 
     <repositories>
         <repository>
-            <id>nexus-snapshots-maven</id>
-            <name>nexus-maven</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
             <id>aliyun</id>
             <name>aliyun</name>
             <url>https://maven.aliyun.com/nexus/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>nexus-maven</id>
-            <name>nexus-maven</name>
-            <url>https://oss.sonatype.org/content/repositories/public</url>
         </repository>
         <repository>
             <id>spring-milestones</id>
@@ -576,7 +526,7 @@
         </repository>
         <repository>
             <id>oss-public</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/public</url>
+            <url>https://oss.sonatype.org/content/repositories/public</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -588,6 +538,7 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+
 
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -610,11 +561,6 @@
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${maven-resources-plugin.version}</version>
                     <configuration>
-                        <propertiesEncoding>${project.build.sourceEncoding}</propertiesEncoding>
-                        <delimiters>
-                            <delimiter>${resource.delimiter}</delimiter>
-                        </delimiters>
-                        <useDefaultDelimiters>false</useDefaultDelimiters>
                         <!-- 后缀为pem、pfx的证书文件 -->
                         <nonFilteredFileExtensions>
                             <nonFilteredFileExtension>pem</nonFilteredFileExtension>
@@ -682,86 +628,35 @@
             </plugins>
         </pluginManagement>
 
-        <plugins>
-            <!-- 编译插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-            <!-- 资源插件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-            <!-- 一键更新子模块版本号 -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>versions-maven-plugin</artifactId>
-                <configuration>
-                    <generateBackupPoms>false</generateBackupPoms>
-                </configuration>
-            </plugin>
-        </plugins>
+        <!--        <plugins>-->
+        <!--            &lt;!&ndash; 编译插件 &ndash;&gt;-->
+        <!--            <plugin>-->
+        <!--                <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                <artifactId>maven-compiler-plugin</artifactId>-->
+        <!--            </plugin>-->
+        <!--            &lt;!&ndash; 资源插件 &ndash;&gt;-->
+        <!--            <plugin>-->
+        <!--                <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                <artifactId>maven-resources-plugin</artifactId>-->
+        <!--            </plugin>-->
+        <!--            &lt;!&ndash;-->
+        <!--            <plugin>-->
+        <!--                <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                <artifactId>maven-javadoc-plugin</artifactId>-->
+        <!--            </plugin>-->
+        <!--            <plugin>-->
+        <!--                <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                <artifactId>maven-source-plugin</artifactId>-->
+        <!--            </plugin>-->
+        <!--            &ndash;&gt;-->
+        <!--            &lt;!&ndash; 一键更新子模块版本号 &ndash;&gt;-->
+        <!--            <plugin>-->
+        <!--                <groupId>org.codehaus.mojo</groupId>-->
+        <!--                <artifactId>versions-maven-plugin</artifactId>-->
+        <!--                <configuration>-->
+        <!--                    <generateBackupPoms>false</generateBackupPoms>-->
+        <!--                </configuration>-->
+        <!--            </plugin>-->
+        <!--        </plugins>-->
     </build>
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>${maven-source-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin.version}</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>oss</id>
-                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
-                <repository>
-                    <id>oss</id>
-                    <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-                </repository>
-            </distributionManagement>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-        </profile>
-    </profiles>
 </project>

@@ -7,6 +7,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import top.tangyh.basic.exception.ArgumentException;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -32,7 +33,7 @@ public class ArgumentAssert {
      * @throws X if expression is {@code false}
      */
     public static <X extends Throwable> void isTrue(boolean expression, Supplier<? extends X> supplier) throws X {
-        if (false == expression) {
+        if (!expression) {
             throw supplier.get();
         }
     }
@@ -809,7 +810,7 @@ public class ArgumentAssert {
      */
     public static <T> T isInstanceOf(Class<?> type, T obj, String errorMsgTemplate, Object... params) throws ArgumentException {
         notNull(type, "Type to check against must not be null");
-        if (false == type.isInstance(obj)) {
+        if (!type.isInstance(obj)) {
             throw new ArgumentException(StrUtil.format(errorMsgTemplate, params));
         }
         return obj;
@@ -865,7 +866,7 @@ public class ArgumentAssert {
      * @throws IllegalStateException 表达式为 {@code false} 抛出此异常
      */
     public static void state(boolean expression, Supplier<String> errorMsgSupplier) throws IllegalStateException {
-        if (false == expression) {
+        if (!expression) {
             throw new IllegalStateException(errorMsgSupplier.get());
         }
     }
@@ -883,7 +884,7 @@ public class ArgumentAssert {
      * @throws IllegalStateException 表达式为 {@code false} 抛出此异常
      */
     public static void state(boolean expression, String errorMsgTemplate, Object... params) throws IllegalStateException {
-        if (false == expression) {
+        if (!expression) {
             throw new IllegalStateException(StrUtil.format(errorMsgTemplate, params));
         }
     }
@@ -958,6 +959,49 @@ public class ArgumentAssert {
         }
         return value;
     }
+
+    /**
+     * 检查日志是否大于指定值
+     *
+     * @param value 值
+     * @param min   最小值（包含）
+     * @return 检查后的长度值 int
+     * @since 4.1.10
+     */
+    public static LocalDateTime checkGt(LocalDateTime value, LocalDateTime min, String... msg) {
+        if (value.isBefore(min)) {
+            String message = null;
+            if (ArrayUtil.isNotEmpty(msg)) {
+                message = msg[0];
+            } else {
+                message = StrUtil.format("{} 必须大于 {} .", value, min);
+            }
+            throw new ArgumentException(message);
+        }
+        return value;
+    }
+
+    /**
+     * 检查日志是否小于指定值
+     *
+     * @param value 值
+     * @param max   最大值（包含）
+     * @return 检查后的长度值 int
+     * @since 4.1.10
+     */
+    public static LocalDateTime checkLt(LocalDateTime value, LocalDateTime max, String... msg) {
+        if (value.isAfter(max)) {
+            String message = null;
+            if (ArrayUtil.isNotEmpty(msg)) {
+                message = msg[0];
+            } else {
+                message = StrUtil.format("{} 必须小于 {} .", value, max);
+            }
+            throw new ArgumentException(message);
+        }
+        return value;
+    }
+
 
     /**
      * 检查值是否在指定范围内

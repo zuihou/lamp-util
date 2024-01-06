@@ -4,7 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.lang.NonNull;
-import top.tangyh.basic.cache.redis.RedisOps;
+import top.tangyh.basic.cache.redis2.CacheResult;
+import top.tangyh.basic.cache.redis2.RedisOps;
 import top.tangyh.basic.cache.repository.CacheOps;
 import top.tangyh.basic.cache.repository.CachePlusOps;
 import top.tangyh.basic.model.cache.CacheHashKey;
@@ -48,6 +49,11 @@ public class RedisOpsImpl implements CacheOps, CachePlusOps {
     }
 
     @Override
+    public Long del(@NonNull Collection<CacheKey> keys) {
+        return redisOps.del(keys);
+    }
+
+    @Override
     public Long del(String... keys) {
         return redisOps.del(keys);
     }
@@ -63,22 +69,22 @@ public class RedisOpsImpl implements CacheOps, CachePlusOps {
     }
 
     @Override
-    public <T> T get(@NonNull CacheKey key, boolean... cacheNullValues) {
+    public <T> CacheResult<T> get(@NonNull CacheKey key, boolean... cacheNullValues) {
         return redisOps.get(key, cacheNullValues);
     }
 
     @Override
-    public <T> T get(String key, boolean... cacheNullValues) {
+    public <T> CacheResult<T> get(@NonNull String key, boolean... cacheNullValues) {
         return redisOps.get(key, cacheNullValues);
     }
 
     @Override
-    public <T> List<T> find(@NonNull Collection<CacheKey> keys) {
+    public <T> List<CacheResult<T>> find(@NonNull Collection<CacheKey> keys) {
         return redisOps.mGetByCacheKey(keys);
     }
 
     @Override
-    public <T> T get(@NonNull CacheKey key, Function<CacheKey, ? extends T> loader, boolean... cacheNullValues) {
+    public <T> CacheResult<T> get(@NonNull CacheKey key, Function<CacheKey, ? extends T> loader, boolean... cacheNullValues) {
         return redisOps.get(key, loader, cacheNullValues);
     }
 
@@ -129,12 +135,12 @@ public class RedisOpsImpl implements CacheOps, CachePlusOps {
     }
 
     @Override
-    public List<String> scan(String pattern) {
+    public List<String> scan(@NonNull String pattern) {
         return redisOps.scan(pattern);
     }
 
     @Override
-    public void scanUnlink(String pattern) {
+    public void scanUnlink(@NonNull String pattern) {
         redisOps.scanUnlink(pattern);
     }
 
@@ -170,12 +176,12 @@ public class RedisOpsImpl implements CacheOps, CachePlusOps {
     }
 
     @Override
-    public <T> T hGet(@NonNull CacheHashKey key, boolean... cacheNullValues) {
+    public <T> CacheResult<T> hGet(@NonNull CacheHashKey key, boolean... cacheNullValues) {
         return redisOps.hGet(key, cacheNullValues);
     }
 
     @Override
-    public <T> T hGet(@NonNull CacheHashKey key, Function<CacheHashKey, T> loader, boolean... cacheNullValues) {
+    public <T> CacheResult<T> hGet(@NonNull CacheHashKey key, Function<CacheHashKey, T> loader, boolean... cacheNullValues) {
         return redisOps.hGet(key, loader, cacheNullValues);
     }
 
@@ -210,23 +216,23 @@ public class RedisOpsImpl implements CacheOps, CachePlusOps {
     }
 
     @Override
-    public Set<Object> hKeys(@NonNull CacheHashKey key) {
+    public <HK> Set<HK> hKeys(@NonNull CacheHashKey key) {
         return redisOps.hKeys(key.getKey());
     }
 
     @Override
-    public List<Object> hVals(@NonNull CacheHashKey key) {
+    public <HV> List<CacheResult<HV>> hVals(@NonNull CacheHashKey key) {
         return redisOps.hVals(key.getKey());
     }
 
 
     @Override
-    public <K, V> Map<K, V> hGetAll(@NonNull CacheHashKey key) {
+    public <K, V> Map<K, CacheResult<V>> hGetAll(@NonNull CacheHashKey key) {
         return redisOps.hGetAll(key);
     }
 
     @Override
-    public <K, V> Map<K, V> hGetAll(@NonNull CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues) {
+    public <K, V> Map<K, CacheResult<V>> hGetAll(@NonNull CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues) {
         return redisOps.hGetAll(key, loader, cacheNullValues);
     }
 

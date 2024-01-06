@@ -4,10 +4,15 @@ package com.wf.captcha.utils;
  *
  */
 public class Quant {
-    protected static final int netsize = 256; /* number of colours used */
+    /**
+     * number of colours used
+     */
+    protected static final int netsize = 256;
 
-    /* four primes near 500 - assume no image has a length so large */
-    /* that it is divisible by all four primes */
+    /**
+     * four primes near 500 - assume no image has a length so.
+     * large  that it is divisible by all four primes
+     */
     protected static final int prime1 = 499;
     protected static final int prime2 = 491;
     protected static final int prime3 = 487;
@@ -32,13 +37,25 @@ public class Quant {
 	   ------------------- */
 
     protected static final int maxnetpos = (netsize - 1);
-    protected static final int netbiasshift = 4; /* bias for colour values */
-    protected static final int ncycles = 100; /* no. of learning cycles */
+    /**
+     * bias for colour values
+     */
+    protected static final int netbiasshift = 4;
+    /**
+     * no. of learning cycles
+     */
+    protected static final int ncycles = 100;
 
-    /* defs for freq and bias */
-    protected static final int intbiasshift = 16; /* bias for fractions */
+    /**
+     * defs for freq and bias.
+     * bias for fractions
+     */
+    protected static final int intbiasshift = 16;
     protected static final int intbias = (((int) 1) << intbiasshift);
-    protected static final int gammashift = 10; /* gamma = 1024 */
+    protected static final int gammashift = 10;
+    /**
+     * gamma = 1024
+     */
     protected static final int gamma = (((int) 1) << gammashift);
     protected static final int betashift = 10;
     protected static final int beta = (intbias >> betashift); /* beta = 1/1024 */
@@ -108,8 +125,9 @@ public class Quant {
     public byte[] colorMap() {
         byte[] map = new byte[3 * netsize];
         int[] index = new int[netsize];
-        for (int i = 0; i < netsize; i++)
+        for (int i = 0; i < netsize; i++) {
             index[network[i][3]] = i;
+        }
         int k = 0;
         for (int i = 0; i < netsize; i++) {
             int j = index[i];
@@ -162,15 +180,17 @@ public class Quant {
             /* smallval entry is now in position i */
             if (smallval != previouscol) {
                 netindex[previouscol] = (startpos + i) >> 1;
-                for (j = previouscol + 1; j < smallval; j++)
+                for (j = previouscol + 1; j < smallval; j++) {
                     netindex[j] = i;
+                }
                 previouscol = smallval;
                 startpos = i;
             }
         }
         netindex[previouscol] = (startpos + maxnetpos) >> 1;
-        for (j = previouscol + 1; j < 256; j++)
+        for (j = previouscol + 1; j < 256; j++) {
             netindex[j] = maxnetpos; /* really 256 */
+        }
     }
 
     /* Main Learning Loop
@@ -182,8 +202,9 @@ public class Quant {
         byte[] p;
         int pix, lim;
 
-        if (lengthcount < minpicturebytes)
+        if (lengthcount < minpicturebytes) {
             samplefac = 1;
+        }
         alphadec = 30 + ((samplefac - 1) / 3);
         p = thepicture;
         pix = 0;
@@ -194,26 +215,29 @@ public class Quant {
         radius = initradius;
 
         rad = radius >> radiusbiasshift;
-        if (rad <= 1)
+        if (rad <= 1) {
             rad = 0;
-        for (i = 0; i < rad; i++)
+        }
+        for (i = 0; i < rad; i++) {
             radpower[i] =
                     alpha * (((rad * rad - i * i) * radbias) / (rad * rad));
+        }
 
         //fprintf(stderr,"beginning 1D learning: initial radius=%d\n", rad);
 
-        if (lengthcount < minpicturebytes)
+        if (lengthcount < minpicturebytes) {
             step = 3;
-        else if ((lengthcount % prime1) != 0)
+        } else if ((lengthcount % prime1) != 0) {
             step = 3 * prime1;
-        else {
-            if ((lengthcount % prime2) != 0)
+        } else {
+            if ((lengthcount % prime2) != 0) {
                 step = 3 * prime2;
-            else {
-                if ((lengthcount % prime3) != 0)
+            } else {
+                if ((lengthcount % prime3) != 0) {
                     step = 3 * prime3;
-                else
+                } else {
                     step = 3 * prime4;
+                }
             }
         }
 
@@ -225,25 +249,31 @@ public class Quant {
             j = contest(b, g, r);
 
             altersingle(alpha, j, b, g, r);
-            if (rad != 0)
-                alterneigh(rad, j, b, g, r); /* alter neighbours */
+            if (rad != 0) {
+                /* alter neighbours */
+                alterneigh(rad, j, b, g, r);
+            }
 
             pix += step;
-            if (pix >= lim)
+            if (pix >= lim) {
                 pix -= lengthcount;
+            }
 
             i++;
-            if (delta == 0)
+            if (delta == 0) {
                 delta = 1;
+            }
             if (i % delta == 0) {
                 alpha -= alpha / alphadec;
                 radius -= radius / radiusdec;
                 rad = radius >> radiusbiasshift;
-                if (rad <= 1)
+                if (rad <= 1) {
                     rad = 0;
-                for (j = 0; j < rad; j++)
+                }
+                for (j = 0; j < rad; j++) {
                     radpower[j] =
                             alpha * (((rad * rad - j * j) * radbias) / (rad * rad));
+                }
             }
         }
         //fprintf(stderr,"finished 1D learning: final alpha=%f !\n",((float)alpha)/initalpha);
@@ -266,20 +296,23 @@ public class Quant {
             if (i < netsize) {
                 p = network[i];
                 dist = p[1] - g; /* inx key */
-                if (dist >= bestd)
+                if (dist >= bestd) {
                     i = netsize; /* stop iter */
-                else {
+                } else {
                     i++;
-                    if (dist < 0)
+                    if (dist < 0) {
                         dist = -dist;
+                    }
                     a = p[0] - b;
-                    if (a < 0)
+                    if (a < 0) {
                         a = -a;
+                    }
                     dist += a;
                     if (dist < bestd) {
                         a = p[2] - r;
-                        if (a < 0)
+                        if (a < 0) {
                             a = -a;
+                        }
                         dist += a;
                         if (dist < bestd) {
                             bestd = dist;
@@ -290,21 +323,26 @@ public class Quant {
             }
             if (j >= 0) {
                 p = network[j];
-                dist = g - p[1]; /* inx key - reverse dif */
-                if (dist >= bestd)
-                    j = -1; /* stop iter */
-                else {
+                /* inx key - reverse dif */
+                dist = g - p[1];
+                if (dist >= bestd) {
+                    /* stop iter */
+                    j = -1;
+                } else {
                     j--;
-                    if (dist < 0)
+                    if (dist < 0) {
                         dist = -dist;
+                    }
                     a = p[0] - b;
-                    if (a < 0)
+                    if (a < 0) {
                         a = -a;
+                    }
                     dist += a;
                     if (dist < bestd) {
                         a = p[2] - r;
-                        if (a < 0)
+                        if (a < 0) {
                             a = -a;
+                        }
                         dist += a;
                         if (dist < bestd) {
                             bestd = dist;
@@ -346,11 +384,13 @@ public class Quant {
         int[] p;
 
         lo = i - rad;
-        if (lo < -1)
+        if (lo < -1) {
             lo = -1;
+        }
         hi = i + rad;
-        if (hi > netsize)
+        if (hi > netsize) {
             hi = netsize;
+        }
 
         j = i + 1;
         k = i - 1;
@@ -410,15 +450,18 @@ public class Quant {
         for (i = 0; i < netsize; i++) {
             n = network[i];
             dist = n[0] - b;
-            if (dist < 0)
+            if (dist < 0) {
                 dist = -dist;
+            }
             a = n[1] - g;
-            if (a < 0)
+            if (a < 0) {
                 a = -a;
+            }
             dist += a;
             a = n[2] - r;
-            if (a < 0)
+            if (a < 0) {
                 a = -a;
+            }
             dist += a;
             if (dist < bestd) {
                 bestd = dist;

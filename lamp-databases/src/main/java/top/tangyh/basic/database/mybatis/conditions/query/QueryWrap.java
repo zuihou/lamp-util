@@ -141,8 +141,8 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
     /**
      * 返回一个支持 lambda 函数写法的 wrapper
      */
-    public LbqWrapper<T> lambda() {
-        return new LbqWrapper<>(getEntity(), getEntityClass(), sqlSelect, paramNameSeq, paramNameValuePairs,
+    public LbQueryWrap<T> lambda() {
+        return new LbQueryWrap<>(getEntity(), getEntityClass(), sqlSelect, paramNameSeq, paramNameValuePairs,
                 expression, paramAlias, lastSql, sqlComment, sqlFirst);
     }
 
@@ -295,8 +295,8 @@ public class QueryWrap<T> extends AbstractWrapper<T, String, QueryWrap<T>>
         if (val instanceof String && this.skipEmpty) {
             return StrUtil.isNotBlank((String) val);
         }
-        if (val instanceof Collection && this.skipEmpty) {
-            return !((Collection) val).isEmpty();
+        if (val instanceof Collection<?> coll && this.skipEmpty) {
+            return !coll.isEmpty();
         }
         return val != null;
     }

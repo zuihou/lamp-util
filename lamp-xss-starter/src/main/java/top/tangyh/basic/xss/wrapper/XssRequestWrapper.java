@@ -3,6 +3,7 @@ package top.tangyh.basic.xss.wrapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
+import top.tangyh.basic.utils.StrPool;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -46,8 +47,8 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
     public String getQueryString() {
         String queryString = super.getQueryString();
         try {
-            if (null != queryString) {
-                queryString = URLDecoder.decode(queryString, "UTF-8");
+            if (queryString != null) {
+                queryString = URLDecoder.decode(queryString, StrPool.UTF_8);
             }
         } catch (UnsupportedEncodingException e) {
             log.warn("getQueryString", e);

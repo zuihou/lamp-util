@@ -9,6 +9,8 @@ package top.tangyh.basic.constant;
  * @create [2022/4/12 11:05 PM ] [tangyh] [初始创建]
  */
 public interface Constants {
-    /** 项目前缀 */
+    /**
+     * 项目前缀
+     */
     String PROJECT_PREFIX = "lamp";
 }

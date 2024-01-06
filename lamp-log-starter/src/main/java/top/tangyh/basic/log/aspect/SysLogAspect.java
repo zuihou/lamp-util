@@ -28,14 +28,14 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.lang.NonNull;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import top.tangyh.basic.annotation.log.SysLog;
+import top.tangyh.basic.annotation.log.WebLog;
 import top.tangyh.basic.base.R;
 import top.tangyh.basic.context.ContextConstants;
 import top.tangyh.basic.context.ContextUtil;
-import top.tangyh.basic.context.ThreadLocalParam;
 import top.tangyh.basic.jackson.JsonUtil;
 import top.tangyh.basic.log.event.SysLogEvent;
 import top.tangyh.basic.log.util.LogUtil;
+import top.tangyh.basic.log.util.ThreadLocalParam;
 import top.tangyh.basic.model.log.OptLogDTO;
 import top.tangyh.basic.utils.SpringUtils;
 import top.tangyh.basic.utils.StrPool;
@@ -69,7 +69,7 @@ public class SysLogAspect {
     private final DefaultParameterNameDiscoverer nameDiscoverer = new DefaultParameterNameDiscoverer();
 
     /***
-     * 定义controller切入点拦截规则：拦截标记SysLog注解和指定包下的方法
+     * 定义controller切入点拦截规则：拦截标记WebLog注解和指定包下的方法
      * 2个表达式加起来才能拦截所有Controller 或者继承了BaseController的方法
      *
      * execution(public * top.tangyh.basic.base.controller.*.*(..)) 解释：
@@ -78,10 +78,10 @@ public class SysLogAspect {
      * 第三个* 类下的所有方法
      * ()中间的.. 任意参数
      *
-     * \@annotation(top.tangyh.basic.annotation.log.SysLog) 解释：
-     * 标记了@SysLog 注解的方法
+     * \@annotation(top.tangyh.basic.annotation.log.WebLog) 解释：
+     * 标记了@WebLog 注解的方法
      */
-    @Pointcut("execution(public * top.tangyh.basic.base.controller.*.*(..)) || @annotation(top.tangyh.basic.annotation.log.SysLog)")
+    @Pointcut("execution(public * top.tangyh.basic.base.controller.*.*(..)) || @annotation(top.tangyh.basic.annotation.log.WebLog)")
     public void sysLogAspect() {
 
     }
@@ -95,7 +95,7 @@ public class SysLogAspect {
     @AfterReturning(returning = "ret", pointcut = "sysLogAspect()")
     public void doAfterReturning(JoinPoint joinPoint, Object ret) {
         tryCatch(p -> {
-            SysLog sysLog = LogUtil.getTargetAnnotation(joinPoint);
+            WebLog sysLog = LogUtil.getTargetAnnotation(joinPoint);
             if (check(joinPoint, sysLog)) {
                 return;
             }
@@ -133,7 +133,7 @@ public class SysLogAspect {
     @AfterThrowing(pointcut = "sysLogAspect()", throwing = "e")
     public void doAfterThrowable(JoinPoint joinPoint, Throwable e) {
         tryCatch((aaa) -> {
-            SysLog sysLog = LogUtil.getTargetAnnotation(joinPoint);
+            WebLog sysLog = LogUtil.getTargetAnnotation(joinPoint);
             if (check(joinPoint, sysLog)) {
                 return;
             }
@@ -164,7 +164,7 @@ public class SysLogAspect {
     @Before(value = "sysLogAspect()")
     public void doBefore(JoinPoint joinPoint) {
         tryCatch(val -> {
-            SysLog sysLog = LogUtil.getTargetAnnotation(joinPoint);
+            WebLog sysLog = LogUtil.getTargetAnnotation(joinPoint);
             if (check(joinPoint, sysLog)) {
                 return;
             }
@@ -174,11 +174,10 @@ public class SysLogAspect {
     }
 
     @NonNull
-    private OptLogDTO buildOptLogDTO(JoinPoint joinPoint, SysLog sysLog) {
+    private OptLogDTO buildOptLogDTO(JoinPoint joinPoint, WebLog sysLog) {
         // 开始时间
         OptLogDTO optLogDTO = get();
         optLogDTO.setCreatedBy(ContextUtil.getUserId());
-        optLogDTO.setUserName(ContextUtil.getName());
         setDescription(joinPoint, sysLog, optLogDTO);
         // 类名
         optLogDTO.setClassPath(joinPoint.getTarget().getClass().getName());
@@ -191,13 +190,28 @@ public class SysLogAspect {
         optLogDTO.setHttpMethod(request.getMethod());
         optLogDTO.setUa(StrUtil.sub(request.getHeader("user-agent"), 0, 500));
         if (ContextUtil.getBoot()) {
-            optLogDTO.setTenantCode(ContextUtil.getTenant());
-            optLogDTO.setSubTenantCode(ContextUtil.getSubTenant());
+            optLogDTO.setTenantId(ContextUtil.getTenantId());
+
+            if (!ContextUtil.isEmptyBasePoolNameHeader()) {
+                optLogDTO.setBasePoolNameHeader(ContextUtil.getBasePoolNameHeader());
+            }
+            if (!ContextUtil.isEmptyExtendPoolNameHeader()) {
+                optLogDTO.setExtendPoolNameHeader(ContextUtil.getExtendPoolNameHeader());
+            }
+            optLogDTO.setCreatedOrgId(ContextUtil.getCurrentCompanyId());
         } else {
-            optLogDTO.setTenantCode(request.getHeader(ContextConstants.JWT_KEY_TENANT));
-            optLogDTO.setSubTenantCode(request.getHeader(ContextConstants.JWT_KEY_SUB_TENANT));
+            optLogDTO.setTenantId(Convert.toLong(request.getHeader(ContextConstants.TENANT_ID_HEADER)));
+            Long basePoolName = Convert.toLong(request.getHeader(ContextConstants.TENANT_BASE_POOL_NAME_HEADER));
+            if (basePoolName != null) {
+                optLogDTO.setBasePoolNameHeader(basePoolName);
+            }
+            Long extendPoolName = Convert.toLong(request.getHeader(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER));
+            if (extendPoolName != null) {
+                optLogDTO.setExtendPoolNameHeader(extendPoolName);
+            }
+            optLogDTO.setCreatedOrgId(Convert.toLong(request.getHeader(ContextConstants.CURRENT_COMPANY_ID_HEADER)));
         }
-        optLogDTO.setTrace(MDC.get(ContextConstants.LOG_TRACE_ID));
+        optLogDTO.setTrace(MDC.get(ContextConstants.TRACE_ID_HEADER));
         if (StrUtil.isEmpty(optLogDTO.getTrace())) {
             optLogDTO.setTrace(request.getHeader(ContextConstants.TRACE_ID_HEADER));
         }
@@ -206,11 +220,11 @@ public class SysLogAspect {
     }
 
     @NonNull
-    private HttpServletRequest setParams(JoinPoint joinPoint, SysLog sysLog, OptLogDTO optLogDTO) {
+    private HttpServletRequest setParams(JoinPoint joinPoint, WebLog sysLog, OptLogDTO optLogDTO) {
         // 参数
         Object[] args = joinPoint.getArgs();
 
-        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes(), "只能在Spring Web环境使用@SysLog记录日志")).getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes(), "只能在Spring Web环境使用@WebLog记录日志")).getRequest();
         if (sysLog.request()) {
             String strArgs = getArgs(args, request);
             optLogDTO.setParams(getText(strArgs));
@@ -218,7 +232,7 @@ public class SysLogAspect {
         return request;
     }
 
-    private void setDescription(JoinPoint joinPoint, SysLog sysLog, OptLogDTO optLogDTO) {
+    private void setDescription(JoinPoint joinPoint, WebLog sysLog, OptLogDTO optLogDTO) {
         String controllerDescription = "";
         Tag api = joinPoint.getTarget().getClass().getAnnotation(Tag.class);
         if (api != null) {
@@ -278,12 +292,12 @@ public class SysLogAspect {
      * @param sysLog    操作日志
      * @return true 表示不需要记录日志
      */
-    private boolean check(JoinPoint joinPoint, SysLog sysLog) {
+    private boolean check(JoinPoint joinPoint, WebLog sysLog) {
         if (sysLog == null || !sysLog.enabled()) {
             return true;
         }
         // 读取目标类上的注解
-        SysLog targetClass = joinPoint.getTarget().getClass().getAnnotation(SysLog.class);
+        WebLog targetClass = joinPoint.getTarget().getClass().getAnnotation(WebLog.class);
         // 加上 sysLog == null 会导致父类上的方法永远需要记录日志
         return targetClass != null && !targetClass.enabled();
     }

@@ -5,21 +5,16 @@
     <parent>
         <artifactId>lamp-util</artifactId>
         <groupId>top.tangyh.basic</groupId>
-        <version>3.11.0-java17</version>
+        <version>4.15.0-java17</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>top.tangyh.basic</groupId>
     <artifactId>lamp-mvc</artifactId>
     <name>${project.artifactId}</name>
     <description>公共模块</description>
 
     <dependencies>
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-        </dependency>
         <dependency>
             <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-core</artifactId>
@@ -32,10 +27,7 @@
             <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-cache-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>cn.afterturn</groupId>
-            <artifactId>easypoi-web</artifactId>
-        </dependency>
+
     </dependencies>
 
 </project>

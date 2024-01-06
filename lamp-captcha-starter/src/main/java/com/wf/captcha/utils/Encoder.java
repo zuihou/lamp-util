@@ -5,6 +5,7 @@ import java.io.OutputStream;
 
 /**
  *
+ * @author Created by 王帆 on 2018-07-27 上午 10:08.
  */
 public class Encoder {
     static final int BITS = 12;
@@ -38,7 +39,7 @@ public class Encoder {
     // for the decompressor.  Late addition:  construct the table according to
     // file size for noticeable speed improvement on small files.  Please direct
     // questions about this implementation to ames!jaw.
-    int masks[] =
+    int[] masks =
             {
                     0x0000,
                     0x0001,
@@ -108,8 +109,9 @@ public class Encoder {
      */
     void char_out(byte c, OutputStream outs) throws IOException {
         accum[a_count++] = c;
-        if (a_count >= 254)
+        if (a_count >= 254) {
             flush_char(outs);
+        }
     }
 
     // Clear out the hash table
@@ -134,8 +136,9 @@ public class Encoder {
      * @param hsize int
      */
     void cl_hash(int hsize) {
-        for (int i = 0; i < hsize; ++i)
+        for (int i = 0; i < hsize; ++i) {
             htab[i] = -1;
+        }
     }
 
     /**
@@ -169,8 +172,9 @@ public class Encoder {
         ent = nextPixel();
 
         hshift = 0;
-        for (fcode = hsize; fcode < 65536; fcode *= 2)
+        for (fcode = hsize; fcode < 65536; fcode *= 2) {
             ++hshift;
+        }
         hshift = 8 - hshift; // set hash code range bound
 
         hsize_reg = hsize;
@@ -189,11 +193,13 @@ public class Encoder {
             } else if (htab[i] >= 0) // non-empty slot
             {
                 disp = hsize_reg - i; // secondary hash (after G. Knott)
-                if (i == 0)
+                if (i == 0) {
                     disp = 1;
+                }
                 do {
-                    if ((i -= disp) < 0)
+                    if ((i -= disp) < 0) {
                         i += hsize_reg;
+                    }
 
                     if (htab[i] == fcode) {
                         ent = codetab[i];
@@ -206,8 +212,9 @@ public class Encoder {
             if (free_ent < maxmaxcode) {
                 codetab[i] = free_ent++; // code -> hashtable
                 htab[i] = fcode;
-            } else
+            } else {
                 cl_block(outs);
+            }
         }
         // Put out the final code.
         output(ent, outs);
@@ -261,8 +268,9 @@ public class Encoder {
      * @return int
      */
     private int nextPixel() {
-        if (remaining == 0)
+        if (remaining == 0) {
             return EOF;
+        }
 
         --remaining;
 
@@ -279,10 +287,11 @@ public class Encoder {
     void output(int code, OutputStream outs) throws IOException {
         cur_accum &= masks[cur_bits];
 
-        if (cur_bits > 0)
+        if (cur_bits > 0) {
             cur_accum |= (code << cur_bits);
-        else
+        } else {
             cur_accum = code;
+        }
 
         cur_bits += n_bits;
 
@@ -300,10 +309,11 @@ public class Encoder {
                 clear_flg = false;
             } else {
                 ++n_bits;
-                if (n_bits == maxbits)
+                if (n_bits == maxbits) {
                     maxcode = maxmaxcode;
-                else
+                } else {
                     maxcode = MAXCODE(n_bits);
+                }
             }
         }
 

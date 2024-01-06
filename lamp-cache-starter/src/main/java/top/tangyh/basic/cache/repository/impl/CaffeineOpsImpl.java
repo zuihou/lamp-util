@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.lang.NonNull;
+import top.tangyh.basic.cache.redis2.CacheResult;
 import top.tangyh.basic.cache.repository.CacheOps;
 import top.tangyh.basic.cache.repository.CachePlusOps;
 import top.tangyh.basic.model.cache.CacheHashKey;
@@ -20,7 +21,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 
 /**
@@ -53,6 +53,14 @@ public class CaffeineOpsImpl implements CacheOps, CachePlusOps {
     }
 
     @Override
+    public Long del(@NonNull Collection<CacheKey> keys) {
+        for (CacheKey key : keys) {
+            cacheMap.invalidate(key.getKey());
+        }
+        return (long) keys.size();
+    }
+
+    @Override
     public Long del(String... keys) {
         for (String key : keys) {
             cacheMap.invalidate(key);
@@ -76,30 +84,28 @@ public class CaffeineOpsImpl implements CacheOps, CachePlusOps {
     }
 
     @Override
-    public <T> T get(@NonNull CacheKey key, boolean... cacheNullValues) {
-        Cache<String, Object> ifPresent = cacheMap.getIfPresent(key.getKey());
-        if (ifPresent == null) {
-            return null;
-        }
-        return (T) ifPresent.getIfPresent(key.getKey());
+    public <T> CacheResult<T> get(@NonNull CacheKey key, boolean... cacheNullValues) {
+        return get(key.getKey(), cacheNullValues);
     }
 
     @Override
-    public <T> T get(String key, boolean... cacheNullValues) {
+    public <T> CacheResult<T> get(String key, boolean... cacheNullValues) {
         Cache<String, Object> ifPresent = cacheMap.getIfPresent(key);
         if (ifPresent == null) {
             return null;
         }
-        return (T) ifPresent.getIfPresent(key);
+        CacheResult<T> result = new CacheResult<>(key);
+        result.setRawValue((T) ifPresent.getIfPresent(key));
+        return result;
     }
 
     @Override
-    public <T> List<T> find(@NonNull Collection<CacheKey> keys) {
-        return keys.stream().map(k -> (T) get(k, false)).filter(Objects::nonNull).collect(Collectors.toList());
+    public <T> List<CacheResult<T>> find(@NonNull Collection<CacheKey> keys) {
+        return keys.stream().map(k -> (CacheResult<T>) get(k, false)).filter(Objects::nonNull).toList();
     }
 
     @Override
-    public <T> T get(@NonNull CacheKey key, Function<CacheKey, ? extends T> loader, boolean... cacheNullValues) {
+    public <T> CacheResult<T> get(@NonNull CacheKey key, Function<CacheKey, ? extends T> loader, boolean... cacheNullValues) {
         Cache<String, Object> cache = cacheMap.get(key.getKey(), (k) -> {
             Caffeine<Object, Object> builder = Caffeine.newBuilder()
                     .maximumSize(DEF_MAX_SIZE);
@@ -111,7 +117,9 @@ public class CaffeineOpsImpl implements CacheOps, CachePlusOps {
             return newCache;
         });
 
-        return (T) cache.getIfPresent(key.getKey());
+        CacheResult<T> result = new CacheResult<>(key.getKey());
+        result.setRawValue((T) cache.getIfPresent(key.getKey()));
+        return result;
     }
 
     @Override
@@ -131,45 +139,45 @@ public class CaffeineOpsImpl implements CacheOps, CachePlusOps {
 
     @Override
     public Long incr(@NonNull CacheKey key) {
-        Long old = get(key, k -> 0L);
-        Long newVal = old + 1;
+        CacheResult<Long> old = get(key, k -> 0L);
+        Long newVal = old.getValue() + 1;
         set(key, newVal);
         return newVal;
     }
 
     @Override
     public Long getCounter(CacheKey key, Function<CacheKey, Long> loader) {
-        return get(key);
+        return (Long) get(key).getValue();
     }
 
     @Override
     public Long incrBy(@NonNull CacheKey key, long increment) {
-        Long old = get(key, k -> 0L);
-        Long newVal = old + increment;
+        CacheResult<Long> old = get(key, k -> 0L);
+        Long newVal = old.getValue() + increment;
         set(key, newVal);
         return newVal;
     }
 
     @Override
     public Double incrByFloat(@NonNull CacheKey key, double increment) {
-        Double old = get(key, k -> 0D);
-        Double newVal = old + increment;
+        CacheResult<Double> old = get(key, k -> 0D);
+        Double newVal = old.getValue() + increment;
         set(key, newVal);
         return newVal;
     }
 
     @Override
     public Long decr(@NonNull CacheKey key) {
-        Long old = get(key, k -> 0L);
-        Long newVal = old - 1;
+        CacheResult<Long> old = get(key, k -> 0L);
+        Long newVal = old.getValue() - 1;
         set(key, newVal);
         return newVal;
     }
 
     @Override
     public Long decrBy(@NonNull CacheKey key, long decrement) {
-        Long old = get(key, k -> 0L);
-        Long newVal = old - decrement;
+        CacheResult<Long> old = get(key, k -> 0L);
+        Long newVal = old.getValue() - decrement;
         set(key, newVal);
         return newVal;
     }
@@ -258,12 +266,12 @@ public class CaffeineOpsImpl implements CacheOps, CachePlusOps {
     }
 
     @Override
-    public <T> T hGet(@NonNull CacheHashKey key, boolean... cacheNullValues) {
+    public <T> CacheResult<T> hGet(@NonNull CacheHashKey key, boolean... cacheNullValues) {
         return get(key.tran(), cacheNullValues);
     }
 
     @Override
-    public <T> T hGet(@NonNull CacheHashKey key, Function<CacheHashKey, T> loader, boolean... cacheNullValues) {
+    public <T> CacheResult<T> hGet(@NonNull CacheHashKey key, Function<CacheHashKey, T> loader, boolean... cacheNullValues) {
         Function<CacheKey, T> ckLoader = k -> loader.apply(key);
         return get(key.tran(), ckLoader, cacheNullValues);
     }
@@ -303,23 +311,23 @@ public class CaffeineOpsImpl implements CacheOps, CachePlusOps {
     }
 
     @Override
-    public Set<Object> hKeys(@NonNull CacheHashKey key) {
+    public <HK> Set<HK> hKeys(@NonNull CacheHashKey key) {
         return Collections.emptySet();
     }
 
     @Override
-    public List<Object> hVals(@NonNull CacheHashKey key) {
+    public <HV> List<CacheResult<HV>> hVals(@NonNull CacheHashKey key) {
         return Collections.emptyList();
     }
 
     @Override
-    public <K, V> Map<K, V> hGetAll(CacheHashKey key) {
+    public <K, V> Map<K, CacheResult<V>> hGetAll(CacheHashKey key) {
         return Collections.emptyMap();
     }
 
     @Override
-    public <K, V> Map<K, V> hGetAll(CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues) {
-        return loader.apply(key);
+    public <K, V> Map<K, CacheResult<V>> hGetAll(CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues) {
+        return Collections.emptyMap();
     }
 
     @Override

@@ -128,6 +128,7 @@ public interface StrPool {
 
 
     String TEST_TOKEN = "Bearer test";
+    String DEV = "dev";
     String TEST = "test";
     String PROD = "prod";
 

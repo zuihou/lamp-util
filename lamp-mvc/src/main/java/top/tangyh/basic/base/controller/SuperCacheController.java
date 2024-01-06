@@ -3,12 +3,15 @@ package top.tangyh.basic.base.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import top.tangyh.basic.annotation.log.SysLog;
-import top.tangyh.basic.annotation.security.PreAuth;
+import org.springframework.web.bind.annotation.RequestBody;
+import top.tangyh.basic.annotation.log.WebLog;
 import top.tangyh.basic.base.R;
+import top.tangyh.basic.base.entity.SuperEntity;
 import top.tangyh.basic.base.service.SuperCacheService;
+import top.tangyh.basic.utils.BeanPlusUtil;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * SuperCacheController
@@ -19,8 +22,13 @@ import java.io.Serializable;
  * @author zuihou
  * @date 2020年03月06日11:06:46
  */
-public abstract class SuperCacheController<S extends SuperCacheService<Entity>, Id extends Serializable, Entity, PageQuery, SaveDTO, UpdateDTO>
-        extends SuperController<S, Id, Entity, PageQuery, SaveDTO, UpdateDTO> {
+public abstract class SuperCacheController<S extends SuperCacheService<Id, Entity>,
+        Id extends Serializable, Entity extends SuperEntity<Id>, SaveVO, UpdateVO, PageQuery, ResultVO>
+        extends SuperController<S, Id, Entity, SaveVO, UpdateVO, PageQuery, ResultVO> {
+    @Override
+    public SuperCacheService<Id, Entity> getSuperService() {
+        return superService;
+    }
 
     /**
      * 查询
@@ -29,12 +37,11 @@ public abstract class SuperCacheController<S extends SuperCacheService<Entity>, 
      * @return 查询结果
      */
     @Override
-    @SysLog("'查询:' + #id")
-    @PreAuth("hasAnyPermission('{}view')")
-    public R<Entity> get(@PathVariable Id id) {
-        return success(baseService.getByIdCache(id));
+    @WebLog("'查询:' + #id")
+    public R<ResultVO> get(@PathVariable Id id) {
+        Entity entity = getSuperService().getByIdCache(id);
+        return success(BeanPlusUtil.toBean(entity, getResultVOClass()));
     }
-
 
     /**
      * 刷新缓存
@@ -43,10 +50,9 @@ public abstract class SuperCacheController<S extends SuperCacheService<Entity>, 
      */
     @Operation(summary = "刷新缓存", description = "刷新缓存")
     @PostMapping("refreshCache")
-    @SysLog("'刷新缓存'")
-    @PreAuth("hasAnyPermission('{}add')")
-    public R<Boolean> refreshCache() {
-        baseService.refreshCache();
+    @WebLog("'刷新缓存'")
+    public R<Boolean> refreshCache(@RequestBody List<Long> ids) {
+        getSuperService().refreshCache(ids);
         return success(true);
     }
 
@@ -57,10 +63,9 @@ public abstract class SuperCacheController<S extends SuperCacheService<Entity>, 
      */
     @Operation(summary = "清理缓存", description = "清理缓存")
     @PostMapping("clearCache")
-    @SysLog("'清理缓存'")
-    @PreAuth("hasAnyPermission('{}add')")
-    public R<Boolean> clearCache() {
-        baseService.clearCache();
+    @WebLog("'清理缓存'")
+    public R<Boolean> clearCache(@RequestBody List<Long> ids) {
+        getSuperService().clearCache(ids);
         return success(true);
     }
 }

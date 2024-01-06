@@ -19,9 +19,4 @@ public class UpdateAllById extends AlwaysUpdateSomeColumnById {
         super("updateAllById", predicate);
     }
 
-//    @Override
-//    public String getMethod(SqlMethod sqlMethod) {
-//        // 自定义 mapper 方法名
-//        return "updateAllById";
-//    }
 }

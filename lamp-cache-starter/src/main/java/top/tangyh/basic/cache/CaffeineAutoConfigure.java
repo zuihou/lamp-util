@@ -11,11 +11,11 @@ import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import top.tangyh.basic.cache.lock.CaffeineDistributedLock;
+import top.tangyh.basic.cache.lock.DistributedLock;
 import top.tangyh.basic.cache.properties.CustomCacheProperties;
 import top.tangyh.basic.cache.repository.CacheOps;
 import top.tangyh.basic.cache.repository.CachePlusOps;
 import top.tangyh.basic.cache.repository.impl.CaffeineOpsImpl;
-import top.tangyh.basic.lock.DistributedLock;
 
 
 /**
@@ -80,10 +80,12 @@ public class CaffeineAutoConfigure {
         cacheManager.setCaffeine(caffeine);
 
         //配置了这里，就必须事先在配置文件中指定key 缓存才生效
-//        Map<String, CustomCacheProperties.Redis> configs = cacheProperties.getConfigs();
-//        Optional.ofNullable(configs).ifPresent((config)->{
-//            cacheManager.setCacheNames(config.keySet());
-//        });
+        /*
+        Map<String, CustomCacheProperties.Redis> configs = cacheProperties.getConfigs();
+        Optional.ofNullable(configs).ifPresent((config)->{
+            cacheManager.setCacheNames(config.keySet());
+        });
+         */
         return cacheManager;
     }
 

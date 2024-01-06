@@ -1,12 +1,5 @@
 package top.tangyh.basic.database.mybatis.handlers;
 
-/**
- * @author tangyh
- * @version v1.0
- * @date 2022/4/13 9:05 PM
- * @create [2022/4/13 9:05 PM ] [tangyh] [初始创建]
- */
-
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.baomidou.mybatisplus.annotation.IEnum;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -93,7 +86,6 @@ public class MybatisEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E
         return clazz != null && clazz.isEnum() && (IEnum.class.isAssignableFrom(clazz) || findEnumValueFieldName(clazz).isPresent());
     }
 
-    @SuppressWarnings("Duplicates")
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, E parameter, JdbcType jdbcType)
             throws SQLException {

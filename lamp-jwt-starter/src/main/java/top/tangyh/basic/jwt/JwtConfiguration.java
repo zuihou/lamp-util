@@ -17,7 +17,7 @@ import top.tangyh.basic.jwt.properties.JwtProperties;
 public class JwtConfiguration {
 
     @Bean
-    public TokenUtil getTokenUtil(JwtProperties authServerProperties) {
-        return new TokenUtil(authServerProperties);
+    public TokenHelper getTokenUtil(JwtProperties authServerProperties) {
+        return new TokenHelper(authServerProperties);
     }
 }

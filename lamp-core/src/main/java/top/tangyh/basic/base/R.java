@@ -19,8 +19,8 @@ import java.util.Map;
  */
 @Getter
 @Setter
-@SuppressWarnings("ALL")
 @Accessors(chain = true)
+@SuppressWarnings("ALL")
 public class R<T> {
     public static final String DEF_ERROR_MESSAGE = "系统繁忙，请稍候再试";
     public static final String HYSTRIX_ERROR_MESSAGE = "请求超时，请稍候再试";

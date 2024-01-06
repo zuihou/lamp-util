@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import top.tangyh.basic.mq.properties.MqProperties;
@@ -22,6 +23,7 @@ import top.tangyh.basic.mq.properties.MqProperties;
  */
 @Configuration
 @Import(LampRabbitMqConfiguration.RabbitMqConfiguration.class)
+@EnableConfigurationProperties(MqProperties.class)
 public class LampRabbitMqConfiguration {
     @Slf4j
     @Configuration
@@ -29,7 +31,7 @@ public class LampRabbitMqConfiguration {
     @EnableAutoConfiguration(exclude = {RabbitAutoConfiguration.class})
     public static class RabbitMqConfiguration {
         public RabbitMqConfiguration() {
-            log.warn("检测到lamp.rabbitmq.enabled=false，排除了 RabbitMQ");
+            log.warn("检测到{}.enabled=false，排除了 RabbitMQ", MqProperties.PREFIX);
         }
     }
 

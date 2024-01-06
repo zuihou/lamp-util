@@ -3,9 +3,6 @@ package top.tangyh.basic.base.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,7 +14,7 @@ import java.util.List;
 
 
 /**
- * 包括id、create_time、created_by、updated_by、update_time、label、parent_id、sort_value 字段的表继承的树形实体
+ * 包括id、created_time、created_by、updated_by、updated_time、label、parent_id、sort_value 字段的表继承的树形实体
  *
  * @author zuihou
  * @date 2019/05/05
@@ -25,18 +22,14 @@ import java.util.List;
 @Getter
 @Setter
 @Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class TreeEntity<E, T extends Serializable> extends Entity<T> {
 
-    /**
-     * 名称
-     */
-    @Schema(description = "名称")
-    @NotEmpty(message = "名称不能为空")
-    @Size(max = 255, message = "名称长度不能超过255")
-    @TableField(value = "label")
-    protected String label;
+    public static final String LABEL = "label";
+    public static final String PARENT_ID = "parentId";
+    public static final String SORT_VALUE = "sortValue";
+    public static final String PARENT_ID_FIELD = "parent_id";
+    public static final String SORT_VALUE_FIELD = "sort_value";
 
     /**
      * 父ID

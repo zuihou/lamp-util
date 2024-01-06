@@ -38,7 +38,6 @@ public final class CollHelper {
     private CollHelper() {
     }
 
-
     public static Map<String, Set<String>> putAll(Map<String, Set<String>>... items) {
         if (ArrayUtil.isEmpty(items)) {
             return Collections.emptyMap();
@@ -184,6 +183,11 @@ public final class CollHelper {
         return initialCapacity(size, 0.75F);
     }
 
+
+    public static int computeListCapacity(int arraySize) {
+        return (int) Math.min(5L + arraySize + (arraySize / 10), Integer.MAX_VALUE);
+    }
+
     /**
      * 按照分隔符切割list
      *
@@ -197,7 +201,7 @@ public final class CollHelper {
             return new ArrayList<>();
         }
         return list.parallelStream().map(function).map(item -> StrUtil.splitToArray(String.valueOf(item), separator))
-                .flatMap(Arrays::stream).filter(ObjectUtil::isNotEmpty).distinct().collect(Collectors.toList());
+                .flatMap(Arrays::stream).filter(ObjectUtil::isNotEmpty).distinct().toList();
     }
 
     /**
@@ -212,7 +216,7 @@ public final class CollHelper {
             return new ArrayList<>();
         }
         return list.parallelStream().map(item -> StrUtil.splitToArray(item, separator))
-                .flatMap(Arrays::stream).filter(ObjectUtil::isNotEmpty).distinct().collect(Collectors.toList());
+                .flatMap(Arrays::stream).filter(ObjectUtil::isNotEmpty).distinct().toList();
     }
 
 
@@ -222,7 +226,7 @@ public final class CollHelper {
         }
         // Avoid integer overflow when a large array is passed in
         int capacity = computeListCapacity(elements.length);
-        ArrayList<E> list = new ArrayList<E>(capacity);
+        ArrayList<E> list = new ArrayList<>(capacity);
         Collections.addAll(list, elements);
         return list;
     }
@@ -231,13 +235,9 @@ public final class CollHelper {
         if (elements == null || elements.length == 0) {
             return Collections.emptySet();
         }
-        LinkedHashSet<E> set = new LinkedHashSet<E>(elements.length * 4 / 3 + 1);
+        LinkedHashSet<E> set = new LinkedHashSet<>(elements.length * 4 / 3 + 1);
         Collections.addAll(set, elements);
         return set;
-    }
-
-    public static int computeListCapacity(int arraySize) {
-        return (int) Math.min(5L + arraySize + (arraySize / 10), Integer.MAX_VALUE);
     }
 
 
@@ -249,7 +249,7 @@ public final class CollHelper {
      * @return
      */
     public static <T> List<T> addAll(List<T>... values) {
-        return Stream.of(values).flatMap(List::stream).collect(Collectors.toList());
+        return Stream.of(values).flatMap(List::stream).toList();
     }
 
     /**
@@ -260,7 +260,7 @@ public final class CollHelper {
      * @return
      */
     public static <T> List<T> addAllUnique(List<T>... values) {
-        return Stream.of(values).flatMap(List::stream).distinct().collect(Collectors.toList());
+        return Stream.of(values).flatMap(List::stream).distinct().toList();
     }
 
     /**

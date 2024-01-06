@@ -21,15 +21,16 @@ import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import top.tangyh.basic.cache.lock.DistributedLock;
 import top.tangyh.basic.cache.lock.RedisDistributedLock;
 import top.tangyh.basic.cache.properties.CustomCacheProperties;
 import top.tangyh.basic.cache.properties.SerializerType;
-import top.tangyh.basic.cache.redis.RedisOps;
+import top.tangyh.basic.cache.redis2.RedisOps;
 import top.tangyh.basic.cache.repository.CacheOps;
 import top.tangyh.basic.cache.repository.CachePlusOps;
 import top.tangyh.basic.cache.repository.impl.RedisOpsImpl;
+import top.tangyh.basic.cache.utils.ProtoStuffSerializer;
 import top.tangyh.basic.cache.utils.RedisObjectSerializer;
-import top.tangyh.basic.lock.DistributedLock;
 import top.tangyh.basic.utils.StrPool;
 
 import java.util.Map;
@@ -80,7 +81,9 @@ public class RedisAutoConfigure {
     @ConditionalOnMissingBean(RedisSerializer.class)
     public RedisSerializer<Object> redisSerializer() {
         SerializerType serializerType = cacheProperties.getSerializerType();
-        if (SerializerType.JDK == serializerType) {
+        if (SerializerType.ProtoStuff == serializerType) {
+            return new ProtoStuffSerializer();
+        } else if (SerializerType.JDK == serializerType) {
             ClassLoader classLoader = this.getClass().getClassLoader();
             return new JdkSerializationRedisSerializer(classLoader);
         }

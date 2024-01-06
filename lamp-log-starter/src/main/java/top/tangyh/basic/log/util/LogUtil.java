@@ -3,7 +3,7 @@ package top.tangyh.basic.log.util;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
-import top.tangyh.basic.annotation.log.SysLog;
+import top.tangyh.basic.annotation.log.WebLog;
 import top.tangyh.basic.utils.StrPool;
 
 import java.lang.reflect.Method;
@@ -23,14 +23,14 @@ public final class LogUtil {
      * 获取操作信息
      */
     public static String getDescribe(JoinPoint point) {
-        SysLog annotation = getTargetAnnotation(point);
+        WebLog annotation = getTargetAnnotation(point);
         if (annotation == null) {
             return StrPool.EMPTY;
         }
         return annotation.value();
     }
 
-    public static String getDescribe(SysLog annotation) {
+    public static String getDescribe(WebLog annotation) {
         if (annotation == null) {
             return StrPool.EMPTY;
         }
@@ -38,22 +38,22 @@ public final class LogUtil {
     }
 
     /**
-     * 优先从子类获取 @SysLog：
+     * 优先从子类获取 @WebLog：
      * 1，若子类重写了该方法，有标记就记录日志，没标记就忽略日志
      * 2，若子类没有重写该方法，就从父类获取，父类有标记就记录日志，没标记就忽略日志
      */
-    public static SysLog getTargetAnnotation(JoinPoint point) {
+    public static WebLog getTargetAnnotation(JoinPoint point) {
         try {
-            SysLog annotation = null;
-            if (point.getSignature() instanceof MethodSignature) {
-                Method method = ((MethodSignature) point.getSignature()).getMethod();
+            WebLog annotation = null;
+            if (point.getSignature() instanceof MethodSignature ms) {
+                Method method = ms.getMethod();
                 if (method != null) {
-                    annotation = method.getAnnotation(SysLog.class);
+                    annotation = method.getAnnotation(WebLog.class);
                 }
             }
             return annotation;
         } catch (Exception e) {
-            log.warn("获取 {}.{} 的 @SysLog 注解失败", point.getSignature().getDeclaringTypeName(), point.getSignature().getName(), e);
+            log.warn("获取 {}.{} 的 @WebLog 注解失败", point.getSignature().getDeclaringTypeName(), point.getSignature().getName(), e);
             return null;
         }
     }

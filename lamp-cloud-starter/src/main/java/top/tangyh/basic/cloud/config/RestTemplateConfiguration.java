@@ -143,8 +143,8 @@ public class RestTemplateConfiguration {
             trustManagers[0] = disabledTrustManager;
             SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, trustManagers, new java.security.SecureRandom());
-            SSLSocketFactory disabledSSLSocketFactory = sslContext.getSocketFactory();
-            builder.sslSocketFactory(disabledSSLSocketFactory, disabledTrustManager);
+            SSLSocketFactory disabledSslSocketFactory = sslContext.getSocketFactory();
+            builder.sslSocketFactory(disabledSslSocketFactory, disabledTrustManager);
             builder.hostnameVerifier(new RestTemplateConfiguration.TrustAllHostnames());
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             log.warn("Error setting SSLSocketFactory in OKHttpClient", e);
@@ -197,10 +197,7 @@ public class RestTemplateConfiguration {
         converters.add(new MappingJackson2HttpMessageConverter(this.objectMapper));
     }
 
-    /**
-     * A {@link X509TrustManager} that does not validate SSL certificates.
-     */
-    class DisableValidationTrustManager implements X509TrustManager {
+    static class DisableValidationTrustManager implements X509TrustManager {
 
         @Override
         public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
@@ -217,7 +214,7 @@ public class RestTemplateConfiguration {
 
     }
 
-    class TrustAllHostnames implements HostnameVerifier {
+    static class TrustAllHostnames implements HostnameVerifier {
 
         @Override
         public boolean verify(String s, SSLSession sslSession) {

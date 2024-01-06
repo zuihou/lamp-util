@@ -1,11 +1,13 @@
 package top.tangyh.basic.base.request;
 
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,7 +32,8 @@ import java.util.Map;
 public class PageParams<T> {
 
     @NotNull(message = "查询对象model不能为空")
-    @Schema(description = "查询参数", required = true)
+    @Schema(description = "查询参数", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Valid
     private T model;
 
     @Schema(description = "页面大小", example = "10")
@@ -39,14 +42,14 @@ public class PageParams<T> {
     @Schema(description = "当前页", example = "1")
     private long current = 1;
 
-    @Schema(description = "排序,默认createTime", allowableValues = "id,createTime,updateTime", example = "id")
-    private String sort = SuperEntity.FIELD_ID;
+    @Schema(description = "排序,默认createdTime", allowableValues = "id,createdTime,updatedTime", example = "id")
+    private String sort = SuperEntity.ID_FIELD;
 
     @Schema(description = "排序规则, 默认descending", allowableValues = "descending,ascending", example = "descending")
     private String order = "descending";
 
     @Schema(description = "扩展参数")
-    private Map<String, Object> extra = new HashMap<>(16);
+    private Map<String, Object> extra = MapUtil.newHashMap();
 
 
     public PageParams(long current, long size) {

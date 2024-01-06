@@ -10,7 +10,8 @@ import java.util.Base64;
 
 /**
  * 验证码抽象类
- * Created by 王帆 on 2018-07-27 上午 10:08.
+ *
+ * @author Created by 王帆 on 2018-07-27 上午 10:08.
  */
 public abstract class Captcha extends Randoms {
     // 常用颜色
@@ -50,23 +51,12 @@ public abstract class Captcha extends Randoms {
         char[] cs = new char[len];
         for (int i = 0; i < len; i++) {
             switch (charType) {
-                case 2:
-                    cs[i] = alpha(numMaxIndex);
-                    break;
-                case 3:
-                    cs[i] = alpha(charMinIndex, charMaxIndex);
-                    break;
-                case 4:
-                    cs[i] = alpha(upperMinIndex, upperMaxIndex);
-                    break;
-                case 5:
-                    cs[i] = alpha(lowerMinIndex, lowerMaxIndex);
-                    break;
-                case 6:
-                    cs[i] = alpha(upperMaxIndex);
-                    break;
-                default:
-                    cs[i] = alpha();
+                case 2 -> cs[i] = alpha(numMaxIndex);
+                case 3 -> cs[i] = alpha(charMinIndex, charMaxIndex);
+                case 4 -> cs[i] = alpha(upperMinIndex, upperMaxIndex);
+                case 5 -> cs[i] = alpha(lowerMinIndex, lowerMaxIndex);
+                case 6 -> cs[i] = alpha(upperMaxIndex);
+                default -> cs[i] = alpha();
             }
         }
         chars = new String(cs);
@@ -81,10 +71,12 @@ public abstract class Captcha extends Randoms {
      * @return 随机颜色
      */
     protected Color color(int fc, int bc) {
-        if (fc > 255)
+        if (fc > 255) {
             fc = 255;
-        if (bc > 255)
+        }
+        if (bc > 255) {
             bc = 255;
+        }
         int r = fc + num(bc - fc);
         int g = fc + num(bc - fc);
         int b = fc + num(bc - fc);

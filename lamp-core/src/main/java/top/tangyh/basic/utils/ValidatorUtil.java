@@ -1,5 +1,7 @@
 package top.tangyh.basic.utils;
 
+import cn.hutool.core.lang.RegexPool;
+
 import java.util.regex.Pattern;
 
 /**
@@ -10,19 +12,22 @@ import java.util.regex.Pattern;
  */
 public final class ValidatorUtil {
     /**
-     * 正则表达式:验证用户名(不包含中文和特殊字符)
+     * 正则表达式:验证用户名
+     * <p>
+     * 至少包含大写、小写、数字、下划线 2项
      */
-    public static final String REGEX_USERNAME = "^[a-zA-Z0-9_]\\w{5,254}$";
+    public static final String REGEX_USERNAME = "^(?!\\d+$)(?![a-zA-Z]+$)\\w{6,255}$";
     public static final Pattern PATTERN_USERNAME = Pattern.compile(REGEX_USERNAME);
     /**
-     * 正则表达式:验证密码(不包含特殊字符)
+     * 正则表达式:验证密码
+     * 至少包含大写、小写、数字、特殊字符 3项
      */
-    public static final String REGEX_PASSWORD = "^[a-zA-Z0-9]{5,15}$";
+    public static final String REGEX_PASSWORD = "(?=.*([a-zA-Z].*))(?=.*\\d.*)(?=.*[-*/+.~!@#$%^&()_].*)[a-zA-Z\\d-*/+.~!@#$%^&()_]{6,20}$";
     public static final Pattern PATTERN_PASSWORD = Pattern.compile(REGEX_PASSWORD);
     /**
      * 正则表达式:验证邮箱
      */
-    public static final String REGEX_EMAIL = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+    public static final String REGEX_EMAIL = RegexPool.EMAIL;
     public static final Pattern PATTERN_EMAIL = Pattern.compile(REGEX_EMAIL);
     /**
      * 正则表达式:验证汉字
@@ -32,7 +37,7 @@ public final class ValidatorUtil {
     /**
      * 正则表达式:验证身份证
      */
-    public static final String REGEX_ID_CARD = "(\\d{14}[0-9a-zA-Z])|(\\d{17}[0-9a-zA-Z])";
+    public static final String REGEX_ID_CARD = "(\\d{14}[\\da-zA-Z])|(\\d{17}[\\da-zA-Z])";
     public static final Pattern PATTERN_ID_CARD = Pattern.compile(REGEX_ID_CARD);
     /**
      * 正则表达式:验证URL
@@ -40,15 +45,16 @@ public final class ValidatorUtil {
     public static final String REGEX_URL = "http(s)?://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?";
     public static final Pattern PATTERN_URL = Pattern.compile(REGEX_URL);
     /**
+     * 移动电话
+     */
+    public static final String REGEX_MOBILE = RegexPool.MOBILE;
+    public static final Pattern PATTERN_MOBILE = Pattern.compile(REGEX_MOBILE);
+    /**
      * 正则表达式:验证IP地址
      */
-    public static final String REGEX_IP_ADDRESS = "(2[5][0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})";
+    public static final String REGEX_IP_ADDRESS = "(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})\\.(25[0-5]|2[0-4]\\d|1\\d{2}|\\d{1,2})";
     public static final Pattern PATTERN_IP_ADDRESS = Pattern.compile(REGEX_IP_ADDRESS);
-    /**
-     * 1开头 总共11位
-     */
-    public static final String REGEX_MOBILE = "^(1)\\d{10}$";
-    public static final Pattern PATTERN_MOBILE = Pattern.compile(REGEX_MOBILE);
+
     private ValidatorUtil() {
     }
 

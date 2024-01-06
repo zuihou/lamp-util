@@ -8,6 +8,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * 中文验证码
+ *  @author zuihou
+ */
 public class ChineseCaptcha extends ChineseCaptchaAbstract {
 
     public ChineseCaptcha() {

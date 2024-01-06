@@ -15,14 +15,18 @@ import static top.tangyh.basic.utils.DateUtils.SLASH_DATE_FORMAT;
 import static top.tangyh.basic.utils.DateUtils.SLASH_DATE_FORMAT_MATCHES;
 
 /**
- * 解决入参为 Date类型
+ * 解决 @RequestParam 标记的 LocalDate 类型的入参，参数转换问题。
+ * <p>
+ * yyyy-MM-dd
+ * yyyy/MM/dd
+ * yyyy年MM月dd日
  *
  * @author zuihou
  * @date 2019-04-30
  */
 public class String2LocalDateConverter extends BaseDateConverter<LocalDate> implements Converter<String, LocalDate> {
 
-    protected static final Map<String, String> FORMAT = new LinkedHashMap(5);
+    protected static final Map<String, String> FORMAT = new LinkedHashMap<>(5);
 
     static {
         FORMAT.put(DEFAULT_DATE_FORMAT, DEFAULT_DATE_FORMAT_MATCHES);

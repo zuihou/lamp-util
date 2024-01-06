@@ -16,14 +16,13 @@ import java.util.List;
 @ConfigurationProperties(EchoProperties.PREFIX)
 public class EchoProperties {
     public static final String PREFIX = Constants.PROJECT_PREFIX + ".echo";
+
     /**
-     * 是否启用远程查询
+     * 启动程序时，将此包下标记了@Echo注解的实体类缓存到内存，提高回显性能
      */
-    private Boolean enabled = true;
-    /** 启动时扫描的包 */
     private List<String> basePackages;
     /**
-     * 是否启用aop注解方式
+     * 是否启用 @EchoResult
      */
     private Boolean aopEnabled = true;
 

@@ -25,6 +25,10 @@ public class UnauthorizedException extends BaseUncheckedException {
         return new UnauthorizedException(ExceptionCode.UNAUTHORIZED.getCode(), msg);
     }
 
+    public static UnauthorizedException wrap(ExceptionCode ec) {
+        return new UnauthorizedException(ec.getCode(), ec.getMsg());
+    }
+
     @Override
     public String toString() {
         return "UnauthorizedException [message=" + getMessage() + ", code=" + getCode() + "]";

@@ -15,5 +15,4 @@ public enum OptLogType {
      * 记录日志到数据库
      */
     DB,
-    ;
 }

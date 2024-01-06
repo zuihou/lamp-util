@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.toolkit.JdbcUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,9 +35,8 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 public class DbPlusUtil {
-    private static final Pattern SQL_SERVER_PATTERN = Pattern.compile("jdbc(:p6spy)?:(?<db>\\w+):.*((//)|@)(?<host>.+):(?<port>\\d+)(;[\\w-]+=[\\w-]+)*(/|(;databasename=)|:)(?<dbName>\\w+)\\??.*");
+    private static final Pattern SQL_SERVER_PATTERN = Pattern.compile("jdbc(:p6spy)?:(?<db>\\w+):.*((//)|@)(?<host>.+):(?<port>\\d+)(/|(;databasename=)|:)(?<dbName>\\w+)\\??.*");
     private static final Map<String, DbType> JDBC_DB_TYPE_CACHE = new ConcurrentHashMap<>();
-    private static final Map<String, String> JDBC_DATABASE_CACHE = new ConcurrentHashMap<>();
 
     @SneakyThrows
     public static String getSqlServerDbName(String url) {
@@ -50,8 +50,8 @@ public class DbPlusUtil {
     /**
      * 截取jdbc地址中的数据库名
      *
-     * @param jdbcUrl
-     * @return
+     * @param jdbcUrl jdbc 链接地址
+     * @return 数据库类型
      */
     public static String getDataBaseNameByUrl(String jdbcUrl) {
         String database = null;
@@ -91,6 +91,8 @@ public class DbPlusUtil {
                 database = connUri;
             }
 
+            assert database != null;
+
             if (database.contains("?")) {
                 database = database.substring(0, database.indexOf("?"));
             }
@@ -103,7 +105,7 @@ public class DbPlusUtil {
         }
 
         if (StrUtil.isBlank(database)) {
-            throw new IllegalArgumentException("Invalid JDBC url." + jdbcUrl);
+            throw new IllegalArgumentException("Invalid JDBC url.");
         }
         return database;
     }
@@ -120,7 +122,7 @@ public class DbPlusUtil {
         try {
             conn = ds.getConnection();
             // catalog和schema获取失败默认使用null代替
-            String catalog = MetaUtil.getCataLog(conn);
+            String catalog = MetaUtil.getCatalog(conn);
             String schema = MetaUtil.getSchema(conn);
 
 
@@ -165,25 +167,7 @@ public class DbPlusUtil {
     public static DbType getDbType(DataSource executor) {
         try {
             Connection conn = executor.getConnection();
-            return JDBC_DB_TYPE_CACHE.computeIfAbsent(conn.getMetaData().getURL(), DbPlusUtil::getDbType);
-        } catch (SQLException e) {
-            throw ExceptionUtils.mpe(e);
-        }
-    }
-
-    /**
-     * 从数据源中获取数据库名
-     *
-     * @param executor executor
-     * @return java.lang.String
-     * @author tangyh
-     * @date 2022/8/22 9:01 PM
-     * @create [2022/8/22 9:01 PM ] [tangyh] [初始创建]
-     */
-    public static String getDatabase(DataSource executor) {
-        try {
-            Connection conn = executor.getConnection();
-            return JDBC_DATABASE_CACHE.computeIfAbsent(conn.getMetaData().getURL(), DbPlusUtil::getDataBaseNameByUrl);
+            return JDBC_DB_TYPE_CACHE.computeIfAbsent(conn.getMetaData().getURL(), JdbcUtils::getDbType);
         } catch (SQLException e) {
             throw ExceptionUtils.mpe(e);
         }

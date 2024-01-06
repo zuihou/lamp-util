@@ -15,8 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import top.tangyh.basic.context.ContextUtil;
 
 import java.io.IOException;
-
-import static top.tangyh.basic.cloud.interceptor.FeignAddHeaderRequestInterceptor.HEADER_NAME_LIST;
+import java.util.Map;
 
 /**
  * 通过 RestTemplate 调用时，传递请求头和线程变量
@@ -35,11 +34,8 @@ public class RestTemplateHeaderInterceptor implements ClientHttpRequestIntercept
 
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
-            HEADER_NAME_LIST.forEach(headerName -> {
-                if (ObjectUtil.isNotEmpty(ContextUtil.get(headerName))) {
-                    httpHeaders.add(headerName, ContextUtil.get(headerName));
-                }
-            });
+            Map<String, String> localMap = ContextUtil.getLocalMap();
+            localMap.forEach(httpHeaders::add);
             return execution.execute(request, bytes);
         }
 
@@ -49,10 +45,12 @@ public class RestTemplateHeaderInterceptor implements ClientHttpRequestIntercept
             return execution.execute(request, bytes);
         }
 
-        HEADER_NAME_LIST.forEach(headerName -> {
-            if (ObjectUtil.isNotEmpty(httpServletRequest.getHeader(headerName))) {
-                httpHeaders.add(headerName, httpServletRequest.getHeader(headerName));
-            }
+        // 传递请求头
+        HttpHeaders headers = request.getHeaders();
+        headers.forEach((key, values) -> {
+            String value = httpServletRequest.getHeader(key);
+            value = ObjectUtil.isEmpty(value) ? ContextUtil.get(key) : value;
+            httpHeaders.add(key, value);
         });
 
         return execution.execute(request, bytes);

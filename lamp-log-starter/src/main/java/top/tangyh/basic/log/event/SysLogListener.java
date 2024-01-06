@@ -1,7 +1,6 @@
 package top.tangyh.basic.log.event;
 
 
-import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -30,14 +29,13 @@ public class SysLogListener {
     @EventListener(SysLogEvent.class)
     public void saveSysLog(SysLogEvent event) {
         OptLogDTO sysLog = (OptLogDTO) event.getSource();
-
-        // 非租户模式 (NONE) ， 需要修改这里的判断
-        if (sysLog == null || StrUtil.isEmpty(sysLog.getTenantCode())) {
-            log.warn("租户编码不存在，忽略操作日志=={}", sysLog != null ? sysLog.getRequestUri() : "");
-            return;
+        ContextUtil.setTenantId(sysLog.getTenantId());
+        if (sysLog.getBasePoolNameHeader() != null) {
+            ContextUtil.setTenantBasePoolName(sysLog.getBasePoolNameHeader());
         }
-        ContextUtil.setTenant(sysLog.getTenantCode());
-
+        if (sysLog.getExtendPoolNameHeader() != null) {
+            ContextUtil.setTenantExtendPoolName(sysLog.getExtendPoolNameHeader());
+        }
         consumer.accept(sysLog);
     }
 

@@ -47,9 +47,6 @@ public class DateFormatRegister implements FeignFormatterRegistrar {
     private static class LocalDateTime2StringConverter implements Converter<LocalDateTime, String> {
         @Override
         public String convert(LocalDateTime source) {
-            if (source == null) {
-                return null;
-            }
             return source.format(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME_FORMAT));
         }
     }
@@ -57,9 +54,6 @@ public class DateFormatRegister implements FeignFormatterRegistrar {
     private static class LocalDate2StringConverter implements Converter<LocalDate, String> {
         @Override
         public String convert(LocalDate source) {
-            if (source == null) {
-                return null;
-            }
             return source.format(DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT));
         }
     }
@@ -67,9 +61,6 @@ public class DateFormatRegister implements FeignFormatterRegistrar {
     private static class LocalTime2StringConverter implements Converter<LocalTime, String> {
         @Override
         public String convert(LocalTime source) {
-            if (source == null) {
-                return null;
-            }
             return source.format(DateTimeFormatter.ofPattern(DEFAULT_TIME_FORMAT));
         }
     }

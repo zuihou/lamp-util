@@ -17,7 +17,9 @@ import java.io.IOException;
  *
  * @author zuihou
  * @date 2020/5/4 下午6:45
+ * @see 4.6.0
  */
+@Deprecated
 public class EnumSerializer extends StdSerializer<BaseEnum> {
     public static final EnumSerializer INSTANCE = new EnumSerializer();
     public static final String ALL_ENUM_KEY_FIELD = "code";

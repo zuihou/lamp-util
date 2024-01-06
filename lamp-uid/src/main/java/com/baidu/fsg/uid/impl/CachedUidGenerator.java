@@ -73,6 +73,7 @@ public class CachedUidGenerator extends DefaultUidGenerator implements Disposabl
         super.afterPropertiesSet();
 
         // initialize RingBuffer & RingBufferPaddingExecutor
+
         this.initRingBuffer();
         LOGGER.info("Initialized RingBuffer successfully.");
     }
@@ -88,7 +89,7 @@ public class CachedUidGenerator extends DefaultUidGenerator implements Disposabl
     }
 
     @Override
-    public void destroy() throws Exception {
+    public void destroy() {
         bufferPaddingExecutor.shutdown();
     }
 

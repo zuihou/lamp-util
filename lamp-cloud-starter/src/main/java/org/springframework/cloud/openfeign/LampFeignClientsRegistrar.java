@@ -1,6 +1,7 @@
 package org.springframework.cloud.openfeign;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -27,11 +28,11 @@ import java.util.Map;
  * @author zuihou
  * @date 2021年07月13日16:39:42
  */
+@Getter
+@Slf4j
 public class LampFeignClientsRegistrar implements ImportBeanDefinitionRegistrar, BeanClassLoaderAware, EnvironmentAware {
 
-    @Getter
     private ClassLoader beanClassLoader;
-    @Getter
     private Environment environment;
 
     @Override
@@ -86,10 +87,10 @@ public class LampFeignClientsRegistrar implements ImportBeanDefinitionRegistrar,
 
                 AbstractBeanDefinition beanDefinition = definition.getBeanDefinition();
 
-                // 别名
+                // alias
                 String alias = aliasBuilder.append("FeignClient").toString();
 
-                // 有默认值，不会为空
+                // has a default, won't be null
                 boolean primary = (Boolean) attributes.get("primary");
 
                 beanDefinition.setPrimary(primary);
@@ -103,13 +104,14 @@ public class LampFeignClientsRegistrar implements ImportBeanDefinitionRegistrar,
                 BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
 
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                log.error("ClassNotFoundException", e);
             }
         }
     }
 
     /**
-     * 返回 {@link SpringFactoriesLoader} 用于加载候选配置的类。
+     * Return the class used by {@link SpringFactoriesLoader} to load configuration
+     * candidates.
      *
      * @return the factory class
      */

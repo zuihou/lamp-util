@@ -22,6 +22,8 @@ import static top.tangyh.basic.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT_EN;
 import static top.tangyh.basic.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT_EN_MATCHES;
 import static top.tangyh.basic.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT_MATCHES;
 import static top.tangyh.basic.utils.DateUtils.DEFAULT_MONTH_FORMAT;
+import static top.tangyh.basic.utils.DateUtils.DEFAULT_MONTH_FORMAT_EN;
+import static top.tangyh.basic.utils.DateUtils.DEFAULT_MONTH_FORMAT_EN_MATCHES;
 import static top.tangyh.basic.utils.DateUtils.DEFAULT_MONTH_FORMAT_SLASH;
 import static top.tangyh.basic.utils.DateUtils.DEFAULT_YEAR_FORMAT;
 import static top.tangyh.basic.utils.DateUtils.SLASH_DATE_FORMAT;
@@ -30,7 +32,22 @@ import static top.tangyh.basic.utils.DateUtils.SLASH_DATE_TIME_FORMAT;
 import static top.tangyh.basic.utils.DateUtils.SLASH_DATE_TIME_FORMAT_MATCHES;
 
 /**
- * 解决入参为 Date类型
+ * 解决 @RequestParam 标记的 Date 类型的入参，参数转换问题。
+ * <p>
+ * yyyy
+ * yyyy-MM
+ * yyyy-MM-dd
+ * yyyy-MM-dd HH
+ * yyyy-MM-dd HH:mm
+ * yyyy-MM-dd HH:mm:ss
+ * yyyy/MM
+ * yyyy/MM/dd
+ * yyyy/MM/dd HH
+ * yyyy/MM/dd HH:mm
+ * yyyy/MM/dd HH:mm:ss
+ * yyyy年MM月
+ * yyyy年MM月dd日
+ * yyyy年MM月dd日HH时mm分ss秒
  *
  * @author zuihou
  * @date 2019-04-30
@@ -38,7 +55,7 @@ import static top.tangyh.basic.utils.DateUtils.SLASH_DATE_TIME_FORMAT_MATCHES;
 @Slf4j
 public class String2DateConverter extends BaseDateConverter<Date> implements Converter<String, Date> {
 
-    protected static final Map<String, String> FORMAT = new LinkedHashMap(15);
+    protected static final Map<String, String> FORMAT = new LinkedHashMap<>(15);
 
     static {
         FORMAT.put(DEFAULT_YEAR_FORMAT, "^\\d{4}");
@@ -52,6 +69,7 @@ public class String2DateConverter extends BaseDateConverter<Date> implements Con
         FORMAT.put("yyyy/MM/dd HH", "^\\d{4}/\\d{1,2}/\\d{1,2} {1}\\d{1,2}");
         FORMAT.put("yyyy/MM/dd HH:mm", "^\\d{4}/\\d{1,2}/\\d{1,2} {1}\\d{1,2}:\\d{1,2}$");
         FORMAT.put(SLASH_DATE_TIME_FORMAT, SLASH_DATE_TIME_FORMAT_MATCHES);
+        FORMAT.put(DEFAULT_MONTH_FORMAT_EN, DEFAULT_MONTH_FORMAT_EN_MATCHES);
         FORMAT.put(DEFAULT_DATE_FORMAT_EN, DEFAULT_DATE_FORMAT_EN_MATCHES);
         FORMAT.put(DEFAULT_DATE_TIME_FORMAT_EN, DEFAULT_DATE_TIME_FORMAT_EN_MATCHES);
     }

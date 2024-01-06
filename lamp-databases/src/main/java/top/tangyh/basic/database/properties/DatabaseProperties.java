@@ -11,12 +11,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import top.tangyh.basic.constant.Constants;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static top.tangyh.basic.context.ContextConstants.TENANT_BASE_POOL_NAME_HEADER;
 import static top.tangyh.basic.database.properties.DatabaseProperties.PREFIX;
-import static top.tangyh.basic.database.properties.MultiTenantType.SCHEMA;
 
 
 /**
@@ -30,9 +29,14 @@ import static top.tangyh.basic.database.properties.MultiTenantType.SCHEMA;
 @ConfigurationProperties(prefix = PREFIX)
 public class DatabaseProperties {
     public static final String PREFIX = Constants.PROJECT_PREFIX + ".database";
-    /** 溢出总页数后是否进行处理 */
+    /**
+     * 溢出总页数后是否进行处理
+     */
     protected Boolean overflow = true;
-    /** 生成 countSql 优化掉 join 现在只支持 left join */
+    /**
+     * 生成 countSql 优化掉 join
+     * 现在只支持 left join
+     */
     protected Boolean optimizeJoin = true;
     /**
      * 是否启用 防止全表更新与删除插件
@@ -44,14 +48,16 @@ public class DatabaseProperties {
     private Boolean isIllegalSql = false;
     /**
      * 是否启用 seata
+     * 仅仅 DATASOURCE 模式有效
      */
     private Boolean isSeata = false;
     /**
      * 是否p6spy在控制台打印日志
+     * 仅仅 DATASOURCE 模式有效
      */
     private Boolean p6spy = false;
     /**
-     * 分页大小限制
+     * 单页分页条数限制
      */
     private long maxLimit = -1;
     private DbType dbType;
@@ -60,46 +66,50 @@ public class DatabaseProperties {
      */
     private Boolean isNotWrite = false;
     /**
+     * 禁止写入白名单
+     */
+    private List<String> writeWhiteList;
+    /**
      * 是否启用数据权限
      */
     private Boolean isDataScope = true;
 
     /**
-     * 当前服务的租户库前缀
-     * <p>
-     * 仅SCHEMA模式使用
+     * SCHEMA模式 租户库 前缀
      */
     private String tenantDatabasePrefix = "lamp_base";
-    /** SCHEMA 模式专用 */
-    private String owner = "";
-
     /**
-     * DATASOURCE模式：当前服务的租户库前缀
+     * DATASOURCE模式 租户库 前缀
      * <p>
-     * SCHEMA模式：tenant服务，创建租户时，需要初始化的租户库。
-     * 如： authority服务的租户库是 lamp_base， msg 服务的租户库是 lamp_extend，则该参数配置为： lamp_base、lamp_extend。
-     * 如： 若所有服务的租户库都是 lamp_base， 则该参数配置为： lamp_base。
-     *
-     * @author tangyh
-     * @date 2022/8/22 9:05 PM
-     * @create [2022/8/22 9:05 PM ] [tangyh] [初始创建]
+     * 新增租户时，需要动态创建的数据库前缀。
+     * <p>
+     * 你的所有后台服务启动时，链接那些租户数据库，这里就要配置几个前缀
+     * <p>
+     * 如：lamp项目原始的服务（基础服务、租户服务、认证服务、消息服务、文件服务、网关服务）
+     * 总共链接了2个租户库： lamp_base_{TenantId}、lamp_extend_{TenantId}， 这里就要配置2个前缀
      */
-    private List<String> initDatabasePrefix = Arrays.asList(TENANT_BASE_POOL_NAME_HEADER);
+    private List<String> initDatabasePrefix = Collections.singletonList(TENANT_BASE_POOL_NAME_HEADER);
+
     /**
      * 多租户模式
      */
-    private MultiTenantType multiTenantType = SCHEMA;
+    private MultiTenantType multiTenantType;
     /**
      * 租户id 列名
      * <p>
      * 使用于 COLUMN 模式
      */
-    private String tenantIdColumn = "tenant_code";
+    private String tenantIdColumn = "tenant_id";
     /**
-     * 在执行sql时，忽略 租户插件自动拼接租户编码的表
-     * 仅 COLUMN 模式有效
+     * 在执行sql时，租户插件 不会自动拼接租户ID的 表名
+     * 仅 COLUMN 和 DATASOURCE_COLUMN 模式有效
      */
-    private List<String> ignoreTables = new ArrayList<>();
+    private List<String> ignoreTable = new ArrayList<>();
+    /**
+     * 在执行sql时，租户插件 不会自动拼接租户ID的 表前缀
+     * 仅 COLUMN 和 DATASOURCE_COLUMN 模式有效
+     */
+    private List<String> ignoreTablePrefix = new ArrayList<>();
     /**
      * id 类型
      */
@@ -135,7 +145,7 @@ public class DatabaseProperties {
 
         /**
          * RingBuffer size扩容参数, 可提高UID生成的吞吐量.
-         * 默认:3， 原bufferSize=8192, 扩容后bufferSize= 8192 << 3 = 65536
+         * 默认:3， 原bufferSize=1024, 扩容后bufferSize= 1024 << 3 = 8192
          */
         private int boostPower = 3;
         /**
@@ -165,14 +175,15 @@ public class DatabaseProperties {
     public static class DefaultId {
 
         /**
-         * 当前时间，相对于时间基点"${epochStr}"的增量值，单位：秒，
+         * 当前时间，相对于时间基点"${epochStr}"的增量值，单位：秒.
+         * <p>
          * 28: 大概可以使用 8.7年, 28位即最大表示2^28的数值的秒数
          * 30: 大概可以使用 34年, 30位即最大表示2^30的数值的秒数
          * 31: 大概可以使用 68年, 31位即最大表示2^31的数值的秒数
          */
         private int timeBits = 31;
         /**
-         * 机器id，
+         * 机器id。内置实现为在启动时由数据库分配，默认分配策略为用后即弃，后续可提供复用策略。
          * <p>
          * 20：100W次重启
          * 22: 最多可支持约420w次机器启动。内置实现为在启动时由数据库分配。420w = 2^22
@@ -187,10 +198,17 @@ public class DatabaseProperties {
          */
         private int seqBits = 9;
         /**
-         * Customer epoch, unit as second. For example 2016-05-20 (ms: 1463673600000)
+         * 客户历元，单位为秒。For example 2016-05-20 (ms: 1463673600000)
          * 可以改成你的项目开始开始的时间
          */
         private String epochStr = "2020-09-15";
+        /**
+         * 当在低频模式下时，序号始终为0，导致生成ID始终为偶数<br>
+         * 此属性用于限定一个随机上限，在不同毫秒下生成序号时，给定一个随机数，避免偶数问题。<br>
+         * 注意次数必须小于bitsAllocator.getMaxSequence()，{@code 0}表示不使用随机数。<br>
+         * 这个上限不包括值本身。
+         */
+        private Long randomSequenceLimit = 0L;
     }
 
 }

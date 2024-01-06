@@ -1,7 +1,6 @@
 package top.tangyh.basic.cloud.feign;
 
 import com.alibaba.cloud.sentinel.feign.SentinelContractHolder;
-import com.alibaba.cloud.sentinel.feign.SentinelInvocationHandler;
 import com.alibaba.csp.sentinel.Entry;
 import com.alibaba.csp.sentinel.EntryType;
 import com.alibaba.csp.sentinel.SphU;
@@ -9,12 +8,14 @@ import com.alibaba.csp.sentinel.Tracer;
 import com.alibaba.csp.sentinel.context.ContextUtil;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import feign.Feign;
+import feign.FeignException;
 import feign.InvocationHandlerFactory;
 import feign.MethodMetadata;
 import feign.Target;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import top.tangyh.basic.base.R;
+import top.tangyh.basic.jackson.JsonUtil;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -44,12 +45,12 @@ public class LampSentinelInvocationHandler implements InvocationHandler {
 
     private final Map<Method, InvocationHandlerFactory.MethodHandler> dispatch;
 
-    private FallbackFactory fallbackFactory;
+    private FallbackFactory<?> fallbackFactory;
 
     private Map<Method, Method> fallbackMethodMap;
 
     LampSentinelInvocationHandler(Target<?> target, Map<Method, InvocationHandlerFactory.MethodHandler> dispatch,
-                                  FallbackFactory fallbackFactory) {
+                                  FallbackFactory<?> fallbackFactory) {
         this.target = checkNotNull(target, "target");
         this.dispatch = checkNotNull(dispatch, "dispatch");
         this.fallbackFactory = fallbackFactory;
@@ -82,72 +83,74 @@ public class LampSentinelInvocationHandler implements InvocationHandler {
             }
         } else if (HASH_CODE.equals(method.getName())) {
             return hashCode();
+
         } else if (TO_STRING.equals(method.getName())) {
             return toString();
-        }
-
-        Object result;
-        InvocationHandlerFactory.MethodHandler methodHandler = this.dispatch.get(method);
-        // only handle by HardCodedTarget
-        if (target instanceof Target.HardCodedTarget) {
-            Target.HardCodedTarget hardCodedTarget = (Target.HardCodedTarget) target;
-            MethodMetadata methodMetadata = SentinelContractHolder.METADATA_MAP
-                    .get(hardCodedTarget.type().getName() + Feign.configKey(hardCodedTarget.type(), method));
-            // resource default is HttpMethod:protocol://url
-            if (methodMetadata == null) {
-                result = methodHandler.invoke(args);
-            } else {
-                String resourceName = methodMetadata.template().method().toUpperCase() + ":" + hardCodedTarget.url()
-                        + methodMetadata.template().path();
-                Entry entry = null;
-                try {
-                    ContextUtil.enter(resourceName);
-                    entry = SphU.entry(resourceName, EntryType.OUT, 1, args);
-                    result = methodHandler.invoke(args);
-                } catch (Throwable ex) {
-                    // fallback handle
-                    if (!BlockException.isBlockException(ex)) {
-                        Tracer.trace(ex);
-                    }
-                    if (fallbackFactory != null) {
-                        try {
-                            Object fallbackResult = fallbackMethodMap.get(method).invoke(fallbackFactory.create(ex), args);
-                            return fallbackResult;
-                        } catch (IllegalAccessException e) {
-                            // shouldn't happen as method is public due to being an
-                            // interface
-                            throw new AssertionError(e);
-                        } catch (InvocationTargetException e) {
-                            throw new AssertionError(e.getCause());
-                        }
-                    } else {
-                        // 主要变化 by zuihou
-                        if (R.class == method.getReturnType()) {
-                            log.error("feign 内部服务调用异常", ex);
-                            return R.fail(ex.getLocalizedMessage());
-                        } else {
-                            throw ex;
-                        }
-                    }
-                } finally {
-                    if (entry != null) {
-                        entry.exit(1, args);
-                    }
-                    ContextUtil.exit();
-                }
-            }
         } else {
-            // other target type using default strategy
-            result = methodHandler.invoke(args);
-        }
+            Object result;
+            InvocationHandlerFactory.MethodHandler methodHandler = this.dispatch.get(method);
+            // only handle by HardCodedTarget
+            if (target instanceof Target.HardCodedTarget<?> hardCodedTarget) {
+                MethodMetadata methodMetadata = SentinelContractHolder.METADATA_MAP
+                        .get(hardCodedTarget.type().getName() + Feign.configKey(hardCodedTarget.type(), method));
+                // resource default is HttpMethod:protocol://url
+                if (methodMetadata == null) {
+                    result = methodHandler.invoke(args);
+                } else {
+                    String resourceName = methodMetadata.template().method().toUpperCase() + ":" + hardCodedTarget.url()
+                            + methodMetadata.template().path();
+                    Entry entry = null;
+                    try {
+                        ContextUtil.enter(resourceName);
+                        entry = SphU.entry(resourceName, EntryType.OUT, 1, args);
+                        result = methodHandler.invoke(args);
+                    } catch (Throwable ex) {
+                        // fallback handle
+                        if (!BlockException.isBlockException(ex)) {
+                            Tracer.trace(ex);
+                        }
+                        if (fallbackFactory != null) {
+                            try {
+                                return fallbackMethodMap.get(method).invoke(fallbackFactory.create(ex), args);
+                            } catch (IllegalAccessException e) {
+                                // shouldn't happen as method is public due to being an
+                                // interface
+                                throw new AssertionError(e);
+                            } catch (InvocationTargetException e) {
+                                throw new AssertionError(e.getCause());
+                            }
+                        } else {
+                            // 主要变化 by zuihou
+                            if (R.class == method.getReturnType()) {
+                                log.error("feign 内部服务调用异常", ex);
+                                if (ex instanceof FeignException fex) {
+                                    String responseBody = fex.contentUTF8();
+                                    return JsonUtil.parse(responseBody, R.class);
+                                }
+                                return R.fail(ex.getLocalizedMessage());
+                            } else {
+                                throw ex;
+                            }
+                        }
+                    } finally {
+                        if (entry != null) {
+                            entry.exit(1, args);
+                        }
+                        ContextUtil.exit();
+                    }
+                }
+            } else {
+                // other target type using default strategy
+                result = methodHandler.invoke(args);
+            }
 
-        return result;
+            return result;
+        }
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof SentinelInvocationHandler) {
-            LampSentinelInvocationHandler other = (LampSentinelInvocationHandler) obj;
+        if (obj instanceof LampSentinelInvocationHandler other) {
             return target.equals(other.target);
         }
         return false;

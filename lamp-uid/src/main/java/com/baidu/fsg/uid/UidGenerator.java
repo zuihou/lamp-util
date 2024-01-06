@@ -19,6 +19,8 @@ import com.baidu.fsg.uid.exception.UidGenerateException;
 
 /**
  * Represents a unique id generator.
+ * <p>
+ * id重复： https://www.codenong.com/cs109643200/
  *
  * @author yutianbao
  */

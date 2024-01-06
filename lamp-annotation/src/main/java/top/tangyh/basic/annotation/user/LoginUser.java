@@ -14,11 +14,14 @@ import java.lang.annotation.Target;
  * 例4：public void test(@LoginUser(isStation = true) SysUser user) //能获取SysUser对象的实时的用户信息和岗位信息
  * 例5：public void test(@LoginUser(isFull = true) SysUser user) //能获取SysUser对象的所有信息
  * 例6：public void test(@LoginUser(isResource = true) SysUser user) //能获取SysUser对象的实时的用户信息和资源信息
+ * <p>
+ * 缺点1： 不能用于 BaseController 类中的方法
+ * 缺点2： 不能和@RequesyBody 标记的参数，同时使用
  *
  * @author zuihou
  * @date 2018/7/24 16:44
  */
-@Target(ElementType.PARAMETER)
+@Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface LoginUser {
@@ -28,9 +31,20 @@ public @interface LoginUser {
     boolean isFull() default false;
 
     /**
+     * 是否只查询员工信息，true则通过rpc接口查询
+     */
+    boolean isEmployee() default false;
+
+    /**
+     * 是否只查询用户信息，true则通过rpc接口查询
+     */
+    boolean isUser() default false;
+
+    /**
      * 是否只查询角色信息，true则通过rpc接口查询
      */
     boolean isRoles() default false;
+
 
     /**
      * 是否只查询 资源 信息，true则通过rpc接口查询
@@ -43,7 +57,12 @@ public @interface LoginUser {
     boolean isOrg() default false;
 
     /**
+     * 是否只查询主组织信息，true则通过rpc接口查询
+     */
+    boolean isMainOrg() default false;
+
+    /**
      * 是否只查询岗位信息，true则通过rpc接口查询
      */
-    boolean isStation() default false;
+    boolean isPosition() default false;
 }

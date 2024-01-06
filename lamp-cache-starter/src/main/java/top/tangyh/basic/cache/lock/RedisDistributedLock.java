@@ -6,7 +6,6 @@ import org.springframework.data.redis.connection.ReturnType;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.types.Expiration;
-import top.tangyh.basic.lock.DistributedLock;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -25,12 +24,14 @@ public class RedisDistributedLock implements DistributedLock {
      * 通过lua脚本释放锁,来达到释放锁的原子操作
      */
     static {
-        UNLOCK_LUA = "if redis.call(\"get\",KEYS[1]) == ARGV[1] " +
-                "then " +
-                "    return redis.call(\"del\",KEYS[1]) " +
-                "else " +
-                "    return 0 " +
-                "end ";
+        UNLOCK_LUA = """
+                if redis.call("get",KEYS[1]) == ARGV[1]
+                then
+                    return redis.call("del",KEYS[1])
+                else
+                    return 0
+                end
+                """;
     }
 
     private final RedisTemplate<String, Object> redisTemplate;

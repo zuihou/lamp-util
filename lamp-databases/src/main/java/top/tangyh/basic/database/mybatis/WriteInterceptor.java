@@ -1,9 +1,10 @@
 package top.tangyh.basic.database.mybatis;
 
-import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
-import lombok.NoArgsConstructor;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.statement.StatementHandler;
@@ -16,13 +17,15 @@ import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
-import top.tangyh.basic.constant.Constants;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import top.tangyh.basic.context.ContextUtil;
+import top.tangyh.basic.database.properties.DatabaseProperties;
 import top.tangyh.basic.exception.BizException;
 import top.tangyh.basic.utils.SpringUtils;
 
 import java.sql.Connection;
-import java.util.Arrays;
 import java.util.Properties;
 
 import static org.apache.ibatis.mapping.SqlCommandType.DELETE;
@@ -40,10 +43,14 @@ import static org.apache.ibatis.mapping.SqlCommandType.UPDATE;
  */
 @SuppressWarnings("AlibabaUndefineMagicConstant")
 @Slf4j
-@NoArgsConstructor
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class WriteInterceptor implements Interceptor {
 
+    private final DatabaseProperties databaseProperties;
+
+    public WriteInterceptor(DatabaseProperties databaseProperties) {
+        this.databaseProperties = databaseProperties;
+    }
 
     @Override
     @SneakyThrows
@@ -52,7 +59,7 @@ public class WriteInterceptor implements Interceptor {
         if (SpringUtils.getApplicationContext() == null) {
             return invocation.proceed();
         }
-        if (!SpringUtils.getApplicationContext().getEnvironment().getProperty(Constants.PROJECT_PREFIX + ".database.isNotWrite", Boolean.class, false)) {
+        if (!SpringUtils.getApplicationContext().getEnvironment().getProperty(DatabaseProperties.PREFIX + ".isNotWrite", Boolean.class, false)) {
             return invocation.proceed();
         }
 
@@ -68,25 +75,43 @@ public class WriteInterceptor implements Interceptor {
         if (StrUtil.containsAnyIgnoreCase(mappedStatement.getId(), "uid", "resetPassErrorNum", "updateLastLoginTime")) {
             return invocation.proceed();
         }
-        // userId=1 的超级管理员 放行
+
         Long userId = ContextUtil.getUserId();
-        String tenant = ContextUtil.getTenant();
         log.info("mapper id={}, userId={}", mappedStatement.getId(), userId);
 
-
-        //演示用的超级管理员 能查 和 增
-        if (Long.valueOf(2).equals(userId) && (DELETE.equals(mappedStatement.getSqlCommandType()))) {
-            throw new BizException(-1, "演示环境，无删除权限，请本地部署后测试");
+        // IP 放行
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+            String ip = JakartaServletUtil.getClientIP(request);
+            if (CollUtil.contains(databaseProperties.getWriteWhiteList(), ip)) {
+                return invocation.proceed();
+            }
+        } else {
+            log.info("requestAttributes is null, ignore.");
         }
 
-        //内置的租户 不能 修改、删除 权限数据
-        boolean isAuthority = StrUtil.containsAnyIgnoreCase(mappedStatement.getId(), "Tenant", "GlobalUser", "User", "Menu", "Resource", "Role", "Dictionary", "Parameter", "Application");
-        boolean isWrite = CollectionUtil.contains(Arrays.asList(DELETE, UPDATE, INSERT), mappedStatement.getSqlCommandType());
-        if ("0000".equals(tenant) && isWrite && isAuthority) {
-            throw new BizException(-1, "演示环境禁止修改、删除重要数据！请登录租户【0000】，账号【lamp_pt】创建其他租户管理员账号后测试全部功能");
+        // 原来让superAdmin可以操作是方便维护演示环境数据，但总有刁民利用此账号，频繁删除演示环境数据。特意删除。
+        if (DELETE.equals(mappedStatement.getSqlCommandType())) {
+            boolean not = StrUtil.containsAnyIgnoreCase(mappedStatement.getId(), ".application.Def", ".system.Def",
+                    ".tenant.Def", ".BaseEmployee", "BaseRole");
+            boolean exclude = StrUtil.containsAnyIgnoreCase(mappedStatement.getId(), "RelMapper");
+            boolean isStop = ContextUtil.isStop();
+            if ((not && !exclude) || isStop) {
+                throw new BizException(-1, "演示环境禁止新增、修改、删除系统级数据！请创建其他租户账号后测试全部功能");
+            }
+        } else if (UPDATE.equals(mappedStatement.getSqlCommandType())) {
+            boolean not = StrUtil.containsAnyIgnoreCase(mappedStatement.getId(), "DefResource");
+            boolean isStop = ContextUtil.isStop();
+            if (not || isStop) {
+                throw new BizException(-1, "演示环境禁止新增、修改、删除系统级数据！请创建其他租户账号后测试全部功能");
+            }
+        } else if (INSERT.equals(mappedStatement.getSqlCommandType())) {
+            boolean not = StrUtil.containsAnyIgnoreCase(mappedStatement.getId(), "DefResource");
+            if (not) {
+                throw new BizException(-1, "演示环境禁止新增、修改、删除系统级数据！请创建其他租户账号后测试全部功能");
+            }
         }
-
-        // 你还可以自定义其他限制规则， 比如：IP 等
 
         //放行
         return invocation.proceed();

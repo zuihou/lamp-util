@@ -41,7 +41,7 @@ public class CacheLoadKeys {
      * 动态查询值
      */
     private Set<Serializable> keys = new HashSet<>();
-    private String tenant;
+    private Long tenantId;
     private LoadService loadService;
 
     public CacheLoadKeys(Echo rf) {
@@ -50,7 +50,7 @@ public class CacheLoadKeys {
 
     public CacheLoadKeys(LoadKey lk, LoadService loadService, Set<Serializable> keys) {
         this.api = lk.getApi();
-        this.tenant = ContextUtil.getTenant();
+        this.tenantId = ContextUtil.getTenantId();
         this.loadService = loadService;
         this.keys = keys;
     }

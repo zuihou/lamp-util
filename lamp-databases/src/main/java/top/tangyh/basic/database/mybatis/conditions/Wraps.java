@@ -9,9 +9,9 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.SqlCondition;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import top.tangyh.basic.database.mybatis.conditions.query.LbqWrapper;
+import top.tangyh.basic.database.mybatis.conditions.query.LbQueryWrap;
 import top.tangyh.basic.database.mybatis.conditions.query.QueryWrap;
-import top.tangyh.basic.database.mybatis.conditions.update.LbuWrapper;
+import top.tangyh.basic.database.mybatis.conditions.update.LbUpdateWrap;
 import top.tangyh.basic.exception.BizException;
 import top.tangyh.basic.utils.ArgumentAssert;
 import top.tangyh.basic.utils.DateUtils;
@@ -112,8 +112,8 @@ public final class Wraps {
      * @param <T> 实体类泛型
      * @return LambdaQueryWrapper&lt;T&gt;
      */
-    public static <T> LbqWrapper<T> lbQ() {
-        return new LbqWrapper<>();
+    public static <T> LbQueryWrap<T> lbQ() {
+        return new LbQueryWrap<>();
     }
 
     /**
@@ -123,8 +123,8 @@ public final class Wraps {
      * @param <T>    实体类泛型
      * @return LambdaQueryWrapper&lt;T&gt;
      */
-    public static <T> LbqWrapper<T> lbQ(T entity) {
-        return new LbqWrapper<>(entity);
+    public static <T> LbQueryWrap<T> lbQ(T entity) {
+        return new LbQueryWrap<>(entity);
     }
 
     /**
@@ -133,8 +133,8 @@ public final class Wraps {
      * @param <T> 实体类泛型
      * @return LambdaUpdateWrapper&lt;T&gt;
      */
-    public static <T> LbuWrapper<T> lbU() {
-        return new LbuWrapper<>();
+    public static <T> LbUpdateWrap<T> lbU() {
+        return new LbUpdateWrap<>();
     }
 
     /**
@@ -144,13 +144,13 @@ public final class Wraps {
      * @param <T>    实体类泛型
      * @return LambdaUpdateWrapper&lt;T&gt;
      */
-    public static <T> LbuWrapper<T> lbU(T entity) {
-        return new LbuWrapper<>(entity);
+    public static <T> LbUpdateWrap<T> lbU(T entity) {
+        return new LbUpdateWrap<>(entity);
     }
 
 
-    public static <Entity> LbqWrapper<Entity> lbq(Entity model, Map<String, Object> extra, Class<Entity> modelClazz) {
-        return q(model, extra, modelClazz).lambda();
+    public static <Entity> LbQueryWrap<Entity> lbq(Entity model, Map<String, Object> extra, Class<Entity> modelClazz) {
+        return Wraps.q(model, extra, modelClazz).lambda();
     }
 
     /**
@@ -267,7 +267,7 @@ public final class Wraps {
                 continue;
             }
 
-            if (!(classValue instanceof String)) {
+            if (!(classValue instanceof String srcValue)) {
                 continue;
             }
             TableField tableField = AnnotationUtil.getAnnotation(field, TableField.class);
@@ -280,7 +280,6 @@ public final class Wraps {
                 continue;
             }
 
-            String srcValue = (String) classValue;
             if (srcValue.contains(PERCENT) || srcValue.contains(UNDERSCORE)) {
                 String tarValue = StrHelper.keywordConvert(srcValue);
                 ReflectUtil.setFieldValue(source, field, tarValue);
@@ -296,9 +295,6 @@ public final class Wraps {
      * @return 对应集合
      */
     public static Collection<?> castList(Object obj) {
-        if (obj instanceof Collection<?>) {
-            return (Collection<?>) obj;
-        }
-        return null;
+        return obj instanceof Collection<?> coll ? coll : null;
     }
 }

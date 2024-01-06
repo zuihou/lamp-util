@@ -27,7 +27,6 @@ import java.util.Map;
 public class SentinelFeignBuilder extends Feign.Builder implements ApplicationContextAware {
 
     private Contract contract = new Contract.Default();
-    private ApplicationContext applicationContext;
     private FeignClientFactory feignContext;
 
     @Override
@@ -48,8 +47,8 @@ public class SentinelFeignBuilder extends Feign.Builder implements ApplicationCo
             @Override
             public InvocationHandler create(Target target, Map<Method, MethodHandler> dispatch) {
                 FeignClient feignClient = AnnotationUtils.findAnnotation(target.type(), FeignClient.class);
-                Class fallback = feignClient.fallback();
-                Class fallbackFactory = feignClient.fallbackFactory();
+                Class<?> fallback = feignClient.fallback();
+                Class<?> fallbackFactory = feignClient.fallbackFactory();
                 String contextId = feignClient.contextId();
 
                 if (!StringUtils.hasText(contextId)) {
@@ -57,19 +56,19 @@ public class SentinelFeignBuilder extends Feign.Builder implements ApplicationCo
                 }
 
                 Object fallbackInstance;
-                FallbackFactory fallbackFactoryInstance;
+                FallbackFactory<?> fallbackFactoryInstance;
                 if (void.class != fallback) {
                     fallbackInstance = getFromContext(contextId, "fallback", fallback, target.type());
-                    return new LampSentinelInvocationHandler(target, dispatch, new FallbackFactory.Default(fallbackInstance));
+                    return new LampSentinelInvocationHandler(target, dispatch, new FallbackFactory.Default<>(fallbackInstance));
                 }
                 if (void.class != fallbackFactory) {
-                    fallbackFactoryInstance = (FallbackFactory) getFromContext(contextId, "fallbackFactory", fallbackFactory, FallbackFactory.class);
+                    fallbackFactoryInstance = (FallbackFactory<?>) getFromContext(contextId, "fallbackFactory", fallbackFactory, FallbackFactory.class);
                     return new LampSentinelInvocationHandler(target, dispatch, fallbackFactoryInstance);
                 }
                 return new LampSentinelInvocationHandler(target, dispatch);
             }
 
-            private Object getFromContext(String name, String type, Class fallbackType, Class targetType) {
+            private Object getFromContext(String name, String type, Class<?> fallbackType, Class<?> targetType) {
                 Object fallbackInstance = feignContext.getInstance(name, fallbackType);
                 if (fallbackInstance == null) {
                     throw new IllegalStateException(
@@ -92,7 +91,6 @@ public class SentinelFeignBuilder extends Feign.Builder implements ApplicationCo
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-        feignContext = this.applicationContext.getBean(FeignClientFactory.class);
+        feignContext = applicationContext.getBean(FeignClientFactory.class);
     }
 }

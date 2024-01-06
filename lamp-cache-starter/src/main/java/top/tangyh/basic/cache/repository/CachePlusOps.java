@@ -1,6 +1,7 @@
 package top.tangyh.basic.cache.repository;
 
 import org.springframework.lang.NonNull;
+import top.tangyh.basic.cache.redis2.CacheResult;
 import top.tangyh.basic.model.cache.CacheHashKey;
 import top.tangyh.basic.model.cache.CacheKey;
 
@@ -122,7 +123,7 @@ public interface CachePlusOps extends CacheOps {
      * @param cacheNullValues 是否缓存空值
      * @return 默认情况下返回给定域的值, 如果给定域不存在于哈希表中， 又或者给定的哈希表并不存在， 那么命令返回 nil
      */
-    <T> T hGet(@NonNull CacheHashKey key, boolean... cacheNullValues);
+    <T> CacheResult<T> hGet(@NonNull CacheHashKey key, boolean... cacheNullValues);
 
     /**
      * 返回哈希表 key 中给定域 field 的值。
@@ -132,7 +133,7 @@ public interface CachePlusOps extends CacheOps {
      * @param cacheNullValues 是否缓存空值
      * @return 默认情况下返回给定域的值, 如果给定域不存在于哈希表中， 又或者给定的哈希表并不存在， 那么命令返回 nil
      */
-    <T> T hGet(@NonNull CacheHashKey key, Function<CacheHashKey, T> loader, boolean... cacheNullValues);
+    <T> CacheResult<T> hGet(@NonNull CacheHashKey key, Function<CacheHashKey, T> loader, boolean... cacheNullValues);
 
     /**
      * 检查给定域 field 是否存在于哈希表 hash 当中
@@ -191,7 +192,7 @@ public interface CachePlusOps extends CacheOps {
      * @param key 一定不能为 {@literal null}.
      * @return 所有的 filed
      */
-    Set<Object> hKeys(@NonNull CacheHashKey key);
+    <HK> Set<HK> hKeys(@NonNull CacheHashKey key);
 
     /**
      * 返回哈希表 key 中所有域的值。
@@ -199,7 +200,7 @@ public interface CachePlusOps extends CacheOps {
      * @param key 一定不能为 {@literal null}.
      * @return 一个包含哈希表中所有值的表。
      */
-    List<Object> hVals(@NonNull CacheHashKey key);
+    <HV> List<CacheResult<HV>> hVals(@NonNull CacheHashKey key);
 
     /**
      * 返回哈希表 key 中，所有的域和值。
@@ -208,7 +209,7 @@ public interface CachePlusOps extends CacheOps {
      * @param key 一定不能为 {@literal null}.
      * @return 以列表形式返回哈希表的域和域的值
      */
-    <K, V> Map<K, V> hGetAll(@NonNull CacheHashKey key);
+    <K, V> Map<K, CacheResult<V>> hGetAll(@NonNull CacheHashKey key);
 
     /**
      * 返回哈希表 key 中，所有的域和值。
@@ -219,7 +220,7 @@ public interface CachePlusOps extends CacheOps {
      * @param cacheNullValues 缓存空值
      * @return 以列表形式返回哈希表的域和域的值
      */
-    <K, V> Map<K, V> hGetAll(@NonNull CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues);
+    <K, V> Map<K, CacheResult<V>> hGetAll(@NonNull CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues);
 
     /**
      * 将一个或多个 member 元素加入到集合 key 当中，已经存在于集合的 member 元素将被忽略。

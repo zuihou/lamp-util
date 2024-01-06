@@ -217,14 +217,14 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
             return;
         }
 
-        if (obj instanceof IPage) {
-            List<?> records = ((IPage<?>) obj).getRecords();
+        if (obj instanceof IPage<?> page) {
+            List<?> records = page.getRecords();
             parseList(records, typeMap, depth, ignoreFields);
             return;
         }
 
-        if (obj instanceof Collection) {
-            parseList((Collection<?>) obj, typeMap, depth, ignoreFields);
+        if (obj instanceof Collection<?> collection) {
+            parseList(collection, typeMap, depth, ignoreFields);
             return;
         }
 
@@ -239,9 +239,9 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
 
             LoadKey type = fieldParam.getLoadKey();
             Map<Serializable, Object> valueMap = typeMap.getOrDefault(type, new ConcurrentHashMap<>(DEF_MAP_SIZE));
-            if (fieldParam.getActualValue() instanceof Collection) {
-                ((Collection<Serializable>) fieldParam.getActualValue()).forEach(item -> {
-                    valueMap.put(item, Collections.emptyMap());
+            if (fieldParam.getActualValue() instanceof Collection<?> av) {
+                av.forEach(item -> {
+                    valueMap.put((Serializable) item, Collections.emptyMap());
                 });
             } else {
                 valueMap.put(fieldParam.getActualValue(), Collections.emptyMap());
@@ -281,8 +281,8 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
             if (Echo.ENUM_API.equalsIgnoreCase(type.getApi())) {
                 Map<Serializable, Object> value = new HashMap<>();
                 valueMap.forEach((k, v) -> {
-                    if (k instanceof BaseEnum) {
-                        value.put(k, ((BaseEnum) k).getDesc());
+                    if (k instanceof BaseEnum be) {
+                        value.put(k, be.getDesc());
                     } else {
                         value.put(k, k);
                     }
@@ -291,7 +291,10 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
             } else {
                 LoadService loadService = strategyMap.get(type.getApi());
                 if (loadService == null) {
-                    log.warn("处理字段的数据回显时，没有找到@Echo注解中api属性的实例：[{}]。 请确保[{}]实现了 LoadService，并注册到Spring容器中，若api指定的是ServiceImpl，请确保在同一个服务内。", type.getApi(), type.getApi());
+                    String tip = "处理字段的数据回显时，没有找到@Echo注解中api属性的实例：[{}]。 请确保[{}]实现了 LoadService，并注册到Spring容器中。" +
+                            "\\n 1. 若api指定的是ServiceImpl，请确保在同一个服务内。 " +
+                            "\\n 2. 若api指定的是FeignClient，请确保被回显的服务能正常调用该Feign接口。 ";
+                    log.warn(tip, type.getApi(), type.getApi());
                     continue;
                 }
 
@@ -321,13 +324,13 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
             return;
         }
 
-        if (obj instanceof IPage) {
-            List<?> records = ((IPage<?>) obj).getRecords();
+        if (obj instanceof IPage<?> page) {
+            List<?> records = page.getRecords();
             writeList(records, typeMap, ignoreFields);
             return;
         }
-        if (obj instanceof Collection) {
-            writeList((Collection<?>) obj, typeMap, ignoreFields);
+        if (obj instanceof Collection<?> coll) {
+            writeList(coll, typeMap, ignoreFields);
             return;
         }
 
@@ -353,7 +356,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
             if (echoValue == null) {
                 continue;
             }
-            if (echoValue instanceof Map && ((Map<?, ?>) echoValue).isEmpty()) {
+            if (echoValue instanceof Map<?, ?> map && map.isEmpty()) {
                 continue;
             }
 
@@ -367,8 +370,7 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
             }
 
             // 将新的值 反射 到指定字段
-            if (obj instanceof EchoVO) {
-                EchoVO vo = (EchoVO) obj;
+            if (obj instanceof EchoVO vo) {
                 vo.getEchoMap().put(fieldName, echoValue);
             } else {
                 ReflectUtil.setFieldValue(obj, field, echoValue);
@@ -394,9 +396,8 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
         }
 
         // 回显集合字段  如: @Echo List<Long> userId;
-        if (actualValue instanceof Collection) {
-            Collection actualValues = (Collection) actualValue;
-            List newVal = new ArrayList<>();
+        if (actualValue instanceof Collection actualValues) {
+            List<Object> newVal = new ArrayList<>();
             for (Object actual : actualValues) {
                 if (actual == null) {
                     continue;
@@ -422,6 +423,20 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
 
         // 获取字典值
         if (ObjectUtil.isNull(newVal) && StrUtil.isNotEmpty(echo.dictType())) {
+            if (originalValue instanceof Collection originalValues) {
+                List listVal = new ArrayList<>();
+                for (Object original : originalValues) {
+                    if (original == null) {
+                        continue;
+                    }
+                    Object value = valueMap.getOrDefault(echo.dictType() + ips.getDictSeparator() + original, EMPTY).toString();
+                    if (value != null) {
+                        listVal.add(value);
+                    }
+                }
+                return listVal;
+            }
+
             List<String> codes = StrUtil.split(originalValue.toString(), ips.getDictItemSeparator());
 
             newVal = codes.stream().map(item -> {

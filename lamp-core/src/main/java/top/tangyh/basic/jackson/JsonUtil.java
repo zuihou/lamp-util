@@ -19,12 +19,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.stream.Collectors;
 
 import static top.tangyh.basic.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT;
 
@@ -44,7 +44,7 @@ public final class JsonUtil {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-        return null;
+        return StrPool.EMPTY;
     }
 
     public static byte[] toJsonAsBytes(Object object) {
@@ -56,6 +56,9 @@ public final class JsonUtil {
     }
 
     public static <T> T parse(String content, Class<T> valueType) {
+        if (StrUtil.isEmpty(content)) {
+            return null;
+        }
         try {
             return getInstance().readValue(content, valueType);
         } catch (Exception e) {
@@ -65,6 +68,9 @@ public final class JsonUtil {
     }
 
     public static <T> T parse(String content, TypeReference<T> typeReference) {
+        if (StrUtil.isEmpty(content)) {
+            return null;
+        }
         try {
             return getInstance().readValue(content, typeReference);
         } catch (IOException e) {
@@ -105,19 +111,21 @@ public final class JsonUtil {
     }
 
     public static <T> List<T> parseArray(String content, Class<T> valueTypeRef) {
+        if (StrUtil.isEmpty(content)) {
+            return Collections.emptyList();
+        }
         try {
             if (!StrUtil.startWith(content, StrPool.LEFT_SQ_BRACKET)) {
                 content = StrPool.LEFT_SQ_BRACKET + content + StrPool.RIGHT_SQ_BRACKET;
             }
-
             List<Map<String, Object>> list = getInstance().readValue(content, new TypeReference<List<Map<String, Object>>>() {
             });
 
-            return list.stream().map((map) -> toPojo(map, valueTypeRef)).collect(Collectors.toList());
+            return list.stream().map((map) -> toPojo(map, valueTypeRef)).toList();
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public static Map<String, Object> toMap(String content) {
@@ -126,7 +134,7 @@ public final class JsonUtil {
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
-        return null;
+        return Collections.emptyMap();
     }
 
     public static <T> Map<String, T> toMap(String content, Class<T> valueTypeRef) {
@@ -140,7 +148,7 @@ public final class JsonUtil {
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
-        return null;
+        return Collections.emptyMap();
     }
 
     public static <T> T toPojo(Map fromValue, Class<T> toValueType) {

@@ -1,6 +1,8 @@
 package top.tangyh.basic.context;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import top.tangyh.basic.utils.StrPool;
 
 import java.util.Map;
@@ -14,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2017-12-13 16:52
  */
 public final class ContextUtil {
+
     /**
      * 支持多线程传递参数
      *
@@ -22,19 +25,21 @@ public final class ContextUtil {
      * @create [2021/6/23 9:26 下午 ] [tangyh] [初始创建]
      */
     private static final ThreadLocal<Map<String, String>> THREAD_LOCAL = new ThreadLocal<>();
+//    private static final ThreadLocal<Map<String, String>> THREAD_LOCAL = new TransmittableThreadLocal<>();  // 配合 @Async 使用时会有问题
 
     private ContextUtil() {
     }
 
     public static void putAll(Map<String, String> map) {
-        map.forEach((k, v) -> {
-            set(k, v);
-        });
+        map.forEach(ContextUtil::set);
     }
 
     public static void set(String key, Object value) {
+        if (ObjectUtil.isEmpty(value) || StrUtil.isBlankOrUndefined(value.toString())) {
+            return;
+        }
         Map<String, String> map = getLocalMap();
-        map.put(key, value == null ? StrPool.EMPTY : value.toString());
+        map.put(key, value.toString());
     }
 
     public static <T> T get(String key, Class<T> type) {
@@ -44,7 +49,13 @@ public final class ContextUtil {
 
     public static <T> T get(String key, Class<T> type, Object def) {
         Map<String, String> map = getLocalMap();
-        return Convert.convert(type, map.getOrDefault(key, String.valueOf(def == null ? StrPool.EMPTY : def)));
+        String value;
+        if (def == null) {
+            value = map.get(key);
+        } else {
+            value = map.getOrDefault(key, String.valueOf(def));
+        }
+        return Convert.convert(type, StrUtil.isEmpty(value) ? def : value);
     }
 
     public static String get(String key) {
@@ -65,27 +76,13 @@ public final class ContextUtil {
         THREAD_LOCAL.set(localMap);
     }
 
-
-    /**
-     * 是否boot项目
-     *
-     * @return 是否boot项目
-     */
-    public static Boolean getBoot() {
-        return get(ContextConstants.IS_BOOT, Boolean.class, false);
-    }
-
-    public static void setBoot(Boolean val) {
-        set(ContextConstants.IS_BOOT, val);
-    }
-
     /**
      * 用户ID
      *
      * @return 用户ID
      */
     public static Long getUserId() {
-        return get(ContextConstants.JWT_KEY_USER_ID, Long.class, 0L);
+        return get(ContextConstants.USER_ID_HEADER, Long.class);
     }
 
     /**
@@ -93,154 +90,142 @@ public final class ContextUtil {
      *
      * @param userId 用户ID
      */
-    public static void setUserId(Long userId) {
-        set(ContextConstants.JWT_KEY_USER_ID, userId);
-    }
-
-    public static void setUserId(String userId) {
-        set(ContextConstants.JWT_KEY_USER_ID, userId);
-    }
-
-    public static String getUserIdStr() {
-        return String.valueOf(getUserId());
+    public static void setUserId(Object userId) {
+        set(ContextConstants.USER_ID_HEADER, userId);
     }
 
     /**
-     * 登录账号
-     *
-     * @return 登录账号
+     * 员工id
      */
-    public static String getAccount() {
-        return get(ContextConstants.JWT_KEY_ACCOUNT, String.class);
+    public static Long getEmployeeId() {
+        return get(ContextConstants.EMPLOYEE_ID_HEADER, Long.class);
     }
 
     /**
-     * 登录账号
+     * 员工id
      *
-     * @param account 登录账号
+     * @param employeeId 员工id
      */
-    public static void setAccount(String account) {
-        set(ContextConstants.JWT_KEY_ACCOUNT, account);
+    public static void setEmployeeId(Object employeeId) {
+        set(ContextConstants.EMPLOYEE_ID_HEADER, employeeId);
     }
 
-
-    /**
-     * 用户姓名
-     *
-     * @return 用户姓名
-     */
-    public static String getName() {
-        return get(ContextConstants.JWT_KEY_NAME, String.class);
+    public static boolean isEmptyTenantId() {
+        return isEmptyLong(ContextConstants.TENANT_ID_HEADER);
     }
 
-    /**
-     * 用户姓名
-     *
-     * @param name 用户姓名
-     */
-    public static void setName(String name) {
-        set(ContextConstants.JWT_KEY_NAME, name);
+    public static boolean isEmptyBasePoolNameHeader() {
+        return isEmptyBasePool();
     }
 
-    /**
-     * 获取token
-     *
-     * @return token
-     */
-    public static String getToken() {
-        return get(ContextConstants.BEARER_HEADER_KEY, String.class);
+    public static boolean isEmptyExtendPoolNameHeader() {
+        return isEmptyLong(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER);
     }
 
-    public static void setToken(String token) {
-        set(ContextConstants.BEARER_HEADER_KEY, token);
+    public static boolean isEmptyBasePool() {
+        return isEmptyLong(ContextConstants.TENANT_BASE_POOL_NAME_HEADER);
+    }
+
+    public static boolean isEmptyUserId() {
+        return isEmptyLong(ContextConstants.USER_ID_HEADER);
+    }
+
+    public static boolean isEmptyEmployeeId() {
+        return isEmptyLong(ContextConstants.EMPLOYEE_ID_HEADER);
+    }
+
+    public static boolean isEmptyApplicationId() {
+        return isEmptyLong(ContextConstants.APPLICATION_ID_HEADER);
     }
 
     /**
-     * 获取租户编码
-     *
-     * @return 租户编码
+     * 租户 id
      */
-    public static String getTenant() {
-        return get(ContextConstants.JWT_KEY_TENANT, String.class, StrPool.EMPTY);
+    public static Long getTenantId() {
+        return get(ContextConstants.TENANT_ID_HEADER, Long.class);
     }
 
-    public static void setTenant(String val) {
-        set(ContextConstants.JWT_KEY_TENANT, val);
-        setTenantBasePoolName(val);
-        setTenantExtendPoolName(val);
+    /**
+     * 租户 id
+     *
+     * @param tenantId 租户id
+     */
+    public static void setTenantId(Object tenantId) {
+        set(ContextConstants.TENANT_ID_HEADER, tenantId);
+        setTenantBasePoolName(tenantId);
+        setTenantExtendPoolName(tenantId);
     }
 
-    public static void clearDatabase() {
-        set(ContextConstants.DATABASE, StrPool.EMPTY);
+    public static Long getBasePoolNameHeader() {
+        return get(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, Long.class);
     }
 
-    public static String getDatabase() {
-        return get(ContextConstants.DATABASE, String.class, StrPool.EMPTY);
+    public static Long getExtendPoolNameHeader() {
+        return get(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, Long.class);
     }
 
-    public static void setDatabaseBase() {
-        set(ContextConstants.DATABASE, ContextConstants.TENANT_BASE_POOL_NAME_HEADER);
+    public static String getTenantIdStr() {
+        return String.valueOf(getTenantId() == null ? StrPool.EMPTY : getTenantId());
     }
-
-    public static void setDatabaseExtend() {
-        set(ContextConstants.DATABASE, ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER);
-    }
-
 
     /**
      * 切换base库
      *
-     * @param tenant
+     * @param tenantId 租户ID
      */
-    public static void setTenantBasePoolName(Object tenant) {
-        set(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, tenant);
+    public static void setTenantBasePoolName(Object tenantId) {
+        set(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, tenantId);
     }
 
     /**
      * 切换extend库
      *
-     * @param tenant
+     * @param tenantId 租户ID
      */
-    public static void setTenantExtendPoolName(Object tenant) {
-        set(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, tenant);
+    public static void setTenantExtendPoolName(Object tenantId) {
+        set(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, tenantId);
     }
 
 
     /**
      * 设置默认库
      */
-    public static void setDefTenant() {
-        set(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, ContextConstants.DEF_TENANT);
-        set(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, ContextConstants.DEF_TENANT);
+    public static void setDefTenantId() {
+        set(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, ContextConstants.DEF_TENANT_ID);
+        set(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, ContextConstants.DEF_TENANT_ID);
+    }
+
+    /**
+     * 设置内置租户
+     */
+    public static void setBuiltTenantId() {
+        set(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, ContextConstants.BUILT_IN_TENANT_ID_STR);
+        set(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, ContextConstants.BUILT_IN_TENANT_ID_STR);
     }
 
     public static boolean isDefTenantId() {
-        String base = get(ContextConstants.TENANT_BASE_POOL_NAME_HEADER);
-        if (ContextConstants.DEF_TENANT.equals(base)) {
+        Long base = get(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, Long.class);
+        if (ContextConstants.DEF_TENANT_ID.equals(base)) {
             return true;
         }
-        String extend = get(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER);
-        if (ContextConstants.DEF_TENANT.equals(extend)) {
-            return true;
-        }
-        return false;
+        Long extend = get(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, Long.class);
+        return ContextConstants.DEF_TENANT_ID.equals(extend);
     }
 
-
-    public static String getSubTenant() {
-        return get(ContextConstants.JWT_KEY_SUB_TENANT, String.class, StrPool.EMPTY);
+    /**
+     * 应用ID
+     */
+    public static Long getApplicationId() {
+        return get(ContextConstants.APPLICATION_ID_HEADER, Long.class);
     }
 
-    public static void setSubTenant(String val) {
-        set(ContextConstants.JWT_KEY_SUB_TENANT, val);
-    }
-
-    public static String getClientId() {
-        return get(ContextConstants.JWT_KEY_CLIENT_ID, String.class);
-    }
-
-    public static void setClientId(String val) {
-        set(ContextConstants.JWT_KEY_CLIENT_ID, val);
+    /**
+     * 应用ID
+     *
+     * @param applicationId 应用ID
+     */
+    public static void setApplicationId(Object applicationId) {
+        set(ContextConstants.APPLICATION_ID_HEADER, applicationId);
     }
 
     /**
@@ -260,6 +245,107 @@ public final class ContextUtil {
     }
 
     /**
+     * 获取token
+     *
+     * @return token
+     */
+    public static String getToken() {
+        return get(ContextConstants.TOKEN_HEADER, String.class);
+    }
+
+    public static void setToken(String token) {
+        set(ContextConstants.TOKEN_HEADER, token == null ? StrPool.EMPTY : token);
+    }
+
+    /**
+     * 获取 当前所属的公司ID
+     *
+     * @return java.lang.Long
+     * @author tangyh
+     * @date 2022/9/9 4:50 PM
+     * @create [2022/9/9 4:50 PM ] [tangyh] [初始创建]
+     */
+    public static Long getCurrentCompanyId() {
+        return get(ContextConstants.CURRENT_COMPANY_ID_HEADER, Long.class);
+    }
+
+    public static void setCurrentCompanyId(Object val) {
+        set(ContextConstants.CURRENT_COMPANY_ID_HEADER, val);
+    }
+
+    /**
+     * 获取 当前所属的顶级公司ID
+     *
+     * @return java.lang.Long
+     * @author tangyh
+     * @date 2022/9/9 4:50 PM
+     * @create [2022/9/9 4:50 PM ] [tangyh] [初始创建]
+     */
+    public static Long getCurrentTopCompanyId() {
+        return get(ContextConstants.CURRENT_TOP_COMPANY_ID_HEADER, Long.class);
+    }
+
+    public static void setCurrentTopCompanyId(Object val) {
+        set(ContextConstants.CURRENT_TOP_COMPANY_ID_HEADER, val);
+    }
+
+    /**
+     * 获取 当前所属的部门ID
+     *
+     * @return java.lang.Long
+     * @author tangyh
+     * @date 2022/9/9 4:50 PM
+     * @create [2022/9/9 4:50 PM ] [tangyh] [初始创建]
+     */
+    public static Long getCurrentDeptId() {
+        return get(ContextConstants.CURRENT_DEPT_ID_HEADER, Long.class);
+    }
+
+    public static void setCurrentDeptId(Object val) {
+        set(ContextConstants.CURRENT_DEPT_ID_HEADER, val);
+    }
+
+    public static String getClientId() {
+        return get(ContextConstants.CLIENT_ID_HEADER, String.class);
+    }
+
+    public static void setClientId(String val) {
+        set(ContextConstants.CLIENT_ID_HEADER, val);
+    }
+
+    private static boolean isEmptyLong(String key) {
+        String val = getLocalMap().get(key);
+        return StrUtil.isEmpty(val) || StrPool.NULL.equals(val) || StrPool.ZERO.equals(val);
+    }
+
+    private static boolean isEmptyStr(String key) {
+        String val = getLocalMap().get(key);
+        return val == null || StrPool.NULL.equals(val);
+    }
+
+    public static String getLogTraceId() {
+        return get(ContextConstants.TRACE_ID_HEADER, String.class);
+    }
+
+    public static void setLogTraceId(String val) {
+        set(ContextConstants.TRACE_ID_HEADER, val);
+    }
+
+    /**
+     * 是否boot项目
+     *
+     * @return 是否boot项目
+     */
+    public static Boolean getBoot() {
+        return get(ContextConstants.IS_BOOT, Boolean.class, false);
+    }
+
+    public static void setBoot(Boolean val) {
+        set(ContextConstants.IS_BOOT, val);
+    }
+
+
+    /**
      * 获取灰度版本号
      *
      * @return 灰度版本号
@@ -272,23 +358,34 @@ public final class ContextUtil {
         set(ContextConstants.GRAY_VERSION, val);
     }
 
-    public static boolean isEmptyTenant() {
-        return isEmptyStr(ContextConstants.JWT_KEY_TENANT);
+    /**
+     * 仅用于演示环境禁止执行某些操作
+     * 后续sql是否可以执行
+     */
+    public static Boolean isProceed() {
+        String proceed = get(ContextConstants.PROCEED, String.class);
+        return StrUtil.isNotEmpty(proceed);
     }
 
-    private static boolean isEmptyLong(String key) {
-        String val = getLocalMap().get(key);
-        return val == null || StrPool.NULL.equals(val) || StrPool.ZERO.equals(val);
+    public static void setProceed() {
+        set(ContextConstants.PROCEED, StrPool.ONE);
     }
 
-    private static boolean isEmptyStr(String key) {
-        String val = getLocalMap().get(key);
-        return val == null || StrPool.NULL.equals(val);
+    /**
+     * 仅用于演示环境禁止执行某些操作
+     * 后续sql是否不能执行
+     */
+    public static Boolean isStop() {
+        String proceed = get(ContextConstants.STOP, String.class);
+        return StrUtil.isNotEmpty(proceed);
+    }
+
+    public static void setStop() {
+        set(ContextConstants.STOP, StrPool.ONE);
     }
 
     public static void remove() {
         THREAD_LOCAL.remove();
     }
-
 
 }

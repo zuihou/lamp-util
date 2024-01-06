@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Bean增强类工具类
@@ -37,7 +36,7 @@ public class BeanPlusUtil extends BeanUtil {
         return sourceList.parallelStream()
                 .filter(Objects::nonNull)
                 .map(source -> toBean(source, destinationClass))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**

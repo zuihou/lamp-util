@@ -17,17 +17,18 @@ import org.hibernate.validator.internal.properties.DefaultGetterPropertySelectio
 import org.hibernate.validator.internal.properties.javabean.JavaBeanHelper;
 import org.hibernate.validator.spi.nodenameprovider.PropertyNodeNameProvider;
 import org.hibernate.validator.spi.properties.GetterPropertySelectionStrategy;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import top.tangyh.basic.annotation.constraints.NotEmptyPattern;
+import top.tangyh.basic.validator.component.FormValidatorController;
+import top.tangyh.basic.validator.component.extract.DefaultConstraintExtractImpl;
+import top.tangyh.basic.validator.component.extract.IConstraintExtract;
 import top.tangyh.basic.validator.constraintvalidators.LengthConstraintValidator;
 import top.tangyh.basic.validator.constraintvalidators.NotEmptyConstraintValidator;
 import top.tangyh.basic.validator.constraintvalidators.NotEmptyPatternConstraintValidator;
 import top.tangyh.basic.validator.constraintvalidators.NotNullConstraintValidator;
-import top.tangyh.basic.validator.controller.FormValidatorController;
-import top.tangyh.basic.validator.extract.DefaultConstraintExtractImpl;
-import top.tangyh.basic.validator.extract.IConstraintExtract;
 
 /**
  * 验证器配置
@@ -35,6 +36,8 @@ import top.tangyh.basic.validator.extract.IConstraintExtract;
  * @author zuihou
  * @date 2019/07/14
  */
+@ComponentScan(basePackageClasses = FormValidatorController.class)
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class ValidatorConfiguration {
 
     @Bean
@@ -44,8 +47,7 @@ public class ValidatorConfiguration {
                 //快速失败返回模式
                 .addProperty("hibernate.validator.fail_fast", "true"))
                 .buildValidatorFactory();
-        Validator validator = validatorFactory.getValidator();
-        return validator;
+        return validatorFactory.getValidator();
     }
 
     private Configuration<HibernateValidatorConfiguration> warp(HibernateValidatorConfiguration configuration) {
@@ -95,10 +97,5 @@ public class ValidatorConfiguration {
     public IConstraintExtract constraintExtract(Validator validator) {
         return new DefaultConstraintExtractImpl(validator);
     }
-
-//    @Bean
-//    public FormValidatorController getFormValidatorController(IConstraintExtract constraintExtract, RequestMappingHandlerMapping requestMappingHandlerMapping) {
-//        return new FormValidatorController(constraintExtract, requestMappingHandlerMapping);
-//    }
 
 }

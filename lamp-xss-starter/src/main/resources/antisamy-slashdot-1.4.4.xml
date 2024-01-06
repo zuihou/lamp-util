@@ -10,6 +10,7 @@ Slashdot allowed tags taken from "Reply" page:
 -->
 <anti-samy-rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xsi:noNamespaceSchemaLocation="antisamy.xsd">
+    <!-- https://blog.csdn.net/raychiu757374816/article/details/79016101  -->
 
     <directives>
         <directive name="omitXmlDeclaration" value="true"/>
@@ -19,7 +20,6 @@ Slashdot allowed tags taken from "Reply" page:
         <directive name="formatOutput" value="false"/>
         <directive name="preserveComments" value="true"/>
         <directive name="onUnknownTag" value="encode"/>
-
         <directive name="embedStyleSheets" value="false"/>
     </directives>
 

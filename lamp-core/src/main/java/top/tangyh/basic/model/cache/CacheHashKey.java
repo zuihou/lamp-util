@@ -6,10 +6,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.lang.NonNull;
+import top.tangyh.basic.utils.StrPool;
 
 import java.time.Duration;
-
-import static top.tangyh.basic.utils.StrPool.COLON;
 
 
 /**
@@ -25,20 +24,19 @@ public class CacheHashKey extends CacheKey {
     /**
      * redis hash field
      */
-    @NonNull
     private Object field;
 
-    public CacheHashKey(@NonNull String key, final @NonNull Object field) {
+    public CacheHashKey(@NonNull String key, final Object field) {
         super(key);
         this.field = field;
     }
 
-    public CacheHashKey(@NonNull String key, final @NonNull Object field, Duration expire) {
+    public CacheHashKey(@NonNull String key, final Object field, Duration expire) {
         super(key, expire);
         this.field = field;
     }
 
     public CacheKey tran() {
-        return new CacheKey(StrUtil.join(COLON, getKey(), getField()), getExpire());
+        return new CacheKey(StrUtil.join(StrPool.COLON, getKey(), getField()), getExpire());
     }
 }

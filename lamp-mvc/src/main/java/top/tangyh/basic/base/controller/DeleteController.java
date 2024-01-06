@@ -3,9 +3,9 @@ package top.tangyh.basic.base.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import top.tangyh.basic.annotation.log.SysLog;
-import top.tangyh.basic.annotation.security.PreAuth;
+import top.tangyh.basic.annotation.log.WebLog;
 import top.tangyh.basic.base.R;
+import top.tangyh.basic.base.entity.SuperEntity;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,7 +19,8 @@ import java.util.List;
  * @author zuihou
  * @date 2020年03月07日22:02:16
  */
-public interface DeleteController<Entity, Id extends Serializable> extends BaseController<Entity> {
+public interface DeleteController<Id extends Serializable, Entity extends SuperEntity<Id>>
+        extends BaseController<Id, Entity> {
 
     /**
      * 删除方法
@@ -29,12 +30,11 @@ public interface DeleteController<Entity, Id extends Serializable> extends BaseC
      */
     @Operation(summary = "删除")
     @DeleteMapping
-    @SysLog("'删除:' + #ids")
-    @PreAuth("hasAnyPermission('{}delete')")
+    @WebLog("'删除:' + #ids")
     default R<Boolean> delete(@RequestBody List<Id> ids) {
         R<Boolean> result = handlerDelete(ids);
         if (result.getDefExec()) {
-            getBaseService().removeByIds(ids);
+            return R.success(getSuperService().removeByIds(ids));
         }
         return result;
     }
