@@ -90,12 +90,5 @@
             <scope>compile</scope>
         </dependency>
 
-
-        <!-- seata-all  SeataHystrixConcurrencyStrategy 和 本项目中 ThreadLocalHystrixConcurrencyStrategy 冲突，导致事务回滚失效 -->
-        <dependency>
-            <groupId>io.seata</groupId>
-            <artifactId>seata-all</artifactId>
-        </dependency>
-
     </dependencies>
 </project>

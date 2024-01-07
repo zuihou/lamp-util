@@ -20,6 +20,7 @@
     <properties>
         <spring-cloud-dependencies.version>2022.0.4</spring-cloud-dependencies.version>
         <spring-cloud-alibaba-dependencies.version>2022.0.0.0</spring-cloud-alibaba-dependencies.version>
+        <!-- none 模式没有使用seata，需要使用时，大家自己集成一下 -->
         <seata.version>1.7.1</seata.version>
         <nacos.version>2.2.4</nacos.version>
         <sentinel.version>1.8.6</sentinel.version>

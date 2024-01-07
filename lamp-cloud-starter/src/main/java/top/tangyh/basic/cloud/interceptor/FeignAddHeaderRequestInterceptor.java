@@ -1,11 +1,9 @@
 package top.tangyh.basic.cloud.interceptor;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import io.seata.core.context.RootContext;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestAttributes;
@@ -51,10 +49,11 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
-        String xid = RootContext.getXID();
-        if (StrUtil.isNotEmpty(xid)) {
-            template.header(RootContext.KEY_XID, xid);
-        }
+        // 需要seata-all的依赖，若需使用seata，请房开以下代码
+//        String xid = RootContext.getXID();
+//        if (StrUtil.isNotEmpty(xid)) {
+//            template.header(RootContext.KEY_XID, xid);
+//        }
 
         template.header(ContextConstants.FEIGN, StrPool.TRUE);
         log.info("thread id ={}, name={}", Thread.currentThread().getId(), Thread.currentThread().getName());
