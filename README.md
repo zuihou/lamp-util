@@ -3,7 +3,6 @@
 [![Language](https://img.shields.io/badge/langs-Java%20%7C%20SpringCloud%20%7C%20Vue3%20%7C%20...-red?style=flat-square&color=42b883)](https://github.com/dromara/lamp-cloud)
 [![License](https://img.shields.io/github/license/dromara/lamp-cloud?color=42b883&style=flat-square)](https://github.com/dromara/lamp-cloud/blob/master/LICENSE)
 [![Author](https://img.shields.io/badge/作者-zuihou-orange.svg)](https://github.com/zuihou)
-[![Version](https://img.shields.io/badge/版本-4.15.0-java17-brightgreen.svg)](https://github.com/dromara/lamp-cloud)
 [![Star](https://img.shields.io/github/stars/dromara/lamp-cloud?color=42b883&logo=github&style=flat-square)](https://github.com/dromara/lamp-cloud/stargazers)
 [![Fork](https://img.shields.io/github/forks/dromara/lamp-cloud?color=42b883&logo=github&style=flat-square)](https://github.com/dromara/lamp-cloud/network/members)
 [![Star](https://gitee.com/dromara/lamp-cloud/badge/star.svg?theme=gray)](https://gitee.com/dromara/lamp-cloud/stargazers)
@@ -36,7 +35,6 @@
 | 项目             | gitee                                                        | github                                                     | 备注       |
 |----------------|--------------------------------------------------------------|------------------------------------------------------------|----------|
 | lamp-util      | [lamp-util](https://gitee.com/zuihou111/lamp-util)           | [lamp-util](https://github.com/zuihou/lamp-util)           | 核心工具集    |
-| lamp-generator | [lamp-generator](https://gitee.com/zuihou111/lamp-generator) | [lamp-generator](https://github.com/zuihou/lamp-generator) | 代码生成器    |
 | lamp-job       | [lamp-job](https://gitee.com/zuihou111/lamp-job)             | [lamp-job](https://github.com/zuihou/lamp-job)             | 分布式定时调度器 |
 
 ## 后端
@@ -45,19 +43,18 @@
 |------------|--------------------------------------------------------|--------------------------------------------------------|-------------------|
 | lamp-cloud | [lamp-cloud](https://gitee.com/dromara/lamp-cloud)   | [lamp-cloud](https://github.com/dromara/lamp-cloud)     | SpringCloud(微服务)版 |
 | lamp-boot  | [lamp-boot](https://gitee.com/zuihou111/lamp-boot)     | [lamp-boot](https://github.com/zuihou/lamp-boot)       | SpringBoot(单体)版   |
-| 微服务版示例     | [lamp-samples](https://github.com/zuihou/lamp-samples) | [lamp-samples](https://github.com/zuihou/lamp-samples) | 常用示例              |
 
 ## 前端
 
 | 项目                        | gitee                                                     | github                                                             | 备注                                           | 演示地址                            |
 |---------------------------|-----------------------------------------------------------|--------------------------------------------------------------------|----------------------------------------------|---------------------------------|
 | lamp-web                  | [lamp-web](https://gitee.com/zuihou111/lamp-web)          | [lamp-web](https://github.com/zuihou/lamp-web)                     | 基于 vue-admin-element (element-ui)            | https://pro.tangyh.top          |
-| lamp-web-pro(强烈推荐！👏👏👏) | [lamp-web-plus](https://gitee.com/zuihou111/lamp-web-pro) | [lamp-web-plus](https://github.com/zuihou/lamp-web-plus)           | 基于 vue-vben-admin （vue 3 + ant design vue 2） | https://pro.tangyh.top/lamp-web |
 
 # lamp-util 简介
 
 `lamp-util` 的前身是 `zuihou-commons`，在3.0.0版本之后，改名为lamp-util，它是`lamp`项目的其中一员。
-`lamp-util` 是基于`jdk11`的， [lamp-cloud](https://github.com/dromara/lamp-cloud)
+
+`lamp-util` 是 [lamp-cloud](https://github.com/dromara/lamp-cloud)
 和 [lamp-boot](https://github.com/zuihou/lamp-boot) 项目的核心工具包，开发宗旨是打造一套兼顾 SpringBoot 和 SpringCloud
 项目的公共工具类。
 
@@ -86,13 +83,14 @@
 - 轻量级接口权限
 - 快去看源码和文档发现 [更多功能](https://www.kancloud.cn/zuihou/zuihou-admin-cloud) 吧
 
-# 会员版演示地址
+# 演示地址
 
-- 4.0版本：后端使用lamp-cloud-pro， 前端使用lamp-web-pro。演示地址：   https://pro.tangyh.top
-- 3.x版本：后端使用lamp-boot-plus， 前端使用lamp-web-plus。演示地址：  https://boot.tangyh.top
-- 3.x版本：后端使用lamp-boot-plus， 前端使用lamp-web。演示地址：     https://boot.tangyh.top/lamp-web
-
-> 4.0 企业版源码已经发布，开源版和个人版(4.0功能可能有所不同)发布暂缓，详情咨询作者
+- 官网
+  - [https://tangyh.top](https://tangyh.top)
+- 4.0版本演示地址（账号密码都在登录页左侧）
+  - 数据源模式：后端使用lamp-cloud-pro-datasource-column， 前端使用lamp-web-pro，演示地址：   [https://datasource.tangyh.top](https://datasource.tangyh.top)
+  - 字段模式：后端使用lamp-cloud-pro-column， 前端使用lamp-web-pro，演示地址：   [https://column.tangyh.top](https://column.tangyh.top)
+  - 非租户模式：后端使用lamp-cloud，前端使用lamp-web，演示地址：   [https://none.tangyh.top](https://none.tangyh.top)
 
 # 会员版
 
