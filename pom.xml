@@ -6,12 +6,12 @@
     <parent>
         <groupId>top.tangyh.basic</groupId>
         <artifactId>lamp-parent</artifactId>
-        <version>4.15.0-java17</version>
+        <version>4.16.0-java17</version>
         <relativePath>lamp-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>lamp-util</artifactId>
-    <version>4.15.0-java17</version>
+    <version>4.16.0-java17</version>
 
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
