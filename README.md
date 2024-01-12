@@ -1,6 +1,6 @@
 # lamp 快速开发平台
 
-[![Language](https://img.shields.io/badge/langs-Java%20%7C%20SpringCloud%20%7C%20Vue3%20%7C%20...-red?style=flat-square&color=42b883)](https://github.com/dromara/lamp-cloud)
+[![Language](https://img.shields.io/badge/语言-Java17%20%7C%20SpringCloud%20%7C%20Vue3%20%7C%20...-red?style=flat-square&color=42b883)](https://github.com/dromara/lamp-cloud)
 [![License](https://img.shields.io/github/license/dromara/lamp-cloud?color=42b883&style=flat-square)](https://github.com/dromara/lamp-cloud/blob/master/LICENSE)
 [![Author](https://img.shields.io/badge/作者-zuihou-orange.svg)](https://github.com/zuihou)
 [![Star](https://img.shields.io/github/stars/dromara/lamp-cloud?color=42b883&logo=github&style=flat-square)](https://github.com/dromara/lamp-cloud/stargazers)
@@ -8,27 +8,27 @@
 [![Star](https://gitee.com/dromara/lamp-cloud/badge/star.svg?theme=gray)](https://gitee.com/dromara/lamp-cloud/stargazers)
 [![Fork](https://gitee.com/dromara/lamp-cloud/badge/fork.svg?theme=gray)](https://gitee.com/dromara/lamp-cloud/members)
 
-# lamp 项目名字由来
-
-`灯灯`(简称灯， 英文名：lamp)，他是一个项目的统称，由"工具集"、"后端"、"前端"组成，包含以下几个子项目
-
-[点我了解项目详细介绍](https://tangyh.top)
-
-# 推广
-
-- 超品周津贴: [点我进入](https://www.aliyun.com/minisite/goods?taskPkg=1212cpz&pkgSid=183200&userCode=uk5ga6sq)
-- 阿里云服务器双11折扣：[点我进入](https://www.aliyun.com/activity/1111?userCode=uk5ga6sq)
-- 阿里云服务器折扣场：[点我进入](https://www.aliyun.com/minisite/goods?userCode=uk5ga6sq)
-- 阿里云服务器优惠券：[点我领取](https://www.aliyun.com/daily-act/ecs/activity_selection?userCode=uk5ga6sq)
--
-通过以上链接任意购买金额大于等于50元的商品，联系作者可赠送 [看云文档](https://www.kancloud.cn/zuihou/zuihou-admin-cloud)
-一份。
-
 # 官网
 
 [https://tangyh.top](https://tangyh.top)
 
+# 分支说明
+
+| 分支        | master        | java17       | 4.x_java17      |
+|-----------|---------------|--------------|-----------------|
+| 源码版本      | 3.x           | 3.x          | 4.x             |
+| JDK版本     | jdk8          | jdk17        | jdk17           |
+| 是否继续升级新功能 | 不开发新功能,仅修复bug | 不开发新功能,仅修复bug     | 持续开发新功能和bug修复   |
+| 是否支持数据源模式 | 是(企业版支持)      | 是(企业版支持)     | 否([企业版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8.html)支持)        |
+| 是否支持字段模式  | 是(开源版企业版均支持)  | 是(开源版企业版均支持) | 否([企业版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8.html)支持)        |
+| 是否支持非租户模式 | 是(开源版企业版均支持)  | 是(开源版企业版均支持) | 是(开源版支持(就是本项目)) |
+
 # lamp 项目组成
+
+`灯灯`(简称灯， 英文名：lamp)，她是一个项目集，由"工具集"、"后端"、"前端"组成，为满足高内聚低耦合设计原则，将一个**大项目**
+拆解为以下几个子项目：
+
+[点我了解项目详细介绍](https://tangyh.top)
 
 ## 工具集
 
@@ -41,14 +41,22 @@
 
 | 项目         | gitee                                                  | github                                                 | 备注                |
 |------------|--------------------------------------------------------|--------------------------------------------------------|-------------------|
-| lamp-cloud | [lamp-cloud](https://gitee.com/dromara/lamp-cloud)   | [lamp-cloud](https://github.com/dromara/lamp-cloud)     | SpringCloud(微服务)版 |
+| lamp-cloud | [lamp-cloud](https://gitee.com/dromara/lamp-cloud)     | [lamp-cloud](https://github.com/dromara/lamp-cloud)    | SpringCloud(微服务)版 |
 | lamp-boot  | [lamp-boot](https://gitee.com/zuihou111/lamp-boot)     | [lamp-boot](https://github.com/zuihou/lamp-boot)       | SpringBoot(单体)版   |
 
 ## 前端
 
-| 项目                        | gitee                                                     | github                                                             | 备注                                           | 演示地址                            |
-|---------------------------|-----------------------------------------------------------|--------------------------------------------------------------------|----------------------------------------------|---------------------------------|
-| lamp-web                  | [lamp-web](https://gitee.com/zuihou111/lamp-web)          | [lamp-web](https://github.com/zuihou/lamp-web)                     | 基于 vue-admin-element (element-ui)            | https://pro.tangyh.top          |
+| 项目                         | gitee                                                      | github                                                   | 备注            | 演示地址                     |
+|----------------------------|------------------------------------------------------------|----------------------------------------------------------|---------------|--------------------------|
+| lamp-web                   | [lamp-web](https://gitee.com/zuihou111/lamp-web)           | [lamp-web](https://github.com/zuihou/lamp-web)           | 基于 vben-admin | https://none.tangyh.top  |
+
+## 注意：
+
+- lamp-cloud 和 lamp-boot 依赖 lamp-util
+- lamp-job 依赖 lamp-cloud 或 lamp-boot
+
+所以，项目的编译顺序是：lamp-util -> lamp-cloud/lamp-boot -> lamp-job ！
+
 
 # lamp-util 简介
 
@@ -57,16 +65,6 @@
 `lamp-util` 是 [lamp-cloud](https://github.com/dromara/lamp-cloud)
 和 [lamp-boot](https://github.com/zuihou/lamp-boot) 项目的核心工具包，开发宗旨是打造一套兼顾 SpringBoot 和 SpringCloud
 项目的公共工具类。
-
-# 快速上手
-
-- 入门到精通，参考文档： https://www.kancloud.cn/zuihou/zuihou-admin-cloud
-- 发现bug和建议，请提交issue： https://github.com/dromara/lamp-cloud/issues
-- 常见问题，请参考Discussions： https://github.com/dromara/lamp-cloud/discussions
-
-## 结构介绍
-
-![lamp-util 功能介绍.png](docs/images/lamp-util功能介绍.png)
 
 ## lamp-util 亮点功能
 
@@ -92,11 +90,11 @@
   - 字段模式：后端使用lamp-cloud-pro-column， 前端使用lamp-web-pro，演示地址：   [https://column.tangyh.top](https://column.tangyh.top)
   - 非租户模式：后端使用lamp-cloud，前端使用lamp-web，演示地址：   [https://none.tangyh.top](https://none.tangyh.top)
 
-# 会员版
+# 企业版
 
-本项目分为开源版和会员版，github和gitee上能搜索到的为开源版本，遵循Apache协议。 会员版源码在私有gitlab托管，购买后开通账号。
+本项目分为开源版、个人学习版和企业商用版，github和gitee上能搜索到的为开源版本，遵循Apache协议。 个人和企业版源码在私有gitlab托管，购买后开通账号。
 
-会员版和开源版区别请看：[会员版](https://www.kancloud.cn/zuihou/zuihou-admin-cloud/2074547)
+区别请看：[会员版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8.html)
 
 # 开源协议
 
@@ -108,5 +106,4 @@ Apache Licence 2.0 Licence是著名的非盈利开源组织Apache采用的协议
 - 在延伸的代码中（修改和有源代码衍生的代码中）需要带有原来代码中的协议，商标，专利声明和其他原来作者规定需要包含的说明。
 - 如果再发布的产品中包含一个Notice文件，则在Notice文件中需要带有Apache Licence。你可以在Notice中增加自己的许可，但不可以表现为对Apache
   Licence构成更改。 Apache Licence也是对商业应用友好的许可。使用者也可以在需要的时候修改代码来满足需要并作为开源或商业产品发布/销售。
--
-若你借鉴或学习了本项目的源码，请你在你的项目源码和说明文档中显著的表明引用于本项目，并附上本项目的github访问地址。（https://github.com/dromara/lamp-cloud）
+- 若你借鉴或学习了本项目的源码，请你在你的项目源码和说明文档中显著的表明引用于本项目，并附上本项目的github访问地址。（https://github.com/dromara/lamp-cloud）
