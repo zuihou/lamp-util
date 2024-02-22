@@ -190,25 +190,8 @@ public class SysLogAspect {
         optLogDTO.setHttpMethod(request.getMethod());
         optLogDTO.setUa(StrUtil.sub(request.getHeader("user-agent"), 0, 500));
         if (ContextUtil.getBoot()) {
-            optLogDTO.setTenantId(ContextUtil.getTenantId());
-
-            if (!ContextUtil.isEmptyBasePoolNameHeader()) {
-                optLogDTO.setBasePoolNameHeader(ContextUtil.getBasePoolNameHeader());
-            }
-            if (!ContextUtil.isEmptyExtendPoolNameHeader()) {
-                optLogDTO.setExtendPoolNameHeader(ContextUtil.getExtendPoolNameHeader());
-            }
             optLogDTO.setCreatedOrgId(ContextUtil.getCurrentCompanyId());
         } else {
-            optLogDTO.setTenantId(Convert.toLong(request.getHeader(ContextConstants.TENANT_ID_HEADER)));
-            Long basePoolName = Convert.toLong(request.getHeader(ContextConstants.TENANT_BASE_POOL_NAME_HEADER));
-            if (basePoolName != null) {
-                optLogDTO.setBasePoolNameHeader(basePoolName);
-            }
-            Long extendPoolName = Convert.toLong(request.getHeader(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER));
-            if (extendPoolName != null) {
-                optLogDTO.setExtendPoolNameHeader(extendPoolName);
-            }
             optLogDTO.setCreatedOrgId(Convert.toLong(request.getHeader(ContextConstants.CURRENT_COMPANY_ID_HEADER)));
         }
         optLogDTO.setTrace(MDC.get(ContextConstants.TRACE_ID_HEADER));

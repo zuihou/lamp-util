@@ -20,9 +20,7 @@ public class TenantP6SpyLogger implements MessageFormattingStrategy {
     public String formatMessage(int connectionId, String now, long elapsed, String category,
                                 String prepared, String sql, String url) {
         return StringUtils.isNotBlank(sql) ?
-                StrUtil.format("{}: {} {}: {} {}: {} \nConsume Time：{} ms {} \nurl: {} \nExecute SQL：{} \n",
-                        ContextConstants.TENANT_BASE_POOL_NAME_HEADER, ContextUtil.getBasePoolNameHeader(),
-                        ContextConstants.TENANT_ID_HEADER, ContextUtil.getTenantId(),
+                StrUtil.format("{}: {} \nConsume Time：{} ms {} \nurl: {} \nExecute SQL：{} \n",
                         ContextConstants.USER_ID_HEADER, ContextUtil.getUserId(),
                         elapsed, now, url, sql.replaceAll(REGX, StringPool.SPACE)) :
                 StringPool.EMPTY;

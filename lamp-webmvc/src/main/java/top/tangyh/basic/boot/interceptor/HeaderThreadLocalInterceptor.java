@@ -1,6 +1,5 @@
 package top.tangyh.basic.boot.interceptor;
 
-import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -37,15 +36,7 @@ public class HeaderThreadLocalInterceptor implements AsyncHandlerInterceptor {
         }
 
         ContextUtil.setPath(getHeader(request, ContextConstants.PATH_HEADER));
-        ContextUtil.setTenantId(getHeader(request, ContextConstants.TENANT_ID_HEADER));
-        String basePoolName = getHeader(request, ContextConstants.TENANT_BASE_POOL_NAME_HEADER);
-        if (StrUtil.isNotEmpty(basePoolName)) {
-            ContextUtil.setTenantBasePoolName(basePoolName);
-        }
-        String extendPoolName = getHeader(request, ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER);
-        if (StrUtil.isNotEmpty(extendPoolName)) {
-            ContextUtil.setTenantExtendPoolName(extendPoolName);
-        }
+
         ContextUtil.setUserId(getHeader(request, ContextConstants.USER_ID_HEADER));
         ContextUtil.setEmployeeId(getHeader(request, ContextConstants.EMPLOYEE_ID_HEADER));
         ContextUtil.setApplicationId(getHeader(request, ContextConstants.APPLICATION_ID_HEADER));

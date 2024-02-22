@@ -110,22 +110,6 @@ public final class ContextUtil {
         set(ContextConstants.EMPLOYEE_ID_HEADER, employeeId);
     }
 
-    public static boolean isEmptyTenantId() {
-        return isEmptyLong(ContextConstants.TENANT_ID_HEADER);
-    }
-
-    public static boolean isEmptyBasePoolNameHeader() {
-        return isEmptyBasePool();
-    }
-
-    public static boolean isEmptyExtendPoolNameHeader() {
-        return isEmptyLong(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER);
-    }
-
-    public static boolean isEmptyBasePool() {
-        return isEmptyLong(ContextConstants.TENANT_BASE_POOL_NAME_HEADER);
-    }
-
     public static boolean isEmptyUserId() {
         return isEmptyLong(ContextConstants.USER_ID_HEADER);
     }
@@ -138,79 +122,6 @@ public final class ContextUtil {
         return isEmptyLong(ContextConstants.APPLICATION_ID_HEADER);
     }
 
-    /**
-     * 租户 id
-     */
-    public static Long getTenantId() {
-        return get(ContextConstants.TENANT_ID_HEADER, Long.class);
-    }
-
-    /**
-     * 租户 id
-     *
-     * @param tenantId 租户id
-     */
-    public static void setTenantId(Object tenantId) {
-        set(ContextConstants.TENANT_ID_HEADER, tenantId);
-        setTenantBasePoolName(tenantId);
-        setTenantExtendPoolName(tenantId);
-    }
-
-    public static Long getBasePoolNameHeader() {
-        return get(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, Long.class);
-    }
-
-    public static Long getExtendPoolNameHeader() {
-        return get(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, Long.class);
-    }
-
-    public static String getTenantIdStr() {
-        return String.valueOf(getTenantId() == null ? StrPool.EMPTY : getTenantId());
-    }
-
-    /**
-     * 切换base库
-     *
-     * @param tenantId 租户ID
-     */
-    public static void setTenantBasePoolName(Object tenantId) {
-        set(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, tenantId);
-    }
-
-    /**
-     * 切换extend库
-     *
-     * @param tenantId 租户ID
-     */
-    public static void setTenantExtendPoolName(Object tenantId) {
-        set(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, tenantId);
-    }
-
-
-    /**
-     * 设置默认库
-     */
-    public static void setDefTenantId() {
-        set(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, ContextConstants.DEF_TENANT_ID);
-        set(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, ContextConstants.DEF_TENANT_ID);
-    }
-
-    /**
-     * 设置内置租户
-     */
-    public static void setBuiltTenantId() {
-        set(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, ContextConstants.BUILT_IN_TENANT_ID_STR);
-        set(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, ContextConstants.BUILT_IN_TENANT_ID_STR);
-    }
-
-    public static boolean isDefTenantId() {
-        Long base = get(ContextConstants.TENANT_BASE_POOL_NAME_HEADER, Long.class);
-        if (ContextConstants.DEF_TENANT_ID.equals(base)) {
-            return true;
-        }
-        Long extend = get(ContextConstants.TENANT_EXTEND_POOL_NAME_HEADER, Long.class);
-        return ContextConstants.DEF_TENANT_ID.equals(extend);
-    }
 
     /**
      * 应用ID

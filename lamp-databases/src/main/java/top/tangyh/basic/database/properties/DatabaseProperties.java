@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static top.tangyh.basic.context.ContextConstants.TENANT_BASE_POOL_NAME_HEADER;
 import static top.tangyh.basic.database.properties.DatabaseProperties.PREFIX;
 
 
@@ -88,7 +87,7 @@ public class DatabaseProperties {
      * 如：lamp项目原始的服务（基础服务、租户服务、认证服务、消息服务、文件服务、网关服务）
      * 总共链接了2个租户库： lamp_base_{TenantId}、lamp_extend_{TenantId}， 这里就要配置2个前缀
      */
-    private List<String> initDatabasePrefix = Collections.singletonList(TENANT_BASE_POOL_NAME_HEADER);
+    private List<String> initDatabasePrefix = Collections.emptyList();
 
     /**
      * 多租户模式

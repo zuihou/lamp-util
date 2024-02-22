@@ -33,10 +33,6 @@ public class OptLogDTO {
      */
     private String requestIp;
 
-    /**
-     * 租户编码
-     */
-    private Long tenantId;
     private Long basePoolNameHeader;
     private Long extendPoolNameHeader;
 

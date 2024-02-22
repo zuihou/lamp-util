@@ -66,7 +66,7 @@ public interface CacheKeyBuilder {
      * @return 租户ID
      */
     default String getTenant() {
-        return ContextUtil.getTenantId() != null ? String.valueOf(ContextUtil.getTenantId()) : null;
+        return null;
     }
 
     /**

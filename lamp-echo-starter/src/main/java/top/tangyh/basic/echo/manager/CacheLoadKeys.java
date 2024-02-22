@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import top.tangyh.basic.annotation.echo.Echo;
-import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.interfaces.echo.LoadService;
 
 import java.io.Serializable;
@@ -41,7 +40,6 @@ public class CacheLoadKeys {
      * 动态查询值
      */
     private Set<Serializable> keys = new HashSet<>();
-    private Long tenantId;
     private LoadService loadService;
 
     public CacheLoadKeys(Echo rf) {
@@ -50,7 +48,6 @@ public class CacheLoadKeys {
 
     public CacheLoadKeys(LoadKey lk, LoadService loadService, Set<Serializable> keys) {
         this.api = lk.getApi();
-        this.tenantId = ContextUtil.getTenantId();
         this.loadService = loadService;
         this.keys = keys;
     }

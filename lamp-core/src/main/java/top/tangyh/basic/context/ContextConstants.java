@@ -29,10 +29,6 @@ public final class ContextConstants {
      */
     public static final String CLIENT_KEY = "Authorization";
     /**
-     * 请求头中携带的 租户id
-     */
-    public static final String TENANT_ID_KEY = "TenantId";
-    /**
      * JWT中封装的 用户id
      */
     public static final String JWT_KEY_USER_ID = "UserId";
@@ -47,18 +43,7 @@ public final class ContextConstants {
      * JWT中封装的 随机数
      */
     public static final String JWT_KEY_UUID = "Uuid";
-    /**
-     * 请求头和线程变量中的 base库 租户数据源标识
-     */
-    public static final String TENANT_BASE_POOL_NAME_HEADER = "lamp_base";
-    /**
-     * 请求头和线程变量中的 extend库 租户数据源标识
-     */
-    public static final String TENANT_EXTEND_POOL_NAME_HEADER = "lamp_extend";
-    /**
-     * 请求头和线程变量中的 企业ID
-     */
-    public static final String TENANT_ID_HEADER = TENANT_ID_KEY;
+
     /**
      * 请求头和线程变量中的 用户ID
      */

@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
-import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.model.log.OptLogDTO;
 
 import java.util.function.Consumer;
@@ -29,13 +28,6 @@ public class SysLogListener {
     @EventListener(SysLogEvent.class)
     public void saveSysLog(SysLogEvent event) {
         OptLogDTO sysLog = (OptLogDTO) event.getSource();
-        ContextUtil.setTenantId(sysLog.getTenantId());
-        if (sysLog.getBasePoolNameHeader() != null) {
-            ContextUtil.setTenantBasePoolName(sysLog.getBasePoolNameHeader());
-        }
-        if (sysLog.getExtendPoolNameHeader() != null) {
-            ContextUtil.setTenantExtendPoolName(sysLog.getExtendPoolNameHeader());
-        }
         consumer.accept(sysLog);
     }
 

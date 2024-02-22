@@ -157,13 +157,5 @@ public interface BaseController<Id extends Serializable, Entity extends SuperEnt
         return ContextUtil.getUserId();
     }
 
-    /**
-     * 当前请求租户
-     *
-     * @return 租户编码
-     */
-    default Long getTenantId() {
-        return ContextUtil.getTenantId();
-    }
 
 }
