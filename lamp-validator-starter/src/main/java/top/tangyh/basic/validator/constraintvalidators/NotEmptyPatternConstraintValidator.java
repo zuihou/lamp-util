@@ -29,7 +29,7 @@ public class NotEmptyPatternConstraintValidator implements ConstraintValidator<N
         NotEmptyPattern.Flag[] flags = parameters.flags();
         int intFlag = 0;
         for (NotEmptyPattern.Flag flag : flags) {
-            intFlag = intFlag | flag.getValue();
+            intFlag |= flag.getValue();
         }
 
         try {

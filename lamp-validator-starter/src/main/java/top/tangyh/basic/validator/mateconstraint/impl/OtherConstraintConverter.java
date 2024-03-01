@@ -5,7 +5,7 @@ import top.tangyh.basic.validator.utils.ValidatorConstants;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,6 +29,6 @@ public class OtherConstraintConverter extends BaseConstraintConverter implements
 
     @Override
     protected List<String> getMethods() {
-        return Arrays.asList(ValidatorConstants.MESSAGE);
+        return Collections.singletonList(ValidatorConstants.MESSAGE);
     }
 }
