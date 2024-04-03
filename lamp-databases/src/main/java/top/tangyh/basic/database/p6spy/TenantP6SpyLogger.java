@@ -19,8 +19,14 @@ public class TenantP6SpyLogger implements MessageFormattingStrategy {
     @Override
     public String formatMessage(int connectionId, String now, long elapsed, String category,
                                 String prepared, String sql, String url) {
+        String msg = """
+                线程参数：{}: {}
+                消耗时间：{} ms, 执行时间 {}
+                数据源: {}
+                执行的SQL：{}
+                """;
         return StringUtils.isNotBlank(sql) ?
-                StrUtil.format("{}: {} \nConsume Time：{} ms {} \nurl: {} \nExecute SQL：{} \n",
+                StrUtil.format(msg,
                         ContextConstants.USER_ID_HEADER, ContextUtil.getUserId(),
                         elapsed, now, url, sql.replaceAll(REGX, StringPool.SPACE)) :
                 StringPool.EMPTY;
