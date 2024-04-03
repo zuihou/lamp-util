@@ -218,6 +218,38 @@ public class ArgumentAssert {
     }
 
     /**
+     * 判断2个参数是否同时为空
+     *
+     * @param object 参数1
+     * @param obj 参数2
+     * @param errorMsgTemplate 错误消息模板，变量使用{}表示
+     * @param params 参数
+     * @throws ArgumentException if the object is {@code null}
+     */
+    public static <T, E> T notAllNull(T object, E obj, String errorMsgTemplate, Object... params) throws ArgumentException {
+        if (object == null && obj == null) {
+            throw new ArgumentException(StrUtil.format(errorMsgTemplate, params));
+        }
+        return object;
+    }
+
+    /**
+     * 判断2个参数是否任意一个为空
+     *
+     * @param object 参数1
+     * @param obj 参数2
+     * @param errorMsgTemplate 错误消息模板，变量使用{}表示
+     * @param params 参数
+     * @throws ArgumentException if the object is {@code null}
+     */
+    public static <T, E> T notAnyNull(T object, E obj, String errorMsgTemplate, Object... params) throws ArgumentException {
+        if (object == null || obj == null) {
+            throw new ArgumentException(StrUtil.format(errorMsgTemplate, params));
+        }
+        return object;
+    }
+
+    /**
      * 断言对象是否不为{@code null} ，如果为{@code null} 抛出{@link ArgumentException} 异常
      *
      * <pre class="code">
