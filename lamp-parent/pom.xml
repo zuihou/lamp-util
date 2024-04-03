@@ -63,7 +63,7 @@
         <commons-logging.version>1.2</commons-logging.version>
         <asm.version>5.0.4</asm.version>
         <jjwt.version>0.11.2</jjwt.version>
-        <tobato-fastdfs-client.version>1.27.2</tobato-fastdfs-client.version>
+        <tobato-fastdfs-client.version>1.27.3-SNAPSHOT</tobato-fastdfs-client.version>
         <qcloudsms.version>1.0.6</qcloudsms.version>
         <tencentcloud-sdk-java.version>3.1.831</tencentcloud-sdk-java.version>
         <aliyun-java-sdk-dysmsapi.version>2.1.0</aliyun-java-sdk-dysmsapi.version>

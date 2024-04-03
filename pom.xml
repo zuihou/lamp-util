@@ -40,6 +40,7 @@
         <module>lamp-uid</module>
         <module>lamp-scan-starter</module>
         <module>lamp-all</module>
+        <module>FastDFS_Client</module>
     </modules>
     <licenses>
         <license>
