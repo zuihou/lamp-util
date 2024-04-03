@@ -41,6 +41,14 @@ public final class Wraps {
      */
     public static final String ED = "_ed";
     /**
+     * 开始时间
+     */
+    public static final String START = "_start";
+    /**
+     * 结束时间
+     */
+    public static final String END = "_end";
+    /**
      * 等于
      */
     public static final String EQ = "_eq";
@@ -183,6 +191,12 @@ public final class Wraps {
                 } else if (key.endsWith(Wraps.ED)) {
                     String beanField = StrUtil.subBefore(key, Wraps.ED, true);
                     wrapper.le(Wraps.getDbField(beanField, modelClazz), DateUtils.getEndTime(value.toString()));
+                } else if (key.endsWith(Wraps.START)) {
+                    String beanField = StrUtil.subBefore(key, Wraps.START, true);
+                    wrapper.ge(Wraps.getDbField(beanField, modelClazz), DateUtils.parseAsLocalDateTime(value.toString()));
+                } else if (key.endsWith(Wraps.END)) {
+                    String beanField = StrUtil.subBefore(key, Wraps.END, true);
+                    wrapper.le(Wraps.getDbField(beanField, modelClazz), DateUtils.parseAsLocalDateTime(value.toString()));
                 } else if (key.endsWith(Wraps.GE)) {
                     String beanField = StrUtil.subBefore(key, Wraps.GE, true);
                     wrapper.ge(Wraps.getDbField(beanField, modelClazz), value);

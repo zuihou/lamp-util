@@ -4,9 +4,14 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+import top.tangyh.basic.converter.String2DateConverter;
+import top.tangyh.basic.converter.String2LocalDateConverter;
+import top.tangyh.basic.converter.String2LocalDateTimeConverter;
+import top.tangyh.basic.converter.String2LocalTimeConverter;
 import top.tangyh.basic.exception.BizException;
 
 import java.lang.management.ManagementFactory;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -24,6 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static cn.hutool.core.date.DatePattern.CHINESE_DATE_PATTERN;
@@ -31,6 +37,7 @@ import static cn.hutool.core.date.DatePattern.CHINESE_DATE_TIME_PATTERN;
 import static cn.hutool.core.date.DatePattern.NORM_DATETIME_PATTERN;
 import static cn.hutool.core.date.DatePattern.NORM_DATE_PATTERN;
 import static cn.hutool.core.date.DatePattern.NORM_TIME_PATTERN;
+import static top.tangyh.basic.exception.BaseException.BASE_VALID_PARAM;
 
 /**
  * 描述：日期工具类
@@ -68,6 +75,46 @@ public final class DateUtils {
     public static final String SLASH_DATE_FORMAT = "yyyy/MM/dd";
     public static final String SLASH_DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
     public static final String CRON_FORMAT = "ss mm HH dd MM ? yyyy";
+
+    public static final Map<String, String> LOCAL_DATE_TIME_FORMAT_MAP = new LinkedHashMap<>(10);
+    public static final Map<String, String> DATE_TIME_FORMAT_MAP = new LinkedHashMap<>(15);
+    public static final Map<String, String> LOCAL_DATE_FORMAT_MAP = new LinkedHashMap<>(10);
+    public static final Map<String, String> LOCAL_TIME_FORMAT_MAP = new LinkedHashMap<>(10);
+
+    static {
+        // 日期时间
+        LOCAL_DATE_TIME_FORMAT_MAP.put(DEFAULT_DATE_TIME_FORMAT, DEFAULT_DATE_TIME_FORMAT_MATCHES);
+        LOCAL_DATE_TIME_FORMAT_MAP.put(SLASH_DATE_TIME_FORMAT, SLASH_DATE_TIME_FORMAT_MATCHES);
+        LOCAL_DATE_TIME_FORMAT_MAP.put(DEFAULT_DATE_TIME_FORMAT_EN, DEFAULT_DATE_TIME_FORMAT_EN_MATCHES);
+        LOCAL_DATE_TIME_FORMAT_MAP.put(DEFAULT_DATE_FORMAT, DEFAULT_DATE_FORMAT_MATCHES);
+        LOCAL_DATE_TIME_FORMAT_MAP.put(SLASH_DATE_FORMAT, SLASH_DATE_FORMAT_MATCHES);
+        LOCAL_DATE_TIME_FORMAT_MAP.put(DEFAULT_DATE_FORMAT_EN, DEFAULT_DATE_FORMAT_EN_MATCHES);
+
+        // 日期
+        LOCAL_DATE_FORMAT_MAP.put(DEFAULT_DATE_FORMAT, DEFAULT_DATE_FORMAT_MATCHES);
+        LOCAL_DATE_FORMAT_MAP.put(SLASH_DATE_FORMAT, SLASH_DATE_FORMAT_MATCHES);
+        LOCAL_DATE_FORMAT_MAP.put(DEFAULT_DATE_FORMAT_EN, DEFAULT_DATE_FORMAT_EN_MATCHES);
+
+        // 时间
+        LOCAL_TIME_FORMAT_MAP.put(DEFAULT_TIME_FORMAT, "^\\d{1,2}:\\d{1,2}:\\d{1,2}$");
+        LOCAL_TIME_FORMAT_MAP.put(DEFAULT_TIME_EN_FORMAT, "^\\d{1,2}时\\d{1,2}分\\d{1,2}秒$");
+
+        // 日期时间
+        DATE_TIME_FORMAT_MAP.put(DEFAULT_YEAR_FORMAT, "^\\d{4}");
+        DATE_TIME_FORMAT_MAP.put(DEFAULT_MONTH_FORMAT, "^\\d{4}-\\d{1,2}$");
+        DATE_TIME_FORMAT_MAP.put(DEFAULT_DATE_FORMAT, DEFAULT_DATE_FORMAT_MATCHES);
+        DATE_TIME_FORMAT_MAP.put("yyyy-MM-dd HH", "^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}");
+        DATE_TIME_FORMAT_MAP.put("yyyy-MM-dd HH:mm", "^\\d{4}-\\d{1,2}-\\d{1,2} {1}\\d{1,2}:\\d{1,2}$");
+        DATE_TIME_FORMAT_MAP.put(DEFAULT_DATE_TIME_FORMAT, DEFAULT_DATE_TIME_FORMAT_MATCHES);
+        DATE_TIME_FORMAT_MAP.put(DEFAULT_MONTH_FORMAT_SLASH, "^\\d{4}/\\d{1,2}$");
+        DATE_TIME_FORMAT_MAP.put(SLASH_DATE_FORMAT, SLASH_DATE_FORMAT_MATCHES);
+        DATE_TIME_FORMAT_MAP.put("yyyy/MM/dd HH", "^\\d{4}/\\d{1,2}/\\d{1,2} {1}\\d{1,2}");
+        DATE_TIME_FORMAT_MAP.put("yyyy/MM/dd HH:mm", "^\\d{4}/\\d{1,2}/\\d{1,2} {1}\\d{1,2}:\\d{1,2}$");
+        DATE_TIME_FORMAT_MAP.put(SLASH_DATE_TIME_FORMAT, SLASH_DATE_TIME_FORMAT_MATCHES);
+        DATE_TIME_FORMAT_MAP.put(DEFAULT_MONTH_FORMAT_EN, DEFAULT_MONTH_FORMAT_EN_MATCHES);
+        DATE_TIME_FORMAT_MAP.put(DEFAULT_DATE_FORMAT_EN, DEFAULT_DATE_FORMAT_EN_MATCHES);
+        DATE_TIME_FORMAT_MAP.put(DEFAULT_DATE_TIME_FORMAT_EN, DEFAULT_DATE_TIME_FORMAT_EN_MATCHES);
+    }
 
     /**
      * 一个月平均天数
@@ -387,6 +434,44 @@ public final class DateUtils {
         throw BizException.wrap("解析日期失败, 请传递正确的日期格式");
     }
 
+    private static <T> T convert(String source, Map<String, String> format, Function<String, T> function) {
+        if (source == null || source.isEmpty()) {
+            return null;
+        }
+        String sourceTrim = source.trim();
+        Set<Map.Entry<String, String>> entries = format.entrySet();
+        for (Map.Entry<String, String> entry : entries) {
+            if (sourceTrim.matches(entry.getValue())) {
+                return function.apply(entry.getKey());
+            }
+        }
+        throw new IllegalArgumentException("无效的日期参数格式:'" + sourceTrim + "'");
+    }
+
+    public static void main(String[] args) {
+        System.out.println(parseAsDateTime("2012-12-14 22:22:33"));
+        System.out.println(parseAsDateTime("2012-12-14 22:22"));
+        System.out.println(parseAsDateTime("2012-12-14 22"));
+        System.out.println(parseAsDateTime("2012-01-22"));
+
+        System.out.println(parseAsDateTime("2012-01-22"));
+        System.out.println(parseAsDateTime("2012/01/22"));
+
+//        System.out.println(parseAsDateTime("22:22:33"));
+//        System.out.println(parseAsDateTime("22时22分33秒"));
+
+
+        System.out.println(new String2DateConverter().convert("2012-12-14 22:22:33"));
+        System.out.println(new String2DateConverter().convert("2012-01-22"));
+
+        System.out.println(new String2DateConverter().convert("2012-01-22"));
+        System.out.println(new String2DateConverter().convert("2012/01/22"));
+//        System.out.println(new String2DateConverter().convert("2012/01=22"));
+
+//        System.out.println(new String2DateConverter().convert("22:22:33"));
+//        System.out.println(new String2DateConverter().convert("22时22分33秒"));
+    }
+
     /**
      * 按给定参数返回Date对象
      *
@@ -394,13 +479,43 @@ public final class DateUtils {
      * @return 解析后的日期
      */
     public static Date parseAsDateTime(String dateTime) {
-        SimpleDateFormat simpledateformat = new SimpleDateFormat(DEFAULT_DATE_TIME_FORMAT);
-        try {
-            return simpledateformat.parse(dateTime);
-        } catch (ParseException e) {
-            return null;
-        }
+        Function<String, Date> function = format -> {
+            try {
+                DateFormat dateFormat = new SimpleDateFormat(format);
+                //严格模式
+                dateFormat.setLenient(false);
+                return dateFormat.parse(dateTime);
+            } catch (ParseException e) {
+                log.info("转换日期失败, date={}, format={}", dateTime, format, e);
+                throw new BizException(BASE_VALID_PARAM, e.getMessage(), e);
+            }
+        };
+        return convert(dateTime, DATE_TIME_FORMAT_MAP, function);
     }
+
+
+    public static LocalDate parseAsLocalDate(String source) {
+        return convert(source, LOCAL_DATE_FORMAT_MAP, key -> LocalDate.parse(source, DateTimeFormatter.ofPattern(key)));
+    }
+
+    public static LocalTime parseAsLocalTime(String source) {
+        return convert(source, LOCAL_TIME_FORMAT_MAP, key -> LocalTime.parse(source, DateTimeFormatter.ofPattern(key)));
+    }
+
+    public static LocalDateTime parseAsLocalDateTime(String source) {
+        Function<String, LocalDateTime> function = key -> {
+            if (source.matches(DEFAULT_DATE_FORMAT_MATCHES)
+                    || source.matches(DEFAULT_DATE_FORMAT_EN_MATCHES)
+                    || source.matches(SLASH_DATE_FORMAT_MATCHES)
+            ) {
+                return LocalDateTime.of(LocalDate.parse(source, DateTimeFormatter.ofPattern(key)), LocalTime.MIN);
+            }
+            return LocalDateTime.parse(source, DateTimeFormatter.ofPattern(key));
+        };
+
+        return convert(source, LOCAL_DATE_TIME_FORMAT_MAP, function);
+    }
+
 
     /**
      * 获取指定日期的开始时间
