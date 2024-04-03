@@ -36,13 +36,13 @@ public class PageParams<T> {
     @Valid
     private T model;
 
-    @Schema(description = "页面大小", example = "10")
+    @Schema(description = "每页显示数据", example = "10")
     private long size = 10;
 
     @Schema(description = "当前页", example = "1")
     private long current = 1;
 
-    @Schema(description = "排序,默认createdTime", allowableValues = "id,createdTime,updatedTime", example = "id")
+    @Schema(description = "排序,默认id", allowableValues = "id,createdTime,updatedTime", example = "id")
     private String sort = SuperEntity.ID_FIELD;
 
     @Schema(description = "排序规则, 默认descending", allowableValues = "descending,ascending", example = "descending")
