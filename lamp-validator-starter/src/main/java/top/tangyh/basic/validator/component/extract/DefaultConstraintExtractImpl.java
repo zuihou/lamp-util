@@ -2,7 +2,9 @@ package top.tangyh.basic.validator.component.extract;
 
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.CharUtil;
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Validator;
 import jakarta.validation.metadata.PropertyDescriptor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import org.hibernate.validator.internal.metadata.core.MetaConstraint;
 import org.hibernate.validator.internal.metadata.location.ConstraintLocation;
 import top.tangyh.basic.utils.StrPool;
 import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
+import top.tangyh.basic.validator.mateconstraint.impl.DigitsConstraintConverter;
 import top.tangyh.basic.validator.mateconstraint.impl.MaxMinConstraintConverter;
 import top.tangyh.basic.validator.mateconstraint.impl.NotNullConstraintConverter;
 import top.tangyh.basic.validator.mateconstraint.impl.OtherConstraintConverter;
@@ -87,6 +90,7 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
             constraintConverters.add(new MaxMinConstraintConverter());
             constraintConverters.add(new NotNullConstraintConverter());
             constraintConverters.add(new RangeConstraintConverter());
+            constraintConverters.add(new DigitsConstraintConverter());
             constraintConverters.add(new RegExConstraintConverter());
             constraintConverters.add(new OtherConstraintConverter());
         } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -114,10 +118,10 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
 
         String key = targetClazz.getName() + StrPool.COLON +
                 Arrays.stream(groups).map(Class::getName).collect(Collectors.joining(StrPool.COLON));
-        if (CACHE.containsKey(key)) {
-            fieldValidatorDesc.putAll(CACHE.get(key));
-            return;
-        }
+//        if (CACHE.containsKey(key)) {
+//            fieldValidatorDesc.putAll(CACHE.get(key));
+//            return;
+//        }
 
         //测试一下这个方法
         //validator.getConstraintsForClass(targetClazz).getConstrainedProperties()
@@ -163,6 +167,7 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
         String fieldName = con.getConstrainable().getName();
         String key = domainName + fieldName;
 
+
         boolean flag = false;
         for (PropertyDescriptor constraintDescriptor : constraintDescriptors) {
             if (constraintDescriptor.getPropertyName().equals(fieldName)) {
@@ -176,6 +181,14 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
         FieldValidatorDesc desc = fieldValidatorDesc.get(key);
         if (desc == null) {
             desc = new FieldValidatorDesc();
+            Field field = ReflectUtil.getField(con.getDeclaringClass(), fieldName);
+            if (field != null) {
+                Schema schema = field.getAnnotation(Schema.class);
+                String name = schema != null && StrUtil.isNotEmpty(schema.description()) ? schema.description() : fieldName;
+                desc.setName(name);
+            } else {
+                desc.setName(fieldName);
+            }
             desc.setField(fieldName);
             desc.setFieldType(getType(con.getConstrainable().getType().getTypeName()));
             desc.setConstraints(new ArrayList<>());

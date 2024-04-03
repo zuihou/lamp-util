@@ -1,6 +1,7 @@
 package top.tangyh.basic.validator.mateconstraint.impl;
 
 import cn.hutool.core.map.MapUtil;
+import jakarta.validation.constraints.Email;
 import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
 import top.tangyh.basic.validator.model.ConstraintInfo;
 
@@ -8,6 +9,8 @@ import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static cn.hutool.core.lang.RegexPool.EMAIL_WITH_CHINESE;
 
 /**
  * 约束提取基础类
@@ -46,6 +49,9 @@ public abstract class BaseConstraintConverter implements IConstraintConverter {
         Map<String, Object> attr = MapUtil.newHashMap();
         for (String method : getMethods()) {
             Object value = clazz.getMethod(method).invoke(ano);
+            if (ano instanceof Email && "regexp".equals(method) && Email.class.getMethod("regexp").getDefaultValue().equals(value)) {
+                value = EMAIL_WITH_CHINESE;
+            }
             attr.put(method, value);
         }
         return new ConstraintInfo().setType(getType(ano.annotationType())).setAttrs(attr);

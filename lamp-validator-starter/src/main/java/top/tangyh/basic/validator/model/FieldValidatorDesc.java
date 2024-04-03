@@ -21,6 +21,10 @@ public class FieldValidatorDesc {
      */
     private String field;
     /**
+     * 字段中文
+     */
+    private String name;
+    /**
      * 字段的类型
      */
     private String fieldType;
