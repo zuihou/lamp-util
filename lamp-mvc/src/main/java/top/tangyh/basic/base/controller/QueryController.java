@@ -1,5 +1,6 @@
 package top.tangyh.basic.base.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -19,6 +20,7 @@ import top.tangyh.basic.interfaces.echo.EchoService;
 import top.tangyh.basic.utils.BeanPlusUtil;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -86,4 +88,21 @@ public interface QueryController<Id extends Serializable, Entity extends SuperEn
         return success(BeanPlusUtil.toBeanList(list, getResultVOClass()));
     }
 
+
+    /**
+     * 批量查询
+     *
+     * @param ids 批量查询
+     * @return 查询结果
+     */
+    @Operation(summary = "根据Id批量查询", description = "根据Id批量查询")
+    @PostMapping("/findByIds")
+    @WebLog("根据Id批量查询")
+    default R<List<ResultVO>> findByIds(@RequestBody List<Id> ids) {
+        if (CollUtil.isEmpty(ids)) {
+            return R.success(Collections.emptyList());
+        }
+        List<Entity> list = getSuperService().listByIds(ids);
+        return success(BeanPlusUtil.toBeanList(list, getResultVOClass()));
+    }
 }
