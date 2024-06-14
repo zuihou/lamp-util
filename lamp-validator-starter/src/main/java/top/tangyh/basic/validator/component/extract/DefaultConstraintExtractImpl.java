@@ -118,10 +118,10 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
 
         String key = targetClazz.getName() + StrPool.COLON +
                 Arrays.stream(groups).map(Class::getName).collect(Collectors.joining(StrPool.COLON));
-//        if (CACHE.containsKey(key)) {
-//            fieldValidatorDesc.putAll(CACHE.get(key));
-//            return;
-//        }
+        if (CACHE.containsKey(key)) {
+            fieldValidatorDesc.putAll(CACHE.get(key));
+            return;
+        }
 
         //测试一下这个方法
         //validator.getConstraintsForClass(targetClazz).getConstrainedProperties()
