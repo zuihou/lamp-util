@@ -8,9 +8,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.github.tobato</groupId>
+    <groupId>top.tangyh.basic</groupId>
     <artifactId>fastdfs-client</artifactId>
-    <version>1.27.3-SNAPSHOT</version>
     <packaging>jar</packaging>
     <!-- x-SNAPSHOT -->
 

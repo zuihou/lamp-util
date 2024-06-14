@@ -118,11 +118,11 @@
     <distributionManagement>
         <snapshotRepository>
             <id>oss</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
         <repository>
             <id>oss</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
@@ -307,9 +307,9 @@
             </dependency>
             <!-- FastDFS文件 -->
             <dependency>
-                <groupId>com.github.tobato</groupId>
+                <groupId>top.tangyh.basic</groupId>
                 <artifactId>fastdfs-client</artifactId>
-                <version>${tobato-fastdfs-client.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <!--minio文件系统 -->
             <dependency>
@@ -527,7 +527,7 @@
         </repository>
         <repository>
             <id>oss-public</id>
-            <url>https://oss.sonatype.org/content/repositories/public</url>
+            <url>https://s01.oss.sonatype.org/content/repositories/public</url>
         </repository>
     </repositories>
     <pluginRepositories>
