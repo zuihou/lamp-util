@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.BeanProperty;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.EnumNamingStrategy;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -55,212 +54,130 @@ public class EnumDeserializer
         extends StdScalarDeserializer<Object>
         implements ContextualDeserializer {
     private static final long serialVersionUID = 1L;
-    /**
-     * @since 2.7.3
-     */
-    protected final CompactStringObjectMap _lookupByName;
-    protected final Boolean _caseInsensitive;
-    /**
-     * Marker flag for cases where we expect actual integral value for Enum,
-     * based on {@code @JsonValue} (and equivalent) annotated accessor.
-     *
-     * @since 2.13
-     */
-    protected final boolean _isFromIntValue;
-    /**
-     * Look up map with <b>key</b> as <code>Enum.name()</code> converted by
-     * {@link EnumNamingStrategy#convertEnumToExternalName(String)}
-     * and <b>value</b> as Enums.
-     *
-     * @since 2.15
-     */
-    protected final CompactStringObjectMap _lookupByEnumNaming;
-    /**
-     * @since 2.8
-     */
-    private final Enum<?> _enumDefaultValue;
     protected Object[] _enumsByIndex;
-    /**
-     * Alternatively, we may need a different lookup object if "use toString"
-     * is defined.
-     *
-     * @since 2.7.3
-     */
+    private final Enum<?> _enumDefaultValue;
+    protected final CompactStringObjectMap _lookupByName;
     protected volatile CompactStringObjectMap _lookupByToString;
+    protected final Boolean _caseInsensitive;
     private Boolean _useDefaultValueForUnknownEnum;
     private Boolean _useNullForUnknownEnum;
+    protected final boolean _isFromIntValue;
+    protected final CompactStringObjectMap _lookupByEnumNaming;
 
-    /**
-     * @since 2.9
-     */
+    /** @deprecated */
+    @Deprecated
     public EnumDeserializer(EnumResolver byNameResolver, Boolean caseInsensitive) {
-        this(byNameResolver, caseInsensitive, null);
+        this(byNameResolver, caseInsensitive, (EnumResolver) null, (EnumResolver) null);
     }
 
-    /**
-     * @since 2.15
-     */
-    public EnumDeserializer(EnumResolver byNameResolver, boolean caseInsensitive,
-                            EnumResolver byEnumNamingResolver) {
+    /** @deprecated */
+    @Deprecated
+    public EnumDeserializer(EnumResolver byNameResolver, boolean caseInsensitive, EnumResolver byEnumNamingResolver) {
         super(byNameResolver.getEnumClass());
-        _lookupByName = byNameResolver.constructLookup();
-        _enumsByIndex = byNameResolver.getRawEnums();
-        _enumDefaultValue = byNameResolver.getDefaultValue();
-        _caseInsensitive = caseInsensitive;
-        _isFromIntValue = byNameResolver.isFromIntValue();
-        _lookupByEnumNaming = byEnumNamingResolver == null ? null : byEnumNamingResolver.constructLookup();
+        this._lookupByName = byNameResolver.constructLookup();
+        this._enumsByIndex = byNameResolver.getRawEnums();
+        this._enumDefaultValue = byNameResolver.getDefaultValue();
+        this._caseInsensitive = caseInsensitive;
+        this._isFromIntValue = byNameResolver.isFromIntValue();
+        this._lookupByEnumNaming = byEnumNamingResolver == null ? null : byEnumNamingResolver.constructLookup();
+        this._lookupByToString = null;
     }
 
-    /**
-     * @since 2.15
-     */
-    protected EnumDeserializer(EnumDeserializer base, Boolean caseInsensitive,
-                               Boolean useDefaultValueForUnknownEnum, Boolean useNullForUnknownEnum) {
+    public EnumDeserializer(EnumResolver byNameResolver, boolean caseInsensitive, EnumResolver byEnumNamingResolver, EnumResolver toStringResolver) {
+        super(byNameResolver.getEnumClass());
+        this._lookupByName = byNameResolver.constructLookup();
+        this._enumsByIndex = byNameResolver.getRawEnums();
+        this._enumDefaultValue = byNameResolver.getDefaultValue();
+        this._caseInsensitive = caseInsensitive;
+        this._isFromIntValue = byNameResolver.isFromIntValue();
+        this._lookupByEnumNaming = byEnumNamingResolver == null ? null : byEnumNamingResolver.constructLookup();
+        this._lookupByToString = toStringResolver == null ? null : toStringResolver.constructLookup();
+    }
+
+    protected EnumDeserializer(EnumDeserializer base, Boolean caseInsensitive, Boolean useDefaultValueForUnknownEnum, Boolean useNullForUnknownEnum) {
         super(base);
-        _lookupByName = base._lookupByName;
-        _enumsByIndex = base._enumsByIndex;
-        _enumDefaultValue = base._enumDefaultValue;
-        _caseInsensitive = caseInsensitive;
-        _isFromIntValue = base._isFromIntValue;
-        _useDefaultValueForUnknownEnum = useDefaultValueForUnknownEnum;
-        _useNullForUnknownEnum = useNullForUnknownEnum;
-        _lookupByEnumNaming = base._lookupByEnumNaming;
+        this._lookupByName = base._lookupByName;
+        this._enumsByIndex = base._enumsByIndex;
+        this._enumDefaultValue = base._enumDefaultValue;
+        this._caseInsensitive = caseInsensitive;
+        this._isFromIntValue = base._isFromIntValue;
+        this._useDefaultValueForUnknownEnum = useDefaultValueForUnknownEnum;
+        this._useNullForUnknownEnum = useNullForUnknownEnum;
+        this._lookupByEnumNaming = base._lookupByEnumNaming;
+        this._lookupByToString = base._lookupByToString;
     }
 
-    /**
-     * @since 2.9
-     * @deprecated Since 2.15
-     */
+    /** @deprecated */
     @Deprecated
     protected EnumDeserializer(EnumDeserializer base, Boolean caseInsensitive) {
-        this(base, caseInsensitive, null, null);
+        this(base, caseInsensitive, (Boolean) null, (Boolean) null);
     }
 
-    /**
-     * @deprecated Since 2.9
-     */
+    /** @deprecated */
     @Deprecated
     public EnumDeserializer(EnumResolver byNameResolver) {
-        this(byNameResolver, null);
+        this((EnumResolver) byNameResolver, (Boolean) null);
     }
 
-    /**
-     * @deprecated Since 2.8
-     */
+    /** @deprecated */
     @Deprecated
-    public static JsonDeserializer<?> deserializerForCreator(DeserializationConfig config,
-                                                             Class<?> enumClass, AnnotatedMethod factory) {
-        return deserializerForCreator(config, enumClass, factory, null, null);
+    public static JsonDeserializer<?> deserializerForCreator(DeserializationConfig config, Class<?> enumClass, AnnotatedMethod factory) {
+        return deserializerForCreator(config, enumClass, factory, (ValueInstantiator) null, (SettableBeanProperty[]) null);
     }
 
-    /**
-     * Factory method used when Enum instances are to be deserialized
-     * using a creator (static factory method)
-     *
-     * @return Deserializer based on given factory method
-     * @since 2.8
-     */
-    public static JsonDeserializer<?> deserializerForCreator(DeserializationConfig config,
-                                                             Class<?> enumClass, AnnotatedMethod factory,
-                                                             ValueInstantiator valueInstantiator, SettableBeanProperty[] creatorProps) {
+    public static JsonDeserializer<?> deserializerForCreator(DeserializationConfig config, Class<?> enumClass, AnnotatedMethod factory, ValueInstantiator valueInstantiator, SettableBeanProperty[] creatorProps) {
         if (config.canOverrideAccessModifiers()) {
-            ClassUtil.checkAndFixAccess(factory.getMember(),
-                    config.isEnabled(MapperFeature.OVERRIDE_PUBLIC_ACCESS_MODIFIERS));
+            ClassUtil.checkAndFixAccess(factory.getMember(), config.isEnabled(MapperFeature.OVERRIDE_PUBLIC_ACCESS_MODIFIERS));
         }
-        return new FactoryBasedEnumDeserializer(enumClass, factory,
-                factory.getParameterType(0),
-                valueInstantiator, creatorProps);
+
+        return new FactoryBasedEnumDeserializer(enumClass, factory, factory.getParameterType(0), valueInstantiator, creatorProps);
     }
 
-    /**
-     * Factory method used when Enum instances are to be deserialized
-     * using a zero-/no-args factory method
-     *
-     * @return Deserializer based on given no-args factory method
-     * @since 2.8
-     */
-    public static JsonDeserializer<?> deserializerForNoArgsCreator(DeserializationConfig config,
-                                                                   Class<?> enumClass, AnnotatedMethod factory) {
+    public static JsonDeserializer<?> deserializerForNoArgsCreator(DeserializationConfig config, Class<?> enumClass, AnnotatedMethod factory) {
         if (config.canOverrideAccessModifiers()) {
-            ClassUtil.checkAndFixAccess(factory.getMember(),
-                    config.isEnabled(MapperFeature.OVERRIDE_PUBLIC_ACCESS_MODIFIERS));
+            ClassUtil.checkAndFixAccess(factory.getMember(), config.isEnabled(MapperFeature.OVERRIDE_PUBLIC_ACCESS_MODIFIERS));
         }
+
         return new FactoryBasedEnumDeserializer(enumClass, factory);
     }
 
-    /**
-     * @since 2.15
-     */
-    public EnumDeserializer withResolved(Boolean caseInsensitive,
-                                         Boolean useDefaultValueForUnknownEnum, Boolean useNullForUnknownEnum) {
-        if (Objects.equals(_caseInsensitive, caseInsensitive)
-                && Objects.equals(_useDefaultValueForUnknownEnum, useDefaultValueForUnknownEnum)
-                && Objects.equals(_useNullForUnknownEnum, useNullForUnknownEnum)) {
-            return this;
-        }
-        return new EnumDeserializer(this, caseInsensitive, useDefaultValueForUnknownEnum, useNullForUnknownEnum);
+    public EnumDeserializer withResolved(Boolean caseInsensitive, Boolean useDefaultValueForUnknownEnum, Boolean useNullForUnknownEnum) {
+        return Objects.equals(this._caseInsensitive, caseInsensitive) && Objects.equals(this._useDefaultValueForUnknownEnum, useDefaultValueForUnknownEnum) && Objects.equals(this._useNullForUnknownEnum, useNullForUnknownEnum) ? this : new EnumDeserializer(this, caseInsensitive, useDefaultValueForUnknownEnum, useNullForUnknownEnum);
     }
 
-    /**
-     * @since 2.9
-     * @deprecated Since 2.15
-     */
+    /** @deprecated */
     @Deprecated
     public EnumDeserializer withResolved(Boolean caseInsensitive) {
-        return withResolved(caseInsensitive,
-                _useDefaultValueForUnknownEnum, _useNullForUnknownEnum);
+        return this.withResolved(caseInsensitive, this._useDefaultValueForUnknownEnum, this._useNullForUnknownEnum);
     }
 
-    @Override // since 2.9
-    public JsonDeserializer<?> createContextual(DeserializationContext ctxt,
-                                                BeanProperty property) throws JsonMappingException {
+    public JsonDeserializer<?> createContextual(DeserializationContext ctxt, BeanProperty property) throws JsonMappingException {
         Boolean caseInsensitive = Optional.ofNullable(findFormatFeature(ctxt, property, handledType(),
                 JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)).orElse(_caseInsensitive);
         Boolean useDefaultValueForUnknownEnum = Optional.ofNullable(findFormatFeature(ctxt, property, handledType(),
                 JsonFormat.Feature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE)).orElse(_useDefaultValueForUnknownEnum);
         Boolean useNullForUnknownEnum = Optional.ofNullable(findFormatFeature(ctxt, property, handledType(),
                 JsonFormat.Feature.READ_UNKNOWN_ENUM_VALUES_AS_NULL)).orElse(_useNullForUnknownEnum);
-        return withResolved(caseInsensitive, useDefaultValueForUnknownEnum, useNullForUnknownEnum);
+        return this.withResolved(caseInsensitive, useDefaultValueForUnknownEnum, useNullForUnknownEnum);
     }
 
-    /*
-    /**********************************************************
-    /* Default JsonDeserializer implementation
-    /**********************************************************
-     */
-
-    /**
-     * Because of costs associated with constructing Enum resolvers,
-     * let's cache instances by default.
-     */
-    @Override
     public boolean isCachable() {
         return true;
     }
 
-    @Override // since 2.12
     public LogicalType logicalType() {
         return LogicalType.Enum;
     }
 
-    @Override // since 2.12
     public Object getEmptyValue(DeserializationContext ctxt) throws JsonMappingException {
-        return _enumDefaultValue;
+        return this._enumDefaultValue;
     }
 
-    @Override
     public Object deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        // Usually should just get string value:
-        // 04-Sep-2020, tatu: for 2.11.3 / 2.12.0, removed "FIELD_NAME" as allowed;
-        //   did not work and gave odd error message.
         if (p.hasToken(JsonToken.VALUE_STRING)) {
-            return _fromString(p, ctxt, p.getText());
-        }
-
-        JsonToken curr = p.currentToken();
-
-        // zuihou 新增的代码！ 支持前端传递对象 {"code": "xx"}
-        if (curr == JsonToken.START_OBJECT) {
+            return this._fromString(p, ctxt, p.getText());
+        }  else if (p.hasToken(JsonToken.START_OBJECT)) {
+            // zuihou 新增的代码！ 支持前端传递对象 {"code": "xx"}
             CompactStringObjectMap lookup = ctxt.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
                     ? _getToStringLookup(ctxt) : _lookupByName;
             JsonNode node = p.getCodec().readTree(p);
@@ -274,205 +191,160 @@ public class EnumDeserializer
                 return _deserializeAltString(p, ctxt, lookup, name);
             }
             return result;
+        } else if (p.hasToken(JsonToken.VALUE_NUMBER_INT)) {
+            return this._isFromIntValue ? this._fromString(p, ctxt, p.getText()) : this._fromInteger(p, ctxt, p.getIntValue());
+        } else {
+            return p.isExpectedStartObjectToken() ? this._fromString(p, ctxt, ctxt.extractScalarFromObject(p, this, this._valueClass)) : this._deserializeOther(p, ctxt);
         }
-
-        // But let's consider int acceptable as well (if within ordinal range)
-        if (p.hasToken(JsonToken.VALUE_NUMBER_INT)) {
-            // 26-Sep-2021, tatu: [databind#1850] Special case where we get "true" integer
-            //    enumeration and should avoid use of {@code Enum.index()}
-            if (_isFromIntValue) {
-                // ... whether to rely on "getText()" returning String, or get number, convert?
-                // For now assume all format backends can produce String:
-                return _fromString(p, ctxt, p.getText());
-            }
-            return _fromInteger(p, ctxt, p.getIntValue());
-        }
-        // 29-Jun-2020, tatu: New! "Scalar from Object" (mostly for XML)
-        if (p.isExpectedStartObjectToken()) {
-            return _fromString(p, ctxt,
-                    ctxt.extractScalarFromObject(p, this, _valueClass));
-        }
-        return _deserializeOther(p, ctxt);
     }
 
-    protected Object _fromString(JsonParser p, DeserializationContext ctxt,
-                                 String text)
-            throws IOException {
-        CompactStringObjectMap lookup = ctxt.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
-                ? _getToStringLookup(ctxt) : _lookupByName;
+    protected Object _fromString(JsonParser p, DeserializationContext ctxt, String text) throws IOException {
+        CompactStringObjectMap lookup = this._resolveCurrentLookup(ctxt);
+
         // zuihou 增强
         if (StrUtil.isBlank(text) || StrPool.NULL.equals(text)) {
             return null;
         }
+
         Object result = lookup.find(text);
         if (result == null) {
             String trimmed = text.trim();
-            if ((trimmed == text) || (result = lookup.find(trimmed)) == null) {
-                return _deserializeAltString(p, ctxt, lookup, trimmed);
+            if (trimmed == text || (result = lookup.find(trimmed)) == null) {
+                return this._deserializeAltString(p, ctxt, lookup, trimmed);
             }
         }
+
         return result;
     }
 
-    protected Object _fromInteger(JsonParser p, DeserializationContext ctxt,
-                                  int index)
-            throws IOException {
-        final CoercionAction act = ctxt.findCoercionAction(logicalType(), handledType(),
-                CoercionInputShape.Integer);
+    private CompactStringObjectMap _resolveCurrentLookup(DeserializationContext ctxt) {
+        if (this._lookupByEnumNaming != null) {
+            return this._lookupByEnumNaming;
+        } else {
+            return ctxt.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING) ? this._getToStringLookup(ctxt) : this._lookupByName;
+        }
+    }
 
-        // First, check legacy setting for slightly different message
+    protected Object _fromInteger(JsonParser p, DeserializationContext ctxt, int index) throws IOException {
+        CoercionAction act = ctxt.findCoercionAction(this.logicalType(), this.handledType(), CoercionInputShape.Integer);
         if (act == CoercionAction.Fail) {
             if (ctxt.isEnabled(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS)) {
-                return ctxt.handleWeirdNumberValue(_enumClass(), index,
-                        "not allowed to deserialize Enum value out of number: disable DeserializationConfig.DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS to allow"
-                );
+                return ctxt.handleWeirdNumberValue(this._enumClass(), index, "not allowed to deserialize Enum value out of number: disable DeserializationConfig.DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS to allow", new Object[0]);
             }
-            // otherwise this will force failure with new setting
-            _checkCoercionFail(ctxt, act, handledType(), index,
-                    "Integer value (" + index + ")");
+
+            this._checkCoercionFail(ctxt, act, this.handledType(), index, "Integer value (" + index + ")");
         }
+
         switch (act) {
             case AsNull:
                 return null;
             case AsEmpty:
-                return getEmptyValue(ctxt);
+                return this.getEmptyValue(ctxt);
             case TryConvert:
             default:
+                if (index >= 0 && index < this._enumsByIndex.length) {
+                    return this._enumsByIndex[index];
+                } else if (this.useDefaultValueForUnknownEnum(ctxt)) {
+                    return this._enumDefaultValue;
+                } else {
+                    return !this.useNullForUnknownEnum(ctxt) ? ctxt.handleWeirdNumberValue(this._enumClass(), index, "index value outside legal index range [0..%s]", new Object[]{this._enumsByIndex.length - 1}) : null;
+                }
         }
-        if (index >= 0 && index < _enumsByIndex.length) {
-            return _enumsByIndex[index];
-        }
-        if (useDefaultValueForUnknownEnum(ctxt)) {
-            return _enumDefaultValue;
-        }
-        if (!useNullForUnknownEnum(ctxt)) {
-            return ctxt.handleWeirdNumberValue(_enumClass(), index,
-                    "index value outside legal index range [0..%s]",
-                    _enumsByIndex.length - 1);
-        }
-        return null;
     }
-        /*
-    return _checkCoercionFail(ctxt, act, rawTargetType, value,
-            "empty String (\"\")");
-            */
 
-    /*
-    /**********************************************************
-    /* Internal helper methods
-    /**********************************************************
-     */
-
-    private final Object _deserializeAltString(JsonParser p, DeserializationContext ctxt,
-                                               CompactStringObjectMap lookup, String nameOrig) throws IOException {
+    private final Object _deserializeAltString(JsonParser p, DeserializationContext ctxt, CompactStringObjectMap lookup, String nameOrig) throws IOException {
         String name = nameOrig.trim();
-        // empty or blank
         if (name.isEmpty()) {
-            // 07-Jun-2021, tatu: [databind#3171] Need to consider Default value first
-            //   (alas there's bit of duplication here)
-            if (useDefaultValueForUnknownEnum(ctxt)) {
-                return _enumDefaultValue;
-            }
-            if (useNullForUnknownEnum(ctxt)) {
+            if (this.useDefaultValueForUnknownEnum(ctxt)) {
+                return this._enumDefaultValue;
+            } else if (this.useNullForUnknownEnum(ctxt)) {
                 return null;
-            }
-
-            CoercionAction act;
-            if (nameOrig.isEmpty()) {
-                act = _findCoercionFromEmptyString(ctxt);
-                act = _checkCoercionFail(ctxt, act, handledType(), nameOrig,
-                        "empty String (\"\")");
             } else {
-                act = _findCoercionFromBlankString(ctxt);
-                act = _checkCoercionFail(ctxt, act, handledType(), nameOrig,
-                        "blank String (all whitespace)");
+                CoercionAction act;
+                if (nameOrig.isEmpty()) {
+                    act = this._findCoercionFromEmptyString(ctxt);
+                    act = this._checkCoercionFail(ctxt, act, this.handledType(), nameOrig, "empty String (\"\")");
+                } else {
+                    act = this._findCoercionFromBlankString(ctxt);
+                    act = this._checkCoercionFail(ctxt, act, this.handledType(), nameOrig, "blank String (all whitespace)");
+                }
+
+                switch (act) {
+                    case AsNull:
+                    default:
+                        return null;
+                    case AsEmpty:
+                    case TryConvert:
+                        return this.getEmptyValue(ctxt);
+                }
             }
-            switch (act) {
-                case AsEmpty:
-                case TryConvert:
-                    return getEmptyValue(ctxt);
-                case AsNull:
-                default: // Fail already handled earlier
-            }
-            return null;
-//            if (ctxt.isEnabled(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)) {
         } else {
-            // [databind#1313]: Case insensitive enum deserialization
-            if (Boolean.TRUE.equals(_caseInsensitive)) {
+            if (Boolean.TRUE.equals(this._caseInsensitive)) {
                 Object match = lookup.findCaseInsensitive(name);
                 if (match != null) {
                     return match;
                 }
             }
-            if (!ctxt.isEnabled(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS)
-                    && !_isFromIntValue) {
-                // [databind#149]: Allow use of 'String' indexes as well -- unless prohibited (as per above)
+
+            if (!ctxt.isEnabled(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS) && !this._isFromIntValue) {
                 char c = name.charAt(0);
-                if (c >= '0' && c <= '9') {
+                if (c >= '0' && c <= '9' && (c != '0' || name.length() <= 1)) {
                     try {
                         int index = Integer.parseInt(name);
                         if (!ctxt.isEnabled(MapperFeature.ALLOW_COERCION_OF_SCALARS)) {
-                            return ctxt.handleWeirdStringValue(_enumClass(), name,
-                                    "value looks like quoted Enum index, but `MapperFeature.ALLOW_COERCION_OF_SCALARS` prevents use"
-                            );
+                            return ctxt.handleWeirdStringValue(this._enumClass(), name, "value looks like quoted Enum index, but `MapperFeature.ALLOW_COERCION_OF_SCALARS` prevents use", new Object[0]);
                         }
-                        if (index >= 0 && index < _enumsByIndex.length) {
-                            return _enumsByIndex[index];
+
+                        if (index >= 0 && index < this._enumsByIndex.length) {
+                            return this._enumsByIndex[index];
                         }
-                    } catch (NumberFormatException e) {
-                        // fine, ignore, was not an integer
+                    } catch (NumberFormatException var8) {
                     }
                 }
             }
+
+            if (this.useDefaultValueForUnknownEnum(ctxt)) {
+                return this._enumDefaultValue;
+            } else {
+                return this.useNullForUnknownEnum(ctxt) ? null : ctxt.handleWeirdStringValue(this._enumClass(), name, "not one of the values accepted for Enum class: %s", new Object[]{lookup.keys()});
+            }
         }
-        if (useDefaultValueForUnknownEnum(ctxt)) {
-            return _enumDefaultValue;
-        }
-        if (useNullForUnknownEnum(ctxt)) {
-            return null;
-        }
-        return ctxt.handleWeirdStringValue(_enumClass(), name,
-                "not one of the values accepted for Enum class: %s", lookup.keys());
     }
 
     protected Object _deserializeOther(JsonParser p, DeserializationContext ctxt) throws IOException {
-        // [databind#381]
-        if (p.hasToken(JsonToken.START_ARRAY)) {
-            return _deserializeFromArray(p, ctxt);
-        }
-        return ctxt.handleUnexpectedToken(_enumClass(), p);
+        return p.hasToken(JsonToken.START_ARRAY) ? this._deserializeFromArray(p, ctxt) : ctxt.handleUnexpectedToken(this._enumClass(), p);
     }
 
     protected Class<?> _enumClass() {
-        return handledType();
+        return this.handledType();
     }
 
+    /** @deprecated */
+    @Deprecated
     protected CompactStringObjectMap _getToStringLookup(DeserializationContext ctxt) {
-        CompactStringObjectMap lookup = _lookupByToString;
+        CompactStringObjectMap lookup = this._lookupByToString;
         if (lookup == null) {
             synchronized (this) {
-                lookup = _lookupByToString;
+                lookup = this._lookupByToString;
                 if (lookup == null) {
-                    lookup = EnumResolver.constructUsingToString(ctxt.getConfig(), _enumClass())
-                            .constructLookup();
-                    _lookupByToString = lookup;
+                    lookup = EnumResolver.constructUsingToString(ctxt.getConfig(), this._enumClass()).constructLookup();
+                    this._lookupByToString = lookup;
                 }
             }
         }
+
         return lookup;
     }
 
-    // @since 2.15
     protected boolean useNullForUnknownEnum(DeserializationContext ctxt) {
-        return Boolean.TRUE.equals(_useNullForUnknownEnum)
-                || ctxt.isEnabled(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL);
+        return this._useNullForUnknownEnum != null ? this._useNullForUnknownEnum : ctxt.isEnabled(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL);
     }
 
-    // @since 2.15
     protected boolean useDefaultValueForUnknownEnum(DeserializationContext ctxt) {
-        return (_enumDefaultValue != null)
-                && (Boolean.TRUE.equals(_useDefaultValueForUnknownEnum)
-                || ctxt.isEnabled(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE));
+        if (this._enumDefaultValue != null) {
+            return this._useDefaultValueForUnknownEnum != null ? this._useDefaultValueForUnknownEnum : ctxt.isEnabled(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE);
+        } else {
+            return false;
+        }
     }
 }
-

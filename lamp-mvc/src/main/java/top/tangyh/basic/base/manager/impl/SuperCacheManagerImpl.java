@@ -278,7 +278,7 @@ public abstract class SuperCacheManagerImpl<M extends SuperMapper<T>, T extends 
             delCache(entity);
         };
 
-        String sqlStatement = SqlHelper.getSqlStatement(this.mapperClass, SqlMethod.INSERT_ONE);
+        String sqlStatement = SqlHelper.getSqlStatement(this.getMapperClass(), SqlMethod.INSERT_ONE);
         return SqlHelper.executeBatch(getEntityClass(), log, entityList, batchSize, (sqlSession, entity) -> {
             if (predicate.test(sqlSession, entity)) {
                 sqlSession.insert(sqlStatement, entity);

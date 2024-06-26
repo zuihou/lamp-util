@@ -41,7 +41,7 @@ public class SentinelFeignBuilder extends Feign.Builder implements ApplicationCo
     }
 
     @Override
-    public Feign build() {
+    public Feign internalBuild() {
         super.invocationHandlerFactory(new InvocationHandlerFactory() {
             @SneakyThrows
             @Override
@@ -86,7 +86,7 @@ public class SentinelFeignBuilder extends Feign.Builder implements ApplicationCo
             }
         });
         super.contract(new SentinelContractHolder(contract));
-        return super.build();
+        return super.internalBuild();
     }
 
     @Override
