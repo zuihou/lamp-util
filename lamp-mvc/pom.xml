@@ -20,6 +20,14 @@
             <artifactId>lamp-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>top.tangyh.basic</groupId>
+            <artifactId>lamp-validator-starter</artifactId>
+        </dependency>
+        <dependency>
             <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-databases</artifactId>
         </dependency>
