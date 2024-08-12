@@ -4,7 +4,7 @@
     <parent>
         <artifactId>lamp-util</artifactId>
         <groupId>top.tangyh.basic</groupId>
-        <version>4.20.0-java17</version>
+        <version>4.21.0-java17</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
