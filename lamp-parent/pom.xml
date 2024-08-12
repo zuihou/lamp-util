@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.1</version>
+        <version>3.3.2</version>
         <relativePath/>
     </parent>
     <groupId>top.tangyh.basic</groupId>
@@ -18,12 +18,12 @@
     <url>https://github.com/zuihou/lamp-cloud</url>
 
     <properties>
-        <spring-cloud-dependencies.version>2023.0.2</spring-cloud-dependencies.version>
-        <spring-cloud-alibaba-dependencies.version>2023.0.1.0</spring-cloud-alibaba-dependencies.version>
+        <spring-cloud-dependencies.version>2023.0.3</spring-cloud-dependencies.version>
+        <spring-cloud-alibaba-dependencies.version>2023.0.1.2</spring-cloud-alibaba-dependencies.version>
         <seata.version>2.0.0</seata.version>
-        <nacos.version>2.3.3</nacos.version>
+        <nacos.version>2.4.0</nacos.version>
         <sentinel.version>1.8.6</sentinel.version>
-        <spring-boot-admin.version>3.3.2</spring-boot-admin.version>
+        <spring-boot-admin.version>3.3.3</spring-boot-admin.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -35,8 +35,9 @@
              <mssql-jdbc-11.version>9.4.1.jre11</mssql-jdbc-11.version>
              <mssql-jdbc-17.version>9.4.1.jre17</mssql-jdbc-17.version>
              -->
-        <hutool.version>5.8.28</hutool.version>
-        <lombok.version>1.18.32</lombok.version>
+        <hutool.version>5.8.29</hutool.version>
+        <lombok.version>1.18.34</lombok.version>
+        <sa-token.version>1.38.0</sa-token.version>
         <oshi.version>6.3.2</oshi.version>
         <druid.version>1.2.23</druid.version>
         <mybatis.version>3.5.16</mybatis.version>
@@ -47,7 +48,7 @@
         <jasypt.version>3.0.4</jasypt.version>
         <p6spy.version>3.9.1</p6spy.version>
         <fastjson.version>1.2.83</fastjson.version>
-        <easy-excel.version>4.0.1</easy-excel.version>
+        <easy-excel.version>4.0.2</easy-excel.version>
         <poi.version>5.2.5</poi.version>
         <transmittable-thread-local.version>2.12.2</transmittable-thread-local.version>
         <knife4j.version>4.5.0</knife4j.version>
