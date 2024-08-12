@@ -46,7 +46,7 @@ public interface QueryController<Id extends Serializable, Entity extends SuperEn
             @Parameter(name = "id", description = "主键", schema = @Schema(type = "long"), in = ParameterIn.PATH),
     })
     @Operation(summary = "单体查询", description = "单体查询")
-    @GetMapping("/{id}")
+    @GetMapping("/{id:[0-9]+}")
     @WebLog("'查询:' + #id")
     default R<ResultVO> get(@PathVariable Id id) {
         Entity entity = getSuperService().getById(id);
