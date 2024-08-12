@@ -5,15 +5,13 @@ import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import top.tangyh.basic.converter.String2DateConverter;
-import top.tangyh.basic.converter.String2LocalDateConverter;
-import top.tangyh.basic.converter.String2LocalDateTimeConverter;
-import top.tangyh.basic.converter.String2LocalTimeConverter;
 import top.tangyh.basic.exception.BizException;
 
 import java.lang.management.ManagementFactory;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -1066,5 +1064,48 @@ public final class DateUtils {
     public static Date getServerStartDate() {
         long time = ManagementFactory.getRuntimeMXBean().getStartTime();
         return new Date(time);
+    }
+
+
+    /**
+     * 转换时间显示方式
+     * @param duration 时间
+     * @return
+     */
+    public static String tranDurationToShow(Duration duration) {
+
+        StringBuilder result = new StringBuilder();
+        long days = Math.abs(duration.toDays());
+        if (days >= 1) {
+            result.append(days).append("天");
+        }
+        long hours = Math.abs(duration.toHours());
+        if (hours >= 1) {
+            if (days >= 1) {
+                long l = hours % 24;
+                if (l > 0) {
+                    result.append(l).append("小时");
+                }
+                return result.append(duration.toHours() > 0 ? "前" : "后").toString();
+            }
+            result.append(hours).append("小时");
+        }
+        long minutes = Math.abs(duration.toMinutes());
+        if (minutes >= 1) {
+            if (hours >= 1) {
+                long l = minutes % 60;
+                if (l > 0) {
+                    result.append(l).append("分钟");
+                }
+                return result.append(duration.toMinutes() > 0 ? "前" : "后").toString();
+            }
+            result.append(minutes).append("分钟");
+        }
+        if (result.isEmpty()) {
+            result.append("1分钟内");
+            return result.toString();
+        } else {
+            return result.append(duration.toSeconds() > 0 ? "前" : "后").toString();
+        }
     }
 }
