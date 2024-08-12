@@ -1,5 +1,6 @@
 package top.tangyh.basic.boot.handler;
 
+import cn.dev33.satoken.exception.SaTokenException;
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -65,6 +66,12 @@ public abstract class AbstractGlobalExceptionHandler {
                 .setErrorMsg(getErrorMsg(ex)).setPath(getPath());
     }
 
+    @ExceptionHandler(SaTokenException.class)
+    public R<?> handlerSaTokenException(SaTokenException e) {
+        log.warn("SaTokenException:", e);
+        return R.result(e.getCode(), null, e.getMessage())
+                .setErrorMsg(getErrorMsg(e)).setPath(getPath());
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ArgumentException.class)

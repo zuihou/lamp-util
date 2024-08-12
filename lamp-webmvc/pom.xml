@@ -27,7 +27,10 @@
             <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-cache-starter</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-core</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
