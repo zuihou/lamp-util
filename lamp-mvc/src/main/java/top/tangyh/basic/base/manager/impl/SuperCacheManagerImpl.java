@@ -78,6 +78,9 @@ public abstract class SuperCacheManagerImpl<M extends SuperMapper<T>, T extends 
     @Override
     @Transactional(readOnly = true)
     public T getByIdCache(Serializable id) {
+        if (id == null) {
+            return null;
+        }
         CacheKey cacheKey = cacheKeyBuilder().key(id);
         CacheResult<T> result = cacheOps.get(cacheKey, k -> super.getById(id));
         return result.getValue();
