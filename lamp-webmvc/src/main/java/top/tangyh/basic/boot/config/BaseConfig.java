@@ -155,11 +155,4 @@ public abstract class BaseConfig {
         return new UndertowServerFactoryCustomizer();
     }
 
-
-    @Bean
-    @ConditionalOnClass
-    @ConditionalOnProperty(prefix = Constants.PROJECT_PREFIX + ".webmvc", name = "header", havingValue = "true", matchIfMissing = true)
-    public GlobalMvcConfigurer getGlobalMvcConfigurer() {
-        return new GlobalMvcConfigurer();
-    }
 }

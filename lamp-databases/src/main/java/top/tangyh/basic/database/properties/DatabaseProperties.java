@@ -60,14 +60,7 @@ public class DatabaseProperties {
      */
     private long maxLimit = -1;
     private DbType dbType;
-    /**
-     * 是否禁止写入
-     */
-    private Boolean isNotWrite = false;
-    /**
-     * 禁止写入白名单
-     */
-    private List<String> writeWhiteList;
+
     /**
      * 是否启用数据权限
      */

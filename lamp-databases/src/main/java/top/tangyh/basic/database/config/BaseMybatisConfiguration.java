@@ -26,7 +26,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import top.tangyh.basic.database.injector.LampSqlInjector;
-import top.tangyh.basic.database.mybatis.WriteInterceptor;
 import top.tangyh.basic.database.mybatis.typehandler.FullLikeTypeHandler;
 import top.tangyh.basic.database.mybatis.typehandler.LeftLikeTypeHandler;
 import top.tangyh.basic.database.mybatis.typehandler.RightLikeTypeHandler;
@@ -53,20 +52,6 @@ public abstract class BaseMybatisConfiguration {
     public BaseMybatisConfiguration(final DatabaseProperties databaseProperties) {
         this.databaseProperties = databaseProperties;
     }
-
-    /**
-     * 演示环境权限拦截器
-     *
-     * @return 写入拦截器
-     */
-    @Bean
-    @Order(15)
-    @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = DatabaseProperties.PREFIX, name = "isNotWrite", havingValue = "true")
-    public WriteInterceptor getWriteInterceptor() {
-        return new WriteInterceptor(databaseProperties);
-    }
-
 
     /**
      * 新的分页插件,一缓和二缓遵循mybatis的规则,需要设置 MybatisConfiguration#useDeprecatedExecutor = false 避免缓存出现问题(该属性会在旧插件移除后一同移除)
