@@ -15,6 +15,6 @@ public class LampMdcAdapterInitializer implements ApplicationContextInitializer<
     @Override
     public void initialize(@NonNull ConfigurableApplicationContext applicationContext) {
         //加载TtlMDCAdapter实例
-        LampMdcAdapter.getInstance();
+//        LampMdcAdapter.getInstance();
     }
 }
