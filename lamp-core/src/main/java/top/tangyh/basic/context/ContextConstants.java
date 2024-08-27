@@ -39,7 +39,6 @@ public final class ContextConstants {
     public static final String JWT_KEY_COMPANY_ID = "CurrentCompanyId";
     public static final String JWT_KEY_TOP_COMPANY_ID = "CurrentTopCompanyId";
     public static final String JWT_KEY_DEPT_ID = "CurrentDeptId";
-    public static final String JWT_KEY_USER = "User";
     /**
      * JWT中封装的 随机数
      */
