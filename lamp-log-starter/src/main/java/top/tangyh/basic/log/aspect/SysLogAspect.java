@@ -191,7 +191,9 @@ public class SysLogAspect {
         optLogDTO.setUa(StrUtil.sub(request.getHeader("user-agent"), 0, 500));
         if (ContextUtil.getBoot()) {
             optLogDTO.setCreatedOrgId(ContextUtil.getCurrentCompanyId());
+            optLogDTO.setToken(ContextUtil.getToken());
         } else {
+            optLogDTO.setToken(Convert.toStr(request.getHeader(ContextConstants.TOKEN_HEADER)));
             optLogDTO.setCreatedOrgId(Convert.toLong(request.getHeader(ContextConstants.CURRENT_COMPANY_ID_HEADER)));
         }
         optLogDTO.setTrace(MDC.get(ContextConstants.TRACE_ID_HEADER));

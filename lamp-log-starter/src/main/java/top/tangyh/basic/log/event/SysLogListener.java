@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Async;
+import top.tangyh.basic.context.ContextUtil;
 import top.tangyh.basic.model.log.OptLogDTO;
 
 import java.util.function.Consumer;
@@ -28,6 +29,7 @@ public class SysLogListener {
     @EventListener(SysLogEvent.class)
     public void saveSysLog(SysLogEvent event) {
         OptLogDTO sysLog = (OptLogDTO) event.getSource();
+        ContextUtil.setToken(sysLog.getToken());
         consumer.accept(sysLog);
     }
 

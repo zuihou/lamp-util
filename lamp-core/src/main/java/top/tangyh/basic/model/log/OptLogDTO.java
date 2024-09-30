@@ -115,6 +115,7 @@ public class OptLogDTO {
 
     private Long createdBy;
     private Long createdOrgId;
+    private String token;
 
 
 }
