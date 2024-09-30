@@ -12,7 +12,6 @@ import org.springdoc.core.customizers.GlobalOperationCustomizer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import top.tangyh.basic.swagger2.properties.SwaggerProperties;
 
 import java.util.List;
@@ -23,9 +22,9 @@ import java.util.List;
  * @author zuihou
  * @date 2018/11/18 9:22
  */
-@Import({
-        Swagger2Configuration.class
-})
+//@Import({
+//        Swagger2Configuration.class
+//})
 @ConditionalOnProperty(prefix = "knife4j", name = "enable", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerAutoConfiguration {
