@@ -72,16 +72,26 @@ public class RedisOps extends BaseRedis {
         boolean cacheNullVal = getCacheNullVal(cacheNullValues);
         T value = (T) valueOps.get(key);
         CacheResult<T> cacheResult = new CacheResult<>(key);
-        if (value != null && (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value))) {
+        if (value != null) {
             cacheResult.setRawValue(value);
             return cacheResult;
+        } else {
+            if (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value)) {
+                cacheResult.setRawValue(value);
+                return cacheResult;
+            }
         }
         // 加锁解决缓存击穿
         synchronized (KEY_LOCKS.computeIfAbsent(key, v -> new Object())) {
             value = (T) valueOps.get(key);
-            if (value != null && (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value))) {
+            if (value != null) {
                 cacheResult.setRawValue(value);
                 return cacheResult;
+            } else {
+                if (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value)) {
+                    cacheResult.setRawValue(value);
+                    return cacheResult;
+                }
             }
 
             try {
@@ -157,15 +167,25 @@ public class RedisOps extends BaseRedis {
         T value = (T) valueOps.get(key.getKey());
 
         CacheResult<T> cacheResult = new CacheResult<>(key);
-        if (value != null && (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value))) {
+        if (value != null) {
             cacheResult.setRawValue(value);
             return cacheResult;
+        } else {
+            if (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value)) {
+                cacheResult.setRawValue(value);
+                return cacheResult;
+            }
         }
         synchronized (KEY_LOCKS.computeIfAbsent(key.getKey(), v -> new Object())) {
             value = (T) valueOps.get(key.getKey());
-            if (value != null && (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value))) {
+            if (value != null) {
                 cacheResult.setRawValue(value);
                 return cacheResult;
+            } else {
+                if (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value)) {
+                    cacheResult.setRawValue(value);
+                    return cacheResult;
+                }
             }
 
             try {
@@ -279,17 +299,27 @@ public class RedisOps extends BaseRedis {
 
         CacheResult<T> cacheResult = new CacheResult<>(key, value);
         cacheResult.setField(field);
-        if (value != null && (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value))) {
+        if (value != null) {
             cacheResult.setRawValue(value);
             return cacheResult;
+        } else {
+            if (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value)) {
+                cacheResult.setRawValue(value);
+                return cacheResult;
+            }
         }
 
         String lockKey = key + "@" + field;
         synchronized (KEY_LOCKS.computeIfAbsent(lockKey, v -> new Object())) {
             value = (T) hashOps.get(key, field);
-            if (value != null && (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value))) {
+            if (value != null) {
                 cacheResult.setRawValue(value);
                 return cacheResult;
+            } else {
+                if (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value)) {
+                    cacheResult.setRawValue(value);
+                    return cacheResult;
+                }
             }
 
             try {
@@ -341,16 +371,26 @@ public class RedisOps extends BaseRedis {
         T value = (T) hashOps.get(key.getKey(), key.getField());
 
         CacheResult<T> cacheResult = new CacheResult<>(key, value);
-        if (value != null && (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value))) {
+        if (value != null) {
             cacheResult.setRawValue(value);
             return cacheResult;
+        } else {
+            if (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value)) {
+                cacheResult.setRawValue(value);
+                return cacheResult;
+            }
         }
         String lockKey = key.getKey() + "@" + key.getField();
         synchronized (KEY_LOCKS.computeIfAbsent(lockKey, v -> new Object())) {
             value = (T) hashOps.get(key.getKey(), key.getField());
-            if (value != null && (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value))) {
+            if (value != null) {
                 cacheResult.setRawValue(value);
                 return cacheResult;
+            } else {
+                if (value instanceof Collection && CollUtil.isNotEmpty((Collection<?>) value)) {
+                    cacheResult.setRawValue(value);
+                    return cacheResult;
+                }
             }
             try {
                 value = loader.apply(key);
