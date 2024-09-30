@@ -291,9 +291,11 @@ public class EchoServiceImpl implements EchoService, EnvironmentCapable, Initial
             } else {
                 LoadService loadService = strategyMap.get(type.getApi());
                 if (loadService == null) {
-                    String tip = "处理字段的数据回显时，没有找到@Echo注解中api属性的实例：[{}]。 请确保[{}]实现了 LoadService，并注册到Spring容器中。" +
-                            "\\n 1. 若api指定的是ServiceImpl，请确保在同一个服务内。 " +
-                            "\\n 2. 若api指定的是FeignClient，请确保被回显的服务能正常调用该Feign接口。 ";
+                    String tip = """
+                            处理字段的数据回显时，没有找到@Echo注解中api属性的实例：[{}]。 请确保[{}]实现了 LoadService，并注册到Spring容器中。
+                            1. 若api指定的是ServiceImpl，请确保在同一个服务内。\s
+                            2. 若api指定的是FeignClient，请确保被回显的服务能正常调用该Feign接口。\s
+                            """;
                     log.warn(tip, type.getApi(), type.getApi());
                     continue;
                 }
