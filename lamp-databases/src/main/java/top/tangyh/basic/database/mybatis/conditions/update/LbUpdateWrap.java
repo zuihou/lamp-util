@@ -3,6 +3,7 @@ package top.tangyh.basic.database.mybatis.conditions.update;
 import com.baomidou.mybatisplus.core.conditions.AbstractLambdaWrapper;
 import com.baomidou.mybatisplus.core.conditions.SharedString;
 import com.baomidou.mybatisplus.core.conditions.segments.MergeSegments;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.Update;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import top.tangyh.basic.utils.StrHelper;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,7 +34,6 @@ import static com.baomidou.mybatisplus.core.enums.WrapperKeyword.APPLY;
 public class LbUpdateWrap<T> extends AbstractLambdaWrapper<T, LbUpdateWrap<T>>
         implements Update<LbUpdateWrap<T>, SFunction<T, ?>> {
 
-    private static final long serialVersionUID = -4194344880194881367L;
     /**
      * SQL 更新字段内容，例如：name='1', age=2
      */
@@ -107,6 +108,23 @@ public class LbUpdateWrap<T> extends AbstractLambdaWrapper<T, LbUpdateWrap<T>>
             sqlSet.add(formatSqlMaybeWithParam(setSql, params));
         }
         return typedThis;
+    }
+
+
+    @Override
+    public LbUpdateWrap<T> setIncrBy(boolean condition, SFunction<T, ?> column, Number val) {
+        return maybeDo(condition, () -> {
+            String realColumn = columnToString(column);
+            sqlSet.add(String.format("%s=%s + %s", realColumn, realColumn, val instanceof BigDecimal ? ((BigDecimal) val).toPlainString() : val));
+        });
+    }
+
+    @Override
+    public LbUpdateWrap<T> setDecrBy(boolean condition, SFunction<T, ?> column, Number val) {
+        return maybeDo(condition, () -> {
+            String realColumn = columnToString(column);
+            sqlSet.add(String.format("%s=%s - %s", realColumn, realColumn, val instanceof BigDecimal ? ((BigDecimal) val).toPlainString() : val));
+        });
     }
 
     @Override
