@@ -68,7 +68,7 @@
         <qiniu-java-sdk.version>7.15.1</qiniu-java-sdk.version>
         <minio.version>8.5.12</minio.version>
         <javassist.version>3.25.0-GA</javassist.version>
-        <antisamy.version>1.6.7</antisamy.version>
+        <antisamy.version>1.7.5</antisamy.version>
         <caffeine.version>2.9.3</caffeine.version>
         <protostuff.version>1.7.4</protostuff.version>
         <ip2region.version>2.6.5</ip2region.version>
