@@ -79,7 +79,7 @@
 - XSS： 对表单参数、json参数进行xss处理
 - 统一的操作日志： AOP方式优雅记录操作日志
 - 轻量级接口权限
-- 快去看源码和文档发现 [更多功能](https://www.kancloud.cn/zuihou/zuihou-admin-cloud) 吧
+- 快去看源码和文档发现 更多功能 吧
 
 # 演示地址
 
