@@ -53,17 +53,17 @@
 
 ## 注意：
 
-- lamp-cloud 和 lamp-boot 依赖 lamp-util
-- lamp-job 依赖 lamp-cloud 或 lamp-boot
+- lamp-cloud 依赖 lamp-util
+- lamp-job 依赖 lamp-cloud
 
-所以，项目的编译顺序是：lamp-util -> lamp-cloud/lamp-boot -> lamp-job ！
+所以，项目的编译顺序是：lamp-util -> lamp-cloud -> lamp-job ！
 
 
 # lamp-util 简介
 
 `lamp-util` 的前身是 `zuihou-commons`，在3.0.0版本之后，改名为lamp-util，它是`lamp`项目的其中一员。
 
-`lamp-util` 是 [lamp-cloud](https://github.com/dromara/lamp-cloud) 和 [lamp-boot](https://github.com/zuihou/lamp-boot) 项目的核心工具包，开发宗旨是打造一套兼顾 SpringBoot 和 SpringCloud
+`lamp-util` 是 [lamp-cloud](https://github.com/dromara/lamp-cloud)  项目的核心工具包，开发宗旨是打造一套兼顾 SpringBoot 和 SpringCloud
 项目的公共工具类。
 
 ## lamp-util 亮点功能
