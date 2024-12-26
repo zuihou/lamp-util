@@ -7,7 +7,7 @@
 		<version>5.0.3</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<groupId>com.xuxueli</groupId>
+
 	<artifactId>xxl-job-core</artifactId>
 	<packaging>jar</packaging>
 
