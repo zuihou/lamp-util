@@ -99,7 +99,7 @@ public class PageParams<T> {
             String humpSort = sortArr[i];
             // 简单的 驼峰 转 下划线
             String underlineSort = Wraps.getDbField(humpSort, entityClazz);
-            orders.add(StrUtil.equalsAny(orderArr[i], "ascending", "ascend") ? OrderItem.asc(underlineSort) : OrderItem.desc(underlineSort));
+            orders.add(StrUtil.equalsAny(orderArr[i], "ascending", "ascend", "asc") ? OrderItem.asc(underlineSort) : OrderItem.desc(underlineSort));
         }
 
         page.setOrders(orders);
