@@ -1,10 +1,12 @@
 package top.tangyh.basic.database.plugins;
 
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.Environment;
@@ -34,7 +36,8 @@ public class TenantLineAnnotationRegister implements EnvironmentCapable, BeanPos
     private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
     private Environment environment;
     private ResourcePatternResolver resourcePatternResolver;
-
+    @Value("${lamp.scan.basePackage}")
+    private String packages;
     protected String resolveBasePackage(String basePackage) {
         return ClassUtils.convertClassNameToResourcePath(getEnvironment().resolveRequiredPlaceholders(basePackage));
     }
@@ -66,6 +69,9 @@ public class TenantLineAnnotationRegister implements EnvironmentCapable, BeanPos
             ResourcePatternResolver resourcePatternResolver = getResourcePatternResolver();
             MetadataReaderFactory metadata = new SimpleMetadataReaderFactory();
             for (String basePackage : basePackages) {
+                if (!StrUtil.contains(basePackage, packages) || !StrUtil.startWith(basePackage, packages)) {
+                    continue;
+                }
                 String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + resolveBasePackage(basePackage) + '/' + DEFAULT_RESOURCE_PATTERN;
                 Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
                 for (Resource resource : resources) {
