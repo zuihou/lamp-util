@@ -16,7 +16,6 @@ import java.lang.annotation.Target;
  * 例6：public void test(@LoginUser(isResource = true) SysUser user) //能获取SysUser对象的实时的用户信息和资源信息
  * <p>
  * 缺点1： 不能用于 BaseController 类中的方法
- * 缺点2： 不能和@RequesyBody 标记的参数，同时使用
  *
  * @author zuihou
  * @date 2018/7/24 16:44

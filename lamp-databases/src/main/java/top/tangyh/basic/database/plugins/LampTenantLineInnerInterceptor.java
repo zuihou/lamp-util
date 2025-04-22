@@ -15,8 +15,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.Parenthesis;
-import net.sf.jsqlparser.expression.RowConstructor;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
@@ -90,9 +88,9 @@ public class LampTenantLineInnerInterceptor extends BaseMultiTableInnerIntercept
     protected void processSelect(Select select, int index, String sql, Object obj) {
         final String whereSegment = (String) obj;
         processSelectBody(select, whereSegment);
-        List<WithItem> withItemsList = select.getWithItemsList();
+        List<WithItem<?>> withItemsList = select.getWithItemsList();
         if (!CollectionUtils.isEmpty(withItemsList)) {
-            withItemsList.forEach(withItem -> processSelectBody(withItem, whereSegment));
+            withItemsList.forEach(withItem -> processSelectBody(withItem.getSelect(), whereSegment));
         }
     }
 
@@ -137,11 +135,7 @@ public class LampTenantLineInnerInterceptor extends BaseMultiTableInnerIntercept
                     int len = expressions.size();
                     for (int i = 0; i < len; i++) {
                         Expression expression = expressions.get(i);
-                        if (expression instanceof Parenthesis) {
-                            ExpressionList rowConstructor = new RowConstructor<>()
-                                    .withExpressions(new ExpressionList<>(((Parenthesis) expression).getExpression(), tenantId));
-                            expressions.set(i, rowConstructor);
-                        } else if (expression instanceof ParenthesedExpressionList) {
+                        if (expression instanceof ParenthesedExpressionList) {
                             ((ParenthesedExpressionList) expression).addExpression(tenantId);
                         } else {
                             expressions.add(tenantId);
