@@ -77,6 +77,15 @@ public interface StrPool {
     String HTML_QUOTE = "&quot;";
     String HTML_LT = "&lt;";
     String HTML_GT = "&gt;";
+
+    String BASE_BOOLEAN_TYPE_NAME = "boolean";
+    String BASE_INTEGER_TYPE_NAME = "integer";
+    String BASE_LONG_TYPE_NAME = "long";
+    String BASE_SHORT_TYPE_NAME = "short";
+    String BASE_DOUBLE_TYPE_NAME = "double";
+    String BASE_FLOAT_TYPE_NAME = "float";
+    String BASE_CHAR_TYPE_NAME = "char";
+
     String STRING_TYPE_NAME = "java.lang.String";
     String LONG_TYPE_NAME = "java.lang.Long";
     String BYTE_TYPE_NAME = "java.lang.Byte";

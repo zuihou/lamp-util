@@ -38,6 +38,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static top.tangyh.basic.utils.StrPool.ARRAY;
+import static top.tangyh.basic.utils.StrPool.BASE_BOOLEAN_TYPE_NAME;
+import static top.tangyh.basic.utils.StrPool.BASE_CHAR_TYPE_NAME;
+import static top.tangyh.basic.utils.StrPool.BASE_DOUBLE_TYPE_NAME;
+import static top.tangyh.basic.utils.StrPool.BASE_FLOAT_TYPE_NAME;
+import static top.tangyh.basic.utils.StrPool.BASE_INTEGER_TYPE_NAME;
+import static top.tangyh.basic.utils.StrPool.BASE_LONG_TYPE_NAME;
+import static top.tangyh.basic.utils.StrPool.BASE_SHORT_TYPE_NAME;
 import static top.tangyh.basic.utils.StrPool.BOOLEAN;
 import static top.tangyh.basic.utils.StrPool.BOOLEAN_TYPE_NAME;
 import static top.tangyh.basic.utils.StrPool.COLLECTION_TYPE_NAME;
@@ -117,7 +124,7 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
         Class<?>[] groups = constraint.getGroups();
 
         String key = targetClazz.getName() + StrPool.COLON +
-                Arrays.stream(groups).map(Class::getName).collect(Collectors.joining(StrPool.COLON));
+                     Arrays.stream(groups).map(Class::getName).collect(Collectors.joining(StrPool.COLON));
         if (CACHE.containsKey(key)) {
             fieldValidatorDesc.putAll(CACHE.get(key));
             return;
@@ -209,11 +216,11 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
 
 
     private String getType(String typeName) {
-        if (StrUtil.startWithAny(typeName, SET_TYPE_NAME, LIST_TYPE_NAME, COLLECTION_TYPE_NAME)) {
+        if (StrUtil.startWithAny(typeName, SET_TYPE_NAME, LIST_TYPE_NAME, COLLECTION_TYPE_NAME, BASE_CHAR_TYPE_NAME)) {
             return ARRAY;
-        } else if (StrUtil.equalsAny(typeName, LONG_TYPE_NAME, INTEGER_TYPE_NAME, SHORT_TYPE_NAME)) {
+        } else if (StrUtil.equalsAny(typeName, LONG_TYPE_NAME, INTEGER_TYPE_NAME, SHORT_TYPE_NAME, BASE_LONG_TYPE_NAME, BASE_INTEGER_TYPE_NAME, BASE_SHORT_TYPE_NAME)) {
             return INTEGER;
-        } else if (StrUtil.equalsAny(typeName, DOUBLE_TYPE_NAME, FLOAT_TYPE_NAME)) {
+        } else if (StrUtil.equalsAny(typeName, DOUBLE_TYPE_NAME, FLOAT_TYPE_NAME, BASE_FLOAT_TYPE_NAME, BASE_DOUBLE_TYPE_NAME)) {
             return FLOAT;
         } else if (StrUtil.equalsAny(typeName, LOCAL_DATE_TIME_TYPE_NAME, DATE_TYPE_NAME)) {
             return DATETIME;
@@ -221,7 +228,7 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
             return DATE;
         } else if (StrUtil.equalsAny(typeName, LOCAL_TIME_TYPE_NAME)) {
             return TIME;
-        } else if (StrUtil.equalsAny(typeName, BOOLEAN_TYPE_NAME)) {
+        } else if (StrUtil.equalsAny(typeName, BOOLEAN_TYPE_NAME, BASE_BOOLEAN_TYPE_NAME)) {
             return BOOLEAN;
         }
         return StrUtil.subAfter(typeName, CharUtil.DOT, true);
