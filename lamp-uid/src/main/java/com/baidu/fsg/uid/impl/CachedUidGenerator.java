@@ -40,7 +40,7 @@ import java.util.List;
  * {@link #boostPower}</code>, Default as {@value #DEFAULT_BOOST_POWER}
  * <li><b>paddingFactor:</b> Represents a percent value of (0 - 100). When the count of rest available UIDs reach the
  * threshold, it will trigger padding buffer. Default as{@link RingBuffer#DEFAULT_PADDING_PERCENT}
- * Sample: paddingFactor=20, bufferSize=1000 -> threshold=1000 * 20 /100, padding buffer will be triggered when tail-cursor<threshold
+ * Sample: paddingFactor=20, bufferSize=1000 -> threshold=1000 * 20 /100, padding buffer will be triggered when tail-cursor  threshold
  * <li><b>scheduleInterval:</b> Padding buffer in a schedule, specify padding buffer interval, Unit as second
  * <li><b>rejectedPutBufferHandler:</b> Policy for rejected put buffer. Default as discard put request, just do logging
  * <li><b>rejectedTakeBufferHandler:</b> Policy for rejected take buffer. Default as throwing up an exception
@@ -114,7 +114,7 @@ public class CachedUidGenerator extends DefaultUidGenerator implements Disposabl
     }
 
     /**
-     * Initialize RingBuffer & RingBufferPaddingExecutor
+     * Initialize RingBuffer {@code &} RingBufferPaddingExecutor
      */
     private void initRingBuffer() {
         // initialize RingBuffer

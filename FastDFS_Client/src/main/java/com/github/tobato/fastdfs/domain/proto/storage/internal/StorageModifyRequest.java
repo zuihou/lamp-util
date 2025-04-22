@@ -41,10 +41,7 @@ public class StorageModifyRequest extends FdfsRequest {
      * 构造函数
      *
      * @param inputStream
-     * @param fileExtName
      * @param fileSize
-     * @param storeIndex
-     * @param isAppenderFile
      */
     public StorageModifyRequest(InputStream inputStream, long fileSize, String path, long fileOffset) {
         super();

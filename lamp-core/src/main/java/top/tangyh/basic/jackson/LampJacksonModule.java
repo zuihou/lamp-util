@@ -21,7 +21,7 @@ import static top.tangyh.basic.utils.DateUtils.DEFAULT_DATE_TIME_FORMAT;
 import static top.tangyh.basic.utils.DateUtils.DEFAULT_TIME_FORMAT;
 
 /**
- * jackson 自定义序列化 & 反序列化 规则
+ * jackson 自定义序列化 and 反序列化 规则
  *
  * @author zuihou
  */

@@ -81,19 +81,19 @@ public class RingBuffer {
     /**
      * Constructor with buffer size, paddingFactor default as {@value #DEFAULT_PADDING_PERCENT}
      *
-     * @param bufferSize must be positive & a power of 2
+     * @param bufferSize must be positive {@code &} a power of 2
      */
     public RingBuffer(int bufferSize) {
         this(bufferSize, DEFAULT_PADDING_PERCENT);
     }
 
     /**
-     * Constructor with buffer size & padding factor
+     * Constructor with buffer size {@code &} padding factor
      *
-     * @param bufferSize    must be positive & a power of 2
+     * @param bufferSize    must be positive {@code &} a power of 2
      * @param paddingFactor percent in (0 - 100). When the count of rest available UIDs reach the threshold, it will trigger padding buffer<br>
      *                      Sample: paddingFactor=20, bufferSize=1000 -> threshold=1000 * 20 /100,
-     *                      padding buffer will be triggered when tail-cursor<threshold
+     *                      padding buffer will be triggered when tail-cursor {@code <} threshold
      */
     public RingBuffer(int bufferSize, int paddingFactor) {
         // check buffer size is positive & a power of 2; padding factor in (0, 100)
@@ -110,8 +110,8 @@ public class RingBuffer {
     }
 
     /**
-     * Put an UID in the ring & tail moved<br>
-     * We use 'synchronized' to guarantee the UID fill in slot & publish new tail sequence as atomic operations<br>
+     * Put an UID in the ring {@code &} tail moved <br/>
+     * We use 'synchronized' to guarantee the UID fill in slot {@code &} publish new tail sequence as atomic operations <br/>
      *
      * <b>Note that: </b> It is recommended to put UID in a serialize way, cause we once batch generate a series UIDs and put
      * the one by one into the buffer, so it is unnecessary put in multi-threads

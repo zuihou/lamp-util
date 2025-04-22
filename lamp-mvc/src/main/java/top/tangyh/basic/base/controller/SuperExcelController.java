@@ -98,8 +98,7 @@ public abstract class SuperExcelController<S extends SuperCacheService<Id, Entit
      * 查询待导出的数据， 子类可以重写
      *
      * @param params params
-     * @return java.util.List<?>
-     * @author tangyh
+     * @return java.util.List
      * @date 2021/5/23 10:25 下午
      * @create [2021/5/23 10:25 下午 ] [tangyh] [初始创建]
      * @update [2021/5/23 10:25 下午 ] [tangyh] [变更描述]
@@ -118,7 +117,7 @@ public abstract class SuperExcelController<S extends SuperCacheService<Id, Entit
         try {
             List<SaveVO> dataList = EasyExcel.read(simpleFile.getInputStream()).head(getSaveVOClass()).sheet().doReadSync();
 
-            String failMsg = ValidatorUtils.validateAll(dataList, 1);
+            String failMsg = ValidatorUtils.validateAllSneaky(dataList, 1);
             if (StrUtil.isNotEmpty(failMsg)) {
                 return R.fail(failMsg);
             }

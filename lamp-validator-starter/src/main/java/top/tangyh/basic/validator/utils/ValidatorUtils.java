@@ -11,6 +11,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.HibernateValidatorConfiguration;
 import org.hibernate.validator.cfg.ConstraintMapping;
@@ -23,6 +24,7 @@ import org.hibernate.validator.internal.properties.javabean.JavaBeanHelper;
 import org.hibernate.validator.spi.nodenameprovider.PropertyNodeNameProvider;
 import org.hibernate.validator.spi.properties.GetterPropertySelectionStrategy;
 import top.tangyh.basic.annotation.constraints.NotEmptyPattern;
+import top.tangyh.basic.exception.BizException;
 import top.tangyh.basic.validator.constraintvalidators.LengthConstraintValidator;
 import top.tangyh.basic.validator.constraintvalidators.NotEmptyConstraintValidator;
 import top.tangyh.basic.validator.constraintvalidators.NotEmptyPatternConstraintValidator;
@@ -39,6 +41,7 @@ import java.util.Set;
  * @since 2024年06月24日14:29:43
  * @author tangyh
  */
+@Slf4j
 public class ValidatorUtils {
 
     private final static Validator VALIDATOR_FAST = warp(Validation.byProvider(HibernateValidator.class).configure().failFast(true)).buildValidatorFactory().getValidator();
@@ -52,12 +55,20 @@ public class ValidatorUtils {
      * @param domain 实体
      * @return
      */
-    public static <T> Set<ConstraintViolation<T>> validateFast(T domain) {
+    public static <T> Set<ConstraintViolation<T>> validateFastSneaky(T domain) {
         Set<ConstraintViolation<T>> validateResult = VALIDATOR_FAST.validate(domain);
         if (!validateResult.isEmpty()) {
-            System.out.println(validateResult.iterator().next().getPropertyPath() + "：" + validateResult.iterator().next().getMessage());
+            log.warn("{}:{}", validateResult.iterator().next().getPropertyPath(), validateResult.iterator().next().getMessage());
         }
         return validateResult;
+    }
+
+    public static <T> void validateFast(T domain) {
+        Set<ConstraintViolation<T>> validateResult = VALIDATOR_FAST.validate(domain);
+        if (!validateResult.isEmpty()) {
+            log.warn("{}:{}", validateResult.iterator().next().getPropertyPath(), validateResult.iterator().next().getMessage());
+            throw BizException.wrap("{}:{}", validateResult.iterator().next().getPropertyPath(), validateResult.iterator().next().getMessage());
+        }
     }
 
     /**
@@ -68,7 +79,7 @@ public class ValidatorUtils {
      * @return
      * @throws Exception
      */
-    public static <T> Set<ConstraintViolation<T>> validateAll(T domain) {
+    public static <T> Set<ConstraintViolation<T>> validateAllSneaky(T domain) {
         Set<ConstraintViolation<T>> validateResult = VALIDATOR_ALL.validate(domain);
         if (!validateResult.isEmpty()) {
             Iterator<ConstraintViolation<T>> it = validateResult.iterator();
@@ -85,15 +96,14 @@ public class ValidatorUtils {
                     name = StrUtil.join(".", excelProperty.value());
                 }
 
-                System.out.println(name + ": " + cv.getPropertyPath() + "：" + cv.getMessage());
-
+                log.warn("{}:{} :{}", name, cv.getPropertyPath(), cv.getMessage());
             }
         }
         return validateResult;
     }
 
 
-    public static <T> String validateAll(List<T> domains, int headRow) {
+    public static <T> String validateAllSneaky(List<T> domains, int headRow) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < domains.size(); i++) {
             T domain = domains.get(i);

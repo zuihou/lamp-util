@@ -83,7 +83,7 @@ public final class CollHelper {
      * <p>
      * 本方法实现了：
      * <p>
-     * 将 list&lt;V&gt 转成 Map&lt;K , M&gt
+     * 将 {@code list<V> } 转成 {@code Map<K , M>}
      * K 需要自己指定， M需要自己指定
      * <p>
      * 其中K不能重复，若重复，则会报错
@@ -111,7 +111,7 @@ public final class CollHelper {
         } catch (IllegalArgumentException duplicateKeys) {
             throw new IllegalArgumentException(
                     duplicateKeys.getMessage()
-                            + ".若要在键下索引多个值，请使用: Multimaps.index.", duplicateKeys);
+                    + ".若要在键下索引多个值，请使用: Multimaps.index.", duplicateKeys);
         }
     }
 
@@ -142,7 +142,7 @@ public final class CollHelper {
         } catch (IllegalArgumentException duplicateKeys) {
             throw new IllegalArgumentException(
                     duplicateKeys.getMessage()
-                            + ".若要在键下索引多个值，请使用: Multimaps.index.", duplicateKeys);
+                    + ".若要在键下索引多个值，请使用: Multimaps.index.", duplicateKeys);
         }
     }
 

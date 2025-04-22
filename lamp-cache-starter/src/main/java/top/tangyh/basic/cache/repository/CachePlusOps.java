@@ -63,7 +63,6 @@ public interface CachePlusOps extends CacheOps {
      * 特殊符号用 \ 隔开
      *
      * @param pattern 表达式
-     * @return 符合给定模式的 key 列表
      */
     void scanUnlink(@NonNull String pattern);
 

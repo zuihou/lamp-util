@@ -36,14 +36,14 @@ public class BitsAllocator {
     private final int workerIdBits;
     private final int sequenceBits;
     /**
-     * Max value for workId & sequence
+     * Max value for workId {@code &} sequence
      * 最大值
      */
     private final long maxDeltaSeconds;
     private final long maxWorkerId;
     private final long maxSequence;
     /**
-     * timestamp & workerId 的移位
+     * timestamp {@code &} workerId 的移位
      */
     private final int timestampShift;
     private final int workerIdShift;
@@ -87,7 +87,7 @@ public class BitsAllocator {
      * deltaSecond 左移（workerIdBits + sequenceBits）位，workerId左移sequenceBits位，此时就完成了字节的分配
      * <p>
      * <p>
-     * Allocate bits for UID according to delta seconds & workerId & sequence<br>
+     * Allocate bits for UID according to delta seconds {@code &} workerId {@code &} sequence <br>
      * <b>Note that: </b>The highest bit will always be 0 for sign
      *
      * @param deltaSeconds

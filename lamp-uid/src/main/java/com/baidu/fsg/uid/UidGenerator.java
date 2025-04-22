@@ -36,7 +36,7 @@ public interface UidGenerator {
 
     /**
      * Parse the UID into elements which are used to generate the UID. <br>
-     * Such as timestamp & workerId & sequence...
+     * Such as timestamp {@code &} workerId {@code &} sequence...
      *
      * @param uid
      * @return Parsed info

@@ -51,7 +51,7 @@ public @interface Echo {
      * <p>
      * api() 配置了FeignClient时，通过 api 调用的结果会因为序列化的关系丢失类型
      * <p>
-     * 如：实际返回值中 Map<Serializable, Object> 的value值为 User 对象，但由于通过FeignClient调用时，会自动进行序列化和反序列化，导致返回值Map中Object类型的value值丢失类型，
+     * 如：实际返回值中 {@code Map<Serializable, Object>} 的value值为 User 对象，但由于通过FeignClient调用时，会自动进行序列化和反序列化，导致返回值Map中Object类型的value值丢失类型，
      * 可以通过配置该参数，回显接口会对返回的value值类型进行强制转换。
      *
      * @return 待转换类

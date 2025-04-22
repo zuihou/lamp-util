@@ -232,7 +232,6 @@ public abstract class BaseRedis {
      * 批量扫描后删除 匹配到的key
      *
      * @param pattern pattern
-     * @author tangyh
      * @date 2021/6/18 3:21 下午
      * @create [2021/6/18 3:21 下午 ] [tangyh] [初始创建]
      */
@@ -1237,7 +1236,7 @@ public abstract class BaseRedis {
      * <p>
      * count 的值可以是以下几种：
      * count > 0 : 从表头开始向表尾搜索，移除与 value 相等的元素，数量为 count 。
-     * count < 0 : 从表尾开始向表头搜索，移除与 value 相等的元素，数量为 count 的绝对值。
+     * count {@code <} 0 : 从表尾开始向表头搜索，移除与 value 相等的元素，数量为 count 的绝对值。
      * count = 0 : 移除表中所有与 value 相等的值。
      *
      * @param key   一定不能为 {@literal null}.

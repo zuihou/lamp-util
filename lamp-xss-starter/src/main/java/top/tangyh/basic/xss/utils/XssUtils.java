@@ -119,9 +119,8 @@ public class XssUtils {
     /**
      * xss校验
      *
-     * @param value
-     * @return
-     * @author 杨慕义
+     * @param value 待替换值
+     * @return 替换后的值
      */
     public static String stripXssAndSql(String value) {
         if (StrUtil.isBlank(value)) {

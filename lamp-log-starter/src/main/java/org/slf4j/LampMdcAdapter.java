@@ -26,7 +26,7 @@ public class LampMdcAdapter implements MDCAdapter {
 
     static {
         mtcMDCAdapter = new LampMdcAdapter();
-        MDC.mdcAdapter = mtcMDCAdapter;
+        MDC.MDC_ADAPTER = mtcMDCAdapter;
     }
 
     private final ThreadLocalMapOfStacks threadLocalMapOfDeques = new ThreadLocalMapOfStacks();

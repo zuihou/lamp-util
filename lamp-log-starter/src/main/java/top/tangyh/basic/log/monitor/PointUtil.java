@@ -18,9 +18,9 @@ public final class PointUtil {
     }
 
     /**
-     * 格式为：{对象id}|{类型}|{对象属性(以&分割)}
-     * 例子1：12344|user-login|ip=xxx.xxx.xx&userName=张三&userType=后台管理员
-     * 例子2：12345|file-upload|fileName=xxx&filePath=xxx
+     * 格式为：{对象id}|{类型}|{对象属性(以{@code &}分割)}
+     * 例子1：12344|user-login|ip=xxx.xxx.xx {@code &} userName=张三 {@code &} userType=后台管理员
+     * 例子2：12345|file-upload|fileName=xxx {@code &} filePath=xxx
      *
      * @param id      对象id
      * @param type    类型

@@ -12,7 +12,7 @@ import com.github.tobato.fastdfs.domain.proto.mapper.FdfsColumn;
  * 文件Truncate命令
  * <p>
  * <pre>
- * 使用限制：创建文件时候需要采用<<源追加>>模式,之后才能Truncate
+ * 使用限制：创建文件时候需要采用"源追加"模式,之后才能Truncate
  * size使用也有限制
  * </pre>
  *

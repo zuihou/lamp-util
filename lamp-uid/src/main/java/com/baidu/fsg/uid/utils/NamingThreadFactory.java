@@ -129,7 +129,7 @@ public class NamingThreadFactory implements ThreadFactory {
     }
 
     /**
-     * Getters & Setters
+     * Getters {@code &} Setters
      */
     public String getName() {
         return name;

@@ -20,7 +20,6 @@ public final class ContextUtil {
     /**
      * 支持多线程传递参数
      *
-     * @author tangyh
      * @date 2021/6/23 9:26 下午
      * @create [2021/6/23 9:26 下午 ] [tangyh] [初始创建]
      */
@@ -172,7 +171,6 @@ public final class ContextUtil {
      * 获取 当前所属的公司ID
      *
      * @return java.lang.Long
-     * @author tangyh
      * @date 2022/9/9 4:50 PM
      * @create [2022/9/9 4:50 PM ] [tangyh] [初始创建]
      */
@@ -188,7 +186,6 @@ public final class ContextUtil {
      * 获取 当前所属的顶级公司ID
      *
      * @return java.lang.Long
-     * @author tangyh
      * @date 2022/9/9 4:50 PM
      * @create [2022/9/9 4:50 PM ] [tangyh] [初始创建]
      */
@@ -204,7 +201,6 @@ public final class ContextUtil {
      * 获取 当前所属的部门ID
      *
      * @return java.lang.Long
-     * @author tangyh
      * @date 2022/9/9 4:50 PM
      * @create [2022/9/9 4:50 PM ] [tangyh] [初始创建]
      */

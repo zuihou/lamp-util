@@ -48,7 +48,7 @@ public class DisposableWorkerIdAssigner implements WorkerIdAssigner {
 
     /**
      * Assign worker id base on database.<p>
-     * If there is host name & port in the environment, we considered that the node runs in Docker container<br>
+     * If there is host name {@code &} port in the environment, we considered that the node runs in Docker container<br>
      * Otherwise, the node runs on an actual machine.
      *
      * @return assigned worker id
