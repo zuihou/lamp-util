@@ -1,6 +1,7 @@
 package top.tangyh.basic.swagger2;
 
 import cn.hutool.core.collection.CollUtil;
+import com.github.xiaoymin.knife4j.spring.configuration.Knife4jProperties;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springdoc.core.customizers.GlobalOperationCustomizer;
+import org.springdoc.core.properties.SpringDocConfigProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -30,9 +32,20 @@ import java.util.List;
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerAutoConfiguration {
     private final SwaggerProperties swaggerProperties;
+    private final Knife4jProperties properties;
 
-    public SwaggerAutoConfiguration(SwaggerProperties swaggerProperties) {
+    public SwaggerAutoConfiguration(Knife4jProperties properties, SwaggerProperties swaggerProperties) {
         this.swaggerProperties = swaggerProperties;
+        this.properties = properties;
+    }
+
+    /**
+     * 增强自定义配置
+     * @return
+     */
+    @Bean
+    public MyKnife4jOpenApiCustomizer knife4jOpenApiCustomizer(SpringDocConfigProperties docProperties) {
+        return new MyKnife4jOpenApiCustomizer(this.properties, docProperties);
     }
 
     /**
