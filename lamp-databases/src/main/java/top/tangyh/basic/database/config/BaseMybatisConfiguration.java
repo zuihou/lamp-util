@@ -122,10 +122,12 @@ public abstract class BaseMybatisConfiguration {
         properties.setProperty("Oracle", DbType.ORACLE.getDb());
         properties.setProperty("MySQL", DbType.MYSQL.getDb());
         properties.setProperty("Microsoft SQL Server", DbType.SQL_SERVER.getDb());
+        properties.setProperty("TDengine", DbType.TDENGINE.getDb());
+        properties.setProperty("DM DBMS", DbType.DM.getDb());
+        properties.setProperty("KINGBASE_ES", DbType.KINGBASE_ES.getDb());
         databaseIdProvider.setProperties(properties);
         return databaseIdProvider;
     }
-
     /**
      * 分页拦截器之后的插件
      *

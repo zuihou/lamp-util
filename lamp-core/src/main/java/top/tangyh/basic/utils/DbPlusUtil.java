@@ -73,7 +73,7 @@ public class DbPlusUtil {
         }
 
         if (!jdbcUrl.startsWith("jdbc:")
-                || (pos1 = jdbcUrl.indexOf(':', 5)) == -1) {
+            || (pos1 = jdbcUrl.indexOf(':', 5)) == -1) {
             throw new IllegalArgumentException("Invalid JDBC url.");
         }
 
@@ -100,7 +100,7 @@ public class DbPlusUtil {
             if (database.contains(";")) {
                 database = database.substring(0, database.indexOf(";"));
             }
-        } else if (name.contains("sqlserver") || name.contains("microsoft")) {
+        } else if (name.contains("dm") || name.contains("sqlserver") || name.contains("microsoft")) {
             database = getSqlServerDbName(jdbcUrl);
         }
 
