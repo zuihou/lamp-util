@@ -7,18 +7,18 @@ import feign.Logger;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.ConnectionPool;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.FeignLoggerFactory;
 import org.springframework.cloud.openfeign.support.FeignHttpClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import top.tangyh.basic.cloud.http.InfoFeignLoggerFactory;
 import top.tangyh.basic.cloud.http.RestTemplateHeaderInterceptor;
@@ -47,6 +47,9 @@ import java.util.concurrent.TimeUnit;
 @ConditionalOnClass(okhttp3.OkHttpClient.class)
 @AllArgsConstructor
 @Slf4j
+@AutoConfiguration(
+        after = {org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration.class}
+)
 public class RestTemplateConfiguration {
     private static final Charset UTF_8 = StandardCharsets.UTF_8;
     private final ObjectMapper objectMapper;
@@ -170,44 +173,42 @@ public class RestTemplateConfiguration {
     @LoadBalanced
     @SentinelRestTemplate
     @ConditionalOnMissingBean(RestTemplate.class)
-//    public RestTemplate lbRestTemplate(okhttp3.OkHttpClient httpClient, RestTemplateHeaderInterceptor interceptor) {
-//        RestTemplate lbRestTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory(httpClient));
-//        lbRestTemplate.setInterceptors(Collections.singletonList(interceptor));
-//        this.configMessageConverters(lbRestTemplate.getMessageConverters());
-//        return lbRestTemplate;
-//    }
-
-    public RestTemplate lbRestTemplate(RestTemplateBuilder restTemplateBuilder, RestTemplateHeaderInterceptor interceptor) {
-        ResponseErrorHandler responseErrorHandler = (response) -> true;
-        RestTemplate restTemplate = restTemplateBuilder.errorHandler(responseErrorHandler).build();
-        restTemplate.setInterceptors(Collections.singletonList(interceptor));
-        this.configMessageConverters(restTemplate.getMessageConverters());
-        return restTemplate;
+    public RestTemplate lbRestTemplate(okhttp3.OkHttpClient httpClient, RestTemplateHeaderInterceptor interceptor) {
+        RestTemplate lbRestTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory(httpClient));
+        lbRestTemplate.setInterceptors(Collections.singletonList(interceptor));
+        this.configMessageConverters(lbRestTemplate.getMessageConverters());
+        return lbRestTemplate;
     }
+
+//    public RestTemplate lbRestTemplate(RestTemplateBuilder restTemplateBuilder, RestTemplateHeaderInterceptor interceptor) {
+//        ResponseErrorHandler responseErrorHandler = (response) -> true;
+//        RestTemplate restTemplate = restTemplateBuilder.errorHandler(responseErrorHandler).build();
+//        restTemplate.setInterceptors(Collections.singletonList(interceptor));
+//        this.configMessageConverters(restTemplate.getMessageConverters());
+//        return restTemplate;
+//    }
 
     /**
      * 普通的 RestTemplate，不透传请求头，一般只做外部 http 调用
      *
-     * @param restTemplateBuilder restTemplateBuilder
      * @return RestTemplate
      */
-    @Bean
-    @LoadBalanced
-    @SentinelRestTemplate
-    public RestTemplate getRestTemplate(RestTemplateBuilder restTemplateBuilder) {
-        ResponseErrorHandler responseErrorHandler = (response) -> true;
-        RestTemplate restTemplate = restTemplateBuilder.errorHandler(responseErrorHandler).build();
-        this.configMessageConverters(restTemplate.getMessageConverters());
-        return restTemplate;
-    }
-
 //    @Bean
+//    @LoadBalanced
 //    @SentinelRestTemplate
-//    public RestTemplate restTemplate(okhttp3.OkHttpClient httpClient) {
-//        RestTemplate restTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory(httpClient));
+//    public RestTemplate getRestTemplate(RestTemplateBuilder restTemplateBuilder) {
+//        ResponseErrorHandler responseErrorHandler = (response) -> true;
+//        RestTemplate restTemplate = restTemplateBuilder.errorHandler(responseErrorHandler).build();
 //        this.configMessageConverters(restTemplate.getMessageConverters());
 //        return restTemplate;
 //    }
+    @Bean
+    @SentinelRestTemplate
+    public RestTemplate restTemplate(okhttp3.OkHttpClient httpClient) {
+        RestTemplate restTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory(httpClient));
+        this.configMessageConverters(restTemplate.getMessageConverters());
+        return restTemplate;
+    }
 
     private void configMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.removeIf(c -> c instanceof StringHttpMessageConverter || c instanceof MappingJackson2HttpMessageConverter);
