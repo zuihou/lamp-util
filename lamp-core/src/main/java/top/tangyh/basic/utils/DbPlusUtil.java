@@ -71,9 +71,8 @@ public class DbPlusUtil {
         if (jdbcUrl.startsWith("jdbc:p6spy")) {
             jdbcUrl = jdbcUrl.replace(":p6spy", "");
         }
-
-        if (!jdbcUrl.startsWith("jdbc:")
-            || (pos1 = jdbcUrl.indexOf(':', 5)) == -1) {
+        pos1 = jdbcUrl.indexOf(':', 5);
+        if (!jdbcUrl.startsWith("jdbc:") || pos1 == -1) {
             throw new IllegalArgumentException("Invalid JDBC url.");
         }
 
@@ -84,7 +83,8 @@ public class DbPlusUtil {
             connUri = jdbcUrl.substring(pos1 + 1);
 
             if (connUri.startsWith("//")) {
-                if ((pos = connUri.indexOf('/', 2)) != -1) {
+                pos = connUri.indexOf('/', 2);
+                if (pos != -1) {
                     database = connUri.substring(pos + 1);
                 }
             } else {

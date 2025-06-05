@@ -63,6 +63,7 @@ import static top.tangyh.basic.utils.StrPool.LOCAL_TIME_TYPE_NAME;
 import static top.tangyh.basic.utils.StrPool.LONG_TYPE_NAME;
 import static top.tangyh.basic.utils.StrPool.SET_TYPE_NAME;
 import static top.tangyh.basic.utils.StrPool.SHORT_TYPE_NAME;
+import static top.tangyh.basic.utils.StrPool.STRING;
 import static top.tangyh.basic.utils.StrPool.TIME;
 import static top.tangyh.basic.validator.utils.ValidatorConstants.MESSAGE;
 import static top.tangyh.basic.validator.utils.ValidatorConstants.NOT_NULL;
@@ -218,7 +219,7 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
     private String getType(String typeName) {
         if (StrUtil.startWithAny(typeName, SET_TYPE_NAME, LIST_TYPE_NAME, COLLECTION_TYPE_NAME, BASE_CHAR_TYPE_NAME)) {
             return ARRAY;
-        } else if (StrUtil.equalsAny(typeName, LONG_TYPE_NAME, INTEGER_TYPE_NAME, SHORT_TYPE_NAME, BASE_LONG_TYPE_NAME, BASE_INTEGER_TYPE_NAME, BASE_SHORT_TYPE_NAME)) {
+        } else if (StrUtil.equalsAny(typeName, INTEGER_TYPE_NAME, SHORT_TYPE_NAME, BASE_INTEGER_TYPE_NAME, BASE_SHORT_TYPE_NAME)) {
             return INTEGER;
         } else if (StrUtil.equalsAny(typeName, DOUBLE_TYPE_NAME, FLOAT_TYPE_NAME, BASE_FLOAT_TYPE_NAME, BASE_DOUBLE_TYPE_NAME)) {
             return FLOAT;
@@ -230,6 +231,8 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
             return TIME;
         } else if (StrUtil.equalsAny(typeName, BOOLEAN_TYPE_NAME, BASE_BOOLEAN_TYPE_NAME)) {
             return BOOLEAN;
+        } else if (StrUtil.equalsAny(typeName, LONG_TYPE_NAME, BASE_LONG_TYPE_NAME)) {
+            return STRING;
         }
         return StrUtil.subAfter(typeName, CharUtil.DOT, true);
     }

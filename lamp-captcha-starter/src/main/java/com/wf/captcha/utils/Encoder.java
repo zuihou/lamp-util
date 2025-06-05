@@ -11,22 +11,22 @@ public class Encoder {
     static final int BITS = 12;
     static final int HSIZE = 5003; // 80% 占用率
     private static final int EOF = -1;
-    int n_bits; // number of bits/code
+    int nBits; // number of bits/code
     int maxbits = BITS; // user settable max # bits/code
     int maxcode; // maximum code, given n_bits
     int maxmaxcode = 1 << BITS; // should NEVER generate this code
     int[] htab = new int[HSIZE];
     int[] codetab = new int[HSIZE];
     int hsize = HSIZE; // for dynamic table sizing
-    int free_ent = 0; // first unused entry
+    int freeEnt = 0; // first unused entry
     // block compression parameters -- after all codes are used up,
     // and compression rate changes, start over.
-    boolean clear_flg = false;
-    int g_init_bits;
-    int ClearCode;
-    int EOFCode;
-    int cur_accum = 0;
-    int cur_bits = 0;
+    boolean clearFlg = false;
+    int gInitBits;
+    int clearCode;
+    int EofCode;
+    int curAccum = 0;
+    int curBits = 0;
 
     // Algorithm:  use open addressing double hashing (no chaining) on the
     // prefix code / next character combination.  We do a variant of Knuth's
@@ -107,10 +107,10 @@ public class Encoder {
      * @param outs 输出流
      * @throws IOException IO异常
      */
-    void char_out(byte c, OutputStream outs) throws IOException {
+    void charOut(byte c, OutputStream outs) throws IOException {
         accum[a_count++] = c;
         if (a_count >= 254) {
-            flush_char(outs);
+            flushChar(outs);
         }
     }
 
@@ -122,12 +122,12 @@ public class Encoder {
      * @param outs 输出流
      * @throws IOException IO异常
      */
-    void cl_block(OutputStream outs) throws IOException {
-        cl_hash(hsize);
-        free_ent = ClearCode + 2;
-        clear_flg = true;
+    void clBlock(OutputStream outs) throws IOException {
+        clHash(hsize);
+        freeEnt = clearCode + 2;
+        clearFlg = true;
 
-        output(ClearCode, outs);
+        output(clearCode, outs);
     }
 
     // reset code table
@@ -135,7 +135,7 @@ public class Encoder {
     /**
      * @param hsize int
      */
-    void cl_hash(int hsize) {
+    void clHash(int hsize) {
         for (int i = 0; i < hsize; ++i) {
             htab[i] = -1;
         }
@@ -152,20 +152,20 @@ public class Encoder {
         int c;
         int ent;
         int disp;
-        int hsize_reg;
+        int hsizeReg;
         int hshift;
 
         // Set up the globals:  g_init_bits - initial number of bits
-        g_init_bits = init_bits;
+        gInitBits = init_bits;
 
         // Set up the necessary values
-        clear_flg = false;
-        n_bits = g_init_bits;
-        maxcode = MAXCODE(n_bits);
+        clearFlg = false;
+        nBits = gInitBits;
+        maxcode = maxCode(nBits);
 
-        ClearCode = 1 << (init_bits - 1);
-        EOFCode = ClearCode + 1;
-        free_ent = ClearCode + 2;
+        clearCode = 1 << (init_bits - 1);
+        EofCode = clearCode + 1;
+        freeEnt = clearCode + 2;
 
         a_count = 0; // clear packet
 
@@ -177,10 +177,10 @@ public class Encoder {
         }
         hshift = 8 - hshift; // set hash code range bound
 
-        hsize_reg = hsize;
-        cl_hash(hsize_reg); // clear hash table
+        hsizeReg = hsize;
+        clHash(hsizeReg); // clear hash table
 
-        output(ClearCode, outs);
+        output(clearCode, outs);
 
         outer_loop:
         while ((c = nextPixel()) != EOF) {
@@ -190,15 +190,16 @@ public class Encoder {
             if (htab[i] == fcode) {
                 ent = codetab[i];
                 continue;
-            } else if (htab[i] >= 0) // non-empty slot
-            {
-                disp = hsize_reg - i; // secondary hash (after G. Knott)
+            } else if (htab[i] >= 0) {
+                // non-empty slot
+                disp = hsizeReg - i; // secondary hash (after G. Knott)
                 if (i == 0) {
                     disp = 1;
                 }
                 do {
-                    if ((i -= disp) < 0) {
-                        i += hsize_reg;
+                    i -= disp;
+                    if (i < 0) {
+                        i += hsizeReg;
                     }
 
                     if (htab[i] == fcode) {
@@ -209,16 +210,16 @@ public class Encoder {
             }
             output(ent, outs);
             ent = c;
-            if (free_ent < maxmaxcode) {
-                codetab[i] = free_ent++; // code -> hashtable
+            if (freeEnt < maxmaxcode) {
+                codetab[i] = freeEnt++; // code -> hashtable
                 htab[i] = fcode;
             } else {
-                cl_block(outs);
+                clBlock(outs);
             }
         }
         // Put out the final code.
         output(ent, outs);
-        output(EOFCode, outs);
+        output(EofCode, outs);
     }
 
     //----------------------------------------------------------------------------
@@ -244,7 +245,7 @@ public class Encoder {
      * @param outs 输出流
      * @throws IOException IO异常
      */
-    void flush_char(OutputStream outs) throws IOException {
+    void flushChar(OutputStream outs) throws IOException {
         if (a_count > 0) {
             outs.write(a_count);
             outs.write(accum, 0, a_count);
@@ -253,11 +254,11 @@ public class Encoder {
     }
 
     /**
-     * @param n_bits int
+     * @param nBits int
      * @return int
      */
-    final int MAXCODE(int n_bits) {
-        return (1 << n_bits) - 1;
+    final int maxCode(int nBits) {
+        return (1 << nBits) - 1;
     }
 
     //----------------------------------------------------------------------------
@@ -285,47 +286,48 @@ public class Encoder {
      * @throws IOException IO异常
      */
     void output(int code, OutputStream outs) throws IOException {
-        cur_accum &= masks[cur_bits];
+        curAccum &= masks[curBits];
 
-        if (cur_bits > 0) {
-            cur_accum |= (code << cur_bits);
+        if (curBits > 0) {
+            curAccum |= (code << curBits);
         } else {
-            cur_accum = code;
+            curAccum = code;
         }
 
-        cur_bits += n_bits;
+        curBits += nBits;
 
-        while (cur_bits >= 8) {
-            char_out((byte) (cur_accum & 0xff), outs);
-            cur_accum >>= 8;
-            cur_bits -= 8;
+        while (curBits >= 8) {
+            charOut((byte) (curAccum & 0xff), outs);
+            curAccum >>= 8;
+            curBits -= 8;
         }
 
         // If the next entry is going to be too big for the code size,
         // then increase it, if possible.
-        if (free_ent > maxcode || clear_flg) {
-            if (clear_flg) {
-                maxcode = MAXCODE(n_bits = g_init_bits);
-                clear_flg = false;
+        if (freeEnt > maxcode || clearFlg) {
+            if (clearFlg) {
+                nBits = gInitBits;
+                maxcode = maxCode(nBits);
+                clearFlg = false;
             } else {
-                ++n_bits;
-                if (n_bits == maxbits) {
+                ++nBits;
+                if (nBits == maxbits) {
                     maxcode = maxmaxcode;
                 } else {
-                    maxcode = MAXCODE(n_bits);
+                    maxcode = maxCode(nBits);
                 }
             }
         }
 
-        if (code == EOFCode) {
+        if (code == EofCode) {
             // At EOF, write the rest of the buffer.
-            while (cur_bits > 0) {
-                char_out((byte) (cur_accum & 0xff), outs);
-                cur_accum >>= 8;
-                cur_bits -= 8;
+            while (curBits > 0) {
+                charOut((byte) (curAccum & 0xff), outs);
+                curAccum >>= 8;
+                curBits -= 8;
             }
 
-            flush_char(outs);
+            flushChar(outs);
         }
     }
 }

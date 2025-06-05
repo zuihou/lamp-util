@@ -131,7 +131,8 @@ public class LampTenantLineInnerInterceptor extends BaseMultiTableInnerIntercept
             if (expressions instanceof ParenthesedExpressionList) {
                 expressions.addExpression(tenantId);
             } else {
-                if (CollectionUtils.isNotEmpty(expressions)) {//fix github issue 4998 jsqlparse 4.5 批量insert ItemsList不是MultiExpressionList 了，需要特殊处理
+                if (CollectionUtils.isNotEmpty(expressions)) {
+                    //fix github issue 4998 jsqlparse 4.5 批量insert ItemsList不是MultiExpressionList 了，需要特殊处理
                     int len = expressions.size();
                     for (int i = 0; i < len; i++) {
                         Expression expression = expressions.get(i);

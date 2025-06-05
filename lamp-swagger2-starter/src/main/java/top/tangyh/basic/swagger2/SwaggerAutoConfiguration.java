@@ -32,6 +32,7 @@ import java.util.List;
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerAutoConfiguration {
     private final SwaggerProperties swaggerProperties;
+
     private final Knife4jProperties properties;
 
     public SwaggerAutoConfiguration(Knife4jProperties properties, SwaggerProperties swaggerProperties) {

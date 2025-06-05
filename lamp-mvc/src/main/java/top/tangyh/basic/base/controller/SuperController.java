@@ -20,6 +20,10 @@ import java.io.Serializable;
  * <p>
  * 若重写扩展方法无法满足，则可以重写page、save等方法，但切记不要修改 @RequestMapping 参数
  *
+ * @param <PageQuery> 查询参数
+ * @param <ResultVO> 返回对象
+ * @param <SaveVO> 保存参数
+ * @param <UpdateVO> 修改参数
  * @param <S>      Service
  * @param <Id>     主键
  * @param <Entity> 实体

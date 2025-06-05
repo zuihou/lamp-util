@@ -119,7 +119,7 @@ public @interface NotEmptyPattern {
          */
         private final int value;
 
-        private Flag(int value) {
+        Flag(int value) {
             this.value = value;
         }
 

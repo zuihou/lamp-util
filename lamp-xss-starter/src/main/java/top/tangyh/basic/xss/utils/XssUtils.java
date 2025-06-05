@@ -39,27 +39,20 @@ public class XssUtils {
     private static final Pattern ONMOUSEOVER_PATTERN_3 = Pattern.compile("onmouseover=.*?", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
     private static final Pattern ALERT_PATTERN = Pattern.compile("alert(.*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
     private static Policy policy = null;
-    private static String REPLACE_STRING = "";
-    private static Pattern script;
+    private static final String REPLACE_STRING = "";
+//    private static final Pattern SCRIPT;
 
     static {
-        script = Pattern.compile("<[\r\n| | ]*script[\r\n| | ]*>(.*?)</[\r\n| | ]*script[\r\n| | ]*>", Pattern.CASE_INSENSITIVE);
+//        SCRIPT = Pattern.compile("<[\r\n| | ]*script[\r\n| | ]*>(.*?)</[\r\n| | ]*script[\r\n| | ]*>", Pattern.CASE_INSENSITIVE);
 
         log.debug(" start read XSS config file [" + ANTISAMY_SLASHDOT_XML + "]");
-        InputStream inputStream = XssUtils.class.getClassLoader().getResourceAsStream(ANTISAMY_SLASHDOT_XML);
-        try {
-            policy = Policy.getInstance(inputStream);
-            log.debug("read XSS config file [" + ANTISAMY_SLASHDOT_XML + "] success");
-        } catch (PolicyException e) {
-            log.error("read XSS config file [" + ANTISAMY_SLASHDOT_XML + "] fail , reason:", e);
-        } finally {
+        try (InputStream inputStream = XssUtils.class.getClassLoader().getResourceAsStream(ANTISAMY_SLASHDOT_XML)) {
             if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    log.error("close XSS config file [" + ANTISAMY_SLASHDOT_XML + "] fail , reason:", e);
-                }
+                policy = Policy.getInstance(inputStream);
             }
+            log.debug("read XSS config file [" + ANTISAMY_SLASHDOT_XML + "] success");
+        } catch (PolicyException | IOException e) {
+            log.error("read XSS config file [" + ANTISAMY_SLASHDOT_XML + "] fail , reason:", e);
         }
     }
 
@@ -74,9 +67,9 @@ public class XssUtils {
         AntiSamy antiSamy = new AntiSamy();
 
         try {
-            log.debug("raw value before xssClean: " + paramValue);
+            log.debug("raw value before xssClean: {}", paramValue);
             if (isIgnoreParamValue(paramValue, ignoreParamValueList)) {
-                log.debug("ignore the xssClean,keep the raw paramValue: " + paramValue);
+                log.debug("ignore the xssClean,keep the raw paramValue: {}", paramValue);
                 return paramValue;
             } else {
                 final CleanResults cr = antiSamy.scan(paramValue, policy);
@@ -92,9 +85,9 @@ public class XssUtils {
                 return str;
             }
         } catch (ScanException e) {
-            log.error("scan failed is [" + paramValue + "]", e);
+            log.error("scan failed is [{}]", paramValue, e);
         } catch (PolicyException e) {
-            log.error("antisamy convert failed  is [" + paramValue + "]", e);
+            log.error("antisamy convert failed  is [{}]", paramValue, e);
         }
         return paramValue;
     }
@@ -102,10 +95,10 @@ public class XssUtils {
     /**
      * 过滤形参
      *
-     * @param paramValue
-     * @param ignoreParamValueList
-     * @param param
-     * @return
+     * @param paramValue           待过滤的参数
+     * @param ignoreParamValueList 忽略过滤的参数列表
+     * @param param 参数名
+     * @return 清理后的字符串
      */
     public static String xssClean(String paramValue, List<String> ignoreParamValueList, String param) {
         if (isIgnoreParamValue(param, ignoreParamValueList)) {

@@ -50,14 +50,14 @@ public abstract class Captcha extends Randoms {
     protected char[] alphas() {
         char[] cs = new char[len];
         for (int i = 0; i < len; i++) {
-            switch (charType) {
-                case 2 -> cs[i] = alpha(numMaxIndex);
-                case 3 -> cs[i] = alpha(charMinIndex, charMaxIndex);
-                case 4 -> cs[i] = alpha(upperMinIndex, upperMaxIndex);
-                case 5 -> cs[i] = alpha(lowerMinIndex, lowerMaxIndex);
-                case 6 -> cs[i] = alpha(upperMaxIndex);
-                default -> cs[i] = alpha();
-            }
+            cs[i] = switch (charType) {
+                case 2 -> alpha(NUM_MAX_INDEX);
+                case 3 -> alpha(CHAR_MIN_INDEX, CHAR_MAX_INDEX);
+                case 4 -> alpha(UPPER_MIN_INDEX, UPPER_MAX_INDEX);
+                case 5 -> alpha(LOWER_MIN_INDEX, LOWER_MAX_INDEX);
+                case 6 -> alpha(UPPER_MAX_INDEX);
+                default -> alpha();
+            };
         }
         chars = new String(cs);
         return cs;

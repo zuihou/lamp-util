@@ -26,8 +26,7 @@ public class TenantP6SpyLogger implements MessageFormattingStrategy {
                 执行的SQL：{}
                 """;
         return StringUtils.isNotBlank(sql) ?
-                StrUtil.format(msg,
-                        ContextConstants.USER_ID_HEADER, ContextUtil.getUserId(),
+                StrUtil.format(msg, ContextConstants.USER_ID_HEADER, ContextUtil.getUserId(),
                         elapsed, now, url, sql.replaceAll(REGX, StringPool.SPACE)) :
                 StringPool.EMPTY;
     }

@@ -194,6 +194,7 @@ public class SysLogAspect {
             optLogDTO.setToken(ContextUtil.getToken());
         } else {
             optLogDTO.setToken(Convert.toStr(request.getHeader(ContextConstants.TOKEN_HEADER)));
+            optLogDTO.setUserId(Convert.toLong(request.getHeader(ContextConstants.USER_ID_HEADER)));
             optLogDTO.setCreatedOrgId(Convert.toLong(request.getHeader(ContextConstants.CURRENT_COMPANY_ID_HEADER)));
         }
         optLogDTO.setTrace(MDC.get(ContextConstants.TRACE_ID_HEADER));

@@ -89,11 +89,8 @@ public enum ExceptionCode implements BaseExceptionCode {
     JWT_USER_INVALID(40006, "用户名或密码错误"),
     JWT_USER_ENABLED(40007, "用户已经被禁用！"),
     JWT_OFFLINE(40008, "您已在另一个设备登录！"),
-    JWT_NOT_LOGIN(40009, "登录超时，请重新登录！"),
+    JWT_NOT_LOGIN(40009, "登录超时，请重新登录！");
     //jwt token 相关 end
-
-
-    ;
 
     private final int code;
     private String msg;

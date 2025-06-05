@@ -40,7 +40,7 @@ import java.util.Properties;
  * Mybatis 常用重用拦截器，lamp.database.multiTenantType=任意模式 都需要实例出来
  * <p>
  * 拦截器执行一定是：
- * WriteInterceptor > DataScopeInterceptor > PaginationInterceptor
+ * DataScopeInterceptor > PaginationInterceptor
  *
  * @author zuihou
  * @date 2018/10/24

@@ -12,6 +12,7 @@ import java.io.Serializable;
 /**
  * 基础接口
  *
+ * @param <Id> 主键
  * @param <Entity> 实体
  * @author zuihou
  * @date 2020年03月07日21:56:32

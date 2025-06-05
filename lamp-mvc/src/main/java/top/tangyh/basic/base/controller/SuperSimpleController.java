@@ -13,6 +13,7 @@ import java.io.Serializable;
  * 基类该类后，没有任何方法。
  * 可以让业务Controller继承 SuperSimpleController 后，按需实现 *Controller 接口
  *
+ * @param <Id>  主键
  * @param <S>      Service
  * @param <Entity> 实体
  * @author zuihou

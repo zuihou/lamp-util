@@ -42,7 +42,6 @@ public class MyKnife4jOpenApiCustomizer implements GlobalOpenApiCustomizer {
     final Knife4jProperties knife4jProperties;
     final SpringDocConfigProperties properties;
 
-
     @Override
     public void customise(OpenAPI openApi) {
         log.debug("Knife4j OpenApiCustomizer");

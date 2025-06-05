@@ -51,8 +51,8 @@ public class MetadataMapper {
         if (null == content) {
             return mdSet;
         }
-        String meta_buff = new String(content, charset);
-        String[] rows = meta_buff.split(OtherConstants.FDFS_RECORD_SEPERATOR);
+        String metaBuff = new String(content, charset);
+        String[] rows = metaBuff.split(OtherConstants.FDFS_RECORD_SEPERATOR);
 
         for (int i = 0; i < rows.length; i++) {
             String[] cols = rows[i].split(OtherConstants.FDFS_FIELD_SEPERATOR, 2);

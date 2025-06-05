@@ -14,8 +14,7 @@ public enum CacheType {
     /**
      * redis
      */
-    REDIS,
-    ;
+    REDIS;
 
     public boolean eq(CacheType cacheType) {
         return cacheType != null && this.name().equals(cacheType.name());

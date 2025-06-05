@@ -18,6 +18,7 @@ import java.util.Map;
 /**
  * 缓存返回对象
  *
+ * @param <T> 实际值
  * @author tangyh
  * @version v1.0
  * @date 2022/10/24 9:25 AM

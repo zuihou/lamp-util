@@ -11,14 +11,14 @@ import com.github.tobato.fastdfs.domain.proto.ProtoHead;
  */
 public class TrackerGetStoreStorageRequest extends FdfsRequest {
 
-    private static final byte withoutGroupCmd = CmdConstants.TRACKER_PROTO_CMD_SERVICE_QUERY_STORE_WITHOUT_GROUP_ONE;
+    private static final byte WITHOUT_GROUP_CMD = CmdConstants.TRACKER_PROTO_CMD_SERVICE_QUERY_STORE_WITHOUT_GROUP_ONE;
 
     /**
      * 获取存储节点
      */
     public TrackerGetStoreStorageRequest() {
         super();
-        this.head = new ProtoHead(withoutGroupCmd);
+        this.head = new ProtoHead(WITHOUT_GROUP_CMD);
     }
 
 }

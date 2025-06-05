@@ -5,6 +5,8 @@ import com.github.tobato.fastdfs.domain.proto.FdfsRequest;
 import com.github.tobato.fastdfs.domain.proto.OtherConstants;
 import com.github.tobato.fastdfs.domain.proto.ProtoHead;
 import com.github.tobato.fastdfs.domain.proto.mapper.FdfsColumn;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.InputStream;
 
@@ -13,10 +15,12 @@ import java.io.InputStream;
  *
  * @author tobato
  */
+@Getter
+@Setter
 public class StorageUploadFileRequest extends FdfsRequest {
 
-    private static final byte uploadCmd = CmdConstants.STORAGE_PROTO_CMD_UPLOAD_FILE;
-    private static final byte uploadAppenderCmd = CmdConstants.STORAGE_PROTO_CMD_UPLOAD_APPENDER_FILE;
+    private static final byte UPLOAD_CMD = CmdConstants.STORAGE_PROTO_CMD_UPLOAD_FILE;
+    private static final byte UPLOAD_APPENDER_CMD = CmdConstants.STORAGE_PROTO_CMD_UPLOAD_APPENDER_FILE;
 
     /**
      * 存储节点index
@@ -27,7 +31,7 @@ public class StorageUploadFileRequest extends FdfsRequest {
      * 发送文件长度
      */
     @FdfsColumn(index = 1)
-    private long fileSize;
+    private final long fileSize;
     /**
      * 文件扩展名
      */
@@ -37,11 +41,11 @@ public class StorageUploadFileRequest extends FdfsRequest {
     /**
      * 构造函数
      *
-     * @param inputStream
-     * @param fileExtName
-     * @param fileSize
-     * @param storeIndex
-     * @param isAppenderFile
+     * @param storeIndex  存储节点index
+     * @param inputStream 文件流
+     * @param fileExtName 文件扩展名
+     * @param fileSize 发送文件长度
+     * @param isAppenderFile 是否追加文件
      */
     public StorageUploadFileRequest(byte storeIndex, InputStream inputStream, String fileExtName, long fileSize,
                                     boolean isAppenderFile) {
@@ -51,31 +55,10 @@ public class StorageUploadFileRequest extends FdfsRequest {
         this.storeIndex = storeIndex;
         this.fileExtName = fileExtName;
         if (isAppenderFile) {
-            head = new ProtoHead(uploadAppenderCmd);
+            head = new ProtoHead(UPLOAD_APPENDER_CMD);
         } else {
-            head = new ProtoHead(uploadCmd);
+            head = new ProtoHead(UPLOAD_CMD);
         }
-    }
-
-    public byte getStoreIndex() {
-        return storeIndex;
-    }
-
-    public void setStoreIndex(byte storeIndex) {
-        this.storeIndex = storeIndex;
-    }
-
-    public String getFileExtName() {
-        return fileExtName;
-    }
-
-    public void setFileExtName(String fileExtName) {
-        this.fileExtName = fileExtName;
-    }
-
-    @Override
-    public long getFileSize() {
-        return fileSize;
     }
 
 }

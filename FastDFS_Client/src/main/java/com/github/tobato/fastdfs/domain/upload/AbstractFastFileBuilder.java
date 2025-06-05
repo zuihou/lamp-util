@@ -11,8 +11,9 @@ import java.util.Set;
 /**
  * 构造FastFile抽象对象
  *
+ * @param <T> 文件
  * @author wuyf
- * @create 2018-12-24 11:08 AM
+ * @since 2018-12-24 11:08 AM
  */
 public abstract class AbstractFastFileBuilder<T> {
 
@@ -41,10 +42,10 @@ public abstract class AbstractFastFileBuilder<T> {
     /**
      * 上传文件
      *
-     * @param inputStream
-     * @param fileSize
-     * @param fileExtName
-     * @return
+     * @param inputStream 文件输入流
+     * @param fileSize 文件大小
+     * @param fileExtName 上传文件分组
+     * @return 构造器
      */
     public AbstractFastFileBuilder<T> withFile(InputStream inputStream, long fileSize, String fileExtName) {
         this.inputStream = inputStream;
@@ -56,9 +57,9 @@ public abstract class AbstractFastFileBuilder<T> {
     /**
      * 元数据信息
      *
-     * @param name
-     * @param value
-     * @return
+     * @param name 名称
+     * @param value 值
+     * @return 构造器
      */
     public AbstractFastFileBuilder<T> withMetaData(String name, String value) {
         this.metaDataSet.add(new MetaData(name, value));
@@ -68,8 +69,8 @@ public abstract class AbstractFastFileBuilder<T> {
     /**
      * 元数据信息
      *
-     * @param metaDataSet
-     * @return
+     * @param metaDataSet 元数据
+     * @return 构造器
      */
     public AbstractFastFileBuilder<T> withMetaData(Set<MetaData> metaDataSet) {
         Validate.notNull(metaDataSet, "元数据不能为空");
@@ -80,8 +81,8 @@ public abstract class AbstractFastFileBuilder<T> {
     /**
      * 上传至文件组
      *
-     * @param groupName
-     * @return
+     * @param groupName 分组
+     * @return 构造器
      */
     public AbstractFastFileBuilder<T> toGroup(String groupName) {
         this.groupName = groupName;
@@ -91,7 +92,7 @@ public abstract class AbstractFastFileBuilder<T> {
     /**
      * 构造上传文件对象
      *
-     * @return
+     * @return 对象
      */
     public abstract T build();
 

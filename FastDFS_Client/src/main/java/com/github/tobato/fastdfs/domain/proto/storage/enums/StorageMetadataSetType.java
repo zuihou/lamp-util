@@ -1,10 +1,13 @@
 package com.github.tobato.fastdfs.domain.proto.storage.enums;
 
+import lombok.Getter;
+
 /**
  * 元数据设置方式
  *
  * @author tobato
  */
+@Getter
 public enum StorageMetadataSetType {
 
     /**
@@ -16,14 +19,10 @@ public enum StorageMetadataSetType {
      */
     STORAGE_SET_METADATA_FLAG_MERGE((byte) 'M');
 
-    private byte type;
+    private final byte type;
 
-    private StorageMetadataSetType(byte type) {
+    StorageMetadataSetType(byte type) {
         this.type = type;
-    }
-
-    public byte getType() {
-        return type;
     }
 
 }

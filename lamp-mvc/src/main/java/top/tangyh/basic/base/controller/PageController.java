@@ -20,7 +20,9 @@ import java.io.Serializable;
 /**
  * 分页控制器
  *
+ * @param <Id>    主键
  * @param <Entity>    实体
+ * @param <ResultVO>   返回参数
  * @param <PageQuery> 分页参数
  * @author zuihou
  * @date 2020年03月07日22:06:35
@@ -39,7 +41,6 @@ public interface PageController<Id extends Serializable, Entity extends SuperEnt
      * 处理查询参数
      *
      * @param params 前端传递的参数
-     * @author tangyh
      * @date 2021/7/3 3:25 下午
      * @create [2021/7/3 3:25 下午 ] [tangyh] [初始创建]
      */

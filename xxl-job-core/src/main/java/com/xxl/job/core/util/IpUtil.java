@@ -17,20 +17,19 @@ import java.util.regex.Pattern;
  * @author xuxueli 2016-5-22 11:38:05
  */
 public class IpUtil {
-    private static final Logger logger = LoggerFactory.getLogger(IpUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IpUtil.class);
 
     private static final String ANYHOST_VALUE = "0.0.0.0";
     private static final String LOCALHOST_VALUE = "127.0.0.1";
     private static final Pattern IP_PATTERN = Pattern.compile("\\d{1,3}(\\.\\d{1,3}){3,5}$");
 
 
-    private static volatile InetAddress LOCAL_ADDRESS = null;
+    private static volatile InetAddress localAddress = null;
 
     // ---------------------- valid ----------------------
 
     private static InetAddress toValidAddress(InetAddress address) {
-        if (address instanceof Inet6Address) {
-            Inet6Address v6Address = (Inet6Address) address;
+        if (address instanceof Inet6Address v6Address) {
             if (isPreferIPV6Address()) {
                 return normalizeV6Address(v6Address);
             }
@@ -48,19 +47,18 @@ public class IpUtil {
     /**
      * valid Inet4Address
      *
-     * @param address
-     * @return
+     * @param address 地址
+     * @return 是否v4
      */
     private static boolean isValidV4Address(InetAddress address) {
         if (address == null || address.isLoopbackAddress()) {
             return false;
         }
         String name = address.getHostAddress();
-        boolean result = (name != null
-                          && IP_PATTERN.matcher(name).matches()
-                          && !ANYHOST_VALUE.equals(name)
-                          && !LOCALHOST_VALUE.equals(name));
-        return result;
+        return (name != null
+                && IP_PATTERN.matcher(name).matches()
+                && !ANYHOST_VALUE.equals(name)
+                && !LOCALHOST_VALUE.equals(name));
     }
 
 
@@ -86,7 +84,7 @@ public class IpUtil {
                 return InetAddress.getByName(addr.substring(0, i) + '%' + address.getScopeId());
             } catch (UnknownHostException e) {
                 // ignore
-                logger.debug("Unknown IPV6 address: ", e);
+                LOGGER.debug("Unknown IPV6 address: ", e);
             }
         }
         return address;
@@ -96,22 +94,19 @@ public class IpUtil {
 
 
     private static InetAddress getLocalAddress0() {
-        InetAddress localAddress = null;
+        InetAddress localAddressVar = null;
         try {
-            localAddress = InetAddress.getLocalHost();
-            InetAddress addressItem = toValidAddress(localAddress);
+            localAddressVar = InetAddress.getLocalHost();
+            InetAddress addressItem = toValidAddress(localAddressVar);
             if (addressItem != null) {
                 return addressItem;
             }
         } catch (Throwable e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
 
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-            if (null == interfaces) {
-                return localAddress;
-            }
             while (interfaces.hasMoreElements()) {
                 try {
                     NetworkInterface network = interfaces.nextElement();
@@ -132,17 +127,17 @@ public class IpUtil {
                                 }
                             }
                         } catch (Throwable e) {
-                            logger.error(e.getMessage(), e);
+                            LOGGER.error(e.getMessage(), e);
                         }
                     }
                 } catch (Throwable e) {
-                    logger.error(e.getMessage(), e);
+                    LOGGER.error(e.getMessage(), e);
                 }
             }
         } catch (Throwable e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
-        return localAddress;
+        return localAddressVar;
     }
 
 
@@ -154,12 +149,12 @@ public class IpUtil {
      * @return first valid local IP
      */
     public static InetAddress getLocalAddress() {
-        if (LOCAL_ADDRESS != null) {
-            return LOCAL_ADDRESS;
+        if (localAddress != null) {
+            return localAddress;
         }
-        InetAddress localAddress = getLocalAddress0();
-        LOCAL_ADDRESS = localAddress;
-        return localAddress;
+        InetAddress localAddressVar = getLocalAddress0();
+        IpUtil.localAddress = localAddressVar;
+        return localAddressVar;
     }
 
     /**
@@ -174,7 +169,7 @@ public class IpUtil {
     /**
      * get ip:port
      *
-     * @param port
+     * @param port 端口
      * @return String
      */
     public static String getIpPort(int port) {

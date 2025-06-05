@@ -20,12 +20,12 @@ public class DownloadFileWriter implements DownloadCallback<String> {
     /**
      * 日志
      */
-    protected static Logger LOGGER = LoggerFactory.getLogger(DownloadFileWriter.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(DownloadFileWriter.class);
 
     /**
      * 文件名称
      */
-    private String fileName;
+    private final String fileName;
 
     public DownloadFileWriter(String fileName) {
         this.fileName = fileName;

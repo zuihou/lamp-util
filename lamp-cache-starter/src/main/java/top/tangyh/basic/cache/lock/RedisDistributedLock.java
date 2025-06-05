@@ -83,9 +83,7 @@ public class RedisDistributedLock implements DistributedLock {
             // spring自带的执行脚本方法中，集群模式直接抛出不支持执行脚本的异常，所以只能拿到原redis的connection来执行脚本
             return redisTemplate.execute((RedisCallback<Boolean>) connection -> {
                 byte[] scriptByte = redisTemplate.getStringSerializer().serialize(UNLOCK_LUA);
-                return connection.eval(scriptByte, ReturnType.BOOLEAN, 1
-                        , redisTemplate.getStringSerializer().serialize(key)
-                        , redisTemplate.getStringSerializer().serialize(lockFlag.get()));
+                return connection.eval(scriptByte, ReturnType.BOOLEAN, 1, redisTemplate.getStringSerializer().serialize(key), redisTemplate.getStringSerializer().serialize(lockFlag.get()));
             });
         } catch (Exception e) {
             log.error("释放redis锁发生异常", e);

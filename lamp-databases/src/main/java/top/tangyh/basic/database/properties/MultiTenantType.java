@@ -34,8 +34,7 @@ public enum MultiTenantType {
      * <p>
      * 该模式不开源，购买咨询作者。
      */
-    DATASOURCE_COLUMN("数据源&字段混合模式"),
-    ;
+    DATASOURCE_COLUMN("数据源&字段混合模式");
     private final String describe;
 
 

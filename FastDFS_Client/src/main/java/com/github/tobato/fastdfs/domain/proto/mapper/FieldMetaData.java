@@ -24,15 +24,15 @@ class FieldMetaData {
     /**
      * 列
      */
-    private Field field;
+    private final Field field;
     /**
      * 列索引
      */
-    private int index;
+    private final int index;
     /**
      * 单元最大长度
      */
-    private int max;
+    private final int max;
     /**
      * 单元长度
      */
@@ -40,21 +40,21 @@ class FieldMetaData {
     /**
      * 列偏移量
      */
-    private int offsize;
+    private final int offSize;
 
     /**
      * 构造函数
      *
-     * @param mapedfield
-     * @param offsize
+     * @param mapedField 字段
+     * @param offSize 列偏移量
      */
-    public FieldMetaData(Field mapedfield, int offsize) {
-        FdfsColumn column = mapedfield.getAnnotation(FdfsColumn.class);
-        this.field = mapedfield;
+    FieldMetaData(Field mapedField, int offSize) {
+        FdfsColumn column = mapedField.getAnnotation(FdfsColumn.class);
+        this.field = mapedField;
         this.index = column.index();
         this.max = column.max();
         this.size = getFieldSize(field);
-        this.offsize = offsize;
+        this.offSize = offSize;
         this.dynamicFieldType = column.dynamicField();
         // 如果强制设置了最大值，以最大值为准
         if (this.max > 0 && this.size > this.max) {
@@ -65,10 +65,10 @@ class FieldMetaData {
     /**
      * 获取Field大小
      *
-     * @param field
-     * @return
+     * @param field 字段
+     * @return 大小
      */
-    private int getFieldSize(Field field) {//
+    private int getFieldSize(Field field) {
         if (String.class == field.getType()) {
             return this.max;
         } else if (long.class == field.getType()) {
@@ -96,19 +96,19 @@ class FieldMetaData {
     public Object getValue(byte[] bs, Charset charset) {
         if (String.class == field.getType()) {
             if (isDynamicField()) {
-                return (new String(bs, offsize, bs.length - offsize, charset)).trim();
+                return (new String(bs, offSize, bs.length - offSize, charset)).trim();
             }
-            return (new String(bs, offsize, size, charset)).trim();
+            return (new String(bs, offSize, size, charset)).trim();
         } else if (long.class == field.getType()) {
-            return BytesUtil.buff2long(bs, offsize);
+            return BytesUtil.buff2long(bs, offSize);
         } else if (int.class == field.getType()) {
-            return (int) BytesUtil.buff2long(bs, offsize);
+            return (int) BytesUtil.buff2long(bs, offSize);
         } else if (java.util.Date.class == field.getType()) {
-            return new Date(BytesUtil.buff2long(bs, offsize) * 1000);
+            return new Date(BytesUtil.buff2long(bs, offSize) * 1000);
         } else if (byte.class == field.getType()) {
-            return bs[offsize];
+            return bs[offSize];
         } else if (boolean.class == field.getType()) {
-            return bs[offsize] != 0;
+            return bs[offSize] != 0;
         }
         throw new FdfsColumnMapException(field.getName() + "获取值时未识别的FdfsColumn类型" + field.getType());
     }
@@ -146,14 +146,14 @@ class FieldMetaData {
         return size;
     }
 
-    public int getOffsize() {
-        return offsize;
+    public int getOffSize() {
+        return offSize;
     }
 
     @Override
     public String toString() {
         return "FieldMetaData [field=" + getFieldName() + ", index=" + index + ", max=" + max + ", size=" + size
-               + ", offsize=" + offsize + "]";
+               + ", offsize=" + offSize + "]";
     }
 
     /**

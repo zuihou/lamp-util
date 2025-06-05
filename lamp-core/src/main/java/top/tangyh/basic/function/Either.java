@@ -9,6 +9,8 @@ import java.util.function.Function;
  * 封装异常 stream 流的异常
  * https://mp.weixin.qq.com/s/jBXYj-w0woXtPPUxGhD8Ug
  *
+ * @param <L> 左值类型
+ * @param <R> 右值类型
  * @author IT牧场
  * @author zuihou
  * @date 2019/05/15

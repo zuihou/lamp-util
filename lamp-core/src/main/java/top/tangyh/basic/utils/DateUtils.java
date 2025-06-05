@@ -4,7 +4,6 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import top.tangyh.basic.converter.String2DateConverter;
 import top.tangyh.basic.exception.BizException;
 
 import java.lang.management.ManagementFactory;
@@ -443,30 +442,6 @@ public final class DateUtils {
             }
         }
         throw new IllegalArgumentException("无效的日期参数格式:'" + sourceTrim + "'");
-    }
-
-    public static void main(String[] args) {
-        System.out.println(parseAsDateTime("2012-12-14 22:22:33"));
-        System.out.println(parseAsDateTime("2012-12-14 22:22"));
-        System.out.println(parseAsDateTime("2012-12-14 22"));
-        System.out.println(parseAsDateTime("2012-01-22"));
-
-        System.out.println(parseAsDateTime("2012-01-22"));
-        System.out.println(parseAsDateTime("2012/01/22"));
-
-//        System.out.println(parseAsDateTime("22:22:33"));
-//        System.out.println(parseAsDateTime("22时22分33秒"));
-
-
-        System.out.println(new String2DateConverter().convert("2012-12-14 22:22:33"));
-        System.out.println(new String2DateConverter().convert("2012-01-22"));
-
-        System.out.println(new String2DateConverter().convert("2012-01-22"));
-        System.out.println(new String2DateConverter().convert("2012/01/22"));
-//        System.out.println(new String2DateConverter().convert("2012/01=22"));
-
-//        System.out.println(new String2DateConverter().convert("22:22:33"));
-//        System.out.println(new String2DateConverter().convert("22时22分33秒"));
     }
 
     /**
@@ -1064,7 +1039,6 @@ public final class DateUtils {
         long time = ManagementFactory.getRuntimeMXBean().getStartTime();
         return new Date(time);
     }
-
 
     /**
      * 转换时间显示方式

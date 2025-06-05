@@ -1,8 +1,11 @@
 package com.xxl.job.core.enums;
 
+import lombok.Getter;
+
 /**
  * Created by xuxueli on 17/5/9.
  */
+@Getter
 public enum ExecutorBlockStrategyEnum {
 
     SERIAL_EXECUTION("Serial execution"),
@@ -12,7 +15,7 @@ public enum ExecutorBlockStrategyEnum {
 
     private String title;
 
-    private ExecutorBlockStrategyEnum(String title) {
+    ExecutorBlockStrategyEnum(String title) {
         this.title = title;
     }
 
@@ -25,10 +28,6 @@ public enum ExecutorBlockStrategyEnum {
             }
         }
         return defaultItem;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public void setTitle(String title) {

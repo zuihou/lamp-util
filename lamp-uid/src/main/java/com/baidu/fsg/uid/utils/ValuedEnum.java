@@ -20,12 +20,13 @@ package com.baidu.fsg.uid.utils;
  * may implements this interface when you defines such kind of enumeration
  *
  * @author yutianbao
+ * @param <T> 值类型
  */
 public interface ValuedEnum<T> {
     /**
      * 值
      *
-     * @return
+     * @return 枚举值
      */
     T value();
 }

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.slf4j.MDC;
 import top.tangyh.basic.exception.BizException;
 import top.tangyh.basic.exception.code.BaseExceptionCode;
 import top.tangyh.basic.jackson.JsonUtil;
@@ -12,8 +13,13 @@ import top.tangyh.basic.jackson.JsonUtil;
 import java.util.HashMap;
 import java.util.Map;
 
+import static top.tangyh.basic.context.ContextConstants.TRACE_ID_HEADER;
+
 
 /**
+ * 全局响应对象
+ *
+ * @param <T> 返回业务对象类型
  * @author zuihou
  * @date 2017-12-13 10:55
  */
@@ -76,6 +82,9 @@ public class R<T> {
     @Schema(description = "异常消息")
     private String errorMsg = "";
 
+    @Schema(description = "追踪ID")
+    private String trace;
+
     private R() {
         this.defExec = false;
         this.timestamp = System.currentTimeMillis();
@@ -87,6 +96,7 @@ public class R<T> {
         this.msg = msg;
         this.defExec = false;
         this.timestamp = System.currentTimeMillis();
+        this.trace = MDC.get(TRACE_ID_HEADER);
     }
 
     public R(int code, T data, String msg, String errorMsg) {

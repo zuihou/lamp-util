@@ -1,5 +1,7 @@
 package com.xxl.job.core.glue;
 
+import lombok.Getter;
+
 /**
  * Created by xuxueli on 17/4/26.
  */
@@ -13,12 +15,15 @@ public enum GlueTypeEnum {
     GLUE_NODEJS("GLUE(Nodejs)", true, "node", ".js"),
     GLUE_POWERSHELL("GLUE(PowerShell)", true, "powershell", ".ps1");
 
-    private String desc;
-    private boolean isScript;
-    private String cmd;
-    private String suffix;
+    @Getter
+    private final String desc;
+    private final boolean isScript;
+    @Getter
+    private final String cmd;
+    @Getter
+    private final String suffix;
 
-    private GlueTypeEnum(String desc, boolean isScript, String cmd, String suffix) {
+    GlueTypeEnum(String desc, boolean isScript, String cmd, String suffix) {
         this.desc = desc;
         this.isScript = isScript;
         this.cmd = cmd;
@@ -34,20 +39,8 @@ public enum GlueTypeEnum {
         return null;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
     public boolean isScript() {
         return isScript;
-    }
-
-    public String getCmd() {
-        return cmd;
-    }
-
-    public String getSuffix() {
-        return suffix;
     }
 
 }

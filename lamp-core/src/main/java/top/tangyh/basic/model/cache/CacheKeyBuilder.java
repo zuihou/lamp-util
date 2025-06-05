@@ -58,17 +58,6 @@ public interface CacheKeyBuilder {
     }
 
     /**
-     * 租户ID，用于区分租户
-     * <p>
-     * 非租户模式设置成空字符串
-     *
-     * @return 租户ID
-     */
-    default String getTenant() {
-        return null;
-    }
-
-    /**
      * 设置企业id
      *
      * @param tenantId 企业id
@@ -189,11 +178,6 @@ public interface CacheKeyBuilder {
             regionList.add(prefix);
         }
 
-        String tenant = this.getTenant();
-        // 租户编码：存储默认库的全局缓存，可以重写getTenant并返回null
-        if (StrUtil.isNotEmpty(tenant)) {
-            regionList.add(tenant);
-        }
         // 服务模块名
         String modular = getModular();
         if (StrUtil.isNotEmpty(modular)) {

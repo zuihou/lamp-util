@@ -272,7 +272,8 @@ public class GifEncoder {
         } catch (IOException e) {
             ok = false;
         }
-        return started = ok;
+        started = ok;
+        return started;
     }
 
     /**
@@ -290,7 +291,8 @@ public class GifEncoder {
         } catch (IOException e) {
             ok = false;
         }
-        return started = ok;
+        started = ok;
+        return started;
     }
 
     /**

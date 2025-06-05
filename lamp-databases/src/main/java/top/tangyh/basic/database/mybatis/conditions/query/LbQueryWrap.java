@@ -59,9 +59,10 @@ import static top.tangyh.basic.database.mybatis.conditions.Wraps.replace;
  * 4，增加 leFooter 方法， 将日期参数值，强制转换成当天 23：59：59
  * 5，增加 geHeader 方法， 将日期参数值，强制转换成当天 00：00：00
  *
+ * @param <T> 实体类型
  * @author zuihou
  * @author hubin miemie HCL
- * @date Created on 2019/5/27 17:11
+ * @since Created on 2019/5/27 17:11
  */
 public class LbQueryWrap<T> extends AbstractLambdaWrapper<T, LbQueryWrap<T>>
         implements Query<LbQueryWrap<T>, T, SFunction<T, ?>> {

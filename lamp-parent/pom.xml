@@ -52,7 +52,7 @@
         <dynamic.datasource.version>4.3.1</dynamic.datasource.version>
         <jasypt.version>3.0.5</jasypt.version>
         <p6spy.version>3.9.1</p6spy.version>
-        <fastjson.version>1.2.83</fastjson.version>
+        <fastjson2.version>2.0.57</fastjson2.version>
         <easyexcel.version>4.0.3</easyexcel.version>
         <poi.version>5.2.5</poi.version>
         <transmittable-thread-local.version>2.12.2</transmittable-thread-local.version>
@@ -66,7 +66,8 @@
         <commons.collections.version>3.2.2</commons.collections.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-io.version>2.15.0</commons-io.version>
-        <commons-logging.version>1.2</commons-logging.version>
+        <commons-logging.version>1.3.3</commons-logging.version>
+        <commons-fileupload.version>1.3.3</commons-fileupload.version>
         <asm.version>5.0.4</asm.version>
         <tobato-fastdfs-client.version>1.27.3-SNAPSHOT</tobato-fastdfs-client.version>
         <tencentcloud-sdk-java.version>4.0.11</tencentcloud-sdk-java.version>
@@ -89,6 +90,7 @@
         <okio.version>2.10.0</okio.version>
         <okhttp3.version>4.10.0</okhttp3.version>
     </properties>
+
     <licenses>
         <license>
             <name>Apache 2</name>
@@ -156,8 +158,8 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- 以上几个配置的顺序不能错，否则会导致 spring、springdoc 的版本不正确 -->
 
+            <!-- 以上几个配置的顺序不能错，否则会导致 spring、springdoc 的版本不正确 -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-bom</artifactId>
@@ -203,9 +205,15 @@
             </dependency>
 
             <dependency>
-                <groupId>org.flowable</groupId>
-                <artifactId>flowable-spring-boot-starter</artifactId>
-                <version>${flowable.version}</version>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons-fileupload.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.ssssssss</groupId>
+                <artifactId>magic-api-spring-boot-starter</artifactId>
+                <version>${magic-api.version}</version>
             </dependency>
 
             <dependency>
@@ -228,34 +236,12 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
-            <!-- excel导入导出 -->
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>easyexcel</artifactId>
-                <version>${easyexcel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>easyexcel-core</artifactId>
-                <version>${easyexcel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi</artifactId>
-                <version>${poi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi-ooxml</artifactId>
-                <version>${poi.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>com.googlecode.aviator</groupId>
                 <artifactId>aviator</artifactId>
                 <version>${aviator.version}</version>
             </dependency>
+
 
             <dependency>
                 <groupId>org.apache.groovy</groupId>
@@ -374,7 +360,6 @@
                 <version>${bce-java-sdk.version}</version>
             </dependency>
 
-
             <dependency>
                 <groupId>de.codecentric</groupId>
                 <artifactId>spring-boot-admin-starter-server</artifactId>
@@ -385,7 +370,27 @@
                 <artifactId>spring-boot-admin-server-ui</artifactId>
                 <version>${spring-boot-admin.version}</version>
             </dependency>
-
+            <!-- excel导入导出 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel-core</artifactId>
+                <version>${easyexcel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.owasp.antisamy</groupId>
@@ -493,9 +498,9 @@
                 <version>${oshi.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
+                <version>${fastjson2.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -548,11 +553,11 @@
             <name>aliyun</name>
             <url>https://maven.aliyun.com/nexus/content/groups/public/</url>
         </repository>
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/libs-milestone</url>
-        </repository>
+<!--        <repository>-->
+<!--            <id>spring-milestones</id>-->
+<!--            <name>Spring Milestones</name>-->
+<!--            <url>https://repo.spring.io/libs-milestone</url>-->
+<!--        </repository>-->
         <repository>
             <id>oss-public</id>
             <url>https://s01.oss.sonatype.org/content/repositories/public</url>
@@ -581,6 +586,9 @@
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
                         <encoding>${project.build.sourceEncoding}</encoding>
+                        <compilerArgs>
+                            <arg>-parameters</arg>
+                        </compilerArgs>
                         <!--                        <compilerArgs>-Xlint:deprecation</compilerArgs>-->
                         <!--                        <compilerArgs>-Xlint:unchecked</compilerArgs>-->
                     </configuration>
@@ -609,6 +617,30 @@
                         </nonFilteredFileExtensions>
                     </configuration>
                 </plugin>
+
+                <!-- 代码规范检查。 文档： https://checkstyle.org/checks.html -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>3.3.1</version>
+                    <configuration>
+                        <configLocation>checkstyle.xml</configLocation>
+                        <suppressionsLocation>suppressions.xml</suppressionsLocation>
+                        <consoleOutput>true</consoleOutput>
+                        <failsOnError>true</failsOnError>
+                        <linkXRef>false</linkXRef>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>validate</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
                 <!--
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

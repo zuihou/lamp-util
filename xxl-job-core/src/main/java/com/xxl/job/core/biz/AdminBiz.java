@@ -17,10 +17,10 @@ public interface AdminBiz {
     /**
      * callback
      *
-     * @param callbackParamList
-     * @return
+     * @param callbackParamList 回调参数
+     * @return str
      */
-    public ReturnT<String> callback(List<HandleCallbackParam> callbackParamList);
+    ReturnT<String> callback(List<HandleCallbackParam> callbackParamList);
 
 
     // ---------------------- registry ----------------------
@@ -28,18 +28,18 @@ public interface AdminBiz {
     /**
      * registry
      *
-     * @param registryParam
-     * @return
+     * @param registryParam 注册参数
+     * @return str
      */
-    public ReturnT<String> registry(RegistryParam registryParam);
+    ReturnT<String> registry(RegistryParam registryParam);
 
     /**
      * registry remove
      *
-     * @param registryParam
-     * @return
+     * @param registryParam 注册参数
+     * @return str
      */
-    public ReturnT<String> registryRemove(RegistryParam registryParam);
+    ReturnT<String> registryRemove(RegistryParam registryParam);
 
 
     // ---------------------- biz (custome) ----------------------

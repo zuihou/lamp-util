@@ -111,6 +111,7 @@ public interface StrPool {
     String DATE = "Date";
     String TIME = "Time";
     String BOOLEAN = "Boolean";
+    String STRING = "String";
 
 
     String HTTPS_PREFIX = "https://";

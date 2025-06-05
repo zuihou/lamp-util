@@ -34,7 +34,7 @@ public class DefaultGenerateStorageClient implements GenerateStorageClient {
     /**
      * 日志
      */
-    protected static Logger LOGGER = LoggerFactory.getLogger(DefaultGenerateStorageClient.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(DefaultGenerateStorageClient.class);
     /**
      * trackerClient
      */

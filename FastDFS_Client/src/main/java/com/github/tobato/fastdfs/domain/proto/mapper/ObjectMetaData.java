@@ -1,5 +1,6 @@
 package com.github.tobato.fastdfs.domain.proto.mapper;
 
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +25,13 @@ public class ObjectMetaData {
     /**
      * 日志
      */
-    private static Logger LOGGER = LoggerFactory.getLogger(ObjectMetaData.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ObjectMetaData.class);
 
     /**
      * 映射对象类名
      */
-    private String className;
+    @Getter
+    private final String className;
 
     /**
      * 映射列(全部)
@@ -39,7 +41,7 @@ public class ObjectMetaData {
     /**
      * 动态计算列(部分)fieldList包含dynamicFieldList
      */
-    private List<FieldMetaData> dynamicFieldList = new ArrayList<FieldMetaData>();
+    private final List<FieldMetaData> dynamicFieldList = new ArrayList<FieldMetaData>();
 
     /**
      * FieldsTotalSize
@@ -59,10 +61,6 @@ public class ObjectMetaData {
         validatFieldListDefine();
     }
 
-    public String getClassName() {
-        return className;
-    }
-
     public List<FieldMetaData> getFieldList() {
         return Collections.unmodifiableList(fieldList);
     }
@@ -70,7 +68,7 @@ public class ObjectMetaData {
     /**
      * 解析映射对象数据映射情况
      *
-     * @return
+     * @return 数据映射
      */
     private <T> List<FieldMetaData> praseFieldList(Class<T> genericType) {
         Field[] fields = genericType.getDeclaredFields();
@@ -106,7 +104,7 @@ public class ObjectMetaData {
     /**
      * 检查按索引映射
      *
-     * @param field
+     * @param field 元数据
      */
     private void validatFieldItemDefineByIndex(FieldMetaData field) {
         for (FieldMetaData otherfield : fieldList) {
@@ -120,7 +118,7 @@ public class ObjectMetaData {
     /**
      * 是否有动态数据列
      *
-     * @return
+     * @return 动态数据列
      */
     private boolean hasDynamicField() {
         for (FieldMetaData field : fieldList) {
@@ -134,10 +132,10 @@ public class ObjectMetaData {
     /**
      * 获取动态数据列长度
      *
-     * @return
-     * @throws NoSuchMethodException
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
+     * @return 长度
+     * @throws NoSuchMethodException 异常
+     * @throws InvocationTargetException 异常
+     * @throws IllegalAccessException 异常
      */
     private int getDynamicFieldSize(Object obj, Charset charset)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
@@ -151,7 +149,7 @@ public class ObjectMetaData {
     /**
      * 获取固定参数对象总长度
      *
-     * @return
+     * @return 总长度
      */
     public int getFieldsFixTotalSize() {
         if (hasDynamicField()) {
@@ -164,12 +162,9 @@ public class ObjectMetaData {
     /**
      * 获取需要发送的报文长度
      *
-     * @param bean
-     * @param charset
-     * @return
-     * @throws NoSuchMethodException
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
+     * @param bean 对象
+     * @param charset 字符集
+     * @return 报文长度
      */
     public int getFieldsSendTotalByteSize(Object bean, Charset charset) {
         if (!hasDynamicField()) {
@@ -182,9 +177,9 @@ public class ObjectMetaData {
     /**
      * 获取动态属性长度
      *
-     * @param bean
-     * @param charset
-     * @return
+     * @param bean 对象
+     * @param charset 字符集
+     * @return 长度
      */
     private int getDynamicTotalFieldSize(Object bean, Charset charset) {
         try {

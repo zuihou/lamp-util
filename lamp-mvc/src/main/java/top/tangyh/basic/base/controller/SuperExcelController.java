@@ -36,7 +36,13 @@ import java.util.List;
 
 /**
  * 导入导出
- *
+ * @param <PageQuery> 查询参数
+ * @param <ResultVO> 返回对象
+ * @param <SaveVO> 保存参数
+ * @param <UpdateVO> 修改参数
+ * @param <S>      Service
+ * @param <Id>     主键
+ * @param <Entity> 实体
  * @author zuihou
  * @date 2020年03月06日11:06:46
  */

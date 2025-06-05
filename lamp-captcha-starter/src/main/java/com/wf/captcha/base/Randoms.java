@@ -17,31 +17,31 @@ public class Randoms {
     /**
      * 数字的最大索引，不包括最大值
      */
-    protected static final int numMaxIndex = 8;
+    protected static final int NUM_MAX_INDEX = 8;
     /**
      * 字符的最小索引，包括最小值
      */
-    protected static final int charMinIndex = numMaxIndex;
+    protected static final int CHAR_MIN_INDEX = NUM_MAX_INDEX;
     /**
      * 大写字符最小索引
      */
-    protected static final int upperMinIndex = charMinIndex;
+    protected static final int UPPER_MIN_INDEX = CHAR_MIN_INDEX;
     /**
      * 大写字符最大索引
      */
-    protected static final int upperMaxIndex = upperMinIndex + 23;
+    protected static final int UPPER_MAX_INDEX = UPPER_MIN_INDEX + 23;
     /**
      * 小写字母最小索引
      */
-    protected static final int lowerMinIndex = upperMaxIndex;
+    protected static final int LOWER_MIN_INDEX = UPPER_MAX_INDEX;
     /**
      * 字符的最大索引，不包括最大值
      */
-    protected static final int charMaxIndex = ALPHA.length;
+    protected static final int CHAR_MAX_INDEX = ALPHA.length;
     /**
      * 小写字母最大索引
      */
-    protected static final int lowerMaxIndex = charMaxIndex;
+    protected static final int LOWER_MAX_INDEX = CHAR_MAX_INDEX;
 
     /**
      * 产生两个数之间的随机数

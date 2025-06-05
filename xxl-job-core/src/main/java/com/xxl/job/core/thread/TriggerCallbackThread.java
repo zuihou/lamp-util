@@ -212,7 +212,7 @@ public class TriggerCallbackThread {
         }
 
         // append file
-        byte[] callbackParamList_bytes = JdkSerializeTool.serialize(callbackParamList);
+        byte[] callbackParamListBytes = JdkSerializeTool.serialize(callbackParamList);
 
         File callbackLogFile = new File(failCallbackFileName.replace("{x}", String.valueOf(System.currentTimeMillis())));
         if (callbackLogFile.exists()) {
@@ -223,7 +223,7 @@ public class TriggerCallbackThread {
                 }
             }
         }
-        FileUtil.writeFileContent(callbackLogFile, callbackParamList_bytes);
+        FileUtil.writeFileContent(callbackLogFile, callbackParamListBytes);
     }
 
     private void retryFailCallbackFile() {
@@ -242,15 +242,15 @@ public class TriggerCallbackThread {
 
         // load and clear file, retry
         for (File callbaclLogFile : callbackLogPath.listFiles()) {
-            byte[] callbackParamList_bytes = FileUtil.readFileContent(callbaclLogFile);
+            byte[] callbackParamListBytes = FileUtil.readFileContent(callbaclLogFile);
 
             // avoid empty file
-            if (callbackParamList_bytes == null || callbackParamList_bytes.length < 1) {
+            if (callbackParamListBytes == null || callbackParamListBytes.length < 1) {
                 callbaclLogFile.delete();
                 continue;
             }
 
-            List<HandleCallbackParam> callbackParamList = (List<HandleCallbackParam>) JdkSerializeTool.deserialize(callbackParamList_bytes, List.class);
+            List<HandleCallbackParam> callbackParamList = (List<HandleCallbackParam>) JdkSerializeTool.deserialize(callbackParamListBytes, List.class);
 
             callbaclLogFile.delete();
             doCallback(callbackParamList);

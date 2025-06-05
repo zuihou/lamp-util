@@ -170,9 +170,7 @@ public final class Wraps {
      * @param extra      extra 扩展参数
      * @param modelClazz modelClazz 条件对象类型
      * @return top.tangyh.basic.database.mybatis.conditions.query.QueryWrap<Entity>
-     * @author zuihou
-     * @date 2021/8/26 8:47 下午
-     * @create [2021/8/26 8:47 下午 ] [tangyh] [初始创建]
+     * @since 2021/8/26 8:47 下午
      */
     public static <Entity> QueryWrap<Entity> q(Entity model, Map<String, Object> extra, Class<Entity> modelClazz) {
         QueryWrap<Entity> wrapper = model != null ? Wraps.q(model) : Wraps.q();

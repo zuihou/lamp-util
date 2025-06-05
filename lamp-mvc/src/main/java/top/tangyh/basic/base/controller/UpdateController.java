@@ -13,6 +13,7 @@ import java.io.Serializable;
 /**
  * 修改Controller
  *
+ * @param <Id>   主键
  * @param <Entity>   实体
  * @param <UpdateVO> 修改参数
  * @author zuihou

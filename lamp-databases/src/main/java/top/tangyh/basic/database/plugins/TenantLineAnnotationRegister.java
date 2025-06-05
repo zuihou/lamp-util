@@ -67,21 +67,18 @@ public class TenantLineAnnotationRegister implements EnvironmentCapable, BeanPos
             TenantLine tenantLineClazz;
             TenantLine tenantLineField;
             Method[] declaredMethods;
-            ResourcePatternResolver resourcePatternResolver = getResourcePatternResolver();
+            ResourcePatternResolver resolver = getResourcePatternResolver();
             MetadataReaderFactory metadata = new SimpleMetadataReaderFactory();
             for (String basePackage : basePackages) {
                 if (!StrUtil.contains(basePackage, packages) || !StrUtil.startWith(basePackage, packages)) {
                     continue;
                 }
                 String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + resolveBasePackage(basePackage) + '/' + DEFAULT_RESOURCE_PATTERN;
-                Resource[] resources = resourcePatternResolver.getResources(packageSearchPath);
+                Resource[] resources = resolver.getResources(packageSearchPath);
                 for (Resource resource : resources) {
                     MetadataReader metadataReader = metadata.getMetadataReader(resource);
                     String className = metadataReader.getClassMetadata().getClassName();
                     clazz = Class.forName(className);
-                    if (clazz == null) {
-                        continue;
-                    }
 
                     tenantLineClazz = clazz.getAnnotation(TenantLine.class);
                     if (tenantLineClazz == null) {

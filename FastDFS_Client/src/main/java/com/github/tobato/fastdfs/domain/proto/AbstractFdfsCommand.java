@@ -63,8 +63,9 @@ public abstract class AbstractFdfsCommand<T> implements FdfsCommand<T> {
      * 3.输出文件内容
      * </pre>
      *
-     * @param out
-     * @throws IOException
+     * @param out 输入流
+     * @param charset 字符集
+     * @throws IOException 异常
      */
     protected void send(OutputStream out, Charset charset) throws IOException {
         // 报文分为三个部分
@@ -92,9 +93,9 @@ public abstract class AbstractFdfsCommand<T> implements FdfsCommand<T> {
     /**
      * 接收这里只能确切知道报文头，报文内容(参数+文件)只能靠接收对象分析
      *
-     * @param in
-     * @return
-     * @throws IOException
+     * @param in 输入流
+     * @return 数据
+     * @throws IOException 异常
      */
     protected T receive(InputStream in, Charset charset) throws IOException {
 
@@ -112,10 +113,10 @@ public abstract class AbstractFdfsCommand<T> implements FdfsCommand<T> {
     /**
      * 发送文件
      *
-     * @param ins
-     * @param size
-     * @param ous
-     * @throws IOException
+     * @param ins 输入流
+     * @param size 文件流大小
+     * @param ous 输入流
+     * @throws IOException 异常
      */
     protected void sendFileContent(InputStream ins, long size, OutputStream ous) throws IOException {
         LOGGER.debug("开始上传文件流大小为{}", size);
@@ -123,7 +124,8 @@ public abstract class AbstractFdfsCommand<T> implements FdfsCommand<T> {
         byte[] buff = new byte[256 * 1024];
         int bytes;
         while (remainBytes > 0) {
-            if ((bytes = ins.read(buff, 0, remainBytes > buff.length ? buff.length : (int) remainBytes)) < 0) {
+            bytes = ins.read(buff, 0, remainBytes > buff.length ? buff.length : (int) remainBytes);
+            if (bytes < 0) {
                 throw new IOException("the end of the stream has been reached. not match the expected size ");
             }
 

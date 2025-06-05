@@ -4,6 +4,7 @@ import com.github.tobato.fastdfs.domain.proto.CmdConstants;
 import com.github.tobato.fastdfs.domain.proto.OtherConstants;
 import com.github.tobato.fastdfs.domain.proto.mapper.BytesUtil;
 import com.github.tobato.fastdfs.exception.FdfsConnectException;
+import lombok.Getter;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,18 +31,25 @@ public class DefaultConnection implements Connection {
     /**
      * 封装socket
      */
-    private Socket socket;
+    private final Socket socket;
     /**
      * 字符集
+     * -- GETTER --
+     *  获取字符集
+     *
+     * @return
+
      */
-    private Charset charset;
+    @Getter
+    private final Charset charset;
 
     /**
      * 创建与服务端连接
      *
-     * @param address
-     * @param soTimeout
-     * @param connectTimeout
+     * @param address 地址
+     * @param soTimeout 超时时长
+     * @param connectTimeout 链接超时时长
+     * @param charset 字符集
      */
     public DefaultConnection(InetSocketAddress address, int soTimeout, int connectTimeout, Charset charset) {
         try {
@@ -63,8 +71,8 @@ public class DefaultConnection implements Connection {
         byte[] header = new byte[OtherConstants.FDFS_PROTO_PKG_LEN_SIZE + 2];
         Arrays.fill(header, (byte) 0);
 
-        byte[] hex_len = BytesUtil.long2buff(0);
-        System.arraycopy(hex_len, 0, header, 0, hex_len.length);
+        byte[] hexLen = BytesUtil.long2buff(0);
+        System.arraycopy(hexLen, 0, header, 0, hexLen.length);
         header[OtherConstants.PROTO_HEADER_CMD_INDEX] = CmdConstants.FDFS_PROTO_CMD_QUIT;
         header[OtherConstants.PROTO_HEADER_STATUS_INDEX] = (byte) 0;
         try {
@@ -96,8 +104,8 @@ public class DefaultConnection implements Connection {
             byte[] header = new byte[OtherConstants.FDFS_PROTO_PKG_LEN_SIZE + 2];
             Arrays.fill(header, (byte) 0);
 
-            byte[] hex_len = BytesUtil.long2buff(0);
-            System.arraycopy(hex_len, 0, header, 0, hex_len.length);
+            byte[] hexLen = BytesUtil.long2buff(0);
+            System.arraycopy(hexLen, 0, header, 0, hexLen.length);
             header[OtherConstants.PROTO_HEADER_CMD_INDEX] = CmdConstants.FDFS_PROTO_CMD_ACTIVE_TEST;
             header[OtherConstants.PROTO_HEADER_STATUS_INDEX] = (byte) 0;
             socket.getOutputStream().write(header);
@@ -105,7 +113,7 @@ public class DefaultConnection implements Connection {
                 return false;
             }
 
-            return header[OtherConstants.PROTO_HEADER_STATUS_INDEX] == 0 ? true : false;
+            return header[OtherConstants.PROTO_HEADER_STATUS_INDEX] == 0;
         } catch (IOException e) {
             LOGGER.error("valid connection error", e);
             return false;
@@ -115,8 +123,8 @@ public class DefaultConnection implements Connection {
     /**
      * 获取输出流
      *
-     * @return
-     * @throws IOException
+     * @return 输出流
+     * @throws IOException 异常
      */
     public OutputStream getOutputStream() throws IOException {
         return socket.getOutputStream();
@@ -125,20 +133,11 @@ public class DefaultConnection implements Connection {
     /**
      * 获取输入流
      *
-     * @return
-     * @throws IOException
+     * @return 输入流
+     * @throws IOException 异常
      */
     public InputStream getInputStream() throws IOException {
         return socket.getInputStream();
-    }
-
-    /**
-     * 获取字符集
-     *
-     * @return
-     */
-    public Charset getCharset() {
-        return charset;
     }
 
 }

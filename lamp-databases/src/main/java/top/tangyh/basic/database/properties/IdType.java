@@ -21,8 +21,7 @@ public enum IdType {
      * <p>
      * 600万/s的稳定吞吐量
      */
-    CACHE,
-    ;
+    CACHE;
 
     public boolean eq(IdType t) {
         return t != null && this.name().equals(t.name());

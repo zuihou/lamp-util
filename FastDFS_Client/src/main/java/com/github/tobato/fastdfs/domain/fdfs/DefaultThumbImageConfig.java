@@ -1,6 +1,8 @@
 package com.github.tobato.fastdfs.domain.fdfs;
 
 import com.github.tobato.fastdfs.FdfsClientConstants;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.Validate;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Component;
  *
  * @author tobato
  */
+@Setter
+@Getter
 @Component
 @ConfigurationProperties(prefix = FdfsClientConstants.THUMB_IMAGE_CONFIG_PREFIX)
 public class DefaultThumbImageConfig implements ThumbImageConfig {
@@ -41,22 +45,6 @@ public class DefaultThumbImageConfig implements ThumbImageConfig {
         int index = buff.lastIndexOf(".");
         buff.insert(index, getPrefixName());
         return buff.toString();
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
     }
 
 }

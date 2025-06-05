@@ -14,6 +14,7 @@ import java.io.Serializable;
 /**
  * 新增
  *
+ * @param <Id> 主键
  * @param <Entity> 实体
  * @param <SaveVO> 保存参数
  * @author zuihou

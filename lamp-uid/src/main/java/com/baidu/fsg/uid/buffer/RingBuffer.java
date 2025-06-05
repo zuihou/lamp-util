@@ -16,6 +16,8 @@
 package com.baidu.fsg.uid.buffer;
 
 import com.baidu.fsg.uid.utils.PaddedAtomicLong;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -47,6 +49,7 @@ public class RingBuffer {
     /**
      * The size of RingBuffer's slots, each slot hold a UID
      */
+    @Getter
     private final int bufferSize;
     private final long indexMask;
     private final long[] slots;
@@ -70,12 +73,18 @@ public class RingBuffer {
     /**
      * Reject put/take buffer handle policy
      */
+    @Setter
     private RejectedPutBufferHandler rejectedPutHandler = this::discardPutBuffer;
+    @Setter
     private RejectedTakeBufferHandler rejectedTakeHandler = this::exceptionRejectedTakeBuffer;
 
     /**
      * Executor of padding buffer
+     * -- SETTER --
+     *  Setters
+
      */
+    @Setter
     private BufferPaddingExecutor bufferPaddingExecutor;
 
     /**
@@ -220,12 +229,11 @@ public class RingBuffer {
      * Initialize flags as CAN_PUT_FLAG
      */
     private PaddedAtomicLong[] initFlags(int bufferSize) {
-        PaddedAtomicLong[] flags = new PaddedAtomicLong[bufferSize];
+        PaddedAtomicLong[] array = new PaddedAtomicLong[bufferSize];
         for (int i = 0; i < bufferSize; i++) {
-            flags[i] = new PaddedAtomicLong(CAN_PUT_FLAG);
+            array[i] = new PaddedAtomicLong(CAN_PUT_FLAG);
         }
-
-        return flags;
+        return array;
     }
 
     /**
@@ -237,25 +245,6 @@ public class RingBuffer {
 
     public long getCursor() {
         return cursor.get();
-    }
-
-    public int getBufferSize() {
-        return bufferSize;
-    }
-
-    /**
-     * Setters
-     */
-    public void setBufferPaddingExecutor(BufferPaddingExecutor bufferPaddingExecutor) {
-        this.bufferPaddingExecutor = bufferPaddingExecutor;
-    }
-
-    public void setRejectedPutHandler(RejectedPutBufferHandler rejectedPutHandler) {
-        this.rejectedPutHandler = rejectedPutHandler;
-    }
-
-    public void setRejectedTakeHandler(RejectedTakeBufferHandler rejectedTakeHandler) {
-        this.rejectedTakeHandler = rejectedTakeHandler;
     }
 
     @Override

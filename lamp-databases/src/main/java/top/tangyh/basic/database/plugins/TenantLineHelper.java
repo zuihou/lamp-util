@@ -12,13 +12,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * @create [2022/8/25 1:12 PM ] [tangyh] [初始创建]
  */
 public class TenantLineHelper {
-    final static Map<String, Boolean> CACHE = new ConcurrentHashMap<>();
+    static final Map<String, Boolean> CACHE = new ConcurrentHashMap<>();
 
     /**
      * 判断 mapper id 是否启用了 @TenantLine 注解
      *
      * @param id mapper 唯一
-     * @author tangyh
      * @date 2022/8/25 1:15 PM
      * @create [2022/8/25 1:15 PM ] [tangyh] [初始创建]
      */

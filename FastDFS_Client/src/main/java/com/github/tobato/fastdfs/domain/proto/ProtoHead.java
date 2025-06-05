@@ -2,6 +2,8 @@ package com.github.tobato.fastdfs.domain.proto;
 
 import com.github.tobato.fastdfs.domain.proto.mapper.BytesUtil;
 import com.github.tobato.fastdfs.exception.FdfsServerException;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +18,7 @@ import java.util.Arrays;
  *
  * @author tobato
  */
+@Getter
 public class ProtoHead {
 
     /**
@@ -24,15 +27,16 @@ public class ProtoHead {
     private static final int HEAD_LENGTH = OtherConstants.FDFS_PROTO_PKG_LEN_SIZE + 2;
 
     /**
-     * 报文内容长度1-7位
+     * 报文内容长度 1-7位
      */
+    @Setter
     private long contentLength = 0;
     /**
-     * 报文类型8位
+     * 报文类型 8位
      */
-    private byte cmd;
+    private final byte cmd;
     /**
-     * 处理状态9位
+     * 处理状态 9位
      */
     private byte status = (byte) 0;
 
@@ -47,9 +51,9 @@ public class ProtoHead {
     /**
      * 返回报文构造函数
      *
-     * @param contentLength
-     * @param cmd
-     * @param status
+     * @param contentLength 报文内容长度
+     * @param cmd 报文类型
+     * @param status 处理状态
      */
     public ProtoHead(long contentLength, byte cmd, byte status) {
         super();
@@ -61,16 +65,16 @@ public class ProtoHead {
     /**
      * 读取输入流创建报文头
      *
-     * @param ins
-     * @return
-     * @throws IOException
+     * @param ins 文件流
+     * @return FDFS协议头定义
+     * @throws IOException 异常
      */
     public static ProtoHead createFromInputStream(InputStream ins) throws IOException {
 
         byte[] header = new byte[HEAD_LENGTH];
-        int bytes;
+        int bytes = ins.read(header);
         // 读取HEAD_LENGTH长度的输入流
-        if ((bytes = ins.read(header)) != header.length) {
+        if (bytes != header.length) {
             throw new IOException("recv package size " + bytes + " != " + header.length);
         }
         long returnContentLength = BytesUtil.buff2long(header, 0);
@@ -81,35 +85,19 @@ public class ProtoHead {
 
     }
 
-    public long getContentLength() {
-        return contentLength;
-    }
-
-    public void setContentLength(long contentLength) {
-        this.contentLength = contentLength;
-    }
-
-    public byte getCmd() {
-        return cmd;
-    }
-
-    public byte getStatus() {
-        return status;
-    }
-
     /**
      * toByte
      *
-     * @return
+     * @return 字节
      */
     public byte[] toByte() {
         byte[] header;
-        byte[] hex_len;
+        byte[] hexLen;
 
         header = new byte[HEAD_LENGTH];
         Arrays.fill(header, (byte) 0);
-        hex_len = BytesUtil.long2buff(contentLength);
-        System.arraycopy(hex_len, 0, header, 0, hex_len.length);
+        hexLen = BytesUtil.long2buff(contentLength);
+        System.arraycopy(hexLen, 0, header, 0, hexLen.length);
         header[OtherConstants.PROTO_HEADER_CMD_INDEX] = cmd;
         header[OtherConstants.PROTO_HEADER_STATUS_INDEX] = status;
         return header;
@@ -118,8 +106,8 @@ public class ProtoHead {
     /**
      * 验证服务端返回报文有效性
      *
-     * @return
-     * @throws IOException
+     * @return 有效性
+     * @throws IOException 异常
      */
     public boolean validateResponseHead() throws IOException {
         // 检查是否是正确反馈报文

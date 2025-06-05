@@ -44,8 +44,8 @@ import java.util.Set;
 @Slf4j
 public class ValidatorUtils {
 
-    private final static Validator VALIDATOR_FAST = warp(Validation.byProvider(HibernateValidator.class).configure().failFast(true)).buildValidatorFactory().getValidator();
-    private final static Validator VALIDATOR_ALL = warp(Validation.byProvider(HibernateValidator.class).configure().failFast(false)).buildValidatorFactory().getValidator();
+    private static final Validator VALIDATOR_FAST = warp(Validation.byProvider(HibernateValidator.class).configure().failFast(true)).buildValidatorFactory().getValidator();
+    private static final Validator VALIDATOR_ALL = warp(Validation.byProvider(HibernateValidator.class).configure().failFast(false)).buildValidatorFactory().getValidator();
 
     /**
      * 校验遇到第一个不合法的字段直接返回不合法字段，后续字段不再校验

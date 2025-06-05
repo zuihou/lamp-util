@@ -105,4 +105,5 @@ public interface QueryController<Id extends Serializable, Entity extends SuperEn
         List<Entity> list = getSuperService().listByIds(ids);
         return success(BeanPlusUtil.toBeanList(list, getResultVOClass()));
     }
+
 }

@@ -45,7 +45,6 @@ public class EchoAutoConfiguration {
      *
      * @param strategyMap 回显查询实例
      * @return top.tangyh.basic.echo.core.EchoService
-     * @author tangyh
      * @date 2021/8/15 10:17 下午
      * @create [2021/8/15 10:17 下午 ] [tangyh] [初始创建]
      */

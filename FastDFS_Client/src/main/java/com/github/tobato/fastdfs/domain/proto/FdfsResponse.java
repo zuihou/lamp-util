@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 /**
  * Fdfs交易应答基类
  *
+ * @param <T> 类型泛型
  * @author tobato
  */
 public abstract class FdfsResponse<T> {
@@ -29,9 +30,6 @@ public abstract class FdfsResponse<T> {
     public FdfsResponse() {
         super();
         this.genericType = (Class<T>) GenericTypeResolver.resolveTypeArgument(getClass(), FdfsResponse.class);
-        // Type theclass = this.getClass().getGenericSuperclass();
-        // this.genericType = ((ParameterizedType)
-        // theclass).getActualTypeArguments()[0];
     }
 
     /**
@@ -44,11 +42,11 @@ public abstract class FdfsResponse<T> {
     /**
      * 解析反馈结果,head已经被解析过
      *
-     * @param head
-     * @param in
-     * @param charset
-     * @return
-     * @throws IOException
+     * @param head 协议头
+     * @param in 输入
+     * @param charset 字符集
+     * @return 内容
+     * @throws IOException 异常
      */
     public T decode(ProtoHead head, InputStream in, Charset charset) throws IOException {
         this.head = head;
@@ -58,10 +56,10 @@ public abstract class FdfsResponse<T> {
     /**
      * 解析反馈内容
      *
-     * @param in
-     * @param charset
-     * @return
-     * @throws IOException
+     * @param in 输入
+     * @param charset 字符集
+     * @return 内容
+     * @throws IOException 异常
      */
     public T decodeContent(InputStream in, Charset charset) throws IOException {
         // 如果有内容

@@ -3,6 +3,8 @@ package top.tangyh.basic.function;
 /**
  * 处理异常的 函数
  *
+ * @param <T> 入参类型
+ * @param <R> 出参类型
  * @author zuihou
  * @date 2019/05/15
  */

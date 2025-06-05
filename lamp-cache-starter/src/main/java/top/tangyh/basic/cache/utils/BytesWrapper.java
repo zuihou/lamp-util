@@ -1,6 +1,8 @@
 package top.tangyh.basic.cache.utils;
 
 /**
+ * 字节包装器
+ * @param <T> 实际值
  * @author zuihou
  */
 public class BytesWrapper<T> implements Cloneable {

@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,26 +22,26 @@ public class DateUtil {
     public static final String CRON_FORMAT = "ss mm HH dd MM ? yyyy";
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    private static final ThreadLocal<Map<String, DateFormat>> dateFormatThreadLocal = new ThreadLocal<Map<String, DateFormat>>();
+    private static final ThreadLocal<Map<String, DateFormat>> DATE_FORMAT_THREAD_LOCAL = new ThreadLocal<Map<String, DateFormat>>();
     // ---------------------- format parse ----------------------
-    private static Logger logger = LoggerFactory.getLogger(DateUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
     private static DateFormat getDateFormat(String pattern) {
-        if (pattern == null || pattern.trim().length() == 0) {
+        if (pattern == null || pattern.trim().isEmpty()) {
             throw new IllegalArgumentException("pattern cannot be empty.");
         }
 
-        Map<String, DateFormat> dateFormatMap = dateFormatThreadLocal.get();
+        Map<String, DateFormat> dateFormatMap = DATE_FORMAT_THREAD_LOCAL.get();
         if (dateFormatMap != null && dateFormatMap.containsKey(pattern)) {
             return dateFormatMap.get(pattern);
         }
 
-        synchronized (dateFormatThreadLocal) {
+        synchronized (DATE_FORMAT_THREAD_LOCAL) {
             if (dateFormatMap == null) {
-                dateFormatMap = new HashMap<String, DateFormat>();
+                dateFormatMap = new HashMap<>();
             }
             dateFormatMap.put(pattern, new SimpleDateFormat(pattern));
-            dateFormatThreadLocal.set(dateFormatMap);
+            DATE_FORMAT_THREAD_LOCAL.set(dateFormatMap);
         }
 
         return dateFormatMap.get(pattern);
@@ -90,9 +89,8 @@ public class DateUtil {
     /**
      * format datetime. like "yyyy-MM-dd"
      *
-     * @param date
-     * @return
-     * @throws ParseException
+     * @param date 日期
+     * @return 字符日期
      */
     public static String formatDate(Date date) {
         return format(date, DATE_FORMAT);
@@ -101,9 +99,8 @@ public class DateUtil {
     /**
      * format date. like "yyyy-MM-dd HH:mm:ss"
      *
-     * @param date
-     * @return
-     * @throws ParseException
+     * @param date 日期
+     * @return 字符日期
      */
     public static String formatDateTime(Date date) {
         return format(date, DATETIME_FORMAT);
@@ -112,10 +109,9 @@ public class DateUtil {
     /**
      * format date
      *
-     * @param date
-     * @param patten
-     * @return
-     * @throws ParseException
+     * @param date 日期
+     * @param patten 格式
+     * @return 字符日期
      */
     public static String format(Date date, String patten) {
         return getDateFormat(patten).format(date);
@@ -124,9 +120,8 @@ public class DateUtil {
     /**
      * parse date string, like "yyyy-MM-dd HH:mm:s"
      *
-     * @param dateString
-     * @return
-     * @throws ParseException
+     * @param dateString 字符日期
+     * @return 日期
      */
     public static Date parseDate(String dateString) {
         return parse(dateString, DATE_FORMAT);
@@ -135,9 +130,8 @@ public class DateUtil {
     /**
      * parse datetime string, like "yyyy-MM-dd HH:mm:ss"
      *
-     * @param dateString
-     * @return
-     * @throws ParseException
+     * @param dateString 字符日期
+     * @return 日期
      */
     public static Date parseDateTime(String dateString) {
         return parse(dateString, DATETIME_FORMAT);
@@ -146,15 +140,13 @@ public class DateUtil {
     /**
      * parse date
      *
-     * @param dateString
-     * @param pattern
-     * @return
-     * @throws ParseException
+     * @param dateString 字符日期
+     * @param pattern 格式
+     * @return 日期
      */
     public static Date parse(String dateString, String pattern) {
         try {
-            Date date = getDateFormat(pattern).parse(dateString);
-            return date;
+            return getDateFormat(pattern).parse(dateString);
         } catch (Exception e) {
             logger.warn("parse date error, dateString = {}, pattern={}; errorMsg = {}", dateString, pattern, e.getMessage());
             return null;

@@ -16,12 +16,12 @@ import java.util.List;
 @ConfigurationProperties(EchoProperties.PREFIX)
 public class EchoProperties {
     public static final String PREFIX = Constants.PROJECT_PREFIX + ".echo";
-    private Boolean enabled = true;
 
     /**
      * 启动程序时，将此包下标记了@Echo注解的实体类缓存到内存，提高回显性能
      */
     private List<String> basePackages;
+    private Boolean enabled = true;
     /**
      * 是否启用 @EchoResult
      */

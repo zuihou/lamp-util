@@ -1,11 +1,15 @@
 package com.xxl.job.core.context;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * xxl-job context
  *
  * @author xuxueli 2020-05-21
  * [Dear hj]
  */
+@Getter
 public class XxlJobContext {
 
     public static final int HANDLE_CODE_SUCCESS = 200;
@@ -13,7 +17,7 @@ public class XxlJobContext {
     public static final int HANDLE_CODE_TIMEOUT = 502;
 
     // ---------------------- base info ----------------------
-    private static InheritableThreadLocal<XxlJobContext> contextHolder = new InheritableThreadLocal<XxlJobContext>(); // support for child thread of job handler)
+    private static final InheritableThreadLocal<XxlJobContext> CONTEXT_HOLDER = new InheritableThreadLocal<>(); // support for child thread of job handler)
     /**
      * job id
      */
@@ -48,10 +52,12 @@ public class XxlJobContext {
      *      502 : timeout
      *
      */
+    @Setter
     private int handleCode;
     /**
      * handleMsg：The simple log msg of job execution
      */
+    @Setter
     private String handleMsg;
 
     public XxlJobContext(long jobId, String jobParam, String jobLogFileName, int shardIndex, int shardTotal) {
@@ -61,53 +67,18 @@ public class XxlJobContext {
         this.shardIndex = shardIndex;
         this.shardTotal = shardTotal;
 
-        this.handleCode = HANDLE_CODE_SUCCESS;  // default success
+        // default success
+        this.handleCode = HANDLE_CODE_SUCCESS;
     }
 
     public static XxlJobContext getXxlJobContext() {
-        return contextHolder.get();
+        return CONTEXT_HOLDER.get();
     }
 
     public static void setXxlJobContext(XxlJobContext xxlJobContext) {
-        contextHolder.set(xxlJobContext);
-    }
-
-    public long getJobId() {
-        return jobId;
-    }
-
-    public String getJobParam() {
-        return jobParam;
-    }
-
-    public String getJobLogFileName() {
-        return jobLogFileName;
-    }
-
-    public int getShardIndex() {
-        return shardIndex;
-    }
-
-    public int getShardTotal() {
-        return shardTotal;
-    }
-
-    public int getHandleCode() {
-        return handleCode;
+        CONTEXT_HOLDER.set(xxlJobContext);
     }
 
     // ---------------------- tool ----------------------
-
-    public void setHandleCode(int handleCode) {
-        this.handleCode = handleCode;
-    }
-
-    public String getHandleMsg() {
-        return handleMsg;
-    }
-
-    public void setHandleMsg(String handleMsg) {
-        this.handleMsg = handleMsg;
-    }
 
 }

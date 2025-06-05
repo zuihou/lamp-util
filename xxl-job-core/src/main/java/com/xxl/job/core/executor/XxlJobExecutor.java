@@ -170,14 +170,14 @@ public class XxlJobExecutor {
     }
 
     private void initAdminBizList(String adminAddresses, String accessToken) throws Exception {
-        if (adminAddresses != null && adminAddresses.trim().length() > 0) {
-            for (String address : adminAddresses.trim().split(",")) {
-                if (address != null && address.trim().length() > 0) {
+        if (adminAddresses != null && !adminAddresses.trim().isEmpty()) {
+            for (String addr : adminAddresses.trim().split(",")) {
+                if (!addr.trim().isEmpty()) {
 
-                    AdminBiz adminBiz = new AdminBizClient(address.trim(), accessToken);
+                    AdminBiz adminBiz = new AdminBizClient(addr.trim(), accessToken);
 
                     if (adminBizList == null) {
-                        adminBizList = new ArrayList<AdminBiz>();
+                        adminBizList = new ArrayList<>();
                     }
                     adminBizList.add(adminBiz);
                 }
@@ -189,16 +189,16 @@ public class XxlJobExecutor {
 
         // fill ip port
         port = port > 0 ? port : NetUtil.findAvailablePort(9999);
-        ip = (ip != null && ip.trim().length() > 0) ? ip : IpUtil.getIp();
+        ip = (ip != null && !ip.trim().isEmpty()) ? ip : IpUtil.getIp();
 
         // generate address
-        if (address == null || address.trim().length() == 0) {
-            String ip_port_address = IpUtil.getIpPort(ip, port);   // registry-address：default use address to registry , otherwise use ip:port if address is null
-            address = "http://{ip_port}/".replace("{ip_port}", ip_port_address);
+        if (address == null || address.trim().isEmpty()) {
+            String ipPortAddress = IpUtil.getIpPort(ip, port);   // registry-address：default use address to registry , otherwise use ip:port if address is null
+            address = "http://{ip_port}/".replace("{ip_port}", ipPortAddress);
         }
 
         // accessToken
-        if (accessToken == null || accessToken.trim().length() == 0) {
+        if (accessToken == null || accessToken.trim().isEmpty()) {
             logger.warn(">>>>>>>>>>> xxl-job accessToken is empty. To ensure system security, please set the accessToken.");
         }
 
@@ -227,7 +227,7 @@ public class XxlJobExecutor {
         //make and simplify the variables since they'll be called several times later
         Class<?> clazz = bean.getClass();
         String methodName = executeMethod.getName();
-        if (name.trim().length() == 0) {
+        if (name.trim().isEmpty()) {
             throw new RuntimeException("xxl-job method-jobhandler name invalid, for[" + clazz + "#" + methodName + "] .");
         }
         if (loadJobHandler(name) != null) {
@@ -250,7 +250,7 @@ public class XxlJobExecutor {
         Method initMethod = null;
         Method destroyMethod = null;
 
-        if (xxlJob.init().trim().length() > 0) {
+        if (!xxlJob.init().trim().isEmpty()) {
             try {
                 initMethod = clazz.getDeclaredMethod(xxlJob.init());
                 initMethod.setAccessible(true);
@@ -258,7 +258,7 @@ public class XxlJobExecutor {
                 throw new RuntimeException("xxl-job method-jobhandler initMethod invalid, for[" + clazz + "#" + methodName + "] .");
             }
         }
-        if (xxlJob.destroy().trim().length() > 0) {
+        if (!xxlJob.destroy().trim().isEmpty()) {
             try {
                 destroyMethod = clazz.getDeclaredMethod(xxlJob.destroy());
                 destroyMethod.setAccessible(true);

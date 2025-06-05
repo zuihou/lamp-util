@@ -59,8 +59,6 @@ public class DefCacheLoader extends CacheLoader<CacheLoadKeys, Map<Serializable,
      */
     @Override
     public ListenableFuture<Map<Serializable, Object>> reload(@NonNull CacheLoadKeys key, @NonNull Map<Serializable, Object> oldValue) {
-        return backgroundRefreshPools.submit(() -> {
-            return load(key);
-        });
+        return backgroundRefreshPools.submit(() -> load(key));
     }
 }

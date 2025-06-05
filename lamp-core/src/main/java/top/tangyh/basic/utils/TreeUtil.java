@@ -3,6 +3,11 @@ package top.tangyh.basic.utils;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeNode;
+import cn.hutool.core.lang.tree.TreeNodeConfig;
+import cn.hutool.core.lang.tree.parser.NodeParser;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import top.tangyh.basic.base.entity.TreeEntity;
@@ -12,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * list列表 转换成tree列表
@@ -97,4 +103,84 @@ public final class TreeUtil {
         }
         return null;
     }
+
+
+    /**
+     * 构建 根节点存储null，节点ID类型为Long 的树
+     *
+     * @param <T>            转换的实体 为数据源里的对象类型
+     * @param list           源数据集合; 必须继承TreeNode<Long>
+     * @return List
+     */
+    public static <T extends TreeNode<Long>> List<Tree<Long>> build(List<T> list) {
+        return build(list, TreeNodeConfig.DEFAULT_CONFIG);
+    }
+
+    /**
+     * 构建 根节点存储null，节点ID类型为Long 的树
+     *
+     * @param <T>            转换的实体 为数据源里的对象类型
+     * @param list           源数据集合; 必须继承TreeNode<Long>
+     * @param treeNodeConfig 配置
+     * @return List
+     */
+    public static <T extends TreeNode<Long>> List<Tree<Long>> build(List<T> list, TreeNodeConfig treeNodeConfig) {
+        return build(list, DEF_PARENT_ID, treeNodeConfig);
+    }
+
+    /**
+     * 构建  根节点存储 <code>rootId</code>，节点ID类型为Long 的树
+     *
+     * @param <T>            转换的实体 为数据源里的对象类型
+     * @param <E>            ID类型
+     * @param list           源数据集合; 必须继承TreeNode<E>
+     * @param rootId         最顶层父id值 一般为 0 或 null 之类
+     * @return List
+     */
+    public static <T extends TreeNode<E>, E> List<Tree<E>> build(List<T> list, E rootId) {
+        return build(list, rootId, TreeNodeConfig.DEFAULT_CONFIG);
+    }
+
+    /**
+     * 构建  根节点存储 <code>rootId</code>，节点ID类型为Long 的树
+     *
+     * @param <T>            转换的实体 为数据源里的对象类型
+     * @param <E>            ID类型
+     * @param list           源数据集合; 必须继承TreeNode<E>
+     * @param rootId         最顶层父id值 一般为 0 或 null 之类
+     * @param treeNodeConfig 配置
+     * @return List
+     */
+    public static <T extends TreeNode<E>, E> List<Tree<E>> build(List<T> list, E rootId, TreeNodeConfig treeNodeConfig) {
+        return cn.hutool.core.lang.tree.TreeUtil.build(list, rootId, treeNodeConfig, new FsNodeParser<>());
+    }
+
+
+    /**
+     * 构建  根节点存储 <code>rootId</code>，节点ID类型为Long 的树
+     *
+     * @param <T>            转换的实体 为数据源里的对象类型
+     * @param list           源数据集合; 必须继承TreeNode<E>
+     * @param nodeParser  解析器
+     * @return List
+     */
+    public static <T extends TreeNode<Long>> List<Tree<Long>> build(List<T> list, NodeParser<T, Long> nodeParser) {
+        return cn.hutool.core.lang.tree.TreeUtil.build(list, DEF_PARENT_ID, TreeNodeConfig.DEFAULT_CONFIG, nodeParser);
+    }
+
+    public static class FsNodeParser<T extends TreeNode<E>, E> implements NodeParser<T, E> {
+        @Override
+        public void parse(T treeNode, Tree<E> tree) {
+            tree.setId(treeNode.getId());
+            tree.setParentId(treeNode.getParentId());
+            tree.setWeight(treeNode.getWeight());
+            tree.setName(treeNode.getName());
+            //扩展字段
+            final Map<String, Object> extra = treeNode.getExtra();
+            if (MapUtil.isNotEmpty(extra)) {
+                extra.forEach(tree::putExtra);
+            }
+        }
+    }
+
 }

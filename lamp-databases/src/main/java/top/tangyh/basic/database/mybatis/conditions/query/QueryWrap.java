@@ -38,6 +38,7 @@ import static top.tangyh.basic.database.mybatis.conditions.Wraps.replace;
  * 4，增加 leFooter 方法， 将日期参数值，强制转换成当天 23：59：59
  * 5，增加 geHeader 方法， 将日期参数值，强制转换成当天 00：00：00
  *
+ * @param <T> 实体类型
  * @author hubin miemie HCL
  * @since 2018-05-25
  */

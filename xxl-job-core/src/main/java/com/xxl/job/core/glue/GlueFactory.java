@@ -21,8 +21,8 @@ public class GlueFactory {
     /**
      * groovy class loader
      */
-    private GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
-    private ConcurrentMap<String, Class<?>> CLASS_CACHE = new ConcurrentHashMap<>();
+    private final GroovyClassLoader groovyClassLoader = new GroovyClassLoader();
+    private final ConcurrentMap<String, Class<?>> CLASS_CACHE = new ConcurrentHashMap<>();
 
     public static GlueFactory getInstance() {
         return glueFactory;
@@ -44,10 +44,10 @@ public class GlueFactory {
      * @throws Exception
      */
     public IJobHandler loadNewInstance(String codeSource) throws Exception {
-        if (codeSource != null && codeSource.trim().length() > 0) {
+        if (codeSource != null && !codeSource.trim().isEmpty()) {
             Class<?> clazz = getCodeSourceClass(codeSource);
             if (clazz != null) {
-                Object instance = clazz.newInstance();
+                Object instance = clazz.getDeclaredConstructor().newInstance();
                 if (instance != null) {
                     if (instance instanceof IJobHandler) {
                         this.injectService(instance);

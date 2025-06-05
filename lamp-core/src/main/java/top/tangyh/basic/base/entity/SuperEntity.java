@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 /**
  * 包括id、created_time、created_by字段的表继承的基础实体
  *
+ * @param <T> 主键类型
  * @author zuihou
  * @date 2019/05/05
  */

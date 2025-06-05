@@ -55,7 +55,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
 //        }
 
         template.header(ContextConstants.FEIGN, StrPool.TRUE);
-        log.info("thread id ={}, name={}", Thread.currentThread().getId(), Thread.currentThread().getName());
+        log.info("url = {}, thread id ={}, name={}", template.url(), Thread.currentThread().getId(), Thread.currentThread().getName());
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
             Map<String, String> localMap = ContextUtil.getLocalMap();

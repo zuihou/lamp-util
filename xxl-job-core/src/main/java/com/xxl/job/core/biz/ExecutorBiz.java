@@ -14,37 +14,37 @@ public interface ExecutorBiz {
 
     /**
      * beat
-     * @return
+     * @return beat
      */
-    public ReturnT<String> beat();
+    ReturnT<String> beat();
 
     /**
      * idle beat
      *
-     * @param idleBeatParam
-     * @return
+     * @param idleBeatParam 参数
+     * @return idle beat
      */
-    public ReturnT<String> idleBeat(IdleBeatParam idleBeatParam);
+    ReturnT<String> idleBeat(IdleBeatParam idleBeatParam);
 
     /**
      * run
-     * @param triggerParam
-     * @return
+     * @param triggerParam 参数
+     * @return run
      */
-    public ReturnT<String> run(TriggerParam triggerParam);
+    ReturnT<String> run(TriggerParam triggerParam);
 
     /**
      * kill
-     * @param killParam
-     * @return
+     * @param killParam 参数
+     * @return kill
      */
-    public ReturnT<String> kill(KillParam killParam);
+    ReturnT<String> kill(KillParam killParam);
 
     /**
      * log
-     * @param logParam
-     * @return
+     * @param logParam 参数
+     * @return log
      */
-    public ReturnT<LogResult> log(LogParam logParam);
+    ReturnT<LogResult> log(LogParam logParam);
 
 }

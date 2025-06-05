@@ -134,8 +134,8 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
         long sequenceBits = bitsAllocator.getSequenceBits();
 
         // parse UID
-        final long sequence = (uid << (totalBits - sequenceBits)) >>> (totalBits - sequenceBits);
-        final long workerId = (uid << (timestampBits + signBits)) >>> (totalBits - workerIdBits);
+        final long sequenceVar = (uid << (totalBits - sequenceBits)) >>> (totalBits - sequenceBits);
+        final long workerIdVar = (uid << (timestampBits + signBits)) >>> (totalBits - workerIdBits);
         final long deltaSeconds = uid >>> (workerIdBits + sequenceBits);
 
         Date thatTime = new Date(TimeUnit.SECONDS.toMillis(epochSeconds + deltaSeconds));
@@ -143,7 +143,7 @@ public class DefaultUidGenerator implements UidGenerator, InitializingBean {
 
         // format as string //delta seconds    | worker node id | sequence
         return String.format("{\"UID\":\"%d\",\"timestamp\":\"%s\",\"workerId\":\"%d\",\"sequence\":\"%d\"}",
-                uid, thatTimeStr, workerId, sequence);
+                uid, thatTimeStr, workerIdVar, sequenceVar);
     }
 
     /**
