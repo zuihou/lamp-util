@@ -6,12 +6,12 @@
     <parent>
         <groupId>top.tangyh.basic</groupId>
         <artifactId>lamp-parent</artifactId>
-        <version>5.1.0</version>
+        <version>5.3.0</version>
         <relativePath>lamp-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>lamp-util</artifactId>
-    <version>5.1.0</version>
+    <version>5.3.0</version>
 
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
