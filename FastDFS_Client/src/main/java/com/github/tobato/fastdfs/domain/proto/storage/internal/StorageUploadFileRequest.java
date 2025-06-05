@@ -1,12 +1,12 @@
 package com.github.tobato.fastdfs.domain.proto.storage.internal;
 
-import java.io.InputStream;
-
 import com.github.tobato.fastdfs.domain.proto.CmdConstants;
 import com.github.tobato.fastdfs.domain.proto.FdfsRequest;
 import com.github.tobato.fastdfs.domain.proto.OtherConstants;
 import com.github.tobato.fastdfs.domain.proto.ProtoHead;
 import com.github.tobato.fastdfs.domain.proto.mapper.FdfsColumn;
+
+import java.io.InputStream;
 
 /**
  * 文件上传命令

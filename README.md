@@ -17,14 +17,14 @@
 
 新用户请直接学习和使用 java17/5.x 分支，其他分支已不在维护
 
-| 分支        | java8/3.x     | java17/3.x    | java17/4.x        | java17/5.x  |
-|-----------|---------------|---------------|---------------|-------------|
-| 源码版本      | 3.x           | 3.x           | 4.x     | 5.x         |
-| JDK版本     | jdk8          | jdk17         | jdk17、jdk21   | jdk17、jdk21 |
-| 是否继续升级新功能 | 不开发新功能,仅修复bug | 不开发新功能,仅修复bug | 不开发新功能,仅修复bug| 持续开发新功能和bug修复                                                                |
-| 是否支持数据源模式 | 是(赞助版支持)      | 是(赞助版支持)      | 否([赞助版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8.html)支持)| 否([赞助版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8.html)支持) |
-| 是否支持字段模式  | 是(开源版赞助版均支持)  | 是(开源版赞助版均支持)  | 否([赞助版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8.html)支持)| 否([赞助版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8.html)支持) |
-| 是否支持非租户模式 | 是(开源版赞助版均支持)  | 是(开源版赞助版均支持)  | 是(开源版支持(就是本项目))    | 是(开源版支持(就是本项目))                                                              |
+| 分支        | java8/3.x     | java17/3.x    | java17/4.x                                                                   | java17/5.x                                                                   |
+|-----------|---------------|---------------|------------------------------------------------------------------------------|------------------------------------------------------------------------------|
+| 源码版本      | 3.x           | 3.x           | 4.x                                                                          | 5.x                                                                          |
+| JDK版本     | jdk8          | jdk17         | jdk17、jdk21                                                                  | jdk17、jdk21                                                                  |
+| 是否继续升级新功能 | 不开发新功能,仅修复bug | 不开发新功能,仅修复bug | 不开发新功能,仅修复bug                                                                | 持续开发新功能和bug修复                                                                |
+| 是否支持数据源模式 | 是(赞助版支持)      | 是(赞助版支持)      | 否([赞助版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8.html)支持) | 否([赞助版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8.html)支持) |
+| 是否支持字段模式  | 是(开源版赞助版均支持)  | 是(开源版赞助版均支持)  | 否([赞助版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8.html)支持) | 否([赞助版](https://tangyh.top/vip/%E6%8E%88%E6%9D%83%E8%B4%B9%E7%94%A8.html)支持) |
+| 是否支持非租户模式 | 是(开源版赞助版均支持)  | 是(开源版赞助版均支持)  | 是(开源版支持(就是本项目))                                                              | 是(开源版支持(就是本项目))                                                              |
 
 # lamp 项目组成
 
@@ -35,22 +35,22 @@
 
 ## 工具集
 
-| 项目             | gitee                                                        | github                     | gitcode                                | 备注       |
-|----------------|--------------------------------------------------------------|------------------------------------------------------------|------------------------------------------------------------|----------|
-| lamp-util      | [lamp-util](https://gitee.com/zuihou111/lamp-util)           | [lamp-util](https://github.com/zuihou/lamp-util)   | [lamp-util](https://gitcode.com/zuihou/lamp-util)           | 核心工具集    |
-| lamp-job       | [lamp-job](https://gitee.com/zuihou111/lamp-job)             | [lamp-job](https://github.com/zuihou/lamp-job)    | [lamp-job](https://gitcode.com/zuihou/lamp-job)             | 分布式定时调度器 |
+| 项目        | gitee                                              | github                                           | gitcode                                           | 备注       |
+|-----------|----------------------------------------------------|--------------------------------------------------|---------------------------------------------------|----------|
+| lamp-util | [lamp-util](https://gitee.com/zuihou111/lamp-util) | [lamp-util](https://github.com/zuihou/lamp-util) | [lamp-util](https://gitcode.com/zuihou/lamp-util) | 核心工具集    |
+| lamp-job  | [lamp-job](https://gitee.com/zuihou111/lamp-job)   | [lamp-job](https://github.com/zuihou/lamp-job)   | [lamp-job](https://gitcode.com/zuihou/lamp-job)   | 分布式定时调度器 |
 
 ## 后端
 
-| 项目         | gitee                                                  | github           | gitcode                                             | 备注                |
-|------------|--------------------------------------------------------|--------------------------------------------------------|-----------------------------------------------------|-------------------|
-| lamp-cloud | [lamp-cloud](https://gitee.com/dromara/lamp-cloud)     | [lamp-cloud](https://github.com/dromara/lamp-cloud)  | [lamp-cloud](https://gitcode.com/zuihou/lamp-cloud) | 微服务和单体模式融合版 |
+| 项目         | gitee                                              | github                                              | gitcode                                             | 备注          |
+|------------|----------------------------------------------------|-----------------------------------------------------|-----------------------------------------------------|-------------|
+| lamp-cloud | [lamp-cloud](https://gitee.com/dromara/lamp-cloud) | [lamp-cloud](https://github.com/dromara/lamp-cloud) | [lamp-cloud](https://gitcode.com/zuihou/lamp-cloud) | 微服务和单体模式融合版 |
 
 ## 前端
 
-| 项目                         | gitee                                                      | github                                                 | gitcode                                                   | 备注            | 演示地址                     |
-|----------------------------|------------------------------------------------------------|----------------------------------------------------------|----------------------------------------------------------|---------------|--------------------------|
-| lamp-web                   | [lamp-web](https://gitee.com/zuihou111/lamp-web)           | [lamp-web](https://github.com/zuihou/lamp-web)    | [lamp-web](https://gitcode.com/zuihou/lamp-web)           | 基于 vben-admin | https://none.tangyh.top  |
+| 项目       | gitee                                            | github                                         | gitcode                                         | 备注            | 演示地址                    |
+|----------|--------------------------------------------------|------------------------------------------------|-------------------------------------------------|---------------|-------------------------|
+| lamp-web | [lamp-web](https://gitee.com/zuihou111/lamp-web) | [lamp-web](https://github.com/zuihou/lamp-web) | [lamp-web](https://gitcode.com/zuihou/lamp-web) | 基于 vben-admin | https://none.tangyh.top |
 
 ## 注意：
 
@@ -59,12 +59,12 @@
 
 所以，项目的编译顺序是：lamp-util -> lamp-cloud -> lamp-job ！
 
-
 # lamp-util 简介
 
 `lamp-util` 的前身是 `zuihou-commons`，在3.0.0版本之后，改名为lamp-util，它是`lamp`项目的其中一员。
 
-`lamp-util` 是 [lamp-cloud](https://github.com/dromara/lamp-cloud)  项目的核心工具包，开发宗旨是打造一套兼顾 SpringBoot 和 SpringCloud
+`lamp-util` 是 [lamp-cloud](https://github.com/dromara/lamp-cloud)  项目的核心工具包，开发宗旨是打造一套兼顾 SpringBoot 和
+SpringCloud
 项目的公共工具类。
 
 ## lamp-util 亮点功能
@@ -85,13 +85,13 @@
 # 演示地址
 
 - 官网
-  - [https://tangyh.top](https://tangyh.top)
-- 4.0版本演示地址（账号密码都是   lamp）
-  - 数据源模式（vben版）：演示地址：   [https://datasource.tangyh.top](https://datasource.tangyh.top)
-  - 数据源模式（soybean版）：演示地址：   [https://soy-datasource.tangyh.top](https://soy-datasource.tangyh.top)
-  - 字段模式（vben版）：演示地址：   [https://column.tangyh.top](https://column.tangyh.top)
-  - 字段模式（soybean版）：演示地址：   [https://soy-column.tangyh.top](https://soy-column.tangyh.top)
-  - 非租户模式：演示地址：   [https://none.tangyh.top](https://none.tangyh.top)
+    - [https://tangyh.top](https://tangyh.top)
+- 4.0版本演示地址（账号密码都是 lamp）
+    - 数据源模式（vben版）：演示地址：   [https://datasource.tangyh.top](https://datasource.tangyh.top)
+    - 数据源模式（soybean版）：演示地址：   [https://soy-datasource.tangyh.top](https://soy-datasource.tangyh.top)
+    - 字段模式（vben版）：演示地址：   [https://column.tangyh.top](https://column.tangyh.top)
+    - 字段模式（soybean版）：演示地址：   [https://soy-column.tangyh.top](https://soy-column.tangyh.top)
+    - 非租户模式：演示地址：   [https://none.tangyh.top](https://none.tangyh.top)
 
 # 赞助版
 
@@ -111,4 +111,5 @@ Apache Licence 2.0 Licence是著名的非盈利开源组织Apache采用的协议
 - 在延伸的代码中（修改和有源代码衍生的代码中）需要带有原来代码中的协议，商标，专利声明和其他原来作者规定需要包含的说明。
 - 如果再发布的产品中包含一个Notice文件，则在Notice文件中需要带有Apache Licence。你可以在Notice中增加自己的许可，但不可以表现为对Apache
   Licence构成更改。 Apache Licence也是对商业应用友好的许可。使用者也可以在需要的时候修改代码来满足需要并作为开源或商业产品发布/销售。
-- 若你借鉴或学习了本项目的源码，请你在你的项目源码和说明文档中显著的表明引用于本项目，并附上本项目的github访问地址。（https://github.com/dromara/lamp-cloud）
+-
+若你借鉴或学习了本项目的源码，请你在你的项目源码和说明文档中显著的表明引用于本项目，并附上本项目的github访问地址。（https://github.com/dromara/lamp-cloud）

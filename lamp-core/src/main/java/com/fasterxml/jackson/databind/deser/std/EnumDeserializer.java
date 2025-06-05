@@ -54,15 +54,15 @@ public class EnumDeserializer
         extends StdScalarDeserializer<Object>
         implements ContextualDeserializer {
     private static final long serialVersionUID = 1L;
-    protected Object[] _enumsByIndex;
-    private final Enum<?> _enumDefaultValue;
     protected final CompactStringObjectMap _lookupByName;
-    protected volatile CompactStringObjectMap _lookupByToString;
     protected final Boolean _caseInsensitive;
-    private Boolean _useDefaultValueForUnknownEnum;
-    private Boolean _useNullForUnknownEnum;
     protected final boolean _isFromIntValue;
     protected final CompactStringObjectMap _lookupByEnumNaming;
+    private final Enum<?> _enumDefaultValue;
+    protected Object[] _enumsByIndex;
+    protected volatile CompactStringObjectMap _lookupByToString;
+    private Boolean _useDefaultValueForUnknownEnum;
+    private Boolean _useNullForUnknownEnum;
 
     /** @deprecated */
     @Deprecated
@@ -176,7 +176,7 @@ public class EnumDeserializer
     public Object deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         if (p.hasToken(JsonToken.VALUE_STRING)) {
             return this._fromString(p, ctxt, p.getText());
-        }  else if (p.hasToken(JsonToken.START_OBJECT)) {
+        } else if (p.hasToken(JsonToken.START_OBJECT)) {
             // zuihou 新增的代码！ 支持前端传递对象 {"code": "xx"}
             CompactStringObjectMap lookup = ctxt.isEnabled(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
                     ? _getToStringLookup(ctxt) : _lookupByName;

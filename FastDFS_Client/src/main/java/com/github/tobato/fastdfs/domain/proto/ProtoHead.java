@@ -1,11 +1,11 @@
 package com.github.tobato.fastdfs.domain.proto;
 
+import com.github.tobato.fastdfs.domain.proto.mapper.BytesUtil;
+import com.github.tobato.fastdfs.exception.FdfsServerException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-
-import com.github.tobato.fastdfs.exception.FdfsServerException;
-import com.github.tobato.fastdfs.domain.proto.mapper.BytesUtil;
 
 /**
  * FDFS协议头定义
@@ -36,18 +36,6 @@ public class ProtoHead {
      */
     private byte status = (byte) 0;
 
-    public long getContentLength() {
-        return contentLength;
-    }
-
-    public byte getCmd() {
-        return cmd;
-    }
-
-    public byte getStatus() {
-        return status;
-    }
-
     /**
      * 请求报文构造函数
      */
@@ -71,24 +59,6 @@ public class ProtoHead {
     }
 
     /**
-     * toByte
-     *
-     * @return
-     */
-    public byte[] toByte() {
-        byte[] header;
-        byte[] hex_len;
-
-        header = new byte[HEAD_LENGTH];
-        Arrays.fill(header, (byte) 0);
-        hex_len = BytesUtil.long2buff(contentLength);
-        System.arraycopy(hex_len, 0, header, 0, hex_len.length);
-        header[OtherConstants.PROTO_HEADER_CMD_INDEX] = cmd;
-        header[OtherConstants.PROTO_HEADER_STATUS_INDEX] = status;
-        return header;
-    }
-
-    /**
      * 读取输入流创建报文头
      *
      * @param ins
@@ -109,6 +79,40 @@ public class ProtoHead {
         // 返回解析出来的ProtoHead
         return new ProtoHead(returnContentLength, returnCmd, returnStatus);
 
+    }
+
+    public long getContentLength() {
+        return contentLength;
+    }
+
+    public void setContentLength(long contentLength) {
+        this.contentLength = contentLength;
+    }
+
+    public byte getCmd() {
+        return cmd;
+    }
+
+    public byte getStatus() {
+        return status;
+    }
+
+    /**
+     * toByte
+     *
+     * @return
+     */
+    public byte[] toByte() {
+        byte[] header;
+        byte[] hex_len;
+
+        header = new byte[HEAD_LENGTH];
+        Arrays.fill(header, (byte) 0);
+        hex_len = BytesUtil.long2buff(contentLength);
+        System.arraycopy(hex_len, 0, header, 0, hex_len.length);
+        header[OtherConstants.PROTO_HEADER_CMD_INDEX] = cmd;
+        header[OtherConstants.PROTO_HEADER_STATUS_INDEX] = status;
+        return header;
     }
 
     /**
@@ -137,10 +141,6 @@ public class ProtoHead {
     @Override
     public String toString() {
         return "ProtoHead [contentLength=" + contentLength + ", cmd=" + cmd + ", status=" + status + "]";
-    }
-
-    public void setContentLength(long contentLength) {
-        this.contentLength = contentLength;
     }
 
 }

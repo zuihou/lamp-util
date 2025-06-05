@@ -1,13 +1,13 @@
 package com.github.tobato.fastdfs.domain.proto.storage.internal;
 
-import java.io.InputStream;
-import java.nio.charset.Charset;
-
 import com.github.tobato.fastdfs.domain.proto.CmdConstants;
 import com.github.tobato.fastdfs.domain.proto.FdfsRequest;
 import com.github.tobato.fastdfs.domain.proto.ProtoHead;
 import com.github.tobato.fastdfs.domain.proto.mapper.DynamicFieldType;
 import com.github.tobato.fastdfs.domain.proto.mapper.FdfsColumn;
+
+import java.io.InputStream;
+import java.nio.charset.Charset;
 
 /**
  * 文件修改请求

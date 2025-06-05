@@ -1,10 +1,10 @@
 package com.github.tobato.fastdfs.domain.proto.storage;
 
-import java.io.InputStream;
-
 import com.github.tobato.fastdfs.domain.proto.AbstractFdfsCommand;
 import com.github.tobato.fastdfs.domain.proto.FdfsResponse;
 import com.github.tobato.fastdfs.domain.proto.storage.internal.StorageModifyRequest;
+
+import java.io.InputStream;
 
 /**
  * 文件修改命令

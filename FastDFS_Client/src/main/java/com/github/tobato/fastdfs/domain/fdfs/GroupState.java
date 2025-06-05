@@ -243,10 +243,10 @@ public class GroupState {
     @Override
     public String toString() {
         return "GroupState [groupName=" + groupName + ", totalMB=" + totalMB + ", freeMB=" + freeMB + ", trunkFreeMB="
-                + trunkFreeMB + ", storageCount=" + storageCount + ", storagePort=" + storagePort + ", storageHttpPort="
-                + storageHttpPort + ", activeCount=" + activeCount + ", currentWriteServer=" + currentWriteServer
-                + ", storePathCount=" + storePathCount + ", subdirCountPerPath=" + subdirCountPerPath
-                + ", currentTrunkFileId=" + currentTrunkFileId + "]";
+               + trunkFreeMB + ", storageCount=" + storageCount + ", storagePort=" + storagePort + ", storageHttpPort="
+               + storageHttpPort + ", activeCount=" + activeCount + ", currentWriteServer=" + currentWriteServer
+               + ", storePathCount=" + storePathCount + ", subdirCountPerPath=" + subdirCountPerPath
+               + ", currentTrunkFileId=" + currentTrunkFileId + "]";
     }
 
 }

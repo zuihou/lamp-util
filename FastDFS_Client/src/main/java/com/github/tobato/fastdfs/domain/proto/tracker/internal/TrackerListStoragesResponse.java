@@ -47,7 +47,7 @@ public class TrackerListStoragesResponse extends FdfsResponse<List<StorageState>
         int fixFieldsTotalSize = objectMetaData.getFieldsFixTotalSize();
         if (bs.length % fixFieldsTotalSize != 0) {
             throw new IOException("fixFieldsTotalSize=" + fixFieldsTotalSize + "but byte array length: " + bs.length
-                    + " is invalid!");
+                                  + " is invalid!");
         }
         // 计算反馈对象数量
         int count = bs.length / fixFieldsTotalSize;

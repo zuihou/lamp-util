@@ -92,8 +92,8 @@ public class CacheResult<T> {
     @JsonIgnore
     public boolean isNullVal() {
         return rawValue != null &&
-                (NullVal.class.equals(rawValue.getClass()) ||
-                        (rawValue instanceof Map map && map.isEmpty()));
+               (NullVal.class.equals(rawValue.getClass()) ||
+                (rawValue instanceof Map map && map.isEmpty()));
     }
 
     /**

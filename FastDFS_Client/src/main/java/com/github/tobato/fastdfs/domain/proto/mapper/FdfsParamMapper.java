@@ -17,20 +17,18 @@ import java.util.Map;
  */
 public class FdfsParamMapper {
 
-    private FdfsParamMapper() {
-        // hide for utils
-    }
-
     /**
      * 对象映射缓存
      */
     private static Map<String, ObjectMetaData> mapCache = new HashMap<String, ObjectMetaData>();
-
     /**
      * 日志
      */
     private static Logger LOGGER = LoggerFactory.getLogger(FdfsParamMapper.class);
 
+    private FdfsParamMapper() {
+        // hide for utils
+    }
 
     /**
      * 将byte解码为对象

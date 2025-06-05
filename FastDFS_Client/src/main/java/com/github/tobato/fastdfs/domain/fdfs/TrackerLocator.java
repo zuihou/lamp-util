@@ -4,7 +4,13 @@ import com.github.tobato.fastdfs.exception.FdfsUnavailableException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.InetSocketAddress;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 表示Tracker服务器位置
@@ -80,10 +86,6 @@ public class TrackerLocator {
 
     }
 
-    public void setTrackerList(List<String> trackerList) {
-        this.trackerList = trackerList;
-    }
-
     public void setRetryAfterSecond(int retryAfterSecond) {
         this.retryAfterSecond = retryAfterSecond;
     }
@@ -142,6 +144,10 @@ public class TrackerLocator {
 
     public List<String> getTrackerList() {
         return Collections.unmodifiableList(trackerList);
+    }
+
+    public void setTrackerList(List<String> trackerList) {
+        this.trackerList = trackerList;
     }
 
 }

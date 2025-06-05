@@ -1,6 +1,5 @@
 package top.tangyh.basic.log;
 
-import org.slf4j.LampMdcAdapter;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.lang.NonNull;

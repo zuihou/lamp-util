@@ -39,7 +39,7 @@ public interface WorkerNodeDao {
     @Insert("""
             INSERT INTO worker_node( id, host_name,port, type, launch_date,modified,created)
              VALUES (null, #{hostName},#{port},#{type},#{launchDate},#{modified}, #{created})
-               """)
+            """)
     @Options(useGeneratedKeys = true, keyColumn = "id", keyProperty = "id")
     // oracle 用下面2个注解！ mysql 和 sql server 用上面2个注解！
     @Insert(databaseId = "oracle", value = """

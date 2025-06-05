@@ -98,7 +98,7 @@ public class LampSentinelInvocationHandler implements InvocationHandler {
                     result = methodHandler.invoke(args);
                 } else {
                     String resourceName = methodMetadata.template().method().toUpperCase() + ":" + hardCodedTarget.url()
-                            + methodMetadata.template().path();
+                                          + methodMetadata.template().path();
                     Entry entry = null;
                     try {
                         ContextUtil.enter(resourceName);

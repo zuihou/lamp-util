@@ -35,8 +35,8 @@ public class ScriptUtil {
             fileOutputStream.close();
         } catch (Exception e) {
             throw e;
-        }finally{
-            if(fileOutputStream != null){
+        } finally {
+            if (fileOutputStream != null) {
                 fileOutputStream.close();
             }
         }
@@ -65,8 +65,8 @@ public class ScriptUtil {
             List<String> cmdarray = new ArrayList<>();
             cmdarray.add(command);
             cmdarray.add(scriptFile);
-            if (params!=null && params.length>0) {
-                for (String param:params) {
+            if (params != null && params.length > 0) {
+                for (String param : params) {
                     cmdarray.add(param);
                 }
             }
@@ -141,7 +141,7 @@ public class ScriptUtil {
     private static long copy(InputStream inputStream, OutputStream outputStream, byte[] buffer) throws IOException {
         try {
             long total = 0;
-            for (;;) {
+            for (; ; ) {
                 int res = inputStream.read(buffer);
                 if (res == -1) {
                     break;

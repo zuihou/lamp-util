@@ -1,8 +1,19 @@
 package com.github.tobato.fastdfs.service;
 
 import com.github.tobato.fastdfs.domain.conn.FdfsConnectionManager;
-import com.github.tobato.fastdfs.domain.fdfs.*;
-import com.github.tobato.fastdfs.domain.proto.storage.*;
+import com.github.tobato.fastdfs.domain.fdfs.FileInfo;
+import com.github.tobato.fastdfs.domain.fdfs.MetaData;
+import com.github.tobato.fastdfs.domain.fdfs.StorageNode;
+import com.github.tobato.fastdfs.domain.fdfs.StorageNodeInfo;
+import com.github.tobato.fastdfs.domain.fdfs.StorePath;
+import com.github.tobato.fastdfs.domain.proto.storage.DownloadCallback;
+import com.github.tobato.fastdfs.domain.proto.storage.StorageDeleteFileCommand;
+import com.github.tobato.fastdfs.domain.proto.storage.StorageDownloadCommand;
+import com.github.tobato.fastdfs.domain.proto.storage.StorageGetMetadataCommand;
+import com.github.tobato.fastdfs.domain.proto.storage.StorageQueryFileInfoCommand;
+import com.github.tobato.fastdfs.domain.proto.storage.StorageSetMetadataCommand;
+import com.github.tobato.fastdfs.domain.proto.storage.StorageUploadFileCommand;
+import com.github.tobato.fastdfs.domain.proto.storage.StorageUploadSlaveFileCommand;
 import com.github.tobato.fastdfs.domain.proto.storage.enums.StorageMetadataSetType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,21 +32,19 @@ import java.util.Set;
 public class DefaultGenerateStorageClient implements GenerateStorageClient {
 
     /**
+     * 日志
+     */
+    protected static Logger LOGGER = LoggerFactory.getLogger(DefaultGenerateStorageClient.class);
+    /**
      * trackerClient
      */
     @Autowired
     protected TrackerClient trackerClient;
-
     /**
      * connectManager
      */
     @Autowired
     protected FdfsConnectionManager fdfsConnectionManager;
-
-    /**
-     * 日志
-     */
-    protected static Logger LOGGER = LoggerFactory.getLogger(DefaultGenerateStorageClient.class);
 
     /**
      * 上传不支持断点续传的文件

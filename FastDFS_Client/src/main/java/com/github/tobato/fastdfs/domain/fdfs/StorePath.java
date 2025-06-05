@@ -1,11 +1,10 @@
 package com.github.tobato.fastdfs.domain.fdfs;
 
-import org.apache.commons.lang3.Validate;
-
-import com.github.tobato.fastdfs.exception.FdfsUnsupportStorePathException;
 import com.github.tobato.fastdfs.domain.proto.OtherConstants;
 import com.github.tobato.fastdfs.domain.proto.mapper.DynamicFieldType;
 import com.github.tobato.fastdfs.domain.proto.mapper.FdfsColumn;
+import com.github.tobato.fastdfs.exception.FdfsUnsupportStorePathException;
+import org.apache.commons.lang3.Validate;
 
 /**
  * 存储文件的路径信息
@@ -14,21 +13,18 @@ import com.github.tobato.fastdfs.domain.proto.mapper.FdfsColumn;
  */
 public class StorePath {
 
-    @FdfsColumn(index = 0, max = OtherConstants.FDFS_GROUP_NAME_MAX_LEN)
-    private String group;
-
-    @FdfsColumn(index = 1, dynamicField = DynamicFieldType.allRestByte)
-    private String path;
-
     /**
      * 解析路径
      */
     private static final String SPLIT_GROUP_NAME_AND_FILENAME_SEPERATOR = "/";
-
     /**
      * group
      */
     private static final String SPLIT_GROUP_NAME = "group";
+    @FdfsColumn(index = 0, max = OtherConstants.FDFS_GROUP_NAME_MAX_LEN)
+    private String group;
+    @FdfsColumn(index = 1, dynamicField = DynamicFieldType.allRestByte)
+    private String path;
 
     /**
      * 存储文件路径
@@ -47,6 +43,44 @@ public class StorePath {
         super();
         this.group = group;
         this.path = path;
+    }
+
+    /**
+     * 从Url当中解析存储路径对象
+     *
+     * @param filePath 有效的路径样式为(group/path) 或者
+     *                 (http://ip/group/path),路径地址必须包含group
+     * @return
+     */
+    public static StorePath parseFromUrl(String filePath) {
+        Validate.notNull(filePath, "解析文件路径不能为空");
+
+        String group = getGroupName(filePath);
+
+        // 获取group起始位置
+        int pathStartPos = filePath.indexOf(group) + group.length() + 1;
+        String path = filePath.substring(pathStartPos, filePath.length());
+        return new StorePath(group, path);
+    }
+
+    /**
+     * 获取Group名称
+     *
+     * @param filePath
+     * @return
+     */
+    private static String getGroupName(String filePath) {
+        //先分隔开路径
+        String[] paths = filePath.split(SPLIT_GROUP_NAME_AND_FILENAME_SEPERATOR);
+        if (paths.length == 1) {
+            throw new FdfsUnsupportStorePathException("解析文件路径错误,有效的路径样式为(group/path) 而当前解析路径为".concat(filePath));
+        }
+        for (String item : paths) {
+            if (item.indexOf(SPLIT_GROUP_NAME) != -1) {
+                return item;
+            }
+        }
+        throw new FdfsUnsupportStorePathException("解析文件路径错误,被解析路径url没有group,当前解析路径为".concat(filePath));
     }
 
     /**
@@ -94,44 +128,6 @@ public class StorePath {
     @Override
     public String toString() {
         return "StorePath [group=" + group + ", path=" + path + "]";
-    }
-
-    /**
-     * 从Url当中解析存储路径对象
-     *
-     * @param filePath 有效的路径样式为(group/path) 或者
-     *                 (http://ip/group/path),路径地址必须包含group
-     * @return
-     */
-    public static StorePath parseFromUrl(String filePath) {
-        Validate.notNull(filePath, "解析文件路径不能为空");
-
-        String group = getGroupName(filePath);
-
-        // 获取group起始位置
-        int pathStartPos = filePath.indexOf(group) + group.length() + 1;
-        String path = filePath.substring(pathStartPos, filePath.length());
-        return new StorePath(group, path);
-    }
-
-    /**
-     * 获取Group名称
-     *
-     * @param filePath
-     * @return
-     */
-    private static String getGroupName(String filePath) {
-        //先分隔开路径
-        String[] paths = filePath.split(SPLIT_GROUP_NAME_AND_FILENAME_SEPERATOR);
-        if (paths.length == 1) {
-            throw new FdfsUnsupportStorePathException("解析文件路径错误,有效的路径样式为(group/path) 而当前解析路径为".concat(filePath));
-        }
-        for (String item : paths) {
-            if (item.indexOf(SPLIT_GROUP_NAME) != -1) {
-                return item;
-            }
-        }
-        throw new FdfsUnsupportStorePathException("解析文件路径错误,被解析路径url没有group,当前解析路径为".concat(filePath));
     }
 
 }

@@ -633,61 +633,61 @@
                 </plugin>
                 -->
                 <!--配置生成源码包 -->
-<!--                <plugin>-->
-<!--                    <groupId>org.apache.maven.plugins</groupId>-->
-<!--                    <artifactId>maven-source-plugin</artifactId>-->
-<!--                    <version>${maven-source-plugin.version}</version>-->
-<!--                    <executions>-->
-<!--                        <execution>-->
-<!--                            <id>attach-sources</id>-->
-<!--                            <goals>-->
-<!--                                <goal>jar</goal>-->
-<!--                            </goals>-->
-<!--                        </execution>-->
-<!--                    </executions>-->
-<!--                </plugin>-->
+                <!--                <plugin>-->
+                <!--                    <groupId>org.apache.maven.plugins</groupId>-->
+                <!--                    <artifactId>maven-source-plugin</artifactId>-->
+                <!--                    <version>${maven-source-plugin.version}</version>-->
+                <!--                    <executions>-->
+                <!--                        <execution>-->
+                <!--                            <id>attach-sources</id>-->
+                <!--                            <goals>-->
+                <!--                                <goal>jar</goal>-->
+                <!--                            </goals>-->
+                <!--                        </execution>-->
+                <!--                    </executions>-->
+                <!--                </plugin>-->
                 <!-- 一键更新子模块版本号 -->
-<!--                <plugin>-->
-<!--                    <groupId>org.codehaus.mojo</groupId>-->
-<!--                    <artifactId>versions-maven-plugin</artifactId>-->
-<!--                    <version>${versions-maven-plugin.version}</version>-->
-<!--                    <configuration>-->
-<!--                        <generateBackupPoms>false</generateBackupPoms>-->
-<!--                    </configuration>-->
-<!--                </plugin>-->
+                <!--                <plugin>-->
+                <!--                    <groupId>org.codehaus.mojo</groupId>-->
+                <!--                    <artifactId>versions-maven-plugin</artifactId>-->
+                <!--                    <version>${versions-maven-plugin.version}</version>-->
+                <!--                    <configuration>-->
+                <!--                        <generateBackupPoms>false</generateBackupPoms>-->
+                <!--                    </configuration>-->
+                <!--                </plugin>-->
             </plugins>
         </pluginManagement>
 
-<!--                <plugins>-->
-<!--                    &lt;!&ndash; 编译插件 &ndash;&gt;-->
-<!--                    <plugin>-->
-<!--                        <groupId>org.apache.maven.plugins</groupId>-->
-<!--                        <artifactId>maven-compiler-plugin</artifactId>-->
-<!--                    </plugin>-->
-<!--                    &lt;!&ndash; 资源插件 &ndash;&gt;-->
-<!--                    <plugin>-->
-<!--                        <groupId>org.apache.maven.plugins</groupId>-->
-<!--                        <artifactId>maven-resources-plugin</artifactId>-->
-<!--                    </plugin>-->
-<!--                    &lt;!&ndash;-->
-<!--                    <plugin>-->
-<!--                        <groupId>org.apache.maven.plugins</groupId>-->
-<!--                        <artifactId>maven-javadoc-plugin</artifactId>-->
-<!--                    </plugin>-->
-<!--                    <plugin>-->
-<!--                        <groupId>org.apache.maven.plugins</groupId>-->
-<!--                        <artifactId>maven-source-plugin</artifactId>-->
-<!--                    </plugin>-->
-<!--                    &ndash;&gt;-->
-<!--                    &lt;!&ndash; 一键更新子模块版本号 &ndash;&gt;-->
-<!--                    <plugin>-->
-<!--                        <groupId>org.codehaus.mojo</groupId>-->
-<!--                        <artifactId>versions-maven-plugin</artifactId>-->
-<!--                        <configuration>-->
-<!--                            <generateBackupPoms>false</generateBackupPoms>-->
-<!--                        </configuration>-->
-<!--                    </plugin>-->
-<!--                </plugins>-->
+        <!--                <plugins>-->
+        <!--                    &lt;!&ndash; 编译插件 &ndash;&gt;-->
+        <!--                    <plugin>-->
+        <!--                        <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                        <artifactId>maven-compiler-plugin</artifactId>-->
+        <!--                    </plugin>-->
+        <!--                    &lt;!&ndash; 资源插件 &ndash;&gt;-->
+        <!--                    <plugin>-->
+        <!--                        <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                        <artifactId>maven-resources-plugin</artifactId>-->
+        <!--                    </plugin>-->
+        <!--                    &lt;!&ndash;-->
+        <!--                    <plugin>-->
+        <!--                        <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                        <artifactId>maven-javadoc-plugin</artifactId>-->
+        <!--                    </plugin>-->
+        <!--                    <plugin>-->
+        <!--                        <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                        <artifactId>maven-source-plugin</artifactId>-->
+        <!--                    </plugin>-->
+        <!--                    &ndash;&gt;-->
+        <!--                    &lt;!&ndash; 一键更新子模块版本号 &ndash;&gt;-->
+        <!--                    <plugin>-->
+        <!--                        <groupId>org.codehaus.mojo</groupId>-->
+        <!--                        <artifactId>versions-maven-plugin</artifactId>-->
+        <!--                        <configuration>-->
+        <!--                            <generateBackupPoms>false</generateBackupPoms>-->
+        <!--                        </configuration>-->
+        <!--                    </plugin>-->
+        <!--                </plugins>-->
     </build>
 
 

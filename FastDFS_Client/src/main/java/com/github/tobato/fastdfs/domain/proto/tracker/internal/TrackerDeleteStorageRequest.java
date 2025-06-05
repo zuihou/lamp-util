@@ -1,12 +1,11 @@
 package com.github.tobato.fastdfs.domain.proto.tracker.internal;
 
-import org.apache.commons.lang3.Validate;
-
 import com.github.tobato.fastdfs.domain.proto.CmdConstants;
 import com.github.tobato.fastdfs.domain.proto.FdfsRequest;
 import com.github.tobato.fastdfs.domain.proto.OtherConstants;
 import com.github.tobato.fastdfs.domain.proto.ProtoHead;
 import com.github.tobato.fastdfs.domain.proto.mapper.FdfsColumn;
+import org.apache.commons.lang3.Validate;
 
 /**
  * 移除存储服务器

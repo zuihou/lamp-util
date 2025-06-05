@@ -78,6 +78,19 @@ public final class DateUtils {
     public static final Map<String, String> DATE_TIME_FORMAT_MAP = new LinkedHashMap<>(15);
     public static final Map<String, String> LOCAL_DATE_FORMAT_MAP = new LinkedHashMap<>(10);
     public static final Map<String, String> LOCAL_TIME_FORMAT_MAP = new LinkedHashMap<>(10);
+    /**
+     * 一个月平均天数
+     */
+    public static final long MAX_MONTH_DAY = 30;
+    /**
+     * 3个月平均天数
+     */
+    public static final long MAX_3_MONTH_DAY = 90;
+    /**
+     * 一年平均天数
+     */
+    public static final long MAX_YEAR_DAY = 365;
+    private static final Map<String, String> DATE_FORMAT = new LinkedHashMap<>(5);
 
     static {
         // 日期时间
@@ -113,20 +126,6 @@ public final class DateUtils {
         DATE_TIME_FORMAT_MAP.put(DEFAULT_DATE_FORMAT_EN, DEFAULT_DATE_FORMAT_EN_MATCHES);
         DATE_TIME_FORMAT_MAP.put(DEFAULT_DATE_TIME_FORMAT_EN, DEFAULT_DATE_TIME_FORMAT_EN_MATCHES);
     }
-
-    /**
-     * 一个月平均天数
-     */
-    public static final long MAX_MONTH_DAY = 30;
-    /**
-     * 3个月平均天数
-     */
-    public static final long MAX_3_MONTH_DAY = 90;
-    /**
-     * 一年平均天数
-     */
-    public static final long MAX_YEAR_DAY = 365;
-    private static final Map<String, String> DATE_FORMAT = new LinkedHashMap<>(5);
 //--格式化日期start-----------------------------------------
 
     static {
@@ -503,8 +502,8 @@ public final class DateUtils {
     public static LocalDateTime parseAsLocalDateTime(String source) {
         Function<String, LocalDateTime> function = key -> {
             if (source.matches(DEFAULT_DATE_FORMAT_MATCHES)
-                    || source.matches(DEFAULT_DATE_FORMAT_EN_MATCHES)
-                    || source.matches(SLASH_DATE_FORMAT_MATCHES)
+                || source.matches(DEFAULT_DATE_FORMAT_EN_MATCHES)
+                || source.matches(SLASH_DATE_FORMAT_MATCHES)
             ) {
                 return LocalDateTime.of(LocalDate.parse(source, DateTimeFormatter.ofPattern(key)), LocalTime.MIN);
             }

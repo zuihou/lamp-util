@@ -1,12 +1,12 @@
 package com.github.tobato.fastdfs.domain.proto.storage.internal;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-
 import com.github.tobato.fastdfs.domain.proto.FdfsResponse;
 import com.github.tobato.fastdfs.domain.proto.storage.DownloadCallback;
 import com.github.tobato.fastdfs.domain.proto.storage.FdfsInputStream;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 
 /**
  * 文件下载结果

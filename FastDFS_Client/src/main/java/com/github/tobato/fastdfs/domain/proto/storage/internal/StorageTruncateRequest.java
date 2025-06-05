@@ -1,12 +1,12 @@
 package com.github.tobato.fastdfs.domain.proto.storage.internal;
 
-import java.nio.charset.Charset;
-
 import com.github.tobato.fastdfs.domain.proto.CmdConstants;
 import com.github.tobato.fastdfs.domain.proto.FdfsRequest;
 import com.github.tobato.fastdfs.domain.proto.ProtoHead;
 import com.github.tobato.fastdfs.domain.proto.mapper.DynamicFieldType;
 import com.github.tobato.fastdfs.domain.proto.mapper.FdfsColumn;
+
+import java.nio.charset.Charset;
 
 /**
  * 文件Truncate命令
@@ -75,13 +75,13 @@ public class StorageTruncateRequest extends FdfsRequest {
         this.path = path;
     }
 
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
-    }
-
     @Override
     public long getFileSize() {
         return fileSize;
+    }
+
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
     }
 
     @Override

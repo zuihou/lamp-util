@@ -13,38 +13,33 @@ public class XxlJobContext {
     public static final int HANDLE_CODE_TIMEOUT = 502;
 
     // ---------------------- base info ----------------------
-
+    private static InheritableThreadLocal<XxlJobContext> contextHolder = new InheritableThreadLocal<XxlJobContext>(); // support for child thread of job handler)
     /**
      * job id
      */
     private final long jobId;
 
+    // ---------------------- for log ----------------------
     /**
      * job param
      */
     private final String jobParam;
 
-    // ---------------------- for log ----------------------
-
+    // ---------------------- for shard ----------------------
     /**
      * job log filename
      */
     private final String jobLogFileName;
-
-    // ---------------------- for shard ----------------------
-
     /**
      * shard index
      */
     private final int shardIndex;
 
+    // ---------------------- for handle ----------------------
     /**
      * shard total
      */
     private final int shardTotal;
-
-    // ---------------------- for handle ----------------------
-
     /**
      * handleCode：The result status of job execution
      *
@@ -54,12 +49,10 @@ public class XxlJobContext {
      *
      */
     private int handleCode;
-
     /**
      * handleMsg：The simple log msg of job execution
      */
     private String handleMsg;
-
 
     public XxlJobContext(long jobId, String jobParam, String jobLogFileName, int shardIndex, int shardTotal) {
         this.jobId = jobId;
@@ -69,6 +62,14 @@ public class XxlJobContext {
         this.shardTotal = shardTotal;
 
         this.handleCode = HANDLE_CODE_SUCCESS;  // default success
+    }
+
+    public static XxlJobContext getXxlJobContext() {
+        return contextHolder.get();
+    }
+
+    public static void setXxlJobContext(XxlJobContext xxlJobContext) {
+        contextHolder.set(xxlJobContext);
     }
 
     public long getJobId() {
@@ -91,32 +92,22 @@ public class XxlJobContext {
         return shardTotal;
     }
 
-    public void setHandleCode(int handleCode) {
-        this.handleCode = handleCode;
-    }
-
     public int getHandleCode() {
         return handleCode;
     }
 
-    public void setHandleMsg(String handleMsg) {
-        this.handleMsg = handleMsg;
+    // ---------------------- tool ----------------------
+
+    public void setHandleCode(int handleCode) {
+        this.handleCode = handleCode;
     }
 
     public String getHandleMsg() {
         return handleMsg;
     }
 
-    // ---------------------- tool ----------------------
-
-    private static InheritableThreadLocal<XxlJobContext> contextHolder = new InheritableThreadLocal<XxlJobContext>(); // support for child thread of job handler)
-
-    public static void setXxlJobContext(XxlJobContext xxlJobContext){
-        contextHolder.set(xxlJobContext);
-    }
-
-    public static XxlJobContext getXxlJobContext(){
-        return contextHolder.get();
+    public void setHandleMsg(String handleMsg) {
+        this.handleMsg = handleMsg;
     }
 
 }

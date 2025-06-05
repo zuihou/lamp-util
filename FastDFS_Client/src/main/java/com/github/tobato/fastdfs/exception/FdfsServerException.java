@@ -1,10 +1,10 @@
 package com.github.tobato.fastdfs.exception;
 
+import com.github.tobato.fastdfs.domain.proto.ErrorCodeConstants;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.github.tobato.fastdfs.domain.proto.ErrorCodeConstants;
 
 /**
  * fastdfs服务端返回的错误码构成的异常

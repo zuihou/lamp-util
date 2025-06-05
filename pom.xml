@@ -36,10 +36,10 @@
         <module>lamp-cache-starter</module>
         <module>lamp-mq-starter</module>
         <module>lamp-echo-starter</module>
-        <module>lamp-uid</module>
         <module>lamp-scan-starter</module>
         <module>lamp-all</module>
         <!-- 代为维护的其他第三方组件 -->
+        <module>lamp-uid</module>
         <module>FastDFS_Client</module>
         <module>xxl-job-core</module>
     </modules>
@@ -119,14 +119,10 @@
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
-                <artifactId>lamp-dozer-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-echo-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-log-starter</artifactId>
@@ -186,8 +182,8 @@
             <artifactId>hutool-all</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -266,6 +262,13 @@
                 <configuration>
                     <generateBackupPoms>false</generateBackupPoms>
                 </configuration>
+            </plugin>
+
+            <!-- 代码规范检查 -->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

@@ -1,9 +1,9 @@
 package com.github.tobato.fastdfs.domain.fdfs;
 
-import java.net.InetSocketAddress;
-
 import com.github.tobato.fastdfs.domain.proto.OtherConstants;
 import com.github.tobato.fastdfs.domain.proto.mapper.FdfsColumn;
+
+import java.net.InetSocketAddress;
 
 /**
  * 向tracker请求上传、下载文件或其他文件请求时，tracker返回的文件storage节点的信息
@@ -53,38 +53,38 @@ public class StorageNode {
         return storeIndex;
     }
 
+    public void setStoreIndex(byte storeIndex) {
+        this.storeIndex = storeIndex;
+    }
+
     public String getGroupName() {
         return groupName;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public int getPort() {
-        return port;
     }
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
 
+    public String getIp() {
+        return ip;
+    }
+
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public int getPort() {
+        return port;
     }
 
     public void setPort(int port) {
         this.port = port;
     }
 
-    public void setStoreIndex(byte storeIndex) {
-        this.storeIndex = storeIndex;
-    }
-
     @Override
     public String toString() {
         return "StorageClient [groupName=" + groupName + ", ip=" + ip + ", port=" + port + ", storeIndex=" + storeIndex
-                + "]";
+               + "]";
     }
 
 }

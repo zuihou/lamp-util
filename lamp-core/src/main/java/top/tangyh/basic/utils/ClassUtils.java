@@ -43,7 +43,7 @@ public class ClassUtils {
                 ConfigurableApplicationContext.CONFIG_LOCATION_DELIMITERS);
         for (String packagePattern : packagePatternArray) {
             Resource[] resources = RESOURCE_PATTERN_RESOLVER.getResources(ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX
-                    + org.springframework.util.ClassUtils.convertClassNameToResourcePath(packagePattern) + "/**/*.class");
+                                                                          + org.springframework.util.ClassUtils.convertClassNameToResourcePath(packagePattern) + "/**/*.class");
             for (Resource resource : resources) {
                 try {
                     ClassMetadata classMetadata = METADATA_READER_FACTORY.getMetadataReader(resource).getClassMetadata();
@@ -76,7 +76,7 @@ public class ClassUtils {
         Set<Class<?>> classes;
 
         if (packageName.contains(StringPool.STAR) && !packageName.contains(StringPool.COMMA)
-                && !packageName.contains(StringPool.SEMICOLON)) {
+            && !packageName.contains(StringPool.SEMICOLON)) {
             classes = scanClasses(packageName, null);
         } else {
             classes = new HashSet<>();

@@ -3,7 +3,11 @@ package com.xxl.job.core.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * @author xuxueli 2020-04-12 0:14:00
@@ -50,7 +54,7 @@ public class JdkSerializeTool {
      * @param bytes
      * @return
      */
-    public static  <T> Object deserialize(byte[] bytes, Class<T> clazz) {
+    public static <T> Object deserialize(byte[] bytes, Class<T> clazz) {
         ByteArrayInputStream bais = null;
         try {
             // 反序列化

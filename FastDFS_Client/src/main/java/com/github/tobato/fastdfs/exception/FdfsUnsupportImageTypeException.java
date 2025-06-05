@@ -2,7 +2,7 @@ package com.github.tobato.fastdfs.exception;
 
 /**
  * 不支持的图片格式
- * 
+ *
  * @author tobato
  *
  */

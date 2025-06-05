@@ -20,21 +20,20 @@ import java.util.Map;
  */
 public class DateUtil {
 
+    public static final String CRON_FORMAT = "ss mm HH dd MM ? yyyy";
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    private static final ThreadLocal<Map<String, DateFormat>> dateFormatThreadLocal = new ThreadLocal<Map<String, DateFormat>>();
     // ---------------------- format parse ----------------------
     private static Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
-    private static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    public static final String CRON_FORMAT = "ss mm HH dd MM ? yyyy";
-
-    private static final ThreadLocal<Map<String, DateFormat>> dateFormatThreadLocal = new ThreadLocal<Map<String, DateFormat>>();
     private static DateFormat getDateFormat(String pattern) {
-        if (pattern==null || pattern.trim().length()==0) {
+        if (pattern == null || pattern.trim().length() == 0) {
             throw new IllegalArgumentException("pattern cannot be empty.");
         }
 
         Map<String, DateFormat> dateFormatMap = dateFormatThreadLocal.get();
-        if(dateFormatMap!=null && dateFormatMap.containsKey(pattern)){
+        if (dateFormatMap != null && dateFormatMap.containsKey(pattern)) {
             return dateFormatMap.get(pattern);
         }
 

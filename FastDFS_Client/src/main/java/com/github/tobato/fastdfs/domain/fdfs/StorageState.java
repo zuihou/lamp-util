@@ -1,9 +1,9 @@
 package com.github.tobato.fastdfs.domain.fdfs;
 
-import java.util.Date;
-
 import com.github.tobato.fastdfs.domain.proto.OtherConstants;
 import com.github.tobato.fastdfs.domain.proto.mapper.FdfsColumn;
+
+import java.util.Date;
 
 /**
  * fastdfs中storage节点的状态信息
@@ -1168,34 +1168,34 @@ public class StorageState {
     @Override
     public String toString() {
         return "StorageState [status=" + status + ", id=" + id + ", ipAddr=" + ipAddr + ", domainName=" + domainName
-                + ", srcIpAddr=" + srcIpAddr + ", version=" + version + ", joinTime=" + joinTime + ", upTime=" + upTime
-                + ", totalMB=" + totalMB + ", freeMB=" + freeMB + ", uploadPriority=" + uploadPriority
-                + ", storePathCount=" + storePathCount + ", subdirCountPerPath=" + subdirCountPerPath
-                + ", currentWritePath=" + currentWritePath + ", storagePort=" + storagePort + ", storageHttpPort="
-                + storageHttpPort + ", connectionAllocCount=" + connectionAllocCount + ", connectionCurrentCount="
-                + connectionCurrentCount + ", connectionMaxCount=" + connectionMaxCount + ", totalUploadCount="
-                + totalUploadCount + ", successUploadCount=" + successUploadCount + ", totalAppendCount="
-                + totalAppendCount + ", successAppendCount=" + successAppendCount + ", totalModifyCount="
-                + totalModifyCount + ", successModifyCount=" + successModifyCount + ", totalTruncateCount="
-                + totalTruncateCount + ", successTruncateCount=" + successTruncateCount + ", totalSetMetaCount="
-                + totalSetMetaCount + ", successSetMetaCount=" + successSetMetaCount + ", totalDeleteCount="
-                + totalDeleteCount + ", successDeleteCount=" + successDeleteCount + ", totalDownloadCount="
-                + totalDownloadCount + ", successDownloadCount=" + successDownloadCount + ", totalGetMetaCount="
-                + totalGetMetaCount + ", successGetMetaCount=" + successGetMetaCount + ", totalCreateLinkCount="
-                + totalCreateLinkCount + ", successCreateLinkCount=" + successCreateLinkCount
-                + ", totalDeleteLinkCount=" + totalDeleteLinkCount + ", successDeleteLinkCount="
-                + successDeleteLinkCount + ", totalUploadBytes=" + totalUploadBytes + ", successUploadBytes="
-                + successUploadBytes + ", totalAppendBytes=" + totalAppendBytes + ", successAppendBytes="
-                + successAppendBytes + ", totalModifyBytes=" + totalModifyBytes + ", successModifyBytes="
-                + successModifyBytes + ", totalDownloadloadBytes=" + totalDownloadloadBytes
-                + ", successDownloadloadBytes=" + successDownloadloadBytes + ", totalSyncInBytes=" + totalSyncInBytes
-                + ", successSyncInBytes=" + successSyncInBytes + ", totalSyncOutBytes=" + totalSyncOutBytes
-                + ", successSyncOutBytes=" + successSyncOutBytes + ", totalFileOpenCount=" + totalFileOpenCount
-                + ", successFileOpenCount=" + successFileOpenCount + ", totalFileReadCount=" + totalFileReadCount
-                + ", successFileReadCount=" + successFileReadCount + ", totalFileWriteCount=" + totalFileWriteCount
-                + ", successFileWriteCount=" + successFileWriteCount + ", lastSourceUpdate=" + lastSourceUpdate
-                + ", lastSyncUpdate=" + lastSyncUpdate + ", lastSyncedTimestamp=" + lastSyncedTimestamp
-                + ", lastHeartBeatTime=" + lastHeartBeatTime + ", isTrunkServer=" + isTrunkServer + "]";
+               + ", srcIpAddr=" + srcIpAddr + ", version=" + version + ", joinTime=" + joinTime + ", upTime=" + upTime
+               + ", totalMB=" + totalMB + ", freeMB=" + freeMB + ", uploadPriority=" + uploadPriority
+               + ", storePathCount=" + storePathCount + ", subdirCountPerPath=" + subdirCountPerPath
+               + ", currentWritePath=" + currentWritePath + ", storagePort=" + storagePort + ", storageHttpPort="
+               + storageHttpPort + ", connectionAllocCount=" + connectionAllocCount + ", connectionCurrentCount="
+               + connectionCurrentCount + ", connectionMaxCount=" + connectionMaxCount + ", totalUploadCount="
+               + totalUploadCount + ", successUploadCount=" + successUploadCount + ", totalAppendCount="
+               + totalAppendCount + ", successAppendCount=" + successAppendCount + ", totalModifyCount="
+               + totalModifyCount + ", successModifyCount=" + successModifyCount + ", totalTruncateCount="
+               + totalTruncateCount + ", successTruncateCount=" + successTruncateCount + ", totalSetMetaCount="
+               + totalSetMetaCount + ", successSetMetaCount=" + successSetMetaCount + ", totalDeleteCount="
+               + totalDeleteCount + ", successDeleteCount=" + successDeleteCount + ", totalDownloadCount="
+               + totalDownloadCount + ", successDownloadCount=" + successDownloadCount + ", totalGetMetaCount="
+               + totalGetMetaCount + ", successGetMetaCount=" + successGetMetaCount + ", totalCreateLinkCount="
+               + totalCreateLinkCount + ", successCreateLinkCount=" + successCreateLinkCount
+               + ", totalDeleteLinkCount=" + totalDeleteLinkCount + ", successDeleteLinkCount="
+               + successDeleteLinkCount + ", totalUploadBytes=" + totalUploadBytes + ", successUploadBytes="
+               + successUploadBytes + ", totalAppendBytes=" + totalAppendBytes + ", successAppendBytes="
+               + successAppendBytes + ", totalModifyBytes=" + totalModifyBytes + ", successModifyBytes="
+               + successModifyBytes + ", totalDownloadloadBytes=" + totalDownloadloadBytes
+               + ", successDownloadloadBytes=" + successDownloadloadBytes + ", totalSyncInBytes=" + totalSyncInBytes
+               + ", successSyncInBytes=" + successSyncInBytes + ", totalSyncOutBytes=" + totalSyncOutBytes
+               + ", successSyncOutBytes=" + successSyncOutBytes + ", totalFileOpenCount=" + totalFileOpenCount
+               + ", successFileOpenCount=" + successFileOpenCount + ", totalFileReadCount=" + totalFileReadCount
+               + ", successFileReadCount=" + successFileReadCount + ", totalFileWriteCount=" + totalFileWriteCount
+               + ", successFileWriteCount=" + successFileWriteCount + ", lastSourceUpdate=" + lastSourceUpdate
+               + ", lastSyncUpdate=" + lastSyncUpdate + ", lastSyncedTimestamp=" + lastSyncedTimestamp
+               + ", lastHeartBeatTime=" + lastHeartBeatTime + ", isTrunkServer=" + isTrunkServer + "]";
     }
 
 }

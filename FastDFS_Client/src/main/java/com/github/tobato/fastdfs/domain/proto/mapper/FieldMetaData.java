@@ -18,6 +18,10 @@ import java.util.Set;
 class FieldMetaData {
 
     /**
+     * 动态属性类型
+     */
+    DynamicFieldType dynamicFieldType;
+    /**
      * 列
      */
     private Field field;
@@ -37,10 +41,6 @@ class FieldMetaData {
      * 列偏移量
      */
     private int offsize;
-    /**
-     * 动态属性类型
-     */
-    DynamicFieldType dynamicFieldType;
 
     /**
      * 构造函数
@@ -153,7 +153,7 @@ class FieldMetaData {
     @Override
     public String toString() {
         return "FieldMetaData [field=" + getFieldName() + ", index=" + index + ", max=" + max + ", size=" + size
-                + ", offsize=" + offsize + "]";
+               + ", offsize=" + offsize + "]";
     }
 
     /**

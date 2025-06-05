@@ -27,12 +27,12 @@ public class MetaData {
         return this.name;
     }
 
-    public String getValue() {
-        return this.value;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getValue() {
+        return this.value;
     }
 
     public void setValue(String value) {

@@ -170,8 +170,8 @@ public final class StrHelper {
         char lastChar = 'a';
         for (char c : s.toCharArray()) {
             if ((Character.isWhitespace(lastChar)) && (!Character.isWhitespace(c))
-                    && (CharPool.DASHED != c) && (buf.length() > 0)
-                    && (buf.charAt(buf.length() - 1) != CharPool.DASHED)) {
+                && (CharPool.DASHED != c) && (buf.length() > 0)
+                && (buf.charAt(buf.length() - 1) != CharPool.DASHED)) {
                 buf.append(StringPool.DASH);
             }
             if (CharPool.UNDERLINE == c) {

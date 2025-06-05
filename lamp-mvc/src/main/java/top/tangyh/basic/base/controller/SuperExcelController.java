@@ -44,14 +44,13 @@ import java.util.List;
 public abstract class SuperExcelController<S extends SuperCacheService<Id, Entity>,
         Id extends Serializable, Entity extends SuperEntity<Id>, SaveVO, UpdateVO, PageQuery, ResultVO>
         extends SuperController<S, Id, Entity, SaveVO, UpdateVO, PageQuery, ResultVO> {
+    private static final String FILE_NAME = "filename";
+    protected Class<SaveVO> saveVOClass = currentSaveVOClass();
+
     @Override
     public SuperCacheService<Id, Entity> getSuperService() {
         return superService;
     }
-
-    private static final String FILE_NAME = "filename";
-
-    protected Class<SaveVO> saveVOClass = currentSaveVOClass();
 
     protected Class<SaveVO> currentSaveVOClass() {
         return (Class<SaveVO>) ReflectionKit.getSuperClassGenericType(this.getClass(), SuperExcelController.class, 3);

@@ -38,6 +38,7 @@ public class TenantLineAnnotationRegister implements EnvironmentCapable, BeanPos
     private ResourcePatternResolver resourcePatternResolver;
     @Value("${lamp.scan.basePackage}")
     private String packages;
+
     protected String resolveBasePackage(String basePackage) {
         return ClassUtils.convertClassNameToResourcePath(getEnvironment().resolveRequiredPlaceholders(basePackage));
     }

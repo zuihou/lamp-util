@@ -1,7 +1,12 @@
 package com.xxl.job.core.biz.client;
 
 import com.xxl.job.core.biz.ExecutorBiz;
-import com.xxl.job.core.biz.model.*;
+import com.xxl.job.core.biz.model.IdleBeatParam;
+import com.xxl.job.core.biz.model.KillParam;
+import com.xxl.job.core.biz.model.LogParam;
+import com.xxl.job.core.biz.model.LogResult;
+import com.xxl.job.core.biz.model.ReturnT;
+import com.xxl.job.core.biz.model.TriggerParam;
 import com.xxl.job.core.util.XxlJobRemotingUtil;
 
 /**
@@ -11,6 +16,9 @@ import com.xxl.job.core.util.XxlJobRemotingUtil;
  */
 public class ExecutorBizClient implements ExecutorBiz {
 
+    private String addressUrl;
+    private String accessToken;
+    private int timeout = 3;
     public ExecutorBizClient() {
     }
     public ExecutorBizClient(String addressUrl, String accessToken) {
@@ -23,19 +31,14 @@ public class ExecutorBizClient implements ExecutorBiz {
         }
     }
 
-    private String addressUrl ;
-    private String accessToken;
-    private int timeout = 3;
-
-
     @Override
     public ReturnT<String> beat() {
-        return XxlJobRemotingUtil.postBody(addressUrl+"beat", accessToken, timeout, "", String.class);
+        return XxlJobRemotingUtil.postBody(addressUrl + "beat", accessToken, timeout, "", String.class);
     }
 
     @Override
-    public ReturnT<String> idleBeat(IdleBeatParam idleBeatParam){
-        return XxlJobRemotingUtil.postBody(addressUrl+"idleBeat", accessToken, timeout, idleBeatParam, String.class);
+    public ReturnT<String> idleBeat(IdleBeatParam idleBeatParam) {
+        return XxlJobRemotingUtil.postBody(addressUrl + "idleBeat", accessToken, timeout, idleBeatParam, String.class);
     }
 
     @Override

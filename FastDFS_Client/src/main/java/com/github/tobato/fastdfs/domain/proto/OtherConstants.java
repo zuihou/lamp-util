@@ -29,9 +29,9 @@ public final class OtherConstants {
     public static final String FDFS_FIELD_SEPERATOR = "\u0002";
 
     public static final int TRACKER_QUERY_STORAGE_FETCH_BODY_LEN = FDFS_GROUP_NAME_MAX_LEN + FDFS_IPADDR_SIZE - 1
-            + FDFS_PROTO_PKG_LEN_SIZE;
+                                                                   + FDFS_PROTO_PKG_LEN_SIZE;
     public static final int TRACKER_QUERY_STORAGE_STORE_BODY_LEN = FDFS_GROUP_NAME_MAX_LEN + FDFS_IPADDR_SIZE
-            + FDFS_PROTO_PKG_LEN_SIZE;
+                                                                   + FDFS_PROTO_PKG_LEN_SIZE;
 
     /**
      * 报文头中命令位置
@@ -52,6 +52,6 @@ public final class OtherConstants {
     public static final long APPENDER_FILE_SIZE = INFINITE_FILE_SIZE;
     public static final long TRUNK_FILE_MARK_SIZE = 512 * 1024L * 1024 * 1024 * 1024 * 1024L;
     public static final long NORMAL_LOGIC_FILENAME_LENGTH = FDFS_FILE_PATH_LEN + FDFS_FILENAME_BASE64_LENGTH
-            + FDFS_FILE_EXT_NAME_MAX_LEN + 1;
+                                                            + FDFS_FILE_EXT_NAME_MAX_LEN + 1;
     public static final long TRUNK_LOGIC_FILENAME_LENGTH = NORMAL_LOGIC_FILENAME_LENGTH + FDFS_TRUNK_FILE_INFO_LEN;
 }

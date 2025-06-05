@@ -2,25 +2,48 @@ package com.xxl.job.core.server;
 
 import com.xxl.job.core.biz.ExecutorBiz;
 import com.xxl.job.core.biz.impl.ExecutorBizImpl;
-import com.xxl.job.core.biz.model.*;
+import com.xxl.job.core.biz.model.IdleBeatParam;
+import com.xxl.job.core.biz.model.KillParam;
+import com.xxl.job.core.biz.model.LogParam;
+import com.xxl.job.core.biz.model.ReturnT;
+import com.xxl.job.core.biz.model.TriggerParam;
 import com.xxl.job.core.thread.ExecutorRegistryThread;
 import com.xxl.job.core.util.GsonTool;
 import com.xxl.job.core.util.ThrowableUtil;
 import com.xxl.job.core.util.XxlJobRemotingUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpHeaderValues;
+import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.codec.http.HttpUtil;
+import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.*;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Copy from : https://github.com/xuxueli/xxl-rpc
@@ -120,6 +143,18 @@ public class EmbedServer {
 
     // ---------------------- registry ----------------------
 
+    public void startRegistry(final String appname, final String address) {
+        // start registry
+        ExecutorRegistryThread.getInstance().start(appname, address);
+    }
+
+    // ---------------------- registry ----------------------
+
+    public void stopRegistry() {
+        // stop registry
+        ExecutorRegistryThread.getInstance().toStop();
+    }
+
     /**
      * netty_http
      * <p>
@@ -175,8 +210,8 @@ public class EmbedServer {
                 return new ReturnT<String>(ReturnT.FAIL_CODE, "invalid request, uri-mapping empty.");
             }
             if (accessToken != null
-                    && accessToken.trim().length() > 0
-                    && !accessToken.equals(accessTokenReq)) {
+                && accessToken.trim().length() > 0
+                && !accessToken.equals(accessTokenReq)) {
                 return new ReturnT<String>(ReturnT.FAIL_CODE, "The access token is wrong.");
             }
 
@@ -240,17 +275,5 @@ public class EmbedServer {
                 super.userEventTriggered(ctx, evt);
             }
         }
-    }
-
-    // ---------------------- registry ----------------------
-
-    public void startRegistry(final String appname, final String address) {
-        // start registry
-        ExecutorRegistryThread.getInstance().start(appname, address);
-    }
-
-    public void stopRegistry() {
-        // stop registry
-        ExecutorRegistryThread.getInstance().toStop();
     }
 }

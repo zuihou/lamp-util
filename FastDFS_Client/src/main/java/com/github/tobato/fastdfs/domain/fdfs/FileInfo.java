@@ -113,7 +113,7 @@ public class FileInfo {
     public String toString() {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return "source_ip_addr = " + this.sourceIpAddr + ", " + "file_size = " + this.fileSize + ", "
-                + "create_timestamp = " + df.format(this.createTime * 1000) + ", " + "crc32 = " + this.crc32;
+               + "create_timestamp = " + df.format(this.createTime * 1000) + ", " + "crc32 = " + this.crc32;
     }
 
 }

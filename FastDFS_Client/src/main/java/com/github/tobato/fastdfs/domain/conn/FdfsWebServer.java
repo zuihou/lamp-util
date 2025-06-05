@@ -1,9 +1,8 @@
 package com.github.tobato.fastdfs.domain.conn;
 
+import com.github.tobato.fastdfs.FdfsClientConstants;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-
-import com.github.tobato.fastdfs.FdfsClientConstants;
 
 /**
  * 表示文件Web服务器对象

@@ -1,11 +1,7 @@
 package top.tangyh.basic.validator.mateconstraint.impl;
 
 
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import top.tangyh.basic.validator.mateconstraint.IConstraintConverter;
 import top.tangyh.basic.validator.utils.ValidatorConstants;
 

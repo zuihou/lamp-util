@@ -1,15 +1,14 @@
 package com.github.tobato.fastdfs.domain.proto;
 
+import com.github.tobato.fastdfs.domain.conn.Connection;
+import com.github.tobato.fastdfs.exception.FdfsIOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.github.tobato.fastdfs.domain.conn.Connection;
-import com.github.tobato.fastdfs.exception.FdfsIOException;
 
 /**
  * 交易命令抽象类

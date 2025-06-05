@@ -1,13 +1,13 @@
 package com.github.tobato.fastdfs.domain.proto.storage.internal;
 
-import java.io.InputStream;
-
 import com.github.tobato.fastdfs.domain.proto.CmdConstants;
 import com.github.tobato.fastdfs.domain.proto.FdfsRequest;
 import com.github.tobato.fastdfs.domain.proto.OtherConstants;
 import com.github.tobato.fastdfs.domain.proto.ProtoHead;
 import com.github.tobato.fastdfs.domain.proto.mapper.DynamicFieldType;
 import com.github.tobato.fastdfs.domain.proto.mapper.FdfsColumn;
+
+import java.io.InputStream;
 
 /**
  * 从文件上传命令
@@ -16,6 +16,16 @@ import com.github.tobato.fastdfs.domain.proto.mapper.FdfsColumn;
  */
 public class StorageUploadSlaveFileRequest extends FdfsRequest {
 
+    /**
+     * 名称前缀
+     */
+    @FdfsColumn(index = 2, max = OtherConstants.FDFS_FILE_PREFIX_MAX_LEN)
+    private final String prefixName;
+    /**
+     * 主文件名
+     */
+    @FdfsColumn(index = 4, dynamicField = DynamicFieldType.allRestByte)
+    private final String masterFilename;
     /**
      * 主文件名长度
      */
@@ -27,20 +37,10 @@ public class StorageUploadSlaveFileRequest extends FdfsRequest {
     @FdfsColumn(index = 1)
     private long fileSize;
     /**
-     * 名称前缀
-     */
-    @FdfsColumn(index = 2, max = OtherConstants.FDFS_FILE_PREFIX_MAX_LEN)
-    private final String prefixName;
-    /**
      * 文件扩展名
      */
     @FdfsColumn(index = 3, max = OtherConstants.FDFS_FILE_EXT_NAME_MAX_LEN)
     private String fileExtName;
-    /**
-     * 主文件名
-     */
-    @FdfsColumn(index = 4, dynamicField = DynamicFieldType.allRestByte)
-    private final String masterFilename;
 
     /**
      * 构造函数
@@ -80,10 +80,6 @@ public class StorageUploadSlaveFileRequest extends FdfsRequest {
         return masterFilename;
     }
 
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
-    }
-
     public String getFileExtName() {
         return fileExtName;
     }
@@ -95,6 +91,10 @@ public class StorageUploadSlaveFileRequest extends FdfsRequest {
     @Override
     public long getFileSize() {
         return fileSize;
+    }
+
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
     }
 
 }

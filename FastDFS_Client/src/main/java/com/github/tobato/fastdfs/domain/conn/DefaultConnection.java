@@ -24,19 +24,17 @@ import java.util.Arrays;
 public class DefaultConnection implements Connection {
 
     /**
+     * 日志
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultConnection.class);
+    /**
      * 封装socket
      */
     private Socket socket;
-
     /**
      * 字符集
      */
     private Charset charset;
-
-    /**
-     * 日志
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultConnection.class);
 
     /**
      * 创建与服务端连接

@@ -1,10 +1,10 @@
 package com.github.tobato.fastdfs.domain.proto;
 
-import java.io.InputStream;
-import java.nio.charset.Charset;
-
 import com.github.tobato.fastdfs.domain.proto.mapper.FdfsParamMapper;
 import com.github.tobato.fastdfs.domain.proto.mapper.ObjectMetaData;
+
+import java.io.InputStream;
+import java.nio.charset.Charset;
 
 /**
  * Fdfs交易请求基类

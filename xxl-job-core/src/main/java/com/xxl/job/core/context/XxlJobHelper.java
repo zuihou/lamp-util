@@ -20,6 +20,8 @@ public class XxlJobHelper {
 
     // ---------------------- base info ----------------------
 
+    private static Logger logger = LoggerFactory.getLogger("xxl-job logger");
+
     /**
      * current JobId
      *
@@ -33,6 +35,8 @@ public class XxlJobHelper {
 
         return xxlJobContext.getJobId();
     }
+
+    // ---------------------- for log ----------------------
 
     /**
      * current JobParam
@@ -48,7 +52,7 @@ public class XxlJobHelper {
         return xxlJobContext.getJobParam();
     }
 
-    // ---------------------- for log ----------------------
+    // ---------------------- for shard ----------------------
 
     /**
      * current JobLogFileName
@@ -64,8 +68,6 @@ public class XxlJobHelper {
         return xxlJobContext.getJobLogFileName();
     }
 
-    // ---------------------- for shard ----------------------
-
     /**
      * current ShardIndex
      *
@@ -79,6 +81,8 @@ public class XxlJobHelper {
 
         return xxlJobContext.getShardIndex();
     }
+
+    // ---------------------- tool for log ----------------------
 
     /**
      * current ShardTotal
@@ -94,17 +98,13 @@ public class XxlJobHelper {
         return xxlJobContext.getShardTotal();
     }
 
-    // ---------------------- tool for log ----------------------
-
-    private static Logger logger = LoggerFactory.getLogger("xxl-job logger");
-
     /**
      * append log with pattern
      *
      * @param appendLogPattern  like "aaa {} bbb {} ccc"
      * @param appendLogArguments    like "111, true"
      */
-    public static boolean log(String appendLogPattern, Object ... appendLogArguments) {
+    public static boolean log(String appendLogPattern, Object... appendLogArguments) {
 
         FormattingTuple ft = MessageFormatter.arrayFormat(appendLogPattern, appendLogArguments);
         String appendLog = ft.getMessage();
@@ -151,16 +151,16 @@ public class XxlJobHelper {
 
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append(DateUtil.formatDateTime(new Date())).append(" ")
-                .append("["+ callInfo.getClassName() + "#" + callInfo.getMethodName() +"]").append("-")
-                .append("["+ callInfo.getLineNumber() +"]").append("-")
-                .append("["+ Thread.currentThread().getName() +"]").append(" ")
-                .append(appendLog!=null?appendLog:"");
+                .append("[" + callInfo.getClassName() + "#" + callInfo.getMethodName() + "]").append("-")
+                .append("[" + callInfo.getLineNumber() + "]").append("-")
+                .append("[" + Thread.currentThread().getName() + "]").append(" ")
+                .append(appendLog != null ? appendLog : "");
         String formatAppendLog = stringBuffer.toString();
 
         // appendlog
         String logFileName = xxlJobContext.getJobLogFileName();
 
-        if (logFileName!=null && logFileName.trim().length()>0) {
+        if (logFileName != null && logFileName.trim().length() > 0) {
             XxlJobFileAppender.appendLog(logFileName, formatAppendLog);
             return true;
         } else {
@@ -176,7 +176,7 @@ public class XxlJobHelper {
      *
      * @return
      */
-    public static boolean handleSuccess(){
+    public static boolean handleSuccess() {
         return handleResult(XxlJobContext.HANDLE_CODE_SUCCESS, null);
     }
 
@@ -195,7 +195,7 @@ public class XxlJobHelper {
      *
      * @return
      */
-    public static boolean handleFail(){
+    public static boolean handleFail() {
         return handleResult(XxlJobContext.HANDLE_CODE_FAIL, null);
     }
 
@@ -214,7 +214,7 @@ public class XxlJobHelper {
      *
      * @return
      */
-    public static boolean handleTimeout(){
+    public static boolean handleTimeout() {
         return handleResult(XxlJobContext.HANDLE_CODE_TIMEOUT, null);
     }
 
@@ -224,7 +224,7 @@ public class XxlJobHelper {
      * @param handleMsg
      * @return
      */
-    public static boolean handleTimeout(String handleMsg){
+    public static boolean handleTimeout(String handleMsg) {
         return handleResult(XxlJobContext.HANDLE_CODE_TIMEOUT, handleMsg);
     }
 

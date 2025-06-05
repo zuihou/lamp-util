@@ -14,21 +14,13 @@ import java.nio.charset.Charset;
  */
 public abstract class FdfsResponse<T> {
     /**
-     * 报文头
-     */
-    protected ProtoHead head;
-
-    /**
      * 返回值类型
      */
     protected final Class<T> genericType;
-
     /**
-     * 获取报文长度
+     * 报文头
      */
-    protected long getContentLength() {
-        return head.getContentLength();
-    }
+    protected ProtoHead head;
 
     /**
      * 构造函数
@@ -40,6 +32,13 @@ public abstract class FdfsResponse<T> {
         // Type theclass = this.getClass().getGenericSuperclass();
         // this.genericType = ((ParameterizedType)
         // theclass).getActualTypeArguments()[0];
+    }
+
+    /**
+     * 获取报文长度
+     */
+    protected long getContentLength() {
+        return head.getContentLength();
     }
 
     /**

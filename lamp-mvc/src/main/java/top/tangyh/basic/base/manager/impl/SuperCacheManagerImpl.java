@@ -269,7 +269,7 @@ public abstract class SuperCacheManagerImpl<M extends SuperMapper<T>, T extends 
         BiPredicate<SqlSession, T> predicate = (sqlSession, entity) -> {
             Object idVal = ReflectionKit.getFieldValue(entity, keyProperty);
             return StringUtils.checkValNull(idVal)
-                    || CollectionUtils.isEmpty(sqlSession.selectList(getSqlStatement(SqlMethod.SELECT_BY_ID), entity));
+                   || CollectionUtils.isEmpty(sqlSession.selectList(getSqlStatement(SqlMethod.SELECT_BY_ID), entity));
         };
 
         BiConsumer<SqlSession, T> consumer = (sqlSession, entity) -> {

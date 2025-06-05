@@ -1,60 +1,60 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<artifactId>lamp-util</artifactId>
-		<groupId>top.tangyh.basic</groupId>
-		<version>5.3.0</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>lamp-util</artifactId>
+        <groupId>top.tangyh.basic</groupId>
+        <version>5.3.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-	<artifactId>xxl-job-core</artifactId>
-	<packaging>jar</packaging>
+    <artifactId>xxl-job-core</artifactId>
+    <packaging>jar</packaging>
 
-	<name>${project.artifactId}</name>
-	<description>A distributed task scheduling framework.</description>
-	<url>https://www.xuxueli.com/</url>
+    <name>${project.artifactId}</name>
+    <description>A distributed task scheduling framework.</description>
+    <url>https://www.xuxueli.com/</url>
 
-	<dependencies>
+    <dependencies>
 
-		<!-- ********************** embed server: netty + gson ********************** -->
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-		</dependency>
+        <!-- ********************** embed server: netty + gson ********************** -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
 
-		<!-- ********************** plugin ********************** -->
-		<!-- groovy-all -->
-		<dependency>
-			<groupId>org.apache.groovy</groupId>
-			<artifactId>groovy</artifactId>
-		</dependency>
+        <!-- ********************** plugin ********************** -->
+        <!-- groovy-all -->
+        <dependency>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy</artifactId>
+        </dependency>
 
-		<!-- spring-context -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<scope>provided</scope>
-		</dependency>
+        <!-- spring-context -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
-		<!-- ********************** base ********************** -->
-		<!-- slf4j -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
+        <!-- ********************** base ********************** -->
+        <!-- slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
 
-		<!-- javax.annotation-api -->
-		<dependency>
-			<groupId>jakarta.annotation</groupId>
-			<artifactId>jakarta.annotation-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
+        <!-- javax.annotation-api -->
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 </project>

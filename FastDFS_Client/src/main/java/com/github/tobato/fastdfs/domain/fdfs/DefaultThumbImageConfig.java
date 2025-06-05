@@ -1,10 +1,9 @@
 package com.github.tobato.fastdfs.domain.fdfs;
 
+import com.github.tobato.fastdfs.FdfsClientConstants;
 import org.apache.commons.lang3.Validate;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-
-import com.github.tobato.fastdfs.FdfsClientConstants;
 
 /**
  * 缩略图配置参数
@@ -15,11 +14,9 @@ import com.github.tobato.fastdfs.FdfsClientConstants;
 @ConfigurationProperties(prefix = FdfsClientConstants.THUMB_IMAGE_CONFIG_PREFIX)
 public class DefaultThumbImageConfig implements ThumbImageConfig {
 
-    private int width;
-
-    private int height;
-
     private static String cachedPrefixName;
+    private int width;
+    private int height;
 
     /**
      * 生成前缀如:_150x150
@@ -46,20 +43,20 @@ public class DefaultThumbImageConfig implements ThumbImageConfig {
         return buff.toString();
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
     public int getWidth() {
         return width;
     }
 
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
     public int getHeight() {
         return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
 }

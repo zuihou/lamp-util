@@ -141,7 +141,7 @@ public class MybatisEnumTypeHandler<E extends Enum<E>> extends BaseTypeHandler<E
         String sValue = StringUtils.toStringTrim(sourceValue);
         String tValue = StringUtils.toStringTrim(targetValue);
         if (sourceValue instanceof Number && targetValue instanceof Number
-                && new BigDecimal(sValue).compareTo(new BigDecimal(tValue)) == 0) {
+            && new BigDecimal(sValue).compareTo(new BigDecimal(tValue)) == 0) {
             return true;
         }
         return Objects.equals(sValue, tValue);

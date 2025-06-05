@@ -24,14 +24,14 @@ import java.net.InetSocketAddress;
 public class FdfsConnectionManager {
 
     /**
+     * 日志
+     */
+    protected static final Logger LOGGER = LoggerFactory.getLogger(FdfsConnectionManager.class);
+    /**
      * 连接池
      */
     @Autowired
     private FdfsConnectionPool pool;
-    /**
-     * 日志
-     */
-    protected static final Logger LOGGER = LoggerFactory.getLogger(FdfsConnectionManager.class);
 
     /**
      * 构造函数

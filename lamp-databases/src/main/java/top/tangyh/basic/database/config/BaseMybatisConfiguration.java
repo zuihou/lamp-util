@@ -128,6 +128,7 @@ public abstract class BaseMybatisConfiguration {
         databaseIdProvider.setProperties(properties);
         return databaseIdProvider;
     }
+
     /**
      * 分页拦截器之后的插件
      *

@@ -7,15 +7,14 @@ import java.io.Serializable;
  */
 public class KillParam implements Serializable {
     private static final long serialVersionUID = 42L;
+    private int jobId;
 
     public KillParam() {
     }
+
     public KillParam(int jobId) {
         this.jobId = jobId;
     }
-
-    private int jobId;
-
 
     public int getJobId() {
         return jobId;

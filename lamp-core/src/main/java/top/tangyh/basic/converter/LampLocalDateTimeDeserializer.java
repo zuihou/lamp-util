@@ -145,7 +145,7 @@ public class LampLocalDateTimeDeserializer extends JSR310DateTimeDeserializerBas
                 return null;
             }
             if ((t == JsonToken.VALUE_STRING || t == JsonToken.VALUE_EMBEDDED_OBJECT)
-                    && context.isEnabled(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS)) {
+                && context.isEnabled(DeserializationFeature.UNWRAP_SINGLE_VALUE_ARRAYS)) {
                 final LocalDateTime parsed = deserialize(parser, context);
                 if (parser.nextToken() != JsonToken.END_ARRAY) {
                     handleMissingEndArrayForSingle(parser, context);
@@ -172,7 +172,7 @@ public class LampLocalDateTimeDeserializer extends JSR310DateTimeDeserializerBas
                     } else {
                         int partialSecond = parser.getIntValue();
                         if (partialSecond < 1_000 &&
-                                !context.isEnabled(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)) {
+                            !context.isEnabled(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS)) {
                             // value is milliseconds, convert it to nanoseconds
                             partialSecond *= 1_000_000;
                         }

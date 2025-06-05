@@ -38,6 +38,46 @@ public class FastFile {
     protected String groupName;
 
     /**
+     * 上传文件对象
+     *
+     * @param inputStream
+     * @param fileSize
+     * @param fileExtName
+     * @param metaDataSet
+     */
+    public FastFile(InputStream inputStream, long fileSize,
+                    String fileExtName, Set<MetaData> metaDataSet) {
+        this.inputStream = inputStream;
+        this.fileSize = fileSize;
+        this.fileExtName = fileExtName;
+        this.metaDataSet = metaDataSet;
+    }
+
+    protected FastFile() {
+        //for build
+    }
+
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public String getFileExtName() {
+        return fileExtName;
+    }
+
+    public Set<MetaData> getMetaDataSet() {
+        return metaDataSet != null ? Collections.unmodifiableSet(metaDataSet) : Collections.EMPTY_SET;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    /**
      * 构造模式
      */
     public static class Builder extends AbstractFastFileBuilder<FastFile> {
@@ -80,45 +120,5 @@ public class FastFile {
             file.groupName = this.groupName;
             return file;
         }
-    }
-
-    public InputStream getInputStream() {
-        return inputStream;
-    }
-
-    public long getFileSize() {
-        return fileSize;
-    }
-
-    public String getFileExtName() {
-        return fileExtName;
-    }
-
-    public Set<MetaData> getMetaDataSet() {
-        return metaDataSet != null ? Collections.unmodifiableSet(metaDataSet) : Collections.EMPTY_SET;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    /**
-     * 上传文件对象
-     *
-     * @param inputStream
-     * @param fileSize
-     * @param fileExtName
-     * @param metaDataSet
-     */
-    public FastFile(InputStream inputStream, long fileSize,
-                    String fileExtName, Set<MetaData> metaDataSet) {
-        this.inputStream = inputStream;
-        this.fileSize = fileSize;
-        this.fileExtName = fileExtName;
-        this.metaDataSet = metaDataSet;
-    }
-
-    protected FastFile() {
-        //for build
     }
 }

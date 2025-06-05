@@ -4,11 +4,11 @@ import com.github.tobato.fastdfs.FdfsClientConstants;
 import com.github.tobato.fastdfs.domain.fdfs.TrackerLocator;
 import com.github.tobato.fastdfs.domain.proto.FdfsCommand;
 import com.github.tobato.fastdfs.exception.FdfsConnectException;
+import jakarta.annotation.PostConstruct;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.validation.constraints.NotNull;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
