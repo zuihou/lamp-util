@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+
+<!-- files  代表你想对项目中的哪个类进行过来  -->
+<!-- checks 代表你想过滤掉哪种检查 -->
+<suppressions>
+    <suppress files="EnumDeserializer.java" checks=".*"/>
+    <suppress files="ParamsBuildHelper.java" checks=".*"/>
+</suppressions>
