@@ -86,6 +86,17 @@ public interface CacheKeyBuilder {
     String getTable();
 
     /**
+     * 租户ID，用于区分租户
+     * <p>
+     * 非租户模式设置成空字符串
+     *
+     * @return 租户ID
+     */
+    default String getTenant() {
+        return null;
+    }
+
+    /**
      * key的字段名， 用于区分字段
      *
      * @return 通常是key的字段名
