@@ -113,22 +113,21 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
         }
         Map<String, FieldValidatorDesc> fieldValidatorDesc = new HashMap<>((int) (constraints.size() / 0.75 + 1));
         for (ValidConstraint constraint : constraints) {
-            doExtract(constraint, fieldValidatorDesc);
+            fieldValidatorDesc.putAll(doExtract(constraint));
         }
 
         return fieldValidatorDesc.values();
     }
 
 
-    private void doExtract(ValidConstraint constraint, Map<String, FieldValidatorDesc> fieldValidatorDesc) throws Exception {
+    private Map<String, FieldValidatorDesc> doExtract(ValidConstraint constraint) throws Exception {
+        Map<String, FieldValidatorDesc> fieldValidatorDesc = new HashMap<>();
         Class<?> targetClazz = constraint.getTarget();
         Class<?>[] groups = constraint.getGroups();
 
-        String key = targetClazz.getName() + StrPool.COLON +
-                     Arrays.stream(groups).map(Class::getName).collect(Collectors.joining(StrPool.COLON));
+        String key = targetClazz.getName() + StrPool.COLON + Arrays.stream(groups).map(Class::getName).collect(Collectors.joining(StrPool.COLON));
         if (CACHE.containsKey(key)) {
-            fieldValidatorDesc.putAll(CACHE.get(key));
-            return;
+            return CACHE.get(key);
         }
 
         //测试一下这个方法
@@ -138,17 +137,18 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
         Set<MetaConstraint<?>> r = res.getMetaConstraints();
         Set<PropertyDescriptor> constrainedProperties = res.getBeanDescriptor().getConstrainedProperties();
         for (MetaConstraint<?> metaConstraint : r) {
-            builderFieldValidatorDesc(metaConstraint, constrainedProperties, groups, fieldValidatorDesc);
+            fieldValidatorDesc.putAll(builderFieldValidatorDesc(metaConstraint, constrainedProperties, groups));
         }
 
         CACHE.put(key, fieldValidatorDesc);
+        return fieldValidatorDesc;
     }
 
 
-    private void builderFieldValidatorDesc(MetaConstraint<?> metaConstraint,
-                                           Set<PropertyDescriptor> constraintDescriptors,
-                                           Class<?>[] groups,
-                                           Map<String, FieldValidatorDesc> fieldValidatorDesc) throws Exception {
+    private Map<String, FieldValidatorDesc> builderFieldValidatorDesc(MetaConstraint<?> metaConstraint,
+                                                                      Set<PropertyDescriptor> constraintDescriptors,
+                                                                      Class<?>[] groups) throws Exception {
+        Map<String, FieldValidatorDesc> fieldValidatorDesc = new HashMap<>();
         //字段上的组
         Set<Class<?>> groupsMeta = metaConstraint.getGroupList();
         boolean isContainsGroup = false;
@@ -167,7 +167,7 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
             }
         }
         if (!isContainsGroup) {
-            return;
+            return fieldValidatorDesc;
         }
 
         ConstraintLocation con = metaConstraint.getLocation();
@@ -184,7 +184,7 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
             }
         }
         if (!flag) {
-            return;
+            return fieldValidatorDesc;
         }
         FieldValidatorDesc desc = fieldValidatorDesc.get(key);
         if (desc == null) {
@@ -213,6 +213,7 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
             notNull.setAttrs(attrs);
             desc.getConstraints().add(notNull);
         }
+        return fieldValidatorDesc;
     }
 
 
