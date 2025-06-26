@@ -121,7 +121,6 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
 
 
     private Map<String, FieldValidatorDesc> doExtract(ValidConstraint constraint) throws Exception {
-        Map<String, FieldValidatorDesc> fieldValidatorDesc = new HashMap<>();
         Class<?> targetClazz = constraint.getTarget();
         Class<?>[] groups = constraint.getGroups();
 
@@ -136,8 +135,9 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
         BeanMetaData<?> res = beanMetaDataManager.getBeanMetaData(targetClazz);
         Set<MetaConstraint<?>> r = res.getMetaConstraints();
         Set<PropertyDescriptor> constrainedProperties = res.getBeanDescriptor().getConstrainedProperties();
+        Map<String, FieldValidatorDesc> fieldValidatorDesc = new HashMap<>();
         for (MetaConstraint<?> metaConstraint : r) {
-            fieldValidatorDesc.putAll(builderFieldValidatorDesc(metaConstraint, constrainedProperties, groups));
+            builderFieldValidatorDesc(metaConstraint, constrainedProperties, groups, fieldValidatorDesc);
         }
 
         CACHE.put(key, fieldValidatorDesc);
@@ -147,8 +147,7 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
 
     private Map<String, FieldValidatorDesc> builderFieldValidatorDesc(MetaConstraint<?> metaConstraint,
                                                                       Set<PropertyDescriptor> constraintDescriptors,
-                                                                      Class<?>[] groups) throws Exception {
-        Map<String, FieldValidatorDesc> fieldValidatorDesc = new HashMap<>();
+                                                                      Class<?>[] groups, Map<String, FieldValidatorDesc> fieldValidatorDesc) throws Exception {
         //字段上的组
         Set<Class<?>> groupsMeta = metaConstraint.getGroupList();
         boolean isContainsGroup = false;
@@ -247,3 +246,4 @@ public class DefaultConstraintExtractImpl implements IConstraintExtract {
         return null;
     }
 }
+
