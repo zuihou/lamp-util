@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -24,8 +26,9 @@ import java.time.LocalDateTime;
 @ToString(callSuper = true)
 @EqualsAndHashCode
 @Accessors(chain = true)
-public class OptLogDTO {
+public class OptLogDTO implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

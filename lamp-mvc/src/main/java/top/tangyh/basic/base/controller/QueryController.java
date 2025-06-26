@@ -59,6 +59,7 @@ public interface QueryController<Id extends Serializable, Entity extends SuperEn
      * @param id 主键id
      * @return 查询结果
      */
+    @Parameters({@Parameter(name = "id", description = "主键", schema = @Schema(type = "long"), in = ParameterIn.PATH)})
     @Operation(summary = "查询单体详情")
     @GetMapping("/detail")
     @WebLog("'查询:' + #id")

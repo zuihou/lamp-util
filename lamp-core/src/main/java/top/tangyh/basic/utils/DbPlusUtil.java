@@ -79,7 +79,7 @@ public class DbPlusUtil {
         final String name = ReUtil.getGroup1("jdbc:(.*?):", jdbcUrl);
 
 
-        if (name.contains("mysql") || name.contains("cobar")) {
+        if (name.contains("mysql") || name.contains("cobar") || name.contains("taos-rs")) {
             connUri = jdbcUrl.substring(pos1 + 1);
 
             if (connUri.startsWith("//")) {
@@ -238,6 +238,8 @@ public class DbPlusUtil {
             return DbType.XCloud;
         } else if (url.contains(":firebirdsql:")) {
             return DbType.FIREBIRD;
+        } else if (url.contains(":taos-rs:")) {
+            return DbType.TDENGINE;
         } else {
             log.warn("The jdbcUrl is " + jdbcUrl + ", Mybatis Plus Cannot Read Database type or The Database's Not Supported!");
             return DbType.OTHER;
