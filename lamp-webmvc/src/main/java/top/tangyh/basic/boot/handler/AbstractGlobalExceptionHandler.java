@@ -348,6 +348,8 @@ public abstract class AbstractGlobalExceptionHandler {
         if (requestAttributes != null) {
             HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
             path = request.getRequestURI();
+        } else {
+            log.warn("无法获取 request");
         }
         return path;
     }
