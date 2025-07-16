@@ -6,12 +6,12 @@
     <parent>
         <groupId>top.tangyh.basic</groupId>
         <artifactId>lamp-parent</artifactId>
-        <version>5.3.1</version>
+        <version>5.3.0</version>
         <relativePath>lamp-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>lamp-util</artifactId>
-    <version>5.3.1</version>
+    <version>5.3.0</version>
 
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
@@ -90,78 +90,78 @@
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-annotation</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-webmvc</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-cache-starter</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-cloud-starter</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-core</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-databases</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-echo-starter</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
 
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-log-starter</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-mq-starter</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-mvc</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-scan-starter</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-swagger2-starter</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-uid</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-validator-starter</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-xss-starter</artifactId>
-                <version>${project.version}</version>
+                <version>5.3.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
