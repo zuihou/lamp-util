@@ -45,12 +45,12 @@ public class XssUtils {
     static {
 //        SCRIPT = Pattern.compile("<[\r\n| | ]*script[\r\n| | ]*>(.*?)</[\r\n| | ]*script[\r\n| | ]*>", Pattern.CASE_INSENSITIVE);
 
-        log.debug(" start read XSS config file [" + ANTISAMY_SLASHDOT_XML + "]");
+        log.trace(" start read XSS config file [" + ANTISAMY_SLASHDOT_XML + "]");
         try (InputStream inputStream = XssUtils.class.getClassLoader().getResourceAsStream(ANTISAMY_SLASHDOT_XML)) {
             if (inputStream != null) {
                 policy = Policy.getInstance(inputStream);
             }
-            log.debug("read XSS config file [" + ANTISAMY_SLASHDOT_XML + "] success");
+            log.trace("read XSS config file [" + ANTISAMY_SLASHDOT_XML + "] success");
         } catch (PolicyException | IOException e) {
             log.error("read XSS config file [" + ANTISAMY_SLASHDOT_XML + "] fail , reason:", e);
         }
@@ -67,9 +67,9 @@ public class XssUtils {
         AntiSamy antiSamy = new AntiSamy();
 
         try {
-            log.debug("raw value before xssClean: {}", paramValue);
+            log.trace("raw value before xssClean: {}", paramValue);
             if (isIgnoreParamValue(paramValue, ignoreParamValueList)) {
-                log.debug("ignore the xssClean,keep the raw paramValue: {}", paramValue);
+                log.trace("ignore the xssClean,keep the raw paramValue: {}", paramValue);
                 return paramValue;
             } else {
                 final CleanResults cr = antiSamy.scan(paramValue, policy);
@@ -80,7 +80,7 @@ public class XssUtils {
                 str = str.replaceAll("&amp;", "&");
                 str = str.replaceAll("&lt;", "<");
                 str = str.replaceAll("&gt;", ">");
-                log.debug("xss filter value after xssClean" + str);
+                log.trace("xss filter value after xssClean" + str);
 
                 return str;
             }
