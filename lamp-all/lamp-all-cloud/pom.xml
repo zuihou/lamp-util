@@ -3,18 +3,23 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>lamp-util</artifactId>
+        <artifactId>lamp-all</artifactId>
         <groupId>top.tangyh.basic</groupId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
-    <artifactId>lamp-all</artifactId>
 
-    <modules>
-        <module>lamp-all-boot</module>
-        <module>lamp-all-cloud</module>
-    </modules>
+    <artifactId>lamp-all-cloud</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>top.tangyh.basic</groupId>
+            <artifactId>lamp-all-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>top.tangyh.basic</groupId>
+            <artifactId>lamp-cloud-starter</artifactId>
+        </dependency>
+    </dependencies>
 </project>

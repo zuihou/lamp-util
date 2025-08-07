@@ -5,7 +5,7 @@
     <parent>
         <artifactId>lamp-util</artifactId>
         <groupId>top.tangyh.basic</groupId>
-        <version>5.4.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -20,8 +20,8 @@
             <artifactId>lamp-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>easyexcel-core</artifactId>
+            <groupId>cn.idev.excel</groupId>
+            <artifactId>fastexcel-core</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

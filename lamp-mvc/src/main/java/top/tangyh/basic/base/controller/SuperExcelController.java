@@ -4,10 +4,10 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.alibaba.excel.exception.ExcelDataConvertException;
-import com.alibaba.excel.metadata.property.ExcelContentProperty;
+import cn.idev.excel.FastExcel;
+import cn.idev.excel.annotation.ExcelProperty;
+import cn.idev.excel.exception.ExcelDataConvertException;
+import cn.idev.excel.metadata.property.ExcelContentProperty;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import io.swagger.v3.oas.annotations.Operation;
@@ -88,7 +88,7 @@ public abstract class SuperExcelController<S extends SuperCacheService<Id, Entit
             response.setCharacterEncoding("utf-8");
 
             List<?> list = findExportList(params);
-            EasyExcel.write(response.getOutputStream(), getExcelClass()).sheet("模板").doWrite(list);
+            FastExcel.write(response.getOutputStream(), getExcelClass()).sheet("模板").doWrite(list);
         } catch (Exception e) {
             log.error("导出失败", e);
             response.reset();
@@ -120,7 +120,7 @@ public abstract class SuperExcelController<S extends SuperCacheService<Id, Entit
                                   HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 配置excel第一行字段名
         try {
-            List<SaveVO> dataList = EasyExcel.read(simpleFile.getInputStream()).head(getSaveVOClass()).sheet().doReadSync();
+            List<SaveVO> dataList = FastExcel.read(simpleFile.getInputStream()).head(getSaveVOClass()).sheet().doReadSync();
 
             String failMsg = ValidatorUtils.validateAllSneaky(dataList, 1);
             if (StrUtil.isNotEmpty(failMsg)) {
