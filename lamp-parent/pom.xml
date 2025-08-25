@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.4</version>
+        <version>3.5.5</version>
         <relativePath/>
     </parent>
     <groupId>top.tangyh.basic</groupId>
@@ -20,20 +20,19 @@
     <properties>
         <revision>5.5.0</revision>
         <!--
-         1. spring-cloud-alibaba 2023.0.1.2 和 seata 2.2.0 不兼容
-         2. spring-cloud-alibaba 2023.0.3.2 的日志存在问题，配置方式变动很大
+         1. spring-cloud-alibaba 2023.0.1.2 和 seata 2.2.0 不兼容，所以只能使用seata2.0.0
+         2. spring-cloud-alibaba 2023.0.3.3 和 seata 2.x.x 使用分布式事务时，代码有bug，无法正常切换数据源
          -->
         <springdoc.version>2.8.5</springdoc.version>
         <knife4j-swagger-models-v3.version>2.2.28</knife4j-swagger-models-v3.version>
         <spring-cloud-dependencies.version>2025.0.0</spring-cloud-dependencies.version>
         <spring-cloud-alibaba-dependencies.version>2023.0.3.3</spring-cloud-alibaba-dependencies.version>
-        <!-- seata强制使用 低版本的，高版本有问题 -->
         <spring-cloud-alibaba-seata-dependencies.version>2023.0.1.2</spring-cloud-alibaba-seata-dependencies.version>
-        <spring-framework.version>6.2.8</spring-framework.version>
+        <spring-framework.version>6.2.10</spring-framework.version>
         <seata.version>2.0.0</seata.version>
-        <nacos.version>3.0.2</nacos.version>
+        <nacos.version>3.0.3</nacos.version>
         <sentinel.version>1.8.6</sentinel.version>
-        <spring-boot-admin.version>3.5.1</spring-boot-admin.version>
+        <spring-boot-admin.version>3.5.2</spring-boot-admin.version>
         <dockerfile-maven-plugin.version>1.4.12</dockerfile-maven-plugin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -42,7 +41,6 @@
         <dubbo.version>3.3.5</dubbo.version>
         <smart-doc.version>3.1.1</smart-doc.version>
         <torna-sdk.version>1.0.16</torna-sdk.version>
-        <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <dm.version>8.1.3.140</dm.version>
         <mysql.version>8.0.33</mysql.version>
         <hutool.version>5.8.39</hutool.version>
@@ -50,31 +48,28 @@
         <sa-token.version>1.44.0</sa-token.version>
         <magic-api.version>2.2.2</magic-api.version>
         <oshi.version>6.8.2</oshi.version>
-        <druid.version>1.2.25</druid.version>
+        <druid.version>1.2.27</druid.version>
         <mybatis.version>3.5.19</mybatis.version>
         <mybatis-spring.version>3.0.5</mybatis-spring.version>
         <mybatis.typehandlers.version>1.0.2</mybatis.typehandlers.version>
         <mybatis-plus.version>3.5.12</mybatis-plus.version>
-        <fastmybatis.version>3.0.17</fastmybatis.version>
+        <fastmybatis.version>3.1.7</fastmybatis.version>
         <dynamic.datasource.version>4.3.1</dynamic.datasource.version>
         <jasypt.version>3.0.5</jasypt.version>
         <p6spy.version>3.9.1</p6spy.version>
         <fastjson2.version>2.0.58</fastjson2.version>
         <fastexcel.version>1.2.0</fastexcel.version>
-        <poi.version>5.2.5</poi.version>
+        <poi.version>5.3.0</poi.version>
         <transmittable-thread-local.version>2.12.2</transmittable-thread-local.version>
         <knife4j.version>4.5.0</knife4j.version>
         <aviator.version>5.1.4</aviator.version>
         <groovy.version>4.0.26</groovy.version>
         <guava.version>33.4.8-jre</guava.version>
-        <commons-exec.version>1.3</commons-exec.version>
-        <commons-email.version>1.5</commons-email.version>
-        <commons.collections4.version>4.4</commons.collections4.version>
-        <commons.collections.version>3.2.2</commons.collections.version>
-        <commons-lang.version>2.6</commons-lang.version>
-        <commons-io.version>2.15.0</commons-io.version>
-        <commons-logging.version>1.3.3</commons-logging.version>
-        <commons-fileupload.version>1.3.3</commons-fileupload.version>
+        <commons-beanutils.version>1.11.0</commons-beanutils.version>
+        <commons-exec.version>1.5</commons-exec.version>
+        <commons-email.version>1.6.0</commons-email.version>
+        <commons-io.version>2.20.0</commons-io.version>
+        <commons-logging.version>1.3.5</commons-logging.version>
         <asm.version>5.0.4</asm.version>
         <tobato-fastdfs-client.version>1.27.3-SNAPSHOT</tobato-fastdfs-client.version>
         <tencentcloud-sdk-java.version>4.0.11</tencentcloud-sdk-java.version>
@@ -94,8 +89,8 @@
         <jsoup.version>1.15.3</jsoup.version>
         <JustAuth.version>1.16.5</JustAuth.version>
         <sun-jaxb.version>2.3.0.1</sun-jaxb.version>
-        <okio.version>2.10.0</okio.version>
-        <okhttp3.version>4.10.0</okhttp3.version>
+        <okio.version>3.12.0</okio.version>
+        <okhttp3.version>4.12.0</okhttp3.version>
     </properties>
 
     <licenses>
@@ -236,12 +231,6 @@
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
                 <version>${commons-logging.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>commons-fileupload</groupId>
-                <artifactId>commons-fileupload</artifactId>
-                <version>${commons-fileupload.version}</version>
             </dependency>
 
             <dependency>
@@ -470,12 +459,6 @@
                         <artifactId>commons-logging</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>${commons-lang.version}</version>
             </dependency>
 
             <!-- commons-exec -->
@@ -722,7 +705,6 @@
                 <!--                </plugin>-->
             </plugins>
         </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
