@@ -59,7 +59,7 @@
         <p6spy.version>3.9.1</p6spy.version>
         <fastjson2.version>2.0.58</fastjson2.version>
         <fastexcel.version>1.2.0</fastexcel.version>
-        <poi.version>5.3.0</poi.version>
+        <poi.version>5.4.0</poi.version>
         <transmittable-thread-local.version>2.12.2</transmittable-thread-local.version>
         <knife4j.version>4.5.0</knife4j.version>
         <aviator.version>5.1.4</aviator.version>
