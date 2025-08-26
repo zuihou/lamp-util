@@ -9,7 +9,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <name>${project.artifactId}</name>
     <artifactId>lamp-echo-starter</artifactId>
     <description>关联数据自动注入器</description>
 

@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>lamp-all</artifactId>
-
+    <name>${project.artifactId}</name>
     <modules>
         <module>lamp-all-boot</module>
         <module>lamp-all-cloud</module>
