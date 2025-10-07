@@ -154,6 +154,23 @@ public final class ContextUtil {
         set(ContextConstants.PATH_HEADER, path == null ? StrPool.EMPTY : path);
     }
 
+
+    /**
+     * 前端的多语言环境
+     */
+    public static String getLocale() {
+        return get(ContextConstants.LOCALE_HEADER, String.class, StrPool.EMPTY);
+    }
+
+    /**
+     * 前端的多语言环境
+     *
+     * @param locale 多语言环境
+     */
+    public static void setLocale(Object locale) {
+        set(ContextConstants.LOCALE_HEADER, locale == null ? StrPool.EMPTY : locale);
+    }
+
     /**
      * 获取token
      *

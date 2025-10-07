@@ -36,6 +36,7 @@ public class FeignAddHeaderRequestInterceptor implements RequestInterceptor {
             ContextConstants.CURRENT_DEPT_ID_HEADER,
             ContextConstants.FEIGN,
             ContextConstants.TRACE_ID_HEADER,
+            ContextConstants.LOCALE_HEADER,
             ContextConstants.GRAY_VERSION,
             ContextConstants.STOP,
             ContextConstants.PROCEED,

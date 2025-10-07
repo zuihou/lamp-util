@@ -73,6 +73,10 @@ public final class ContextConstants {
      */
     public static final String PATH_HEADER = "Path";
     /**
+     * 请求头中存放的 前端语言环境
+     */
+    public static final String LOCALE_HEADER = "Locale";
+    /**
      * 请求头和线程变量中的 token
      */
     public static final String TOKEN_HEADER = TOKEN_KEY;
