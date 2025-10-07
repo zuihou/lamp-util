@@ -208,7 +208,7 @@ public interface CachePlusOps extends CacheOps {
      * @param key 一定不能为 {@literal null}.
      * @return 以列表形式返回哈希表的域和域的值
      */
-    <K, V> Map<K, CacheResult<V>> hGetAll(@NonNull CacheHashKey key);
+    <K, V> Map<K, CacheResult<V>> hGetAll(@NonNull CacheKey key);
 
     /**
      * 返回哈希表 key 中，所有的域和值。
@@ -219,7 +219,7 @@ public interface CachePlusOps extends CacheOps {
      * @param cacheNullValues 缓存空值
      * @return 以列表形式返回哈希表的域和域的值
      */
-    <K, V> Map<K, CacheResult<V>> hGetAll(@NonNull CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues);
+    <K, V> Map<K, CacheResult<V>> hGetAll(@NonNull CacheKey key, Function<CacheKey, Map<K, V>> loader, boolean... cacheNullValues);
 
     /**
      * 将一个或多个 member 元素加入到集合 key 当中，已经存在于集合的 member 元素将被忽略。

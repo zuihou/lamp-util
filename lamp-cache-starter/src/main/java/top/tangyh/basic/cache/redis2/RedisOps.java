@@ -465,7 +465,7 @@ public class RedisOps extends BaseRedis {
         return returnMapVal(key, map);
     }
 
-    public <K, V> Map<K, CacheResult<V>> hGetAll(@NonNull CacheHashKey key) {
+    public <K, V> Map<K, CacheResult<V>> hGetAll(@NonNull CacheKey key) {
         return hGetAll(key.getKey());
     }
 
@@ -480,7 +480,7 @@ public class RedisOps extends BaseRedis {
      * @see <a href="https://redis.io/commands/hget">Redis Documentation: HGET</a>
      */
     @Nullable
-    public <K, V> Map<K, CacheResult<V>> hGetAll(@NonNull CacheHashKey key, Function<CacheHashKey, Map<K, V>> loader, boolean... cacheNullValues) {
+    public <K, V> Map<K, CacheResult<V>> hGetAll(@NonNull CacheKey key, Function<CacheKey, Map<K, V>> loader, boolean... cacheNullValues) {
         boolean cacheNullVal = getCacheNullVal(cacheNullValues);
         Map<K, V> map = (Map<K, V>) hashOps.entries(key.getKey());
         if (MapUtil.isNotEmpty(map)) {
