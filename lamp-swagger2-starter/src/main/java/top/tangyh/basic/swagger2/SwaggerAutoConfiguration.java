@@ -2,6 +2,7 @@ package top.tangyh.basic.swagger2;
 
 import cn.hutool.core.collection.CollUtil;
 import com.github.xiaoymin.knife4j.spring.configuration.Knife4jProperties;
+import com.github.xiaoymin.knife4j.spring.extension.Knife4jOpenApiCustomizer;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -11,10 +12,10 @@ import io.swagger.v3.oas.models.parameters.Parameter;
 import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springdoc.core.customizers.GlobalOperationCustomizer;
 import org.springdoc.core.properties.SpringDocConfigProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import top.tangyh.basic.swagger2.properties.SwaggerProperties;
 
 import java.util.List;
@@ -25,9 +26,9 @@ import java.util.List;
  * @author zuihou
  * @date 2018/11/18 9:22
  */
-@Import({
-        Swagger2Configuration.class
-})
+//@Import({
+//        Swagger2Configuration.class
+//})
 @ConditionalOnProperty(prefix = "knife4j", name = "enable", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(SwaggerProperties.class)
 public class SwaggerAutoConfiguration {
@@ -40,14 +41,21 @@ public class SwaggerAutoConfiguration {
         this.properties = properties;
     }
 
+    @Bean
+    @ConditionalOnClass(SwaggerWebMvcConfigurer.class)
+    public SwaggerWebMvcConfigurer getSwaggerWebMvcConfigurer() {
+        return new SwaggerWebMvcConfigurer();
+    }
+
     /**
      * 增强自定义配置
      * @return
      */
     @Bean
-    public MyKnife4jOpenApiCustomizer knife4jOpenApiCustomizer(SpringDocConfigProperties docProperties) {
+    public Knife4jOpenApiCustomizer knife4jOpenApiCustomizer(SpringDocConfigProperties docProperties) {
         return new MyKnife4jOpenApiCustomizer(this.properties, docProperties);
     }
+
 
     /**
      * 根据@Tag 上的排序，写入x-order

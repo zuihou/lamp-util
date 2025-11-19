@@ -77,7 +77,7 @@ public class DatabaseProperties {
      * <p>
      * 你的所有后台服务启动时，链接那些租户数据库，这里就要配置几个前缀
      * <p>
-     * 如：lamp项目原始的服务（基础服务、租户服务、认证服务、消息服务、文件服务、网关服务）
+     * 如：项目原始的服务（基础服务、租户服务、认证服务、消息服务、文件服务、网关服务）
      * 总共链接了2个租户库： lamp_base_{TenantId}、lamp_extend_{TenantId}， 这里就要配置2个前缀
      */
     private List<String> initDatabasePrefix = Collections.emptyList();

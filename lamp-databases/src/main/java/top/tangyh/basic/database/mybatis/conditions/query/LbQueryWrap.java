@@ -73,7 +73,7 @@ public class LbQueryWrap<T> extends AbstractLambdaWrapper<T, LbQueryWrap<T>>
     private SharedString sqlSelect = new SharedString();
 
     /**
-     * 是否跳过空值（lamp项目扩展）
+     * 是否跳过空值（项目扩展）
      */
     private boolean skipEmpty = true;
 

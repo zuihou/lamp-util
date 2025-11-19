@@ -88,6 +88,7 @@ public class R<T> {
     private R() {
         this.defExec = false;
         this.timestamp = System.currentTimeMillis();
+        this.trace = MDC.get(TRACE_ID_HEADER);
     }
 
     public R(int code, T data, String msg) {
