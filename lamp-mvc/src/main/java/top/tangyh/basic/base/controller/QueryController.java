@@ -43,7 +43,7 @@ public interface QueryController<Id extends Serializable, Entity extends SuperEn
      * @return 查询结果
      */
     @Parameters({
-            @Parameter(name = "id", description = "主键", schema = @Schema(type = "long"), in = ParameterIn.PATH),
+            @Parameter(name = "id", description = "主键", schema = @Schema(type = "long"), in = ParameterIn.QUERY),
     })
     @Operation(summary = "单体查询", description = "单体查询")
     @GetMapping("/{id:[0-9]+}")
