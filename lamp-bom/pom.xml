@@ -13,7 +13,7 @@
     <url>https://github.com/zuihou/lamp-cloud</url>
 
     <properties>
-        <revision>5.7.0</revision>
+        <revision>5.8.0</revision>
     </properties>
 
     <dependencyManagement>
