@@ -18,7 +18,7 @@
     <url>https://github.com/zuihou/lamp-cloud</url>
 
     <properties>
-        <revision>5.8.1</revision>
+        <revision>5.9.0</revision>
         <!--
          1. spring-cloud-alibaba 2023.0.1.2 和 seata 2.2.0 不兼容，所以只能使用seata2.0.0
          2. spring-cloud-alibaba 2023.0.3.3 和 seata 2.x.x 使用分布式事务时，代码有bug，无法正常切换数据源
