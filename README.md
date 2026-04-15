@@ -93,6 +93,10 @@ SpringCloud
     - 字段模式（soybean版）：演示地址：   [https://soy-column.tangyh.top](https://soy-column.tangyh.top)
     - 非租户模式：演示地址：   [https://none.tangyh.top](https://none.tangyh.top)
 
+# 优秀案例
+- 主数据平台： [mddata](https://gitee.com/henhen6/mddata)。 专注于单点登录中心、开放平台、基础管理平台解决方案
+- 即时通讯系统： [HuLa-Server](https://github.com/HuLaSpark/HuLa-Server)
+
 # 赞助版
 
 本项目分为开源版、企业商用版，github和gitee上能搜索到的为开源版本，遵循Apache协议。 赞助版源码在私有gitlab托管，购买后开通账号。
