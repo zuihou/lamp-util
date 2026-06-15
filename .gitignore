@@ -6,6 +6,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 log.path_IS_UNDEFINED
 .DS_Store
+offline_user.md
+spy.log
 
 ### STS ###
 .apt_generated
@@ -30,3 +32,7 @@ nbdist/
 .nb-gradle/
 generatorConfig.xml
 
+### nacos ###
+third-party/nacos/derby.log
+third-party/nacos/data/
+third-party/nacos/work/

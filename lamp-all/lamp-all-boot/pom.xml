@@ -56,7 +56,6 @@
         <dependency>
             <groupId>top.tangyh.basic</groupId>
             <artifactId>lamp-log-starter</artifactId>
-
         </dependency>
         <dependency>
             <groupId>top.tangyh.basic</groupId>
