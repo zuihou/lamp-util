@@ -80,7 +80,7 @@
         <bce-java-sdk.version>0.10.336</bce-java-sdk.version>
         <esdk-obs-java.version>3.24.3</esdk-obs-java.version>
         <qiniu-java-sdk.version>7.15.1</qiniu-java-sdk.version>
-        <minio.version>8.5.12</minio.version>
+        <minio.version>8.6.0</minio.version>
         <javassist.version>3.25.0-GA</javassist.version>
         <antisamy.version>1.7.8</antisamy.version>
         <caffeine.version>2.9.3</caffeine.version>
