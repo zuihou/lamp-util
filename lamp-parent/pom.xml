@@ -88,7 +88,7 @@
         <ip2region.version>3.3.7</ip2region.version>
         <bitwalker.version>1.21</bitwalker.version>
         <gson.version>2.8.9</gson.version>
-        <jsoup.version>1.15.3</jsoup.version>
+        <jsoup.version>1.23.1</jsoup.version>
         <JustAuth.version>1.16.5</JustAuth.version>
         <sun-jaxb.version>2.3.0.1</sun-jaxb.version>
         <okio.version>3.12.0</okio.version>
