@@ -13,7 +13,7 @@
     <url>https://github.com/zuihou/lamp-cloud</url>
 
     <properties>
-        <revision>5.10.0</revision>
+        <revision>5.10.1</revision>
     </properties>
 
     <dependencyManagement>
@@ -107,6 +107,11 @@
             <dependency>
                 <groupId>top.tangyh.basic</groupId>
                 <artifactId>lamp-swagger2-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.tangyh.basic</groupId>
+                <artifactId>lamp-nextdoc4j-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

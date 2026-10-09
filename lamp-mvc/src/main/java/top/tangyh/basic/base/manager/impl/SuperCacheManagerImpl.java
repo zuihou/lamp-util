@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
@@ -251,10 +251,11 @@ public abstract class SuperCacheManagerImpl<M extends SuperMapper<T>, T extends 
     public boolean saveBatch(Collection<T> entityList, int batchSize) {
         String sqlStatement = getSqlStatement(SqlMethod.INSERT_ONE);
         return executeBatch(entityList, batchSize, (sqlSession, entity) -> {
-            sqlSession.insert(sqlStatement, entity);
+            int count = sqlSession.insert(sqlStatement, entity);
 
             // 设置缓存
             setCache(entity);
+            return count;
         });
     }
 
@@ -272,23 +273,25 @@ public abstract class SuperCacheManagerImpl<M extends SuperMapper<T>, T extends 
                    || CollectionUtils.isEmpty(sqlSession.selectList(getSqlStatement(SqlMethod.SELECT_BY_ID), entity));
         };
 
-        BiConsumer<SqlSession, T> consumer = (sqlSession, entity) -> {
+        BiFunction<SqlSession, T, Integer> consumer = (sqlSession, entity) -> {
             MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
             param.put(Constants.ENTITY, entity);
-            sqlSession.update(getSqlStatement(SqlMethod.UPDATE_BY_ID), param);
+            int count = sqlSession.update(getSqlStatement(SqlMethod.UPDATE_BY_ID), param);
 
             // 清理缓存
             delCache(entity);
+            return count;
         };
 
         String sqlStatement = SqlHelper.getSqlStatement(this.getMapperClass(), SqlMethod.INSERT_ONE);
         return SqlHelper.executeBatch(getEntityClass(), log, entityList, batchSize, (sqlSession, entity) -> {
             if (predicate.test(sqlSession, entity)) {
-                sqlSession.insert(sqlStatement, entity);
+                int count = sqlSession.insert(sqlStatement, entity);
                 // 设置缓存
                 setCache(entity);
+                return count;
             } else {
-                consumer.accept(sqlSession, entity);
+                return consumer.apply(sqlSession, entity);
             }
         });
 
@@ -302,10 +305,11 @@ public abstract class SuperCacheManagerImpl<M extends SuperMapper<T>, T extends 
         return executeBatch(entityList, batchSize, (sqlSession, entity) -> {
             MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
             param.put(Constants.ENTITY, entity);
-            sqlSession.update(sqlStatement, param);
+            int update = sqlSession.update(sqlStatement, param);
 
             // 清理缓存
             delCache(entity);
+            return update;
         });
     }
 

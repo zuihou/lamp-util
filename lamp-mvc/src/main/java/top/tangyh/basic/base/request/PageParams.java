@@ -43,10 +43,10 @@ public class PageParams<T> {
     @Schema(description = "当前页", example = "1")
     private long current = 1;
 
-    @Schema(description = "排序,默认id", allowableValues = "id,createdTime,updatedTime", example = "id")
+    @Schema(description = "排序,默认id", allowableValues = {"id", "createdTime", "updatedTime"}, example = "id")
     private String sort = SuperEntity.ID_FIELD;
 
-    @Schema(description = "排序规则, 默认descending", allowableValues = "descending,ascending", example = "descending")
+    @Schema(description = "排序规则, 默认descending", allowableValues = {"descending", "ascending"}, example = "descending")
     private String order = "descending";
 
     @Schema(description = "扩展参数")

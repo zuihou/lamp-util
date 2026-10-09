@@ -1,11 +1,12 @@
 package top.tangyh.basic.base.manager;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.repository.IRepository;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import top.tangyh.basic.base.mapper.SuperMapper;
 import top.tangyh.basic.exception.BizException;
 import top.tangyh.basic.exception.code.ExceptionCode;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ import java.util.List;
  * @date 2020年03月03日20:49:03
  */
 @SuppressWarnings("ALL")
-public interface SuperManager<T> extends IService<T> {
+public interface SuperManager<T> extends IRepository<T> {
     /**
      * 获取实体的类型
      *
@@ -27,6 +28,23 @@ public interface SuperManager<T> extends IService<T> {
      */
     @Override
     Class<T> getEntityClass();
+
+    /**
+     * 插入（批量）
+     *
+     * @param entityList 实体对象集合
+     * @param batchSize  插入批次数量
+     */
+    boolean saveBatch(Collection<T> entityList);
+
+
+    /**
+     * 根据ID 批量更新
+     *
+     * @param entityList 实体对象集合
+     * @param batchSize  更新批次数量
+     */
+    boolean updateBatchById(Collection<T> entityList);
 
     /**
      * 批量保存数据

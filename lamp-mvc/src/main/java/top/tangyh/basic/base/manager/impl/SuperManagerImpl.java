@@ -1,12 +1,13 @@
 package top.tangyh.basic.base.manager.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import com.baomidou.mybatisplus.spring.repository.CrudRepository;
 import top.tangyh.basic.base.manager.SuperManager;
 import top.tangyh.basic.base.mapper.SuperMapper;
 import top.tangyh.basic.exception.BizException;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Collection;
 
 import static top.tangyh.basic.exception.code.ExceptionCode.SERVICE_MAPPER_ERROR;
 
@@ -24,7 +25,7 @@ import static top.tangyh.basic.exception.code.ExceptionCode.SERVICE_MAPPER_ERROR
  * @author zuihou
  * @date 2020年02月27日18:15:17
  */
-public class SuperManagerImpl<M extends SuperMapper<T>, T> extends ServiceImpl<M, T> implements SuperManager<T> {
+public class SuperManagerImpl<M extends SuperMapper<T>, T> extends CrudRepository<M, T> implements SuperManager<T> {
 
     private Class<T> entityClass = null;
 
@@ -49,4 +50,13 @@ public class SuperManagerImpl<M extends SuperMapper<T>, T> extends ServiceImpl<M
         return SqlHelper.retBool(getSuperMapper().updateAllById(model));
     }
 
+    @Override
+    public boolean saveBatch(Collection<T> entityList) {
+        return saveBatch(entityList, DEFAULT_BATCH_SIZE);
+    }
+
+    @Override
+    public boolean updateBatchById(Collection<T> entityList) {
+        return updateBatchById(entityList, DEFAULT_BATCH_SIZE);
+    }
 }

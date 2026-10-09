@@ -64,7 +64,7 @@
         </dependency>
         <dependency>
             <groupId>top.tangyh.basic</groupId>
-            <artifactId>lamp-swagger2-starter</artifactId>
+            <artifactId>lamp-nextdoc4j-starter</artifactId>
 
         </dependency>
         <dependency>

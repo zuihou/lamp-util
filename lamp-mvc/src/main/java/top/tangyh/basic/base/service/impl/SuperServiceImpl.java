@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
+import com.baomidou.mybatisplus.extension.repository.IRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import top.tangyh.basic.base.entity.SuperEntity;
@@ -77,7 +78,7 @@ public class SuperServiceImpl<M extends SuperManager<Entity>, Id extends Seriali
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean saveBatch(List<Entity> entityList) {
-        return this.getSuperManager().saveBatch(entityList);
+        return this.getSuperManager().saveBatch(entityList, IRepository.DEFAULT_BATCH_SIZE);
     }
 
     /**
